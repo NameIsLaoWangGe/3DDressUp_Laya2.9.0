@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":3,
+    "selecteID":5,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#595d66","height":720},
     "nodeParent":-1,
-    "maxID":5,
+    "maxID":6,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -41,6 +41,20 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip",
+            "props":{"y":166,"x":466,"width":689,"value":"0123456789","skin":"Lwg/UI/lALPGoU8eRRGnZNQzQIX_535_80.png","sheet":"0123456789","height":80},
+            "nodeParent":2,
+            "label":"FontClip",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":5,
+            "child":[
+                ]
         }],
     "animations":[
         {
