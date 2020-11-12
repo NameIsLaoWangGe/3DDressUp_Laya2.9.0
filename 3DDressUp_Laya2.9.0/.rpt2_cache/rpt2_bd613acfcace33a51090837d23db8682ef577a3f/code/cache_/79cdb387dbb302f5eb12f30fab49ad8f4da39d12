@@ -1,0 +1,12 @@
+{
+  "code": "import { Admin } from \"./Lwg\";\r\nexport default class _GamePencilItem extends Admin._Object {\r\n    lwgBtnClick() {\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/GameConfig.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/Admanager.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/Lwg.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Compound.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Game.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_GameItem.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_PropTry.ts"
+  ]
+}

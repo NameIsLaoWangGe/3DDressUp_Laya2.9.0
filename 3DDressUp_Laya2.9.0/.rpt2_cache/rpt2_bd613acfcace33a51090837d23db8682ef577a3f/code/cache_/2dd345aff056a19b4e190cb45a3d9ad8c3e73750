@@ -1,0 +1,21 @@
+{
+  "code": "import ZJADMgr from \"../TJ/ZJADMgr\";\r\nimport { Admin, _LwgInit, _LwgInitScene } from \"./Lwg\";\r\nimport { _AdsHint } from \"./_AdsHint\";\r\nimport { _Compound } from \"./_Compound\";\r\nimport { _Game } from \"./_Game\";\r\nimport { _Guide } from \"./_Guide\";\r\nimport { _PreLoad } from \"./_PreLoad\";\r\nimport { _PreLoadStep } from \"./_PreLoadStep\";\r\nimport { _PropTry } from \"./_PropTry\";\r\nimport { _SelectLevel } from \"./_SelectLevel\";\r\nimport { _Settle } from \"./_Settle\";\r\nimport { _Share } from \"./_Share\";\r\nimport { _Special } from \"./_Special\";\r\nimport { _Start } from \"./_Start\";\r\nimport { _Task } from \"./_Task\";\r\nimport { _Victory } from \"./_Victory\";\r\nexport var SceneName;\r\n(function (SceneName) {\r\n})(SceneName || (SceneName = {}));\r\nexport default class LwgInit extends _LwgInitScene {\r\n    lwgOnAwake() {\r\n        _LwgInit._pkgInfo = [];\r\n        Admin._platform.name = Admin._platform.tpye.Bytedance;\r\n        Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;\r\n        Admin._moudel = {\r\n            _PreLoad: _PreLoad,\r\n            _Guide: _Guide,\r\n            _Start: _Start,\r\n            _Game: _Game,\r\n            _Task: _Task,\r\n            _PreLoadStep: _PreLoadStep,\r\n            _SelectLevel: _SelectLevel,\r\n            _Settle: _Settle,\r\n            _Victory: _Victory,\r\n            _Share: _Share,\r\n            _Special: _Special,\r\n            _PropTry: _PropTry,\r\n            _AdsHint: _AdsHint,\r\n            _Compound: _Compound,\r\n        };\r\n        new ZJADMgr();\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/ZJADMgr.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/Lwg.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_AdsHint.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Compound.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Game.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Guide.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_PreLoad.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_PreLoadStep.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_PropTry.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_SelectLevel.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Settle.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Share.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Special.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Start.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Task.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Victory.ts"
+  ]
+}

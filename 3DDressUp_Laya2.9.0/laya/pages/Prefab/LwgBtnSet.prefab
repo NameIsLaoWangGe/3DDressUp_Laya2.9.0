@@ -1,0 +1,26 @@
+{
+    "x":0,
+    "type":"Sprite",
+    "selectedBox":423,
+    "searchKey":"Sprite,BtnSet,BtnSet",
+    "props":{"y":0,"x":0,"width":47,"var":"BtnSet","presetID":1,"preset":"laya/pages/Prefab/LwgBtnSet.prefab","pivotY":27,"pivotX":24,"name":"BtnSet","isPresetRoot":true,"height":54},
+    "nodeParent":-1,
+    "maxID":424,
+    "label":"BtnSet",
+    "isDirectory":false,
+    "isAniNode":true,
+    "hasChild":false,
+    "compId":423,
+    "child":[
+        ],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }],
+    "$HIDDEN":false
+}

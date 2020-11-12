@@ -1,0 +1,10 @@
+[
+  {
+    "flatMessage": "This syntax requires an imported helper but module 'tslib' cannot be found.",
+    "formatted": "\u001b[96m../../../../Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/ZJADMgr.ts\u001b[0m:\u001b[93m76\u001b[0m:\u001b[93m11\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2354: \u001b[0mThis syntax requires an imported helper but module 'tslib' cannot be found.\r\n\r\n\u001b[7m76\u001b[0m     async GameCfg()  {\r\n\u001b[7m  \u001b[0m \u001b[91m          ~~~~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2354,
+    "type": "semantic",
+    "fileLine": "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/ZJADMgr.ts(76,11)"
+  }
+]

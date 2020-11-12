@@ -1,0 +1,9 @@
+{
+  "code": "import { Admin, Click, Dialogue } from \"./Lwg\";\r\nimport { _Game } from \"./_Game\";\r\nexport default class _GameBlinkItem extends Admin._Object {\r\n    lwgBtnClick() {\r\n        var func = (e) => {\r\n            e.stopPropagation();\r\n        };\r\n        Click._on(Click._Type.noEffect, this.Owner, this, func, func, (e) => {\r\n            e.stopPropagation();\r\n            if (this.Owner['_dataSource']['have']) {\r\n                _Game._BlinkPencils._pitchName = this.Owner['_dataSource']['name'];\r\n            }\r\n            else {\r\n                Dialogue.createHint_Middle('尚未获得！');\r\n            }\r\n        }, func);\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/Admanager.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/Lwg.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_Game.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/_PropTry.ts"
+  ]
+}

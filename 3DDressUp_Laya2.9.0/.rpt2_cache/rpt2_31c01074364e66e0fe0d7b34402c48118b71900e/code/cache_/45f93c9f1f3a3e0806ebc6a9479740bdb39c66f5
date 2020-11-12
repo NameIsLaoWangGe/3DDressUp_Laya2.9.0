@@ -1,0 +1,7 @@
+{
+  "code": "import ADManager from \"../TJ/Admanager\";\r\nimport { Admin, Click } from \"./Lwg\";\r\nexport var _AdsHint;\r\n(function (_AdsHint) {\r\n    class AdsHint extends Admin._SceneBase {\r\n        setCallBack(_adAction) {\r\n            this.adAction = _adAction;\r\n        }\r\n        lwgOnEnable() {\r\n            this.Owner['BtnClose'].visible = false;\r\n            Laya.timer.frameOnce(120, this, () => {\r\n                this.Owner['BtnClose'].visible = true;\r\n            });\r\n        }\r\n        lwgOpenAni() {\r\n            return 10;\r\n        }\r\n        lwgBtnClick() {\r\n            Click._on(Click._Type.largen, this.Owner['BtnClose'], this, null, null, () => {\r\n                this.lwgCloseScene();\r\n            });\r\n            Click._on(Click._Type.largen, this.Owner['BtnConfirm'], this, null, null, () => {\r\n                ADManager.ShowReward(this.adAction, null);\r\n                this.lwgCloseScene();\r\n            });\r\n        }\r\n    }\r\n    _AdsHint.AdsHint = AdsHint;\r\n})(_AdsHint || (_AdsHint = {}));\r\nexport default _AdsHint.AdsHint;\r\n",
+  "references": [
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/TJ/Admanager.ts",
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Frame/Lwg.ts"
+  ]
+}

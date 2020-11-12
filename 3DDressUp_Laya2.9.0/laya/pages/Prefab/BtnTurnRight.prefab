@@ -1,0 +1,25 @@
+{
+    "x":0,
+    "type":"Image",
+    "selectedBox":104,
+    "searchKey":"Image,BtnTurnRight,BtnTurnRight",
+    "props":{"zOrder":250,"y":0,"x":0,"width":39,"var":"BtnTurnRight","skin":"Game/UI/GameScene/y.png","presetID":1,"preset":"laya/pages/Prefab/BtnTurnRight.prefab","pivotY":35,"pivotX":20,"name":"BtnTurnRight","isPresetRoot":true,"height":69},
+    "nodeParent":-1,
+    "maxID":105,
+    "label":"BtnTurnRight",
+    "isDirectory":false,
+    "isAniNode":true,
+    "hasChild":false,
+    "compId":104,
+    "child":[
+        ],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }]
+}
