@@ -1,5 +1,3 @@
-import { Admin, _LwgInit, _LwgInitScene } from "./Lwg";
-
 export enum SceneName {
 }
 export default class LwgInit extends _LwgInitScene {
@@ -30,3 +28,4 @@ export default class LwgInit extends _LwgInitScene {
         // new ZJADMgr();
     }
 }
+import { Admin, _LwgInit, _LwgInitScene } from "./Lwg";

@@ -8,44 +8,15 @@ import { _SelectLevel } from "./_SelectLevel";
 export module _Start {
     export function _init(): void {
     }
-    /**通用类，进行通用初始化，可在每个游戏中重复使用重复*/
-    export class _StartScene extends Admin._SceneBase {
-        moduleOnAwake(): void {
-            ADManager.TAPoint(TaT.PageShow, 'mainpage');
-            ADManager.TAPoint(TaT.BtnShow, 'start_main');
-            _Gold.createGoldNode(38, 68);
-        }
-    }
-    export class Start extends _StartScene {
+    export class Start extends Admin._SceneBase {
         lwgOnAwake(): void {
-
         }
         lwgOnStart(): void {
-            Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.upLeftDownLeft;
         }
         lwgOpenAniAfter(): void {
-            TimerAdmin._loop(2000, this, () => {
-                Animation2D.bomb_LeftRight(this.ImgVar('BtnStart'), 1.22, 250);
-            }, true);
         }
         lwgBtnClick(): void {
-            Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
-                ADManager.TAPoint(TaT.BtnClick, 'start_main');
-                _SelectLevel._Data._pich.classify = _SelectLevel._Data._classify.animal;
-                this.lwgOpenScene(_SceneName.SelectLevel);
-            })
-            Click._on(Click._Type.largen, this.btnVar('BtnLimit'), this, null, null, () => {
-                _SelectLevel._Data._pich.classify = _SelectLevel._Data._classify.limit;
-                this.lwgOpenScene(_SceneName.SelectLevel);
-            })
-            Click._on(Click._Type.largen, this.btnVar('BtnConversion'), this, null, null, () => {
-                Dialogue.createHint_Middle('敬请期待！');
-            })
-            Click._on(Click._Type.noEffect, this.btnVar('BtnSpecial'), this, null, null, () => {
-                Dialogue.createHint_Middle('敬请期待！');
-            })
         }
-
         lwgOnDisable(): void {
             ADManager.TAPoint(TaT.PageLeave, 'mainpage');
         }

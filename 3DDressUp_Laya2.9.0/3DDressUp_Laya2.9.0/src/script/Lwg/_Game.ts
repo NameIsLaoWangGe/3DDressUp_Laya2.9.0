@@ -1,6 +1,6 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import RecordManager from "../TJ/RecordManager";
-import { Admin, Animation2D, Click, Color, EventAdmin, Share, TimerAdmin, Tools, _Gold, _SceneName } from "./Lwg";
+import { Admin, Animation2D, Click, Color, EventAdmin, TimerAdmin, Tools, _Gold, _SceneName } from "./Lwg";
 import _GameBlinkItem from "./_GameBlinkItem";
 import { _GameItem } from "./_GameItem";
 import { _PreloadUrl } from "./_PreLoad";
@@ -238,13 +238,13 @@ export module _Game {
     export class Game extends Admin._SceneBase {
         lwgOnAwake(): void {
             ADManager.TAPoint(TaT.PageShow, 'playpage');
-            ADManager.TAPoint(TaT.LevelStart, `level_${this.Owner.name}`);
+            ADManager.TAPoint(TaT.LevelStart, `level_${this._Owner.name}`);
             _Gold.goldVinish(100);
             _BlinkPencils._switch = false;
             _stepIndex.present = 0;
             _stepIndex.present = 0;
             _stepIndex.max = 0;
-            _GeneralList1 = this.ImgVar('GeneralList1');
+            _GeneralList1 = this._ImgVar('GeneralList1');
             _GeneralList1.pos(Laya.stage.width / 2, Laya.stage.height * 0.835);
 
             // // _GeneralList.pos(Laya.stage.width / 2, Laya.stage.height * 0.835);
@@ -278,12 +278,12 @@ export module _Game {
 
             _stepOrderImg = [];
             let index = 1;
-            while (this.Owner['Draw' + index]) {
-                let Img = this.Owner['Draw' + index] as Laya.Image;
+            while (this._Owner['Draw' + index]) {
+                let Img = this._Owner['Draw' + index] as Laya.Image;
                 _stepOrderImg.push(Img);
                 Img[_drawBoardProperty.originalZOder] = Img.zOrder;
                 let parent = Img.parent as Laya.Image;
-                if (parent != this.ImgVar('DrawRoot')) {
+                if (parent != this._ImgVar('DrawRoot')) {
                     parent[_drawBoardProperty.originalZOder] = parent.zOrder;
                     parent[_drawBoardProperty.whetherPass] = false;
                 }
@@ -293,21 +293,21 @@ export module _Game {
                 DrawBoard.name = 'DrawBoard';
                 DrawBoard.width = Img.width;
                 DrawBoard.height = Img.height;
-                this.Owner['Draw' + index].skin = null;
+                this._Owner['Draw' + index].skin = null;
                 index++;
             }
         }
         lwgOpenAni(): number {
-            this.ImgVar('DrawingBoard').zOrder = 100;
-            this.ImgVar('DrawingBoard').width = Laya.stage.width;
-            this.ImgVar('DrawingBoard').height = Laya.stage.height;
-            let fX = this.ImgVar('DrawingBoard').x = -Laya.stage.width / 2;
-            let fY = this.ImgVar('DrawingBoard').y = -500;
-            let fR = this.ImgVar('DrawingBoard').rotation = 75;
+            this._ImgVar('DrawingBoard').zOrder = 100;
+            this._ImgVar('DrawingBoard').width = Laya.stage.width;
+            this._ImgVar('DrawingBoard').height = Laya.stage.height;
+            let fX = this._ImgVar('DrawingBoard').x = -Laya.stage.width / 2;
+            let fY = this._ImgVar('DrawingBoard').y = -500;
+            let fR = this._ImgVar('DrawingBoard').rotation = 75;
             let time = 600;
             let delay = 150;
-            Animation2D.simple_Rotate(this.ImgVar('DrawingBoard'), fR, 0, time, delay);
-            Animation2D.move_Simple(this.ImgVar('DrawingBoard'), fX, fY, 0, 0, time, delay, () => {
+            Animation2D.simple_Rotate(this._ImgVar('DrawingBoard'), fR, 0, time, delay);
+            Animation2D.move_Simple(this._ImgVar('DrawingBoard'), fX, fY, 0, 0, time, delay, () => {
                 TimerAdmin._frameOnce(30, this, () => {
                     RecordManager.startAutoRecord();
                     this.Step.cutFocus();
@@ -315,15 +315,15 @@ export module _Game {
             });
 
             let Shadow = new Laya.Image();
-            this.Owner.addChild(Shadow);
-            Shadow.zOrder = this.ImgVar('DrawingBoard').zOrder - 1;
+            this._Owner.addChild(Shadow);
+            Shadow.zOrder = this._ImgVar('DrawingBoard').zOrder - 1;
             Shadow.skin = `Frame/UI/ui_orthogon_black.png`;
             Shadow.sizeGrid = '14,16,23,12';
-            Shadow.width = this.ImgVar('DrawingBoard').width;
-            Shadow.height = this.ImgVar('DrawingBoard').height;
-            Shadow.x = this.ImgVar('DrawingBoard').x + 100;
-            Shadow.y = this.ImgVar('DrawingBoard').y + 100;
-            Shadow.rotation = this.ImgVar('DrawingBoard').rotation;
+            Shadow.width = this._ImgVar('DrawingBoard').width;
+            Shadow.height = this._ImgVar('DrawingBoard').height;
+            Shadow.x = this._ImgVar('DrawingBoard').x + 100;
+            Shadow.y = this._ImgVar('DrawingBoard').y + 100;
+            Shadow.rotation = this._ImgVar('DrawingBoard').rotation;
             Animation2D.scale_Alpha(Shadow, 0.2, 1.2, 1.3, 1, 1, 0.4, time);
             Animation2D.simple_Rotate(Shadow, fR - 20, 0, time, delay);
             Animation2D.move_Simple(Shadow, fX, fY, 0, 0, time, delay, () => {
@@ -365,14 +365,14 @@ export module _Game {
                 if (Parent.name == 'Head' || Parent.name == 'Body') {
                     let oriPovitX = Parent.pivotX;
                     let oriPovitY = Parent.pivotY;
-                    if (this.Owner.name !== 'Game_wugui') {
+                    if (this._Owner.name !== 'Game_wugui') {
                         Tools.Node.changePovit(Parent, Parent.width / 2, Parent.height / 2, true);
                     }
                     let point = (Parent.parent as Laya.Image).localToGlobal(new Laya.Point(Parent.x, Parent.y));
                     let diffPoint = new Laya.Point(Laya.stage.width / 2 - point.x, Laya.stage.width * 3 / 5 - point.y);
                     // console.log(point);
-                    Animation2D.move_Simple(this.ImgVar('DrawRoot'), this.ImgVar('DrawRoot').x, this.ImgVar('DrawRoot').y, this.ImgVar('DrawRoot').x + diffPoint.x, this.ImgVar('DrawRoot').y + diffPoint.y, 400, 0, () => {
-                        if (this.Owner.name !== 'Game_wugui') {
+                    Animation2D.move_Simple(this._ImgVar('DrawRoot'), this._ImgVar('DrawRoot').x, this._ImgVar('DrawRoot').y, this._ImgVar('DrawRoot').x + diffPoint.x, this._ImgVar('DrawRoot').y + diffPoint.y, 400, 0, () => {
+                        if (this._Owner.name !== 'Game_wugui') {
                             Tools.Node.changePovit(Parent, oriPovitX, oriPovitY, true);
                         }
                         if (func) {
@@ -383,16 +383,16 @@ export module _Game {
             },
             /**完成时候的焦点切换*/
             compeletCutFocus: (func?: Function) => {
-                Animation2D.move_Simple(this.ImgVar('DrawRoot'), this.ImgVar('DrawRoot').x, this.ImgVar('DrawRoot').y, this.Step.firstRootP.x, this.Step.firstRootP.y, 300, 0, () => {
+                Animation2D.move_Simple(this._ImgVar('DrawRoot'), this._ImgVar('DrawRoot').x, this._ImgVar('DrawRoot').y, this.Step.firstRootP.x, this.Step.firstRootP.y, 300, 0, () => {
                     if (func) {
                         func();
                     }
                 });
             },
             init: () => {
-                // console.log(this.ImgVar('DrawRoot').y);
-                this.ImgVar('DrawRoot').y = this.ImgVar('DrawRoot').y / 1280 * Laya.stage.height;
-                let Picture = this.ImgVar('DrawRoot').getChildAt(0) as Laya.Image;
+                // console.log(this._ImgVar('DrawRoot').y);
+                this._ImgVar('DrawRoot').y = this._ImgVar('DrawRoot').y / 1280 * Laya.stage.height;
+                let Picture = this._ImgVar('DrawRoot').getChildAt(0) as Laya.Image;
                 let num = 0;
                 for (let index = 0; index < Picture.numChildren; index++) {
                     const element = Picture.getChildAt(index);
@@ -405,26 +405,26 @@ export module _Game {
                 } else {
                     this.Step.needCut = false;
                 }
-                this.Step.firstRootP = new Laya.Point(this.ImgVar('DrawRoot').x, this.ImgVar('DrawRoot').y);
-                this.Step.firstRootScaleX = this.ImgVar('DrawRoot').scaleX;
-                this.Step.firstRootScaleY = this.ImgVar('DrawRoot').scaleY;
+                this.Step.firstRootP = new Laya.Point(this._ImgVar('DrawRoot').x, this._ImgVar('DrawRoot').y);
+                this.Step.firstRootScaleX = this._ImgVar('DrawRoot').scaleX;
+                this.Step.firstRootScaleY = this._ImgVar('DrawRoot').scaleY;
                 let StepSwitch = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.StepSwitch.prefab) as Laya.Image;
-                this.Owner.addChild(StepSwitch)['pos'](Laya.stage.width / 2, Laya.stage.height * 0.641);
+                this._Owner.addChild(StepSwitch)['pos'](Laya.stage.width / 2, Laya.stage.height * 0.641);
                 this.Step.BtnNext = StepSwitch.getChildByName('BtnNextStep') as Laya.Image;
                 this.Step.BtnLast = StepSwitch.getChildByName('BtnLastStep') as Laya.Image;
                 this.Step.BtnNext.visible = false;
                 this.Step.BtnLast.visible = false;
                 this.Step.BtnCompelet = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.BtnCompelet.prefab) as Laya.Image;
-                this.Owner.addChild(this.Step.BtnCompelet)['pos'](563, Laya.stage.height * 0.641);
+                this._Owner.addChild(this.Step.BtnCompelet)['pos'](563, Laya.stage.height * 0.641);
                 this.Step.BtnCompelet.visible = false;
                 this.Step.BtnTurnLeft = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.BtnTurnLeft.prefab) as Laya.Image;
-                this.Owner.addChild(this.Step.BtnTurnLeft)['pos'](37, Laya.stage.height * 0.838);
+                this._Owner.addChild(this.Step.BtnTurnLeft)['pos'](37, Laya.stage.height * 0.838);
                 this.Step.BtnTurnRight = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.BtnTurnRight.prefab) as Laya.Image;
-                this.Owner.addChild(this.Step.BtnTurnRight)['pos'](687, Laya.stage.height * 0.838);
+                this._Owner.addChild(this.Step.BtnTurnRight)['pos'](687, Laya.stage.height * 0.838);
             }
         }
         lwgOnEnable(): void {
-            _BlinkList = this.ListVar('BlinkList');
+            _BlinkList = this._ListVar('BlinkList');
             _BlinkList.pos(Laya.stage.width / 2 + Laya.stage.width, Laya.stage.height * 0.835);
             _BlinkList.array = _BlinkPencils._data;
             _BlinkList.selectEnable = true;
@@ -476,54 +476,54 @@ export module _Game {
             })
 
             EventAdmin._register(_Event.Photo, this, () => {
-                this.AniVar(_Animation.action1).play();
-                this.AniVar(_Animation.action1).stop();
-                var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);
+                this._AniVar(_Animation.action1).play();
+                this._AniVar(_Animation.action1).stop();
+                var htmlCanvas: Laya.HTMLCanvas = this._Owner.drawToCanvas(this._Owner.width, this._Owner.height, 0, 0);
                 _Share._Data._photo._base64 = htmlCanvas.toBase64("image/png", 1)
             })
 
             EventAdmin._register(_Event.colseScene, this, () => {
-                Tools.Node.changePovit(this.ImgVar('DrawRoot'), 0, 0);
-                this.ImgVar('DrawRoot').x = 0;
-                this.ImgVar('DrawRoot').y = 0;
-                let Image = this.ImgVar('DrawRoot').getChildAt(0) as Laya.Image;
+                Tools.Node.changePovit(this._ImgVar('DrawRoot'), 0, 0);
+                this._ImgVar('DrawRoot').x = 0;
+                this._ImgVar('DrawRoot').y = 0;
+                let Image = this._ImgVar('DrawRoot').getChildAt(0) as Laya.Image;
                 Tools.Node.changePovit(Image, 0, 0);
                 Image.scale(Image.scaleX - 0.2, Image.scaleY - 0.2);
-                if (this.Owner.name == 'Game_dinglaotai' || this.Owner.name == 'Game_dinglaotou' || this.Owner.name == 'Game_zhangyugege') {
+                if (this._Owner.name == 'Game_dinglaotai' || this._Owner.name == 'Game_dinglaotou' || this._Owner.name == 'Game_zhangyugege') {
                     Image.x = 130;
-                } else if (this.Owner.name == 'Game_xiaohonghua') {
+                } else if (this._Owner.name == 'Game_xiaohonghua') {
                     Image.x = 85;
-                } else if (this.Owner.name == 'Game_xiaoqiche') {
+                } else if (this._Owner.name == 'Game_xiaoqiche') {
                     Image.x = 130;
-                } else if (this.Owner.name == 'Game_wanshengnangua') {
+                } else if (this._Owner.name == 'Game_wanshengnangua') {
                     Image.x = 80;
-                } else if (this.Owner.name == 'Game_xiaonainiu') {
+                } else if (this._Owner.name == 'Game_xiaonainiu') {
                     Image.x = 55;
-                } else if (this.Owner.name == 'Game_maotouying') {
+                } else if (this._Owner.name == 'Game_maotouying') {
                     Image.x = 85;
                 } else {
                     Image.x = 50;
                 }
-                if (this.Owner.name == 'Game_wugui' || this.Owner.name == 'Game_haitun' || this.Owner.name == 'Game_wanshengnangua') {
+                if (this._Owner.name == 'Game_wugui' || this._Owner.name == 'Game_haitun' || this._Owner.name == 'Game_wanshengnangua') {
                     Image.y = 120;
-                } else if (this.Owner.name == 'Game_xiaonainiu') {
+                } else if (this._Owner.name == 'Game_xiaonainiu') {
                     Image.y = 90;
                 } else {
                     Image.y = 100;
                 }
-                var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);
+                var htmlCanvas: Laya.HTMLCanvas = this._Owner.drawToCanvas(this._Owner.width, this._Owner.height, 0, 0);
                 _SelectLevel._Data._setHaveBeenDrawn(htmlCanvas.toBase64("image/png", 1));
-                this.lwgCloseScene();
+                this._closeScene();
             })
             EventAdmin._register(_Event.victory, this, () => {
-                this.AniVar(_Animation.action1).stop();
-                Tools.Node.changePovit(this.ImgVar('DrawRoot'), this.ImgVar('DrawRoot').width / 2, this.ImgVar('DrawRoot').height / 2);
-                Animation2D.move_Scale(this.ImgVar('DrawRoot'), this.ImgVar('DrawRoot').scaleX, this.ImgVar('DrawRoot').x, this.ImgVar('DrawRoot').y, this.ImgVar('DrawRoot').x, this.ImgVar('DrawRoot').y + 150, this.ImgVar('DrawRoot').scaleX / 2, 500, 500);
+                this._AniVar(_Animation.action1).stop();
+                Tools.Node.changePovit(this._ImgVar('DrawRoot'), this._ImgVar('DrawRoot').width / 2, this._ImgVar('DrawRoot').height / 2);
+                Animation2D.move_Scale(this._ImgVar('DrawRoot'), this._ImgVar('DrawRoot').scaleX, this._ImgVar('DrawRoot').x, this._ImgVar('DrawRoot').y, this._ImgVar('DrawRoot').x, this._ImgVar('DrawRoot').y + 150, this._ImgVar('DrawRoot').scaleX / 2, 500, 500);
                 _Gold.goldAppear(100);
             })
 
             EventAdmin._register(_Event.playAni1, this, (loop?: boolean) => {
-                this.AniVar(_Animation.action1).play(null, loop == undefined ? false : loop);
+                this._AniVar(_Animation.action1).play(null, loop == undefined ? false : loop);
             })
 
             EventAdmin._register(_Event.start, this, () => {
@@ -537,7 +537,7 @@ export module _Game {
                 }
                 let Img = _stepOrderImg[_stepIndex.present];
                 let ImgParent = Img.parent as Laya.Image;
-                if (ImgParent != this.ImgVar('DrawRoot')) {
+                if (ImgParent != this._ImgVar('DrawRoot')) {
                     ImgParent.zOrder = 200;
                 }
                 Img.zOrder = 200;
@@ -582,7 +582,7 @@ export module _Game {
                             }
                             // console.log(_stepIndex,_stepIndex.max);
                             EventAdmin._notify(_Event.restoreZOder);
-                            if (Img0Parent != this.ImgVar('DrawRoot')) {
+                            if (Img0Parent != this._ImgVar('DrawRoot')) {
                                 Img0Parent.zOrder = 200;
                             }
                             Img0.zOrder = 200;
@@ -622,7 +622,7 @@ export module _Game {
                             if (!_stepOrderImg[_stepIndex.present][_drawBoardProperty.whetherPass]) {
                                 this.Step.BtnNext.visible = false;
                             }
-                            if (Img0Parent != this.ImgVar('DrawRoot')) {
+                            if (Img0Parent != this._ImgVar('DrawRoot')) {
                                 Img0Parent.zOrder = 200;
                             }
                             // console.log(_stepIndex,_stepIndex.max);
@@ -640,7 +640,7 @@ export module _Game {
                     if (element) {
                         element.zOrder = _stepOrderImg[index][_drawBoardProperty.originalZOder];
                         let parent = element.parent as Laya.Image;
-                        if (parent != this.ImgVar('DrawRoot')) {
+                        if (parent != this._ImgVar('DrawRoot')) {
                             parent.zOrder = parent[_drawBoardProperty.originalZOder];
                         }
                     }
@@ -719,7 +719,7 @@ export module _Game {
                 return color;
             },
             getRadius: (): number => {
-                if (this.Owner.name == 'Game_dinglaotai' || this.Owner.name == 'Game_dinglaotou' || this.Owner.name == 'Game_zhangyugege') {
+                if (this._Owner.name == 'Game_dinglaotai' || this._Owner.name == 'Game_dinglaotou' || this._Owner.name == 'Game_zhangyugege') {
                     return 25;
                 } else {
                     return 50;
@@ -735,7 +735,7 @@ export module _Game {
                 this.Draw.BlinkSp.graphics.drawTexture(this.Draw.getBlinkTex(), x ? x : this.Draw.frontPos.x - this.Draw.getRadius() / 2, y ? y : this.Draw.frontPos.y - this.Draw.getRadius() / 2, this.Draw.getRadius(), this.Draw.getRadius(), null, 1, null, null);
             },
             getSpace: () => {
-                if (this.Owner.name == 'Game_dinglaotai' || this.Owner.name == 'Game_dinglaotou' || this.Owner.name == 'Game_zhangyugege') {
+                if (this._Owner.name == 'Game_dinglaotai' || this._Owner.name == 'Game_dinglaotou' || this._Owner.name == 'Game_zhangyugege') {
                     return 5;
                 } else {
                     return 10;
@@ -929,7 +929,7 @@ export module _Game {
                 EventAdmin._notify(_Event.turnRight);
             });
             Click._on(Click._Type.largen, this.Step.BtnCompelet, this, stop, stop, () => {
-                this.lwgOpenScene(_SceneName.Settle, false, () => {
+                this._openScene(_SceneName.Settle, false, () => {
                     this.Step.BtnCompelet.visible = false;
                 });
             });
@@ -937,7 +937,7 @@ export module _Game {
         lwgOnDisable(): void {
             _ColoursPencils._switch = false;
             ADManager.TAPoint(TaT.PageShow, 'playpage');
-            ADManager.TAPoint(TaT.LevelFinish, `level_${this.Owner.name} `);
+            ADManager.TAPoint(TaT.LevelFinish, `level_${this._Owner.name} `);
         }
     }
 }

@@ -5633,9 +5633,9 @@
             reg("script/GameUI.ts", GameUI);
         }
     }
-    GameConfig.width = 720;
-    GameConfig.height = 120;
-    GameConfig.scaleMode = "fixedwidth";
+    GameConfig.width = 1280;
+    GameConfig.height = 720;
+    GameConfig.scaleMode = "fixedheight";
     GameConfig.screenMode = "horizontal";
     GameConfig.alignV = "top";
     GameConfig.alignH = "left";

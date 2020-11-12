@@ -29,71 +29,11 @@ export module lwg {
             lwg.Admin._openScene('UIPause', null, null, null);
         }
     }
-
-    /**互推模块*/
-    export module Elect {
-        /**
-         * 创建通用重来prefab
-         * @param parent 父节点
-         * @param y y位置
-         */
-        export function _createP201_01(parent): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/P201.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('P201', _prefab.create, _prefab);
-                parent.addChild(sp);
-                sp.pos(80, 290);
-                sp.zOrder = 65;
-            }));
-        }
-    }
-
     /**提示模块*/
     export module Dialogue {
-        /**提示文字的类型描述*/
-        export enum HintContent {
-            '金币不够了！',
-            '没有可以购买的皮肤了！',
-            '暂时没有广告，过会儿再试试吧！',
-            '暂无皮肤!',
-            '暂无分享!',
-            '暂无提示机会!',
-            '观看完整广告才能获取奖励哦！',
-            '通关上一关才能解锁本关！',
-            '分享成功后才能获取奖励！',
-            '分享成功!',
-            '暂无视频，玩一局游戏之后分享！',
-            '消耗2点体力！',
-            '今日体力福利已领取！',
-            '分享成功，获得125金币！',
-            '分享成功，获得50金币！',
-            '限定皮肤已经获得，请前往皮肤界面查看。',
-            '分享失败！',
-            '兑换码错误！',
-            '尚未获得该商品!',
-            '恭喜获得新皮肤!',
-            '请前往皮肤限定界面获取!',
-            '通过相应的关卡数达到就可以得到了!',
-            '点击金币抽奖按钮购买!',
-            '没有领取次数了！',
-            '增加三次开启宝箱次数！',
-            '观看广告可以获得三次开宝箱次数！',
-            '没有宝箱领可以领了！',
-            '请前往皮肤界面购买！',
-            '今天已经签到过了！',
-            '没有抽奖次数了，请通过观看广告获取！',
-            '没有库存了！',
-            '牌数太少，无法使用道具！',
-            '没有可以购买的卡牌了！',
-            '敬请期待!',
-            '尚未获得!',
-        }
         enum Skin {
             blackBord = 'Frame/UI/ui_orthogon_black.png'
         }
-
         /**
          * 动态创建，第一次创建比较卡，是因为第一次绘制，而不是加载，需要优化
          * @param describe 类型，也就是提示文字类型
@@ -151,7 +91,6 @@ export module lwg {
                 });
             });
         }
-
         /**获取对话框内容，内容必须已经预加载*/
         export let _dialogContent = {
             get Array(): Array<any> {
@@ -329,7 +268,6 @@ export module lwg {
 
     /**体力模块*/
     export module Execution {
-
         /**体力*/
         export let _execution = {
             get value(): number {
@@ -339,8 +277,6 @@ export module lwg {
                 Laya.LocalStorage.setItem('_execution', val.toString());
             }
         };
-
-
         /**指代当前剩余体力节点*/
         export let ExecutionNumNode: Laya.Sprite;
         /**
@@ -363,14 +299,13 @@ export module lwg {
             }));
         }
 
-
         /**
          * 创建体力增加的prefab
          * @param x x位置
          * @param y y位置
          * @param func 回调函数
         */
-        export function _createAddExecution(x, y, func): void {
+        export function _createAddExecution(x: number, y: number, func: Function): void {
             let sp: Laya.Sprite;
             Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
                 let _prefab = new Laya.Prefab();
@@ -631,7 +566,7 @@ export module lwg {
         /**类粒子特效的通用父类*/
         export class GoldAniBase extends Laya.Script {
             /**挂载当前脚本的节点*/
-            Owner: Laya.Sprite;
+            _Owner: Laya.Sprite;
             /**所在场景*/
             selfScene: Laya.Scene;
             /**移动开关*/
@@ -669,11 +604,11 @@ export module lwg {
                 this.initProperty();
             }
             onEnable(): void {
-                this.Owner = this.owner as Laya.Sprite;
-                this.selfScene = this.Owner.scene;
-                let calssName = this['__proto__']['constructor'].name;
-                this.Owner[calssName] = this;
-                // console.log(this.Owner.getBounds());
+                this._Owner = this.owner as Laya.Sprite;
+                this.selfScene = this._Owner.scene;
+                let _calssName = this['__proto__']['constructor'].name;
+                this._Owner[_calssName] = this;
+                // console.log(this._Owner.getBounds());
                 this.timer = 0;
                 this.lwgInit();
                 this.propertyAssign();
@@ -688,13 +623,13 @@ export module lwg {
             /**一些节点上的初始属性赋值*/
             propertyAssign(): void {
                 if (this.startAlpha) {
-                    this.Owner.alpha = this.startAlpha;
+                    this._Owner.alpha = this.startAlpha;
                 }
                 if (this.startScale) {
-                    this.Owner.scale(this.startScale, this.startScale);
+                    this._Owner.scale(this.startScale, this.startScale);
                 }
                 if (this.startRotat) {
-                    this.Owner.rotation = this.startRotat;
+                    this._Owner.rotation = this.startRotat;
                 }
             }
             /**
@@ -703,8 +638,8 @@ export module lwg {
               * @param basedSpeed 基础速度
               */
             commonSpeedXYByAngle(angle, speed) {
-                this.Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
-                this.Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
+                this._Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
+                this._Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
             }
             /**移动规则*/
             moveRules(): void {
@@ -713,7 +648,7 @@ export module lwg {
                 this.moveRules();
             }
             onDisable(): void {
-                Laya.Pool.recover(this.Owner.name, this.Owner);
+                Laya.Pool.recover(this._Owner.name, this._Owner);
                 this.destroy();//删除自己，下次重新添加
                 Laya.Tween.clearAll(this);
                 Laya.timer.clearAll(this);
@@ -731,10 +666,10 @@ export module lwg {
             /**回调函数*/
             func: any
             lwgInit(): void {
-                this.Owner.width = 115;
-                this.Owner.height = 111;
-                this.Owner.pivotX = this.Owner.width / 2;
-                this.Owner.pivotY = this.Owner.height / 2;
+                this._Owner.width = 115;
+                this._Owner.height = 111;
+                this._Owner.pivotX = this._Owner.width / 2;
+                this._Owner.pivotY = this._Owner.height / 2;
             }
             initProperty(): void {
             }
@@ -742,8 +677,8 @@ export module lwg {
                 if (this.moveSwitch) {
                     this.timer++;
                     if (this.timer > 0) {
-                        lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
-                            this.Owner.removeSelf();
+                        lwg.Animation2D.move_Scale(this._Owner, 1, this._Owner.x, this._Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
+                            this._Owner.removeSelf();
                             if (this.func !== null) {
                                 this.func();
                             }
@@ -1565,8 +1500,8 @@ export module lwg {
                 Defeated: 'defeated',
             },
             state: 'Start',
-            setState(calssName: string): void {
-                switch (calssName) {
+            setState(_calssName: string): void {
+                switch (_calssName) {
                     case _SceneName.Start:
                         _gameState.state = _gameState.type.Start;
                         break;
@@ -1587,78 +1522,76 @@ export module lwg {
 
         /**2D场景通用父类*/
         export class _SceneBase extends Laya.Script {
-            // Owner: Laya.Scene;
             /**类名*/
-            calssName: string = _SceneName.PreLoad;
+            private _calssName: string = _SceneName.PreLoad;
             constructor() {
                 super();
             }
             /**挂载当前脚本的节点*/
-            get Owner(): Laya.Scene {
+            get _Owner(): Laya.Scene {
                 return this.owner as Laya.Scene;
             }
             // 常用节点获取
-            SpriteVar(str: string): Laya.Sprite {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Sprite;
+            _SpriteVar(str: string): Laya.Sprite {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.Sprite;
                 } else {
                     console.log('场景内不存在全局节点：', str);
                     return undefined;
                 }
             }
             /**常用动画组件获取*/
-            AniVar(str: string): Laya.Animation {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Animation;
+            _AniVar(str: string): Laya.Animation {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.Animation;
                 } else {
                     console.log('场景内不存在动画：', str);
                     return undefined;
                 }
             }
-            btnVar(str: string): Laya.Sprite {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Image;
+            _btnVar(str: string): Laya.Sprite {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.Image;
                 } else {
                     console.log('场景内不存在全局按钮：', str);
                     return undefined;
                 }
             }
-            ImgVar(str: string): Laya.Image {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Image;
+            _ImgVar(str: string): Laya.Image {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.Image;
                 } else {
                     console.log('场景内不存在全局节点：', str);
                     return undefined;
                 }
             }
-            ListVar(str: string): Laya.List {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.List;
+            _ListVar(str: string): Laya.List {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.List;
                 } else {
                     console.log('场景内不存在全局节点：', str);
                 }
             }
-            TapVar(str: string): Laya.Tab {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Tab;
+            _TapVar(str: string): Laya.Tab {
+                if (this._Owner[str]) {
+                    return this._Owner[str] as Laya.Tab;
                 } else {
                     console.log('场景内不存在全局节点：', str);
                 }
             }
             onAwake(): void {
                 // 类名
-                if (this.Owner.name == null) {
+                if (this._Owner.name == null) {
                     console.log('场景名称失效，脚本赋值失败');
                 } else {
-                    this.calssName = this.Owner.name;
-                    this.Owner[this.calssName] = this;
+                    // 组件变为的self属性
+                    this._calssName = this._Owner.name;
+                    this._Owner[this._calssName] = this;
                 }
-                // 组件变为的self属性
-                _gameState.setState(this.calssName);
+                _gameState.setState(this._calssName);
                 this.moduleOnAwake();
                 this.lwgOnAwake();
                 this.lwgAdaptive();
-                // Tomato.scenePrintPoint(this.calssName, Tomato.scenePointType.open);
             }
             /**游戏开始前执行一次，重写覆盖*/
             lwgOnAwake(): void { };
@@ -1684,19 +1617,41 @@ export module lwg {
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
-            /**b
-             * 点击事件注册,可以用(e)=>{}简写传递的函数参数
+            /**
+             * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
              * @param effect 效果类型 1.'largen'
              * @param target 节点
-             * @param caller 执行域
-             * @param down 按下函数
-             * @param move 移动函数
              * @param up 抬起函数
              * @param out 出屏幕函数
            * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
            */
-            btnRig(effect: string, target: Laya.Node, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
-                Click._on(effect, target, caller, down, move, up, out);
+            _btnUpRig(effect: string, target: Laya.Node, up: Function): void {
+                Click._on(effect, target, this, null, null, up, null);
+            }
+            /**
+             * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param effect 效果类型 1.'largen'
+             * @param target 节点
+             * @param caller 执行域
+             * @param down 按下
+             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+            */
+            _btnDownRig(effect: string, target: Laya.Node, down?: Function): void {
+                Click._on(effect, target, this, down, null, null, null);
+            }
+            /**
+              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param effect 效果类型 1.'largen'
+              * @param target 节点
+              * @param caller 执行域
+              * @param down 按下
+              * @param move 移动
+              * @param up 抬起
+              * @param out 按下
+              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnRig(effect: string, target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function): void {
+                Click._on(effect, target, this, down, move, up, out);
             }
             /**
               * 打开场景
@@ -1705,10 +1660,10 @@ export module lwg {
               * @param func 完成回调，默认为null
               * @param zOrder 指定层级
              */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
+            _openScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
                 let closeName;
                 if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.Owner.name;
+                    closeName = this._Owner.name;
                 }
                 Admin._openScene(openSceneName, closeName, func, zOrder);
             }
@@ -1717,8 +1672,8 @@ export module lwg {
              * @param sceneName 默认为当前场景
              * @param func 关闭后的回调函数
              * */
-            lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
+            _closeScene(sceneName?: string, func?: Function): void {
+                Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
             }
             /**初始化完毕后，onUpdate前执行一次，重写覆盖*/
             lwgOnStart(): void { }
@@ -1733,7 +1688,7 @@ export module lwg {
                         this.lwgBtnClick();
                     });
                 } else {
-                    time = _commonOpenAni(this.Owner);
+                    time = _commonOpenAni(this._Owner);
                 }
             }
             /**开场动画,返回的数字为时间倒计时，倒计时结束后开启点击事件,也可以用来屏蔽通用动画，只需返回一个数字即可,如果场景内节点是以prefab添加进去的，那么必须卸载lwgOpenAni之前*/
@@ -1742,14 +1697,21 @@ export module lwg {
             lwgOpenAniAfter(): void { };
             /**按钮点击事件注册*/
             lwgBtnClick(): void { };
-            /**按照y坐标的比例适配*/
-            lwgAdaptiveProportion(arr: Array<Laya.Sprite>): void {
+            /**按照当前Y轴坐标的高度的比例适配*/
+            lwgAdaptiveHeight(arr: Array<Laya.Sprite>): void {
                 for (let index = 0; index < arr.length; index++) {
                     const element = arr[index] as Laya.Sprite;
                     element.y / GameConfig.height * Laya.stage.height;
                 }
             };
-            /**一些节点的自适应*/
+            /**按照当前X轴的高度的比例适配*/
+            lwgAdaptiveWidth(arr: Array<Laya.Sprite>): void {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index] as Laya.Sprite;
+                    element.x / GameConfig.width * Laya.stage.width;
+                }
+            };
+            /**随意适配*/
             lwgAdaptive(): void { };
             onUpdate(): void { this.lwgOnUpdate() };
             /**每帧执行*/
@@ -1759,84 +1721,23 @@ export module lwg {
             /**离场动画,也可以用来屏蔽通用动画，只需返回一个数字即可*/
             lwgVanishAni(): number { return null };
             onDisable(): void {
-                Animation2D.fadeOut(this.Owner, 1, 0, 2000, 1);
+                Animation2D.fadeOut(this._Owner, 1, 0, 2000, 1);
                 this.lwgOnDisable();
                 Laya.timer.clearAll(this);
                 Laya.Tween.clearAll(this);
                 EventAdmin._offCaller(this);
-                // Tomato.scenePrintPoint(this.calssName, Tomato.scenePointType.close);
+                // Tomato.scenePrintPoint(this._calssName, Tomato.scenePointType.close);
             }
             /**离开时执行，子类不执行onDisable，只执行lwgDisable*/
             lwgOnDisable(): void { };
         }
-
-        /**2D角色通用父类*/
-        export class _Person extends Laya.Script {
-            /**物理组件*/
-            constructor() {
-                super();
-            }
-            /**挂载当前脚本的节点*/
-            get Owner(): Laya.Sprite {
-                return this.owner as Laya.Sprite;
-            }
-            get OwnerScene(): Laya.Sprite {
-                return this.owner.scene as Laya.Scene;
-            }
-            /**物理组件*/
-            get OwnerRig(): Laya.RigidBody {
-                if (!this.Owner['_OwnerRig']) {
-                    this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody)
-                }
-                return this.Owner['_OwnerRig'];
-            }
-            onAwake(): void {
-                this.lwgOnAwake();
-            }
-            lwgOnAwake(): void {
-            }
-            onEnable(): void {
-                // 类名
-                let calssName = this['__proto__']['constructor'].name;
-                // 组件变为的self属性
-                this.Owner[calssName] = this;
-                this.lwgOnEnable();
-            }
-            /**初始化，在onEnable中执行，重写即可覆盖*/
-            lwgOnEnable(): void {
-                console.log('父类的初始化！');
-            }
-            /**
-              * 打开场景
-              * @param openSceneName 需要打开的场景名称
-              * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
-              * @param func 完成回调，默认为null
-              * @param zOrder 指定层级
-             */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
-                let closeName;
-                if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.OwnerScene.name;
-                }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
-            }
-            /**
-            * 关闭场景，
-            * @param sceneName 默认为当前场景
-            * @param func 关闭后的回调函数
-            * */
-            lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-            }
-        }
-
-        /**2D物件通用父类*/
+        /**2D角色、物件通用父类*/
         export class _Object extends Laya.Script {
             constructor() {
                 super();
             }
             /**挂载当前脚本的节点*/
-            get Owner(): Laya.Sprite {
+            get _Owner(): Laya.Sprite {
                 return this.owner as Laya.Sprite;
             }
             get OwnerScene(): Laya.Sprite {
@@ -1844,22 +1745,22 @@ export module lwg {
             }
             /**物理组件*/
             get OwnerRig(): Laya.RigidBody {
-                if (!this.Owner['_OwnerRig']) {
-                    this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody)
+                if (!this._Owner['_OwnerRig']) {
+                    this._Owner['_OwnerRig'] = this._Owner.getComponent(Laya.RigidBody)
                 }
-                return this.Owner['_OwnerRig'];
+                return this._Owner['_OwnerRig'];
             }
             onAwake(): void {
                 // 类名
-                let calssName = this['__proto__']['constructor'].name;
+                let _calssName = this['__proto__']['constructor'].name;
                 // 组件变为的self属性
-                this.Owner[calssName] = this;
+                this._Owner[_calssName] = this;
                 this.lwgOnAwake();
             }
 
             ImgChild(str: string): Laya.Image {
-                if (this.Owner.getChildByName(str)) {
-                    return this.Owner.getChildByName(str) as Laya.Image;
+                if (this._Owner.getChildByName(str)) {
+                    return this._Owner.getChildByName(str) as Laya.Image;
                 } else {
                     console.log('场景内不存在子节点：', str);
                     return undefined;
@@ -1886,7 +1787,7 @@ export module lwg {
             * @param func 关闭后的回调函数
             * */
             lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
+                Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
             }
             /**声明一些节点*/
             lwgOnAwake(): void { }
@@ -1919,6 +1820,171 @@ export module lwg {
         }
     }
 
+    /**数据管理*/
+    export module _DataAdmin {
+        export class _Store {
+            getVariables(): void {
+
+            }
+        }
+        /**new出一个通用数据管理对象，如果不通用，则可以继承使用*/
+        export class _DataTable {
+            /**一些通用的属性名称*/
+            _property = {
+                name: 'name',
+                chName: 'chName',
+                classify: 'classify',
+                unlockWay: 'unlockWay',
+                condition: 'condition',
+                resCondition: 'resCondition',
+                unlock: 'unlock',
+                have: 'have',
+                compelet: 'compelet',
+                getAward: 'getAward',
+            };
+            _arr: Array<any>;
+            /**
+             * @param {string} name 在本地
+             * @param {Array<any>} arrUrl 数据
+             * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
+             */
+            constructor(dataName: string, arrUrl: string, localStorage?: boolean, proName?: string,) {
+                if (localStorage) {
+                    this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
+                } else {
+                    if (Laya.Loader.getRes(arrUrl)) {
+                        this._arr = Laya.Loader.getRes(arrUrl);
+                    } else {
+                        console.log(arrUrl, '数据表不存在！');
+                    }
+                }
+            }
+            /**
+             *通过名称获取属性值
+             * @param {string} name 名称
+             * @param {string} pro 属性值
+             */
+            _getProperty(name: string, pro: string): any {
+                let value: any;
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.name] == name) {
+                            value = element[pro];
+                            break;
+                        }
+                    }
+                }
+                return value;
+            };
+            /**
+             *通过名称获取属性值
+             * @param {string} name 名称
+             * @param {string} pro 属性名
+             * @param {any} value 属性值
+            */
+            _setProperty(name: string, pro: string, value: any): any {
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.name] == name) {
+                            element[pro] = value;
+                            break;
+                        }
+                    }
+                }
+                return value;
+            };
+
+            /**
+             * 通过一个属性和值随机出一个对象
+             * @param {string} [pro] 属性名如果不输入则从表中盲选一个。
+             * @param {*} [value] 属性值默认为null
+             * @memberof _DataTable
+             */
+            _randomOne(proName?: string, value?: any): any {
+                let data1: any;
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName]) {
+                            arr.push(element);
+                        }
+                    }
+                }
+                if (arr.length == 0) {
+                    return null;
+                } else {
+                    let any = Tools.arrayRandomGetOne(arr);
+                    return any;
+                }
+            }
+            /**
+             * 通过某个属性名称和值获取所有复合条件的属性，可以查找品类
+             * @param {string} proName 属性名
+             * @param {*} value 值
+             * @memberof _DataTable
+             */
+            _getPropertyArr(proName: string, value: any): Array<any> {
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName] && element[proName] == value) {
+                            arr.push(element);
+                        }
+                    }
+                }
+                return arr;
+            }
+            /**
+             * 通过某个属性名称设置全部属性值
+             * @param {string} proName 属性名
+             * @param {*} value 值
+             * @return {*}  {Array<any>}
+             * @memberof _DataTable
+             */
+            _setPropertyArr(proName: string, value: any): Array<any> {
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName]) {
+                            element[proName] == value;
+                            arr.push(element);
+                        }
+                    }
+                }
+                return arr;
+            }
+            /**
+              * 通过resCondition/condition对比,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
+              * @param calssName 商品种类
+              * @param name 商品名称
+              * @param number 购买几次，不传则默认为1次
+             */
+            _checkCondition(name: string, number?: number): any {
+                number = number == undefined ? number : 1;
+                let resCondition = this._getProperty(name, this._property.resCondition);
+                let condition = this._getProperty(name, this._property.condition);
+                let compelet = this._getProperty(name, this._property.compelet);
+                if (compelet !== true && compelet !== null) {
+                    if (condition <= resCondition + number) {
+                        this._setProperty(name, this._property.resCondition, condition);
+                        this._setProperty(name, this._property.compelet, true);
+                        return true;
+                    } else {
+                        this._setProperty(name, this._property.resCondition, resCondition + number);
+                        return false;
+                    }
+                } else {
+                    return -1;
+                }
+            }
+        }
+    }
+
     /**滤镜模块,主要是为节点和场景等进行颜色变化设置*/
     export module Color {
         /**
@@ -1930,7 +1996,6 @@ export module lwg {
         export function RGBToHexString(r, g, b) {
             return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
         }
-
         /**
         * RGB三个颜色值转换成16进制的字符串‘#xxxxxx’；
         * @param r 
@@ -5632,8 +5697,6 @@ export module lwg {
                 }
                 return arr;
             }
-
-
         }
 
         /**
@@ -5654,7 +5717,7 @@ export module lwg {
             // 第一步，先尝试从本地缓存获取数据，
             // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
             // 第三步，如果本地缓存没有，那么直接从数据表获取
-            let dataArr:any;
+            let dataArr: any;
             try {
                 Laya.LocalStorage.getJSON(storageName);
                 // console.log(Laya.LocalStorage.getJSON(storageName));
@@ -5690,1281 +5753,6 @@ export module lwg {
             return dataArr;
         }
     }
-
-
-    /**商城模块,用于购买和穿戴，主要是购买和存储，次要是穿戴*/
-    export module Shop {
-        /**商品品类集合，重写则规定列表顺序*/
-        export let goodsClassArr: Array<Array<any>> = [];
-        /**商品图片对应的文件夹名称集合，顺序必须和商品品类顺序一样*/
-        export let classWarehouse: Array<string> = [];
-        /**商品种类切换页*/
-        export let _ShopTap: Laya.Tab;
-        /**假如还有一个商品切换页_OtherTap*/
-        export let _OtherTap: Laya.Tab;
-        /**商品列表*/
-        export let _ShopList: Laya.List;
-
-        /**试用商品名称记录，一般用于皮肤试用,包括试用类别名称和名字*/
-        export let _tryName: Array<string> = [];
-
-        //皮肤*****************************************************************************************************
-        /**皮肤的总数据，存储对象依次为[{名称，获取方式，剩余数量或者次数}]*/
-        export let allSkin = [];
-        /**默认皮肤*/
-        export let defaultSkin: string;
-        /**当前穿戴的皮肤*/
-        export let _currentSkin = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_currentSkin') ? Laya.LocalStorage.getItem('Shop_currentSkin') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_currentSkin', name);
-            }
-        };
-
-        //默认道具**********************************************************************************************************
-        /**所有道具*/
-        export let allProps: Array<any> = [];
-        /**当前道具*/
-        export let defaultProp: string;
-        /**当前道具*/
-        export let _currentProp = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_currentProp') ? Laya.LocalStorage.getItem('Shop_currentProp') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_currentProp', name);
-            }
-        };
-
-        //其他道具，第三种物品的统称***********************************************************************************
-        /**所有其他道具集合*/
-        export let allOther: Array<any> = [];
-        /**默认穿戴的其他道具*/
-        export let defaultOther: string;
-        /**当前使用的其他物品*/
-        export let _currentOther = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_crrentOther') ? Laya.LocalStorage.getItem('Shop_crrentOther') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_crrentOther', name);
-            }
-        };
-
-        /**今日用了商品的种类，用在开始游戏界面，可能会有些任务需要用到*/
-        export let useSkinType = [];
-        /**
-         * 用过的皮肤都放进useSkinType，会自动去重
-         * @param skin 皮肤名称
-         */
-        export function setUseSkinType(): number {
-            let arr = [];
-            try {
-                // 拉取
-                if (Laya.LocalStorage.getJSON('Shop_useSkinType')) {
-                    arr = JSON.parse(Laya.LocalStorage.getJSON('Shop_useSkinType'));
-                    useSkinType = arr !== null ? arr['Shop_useSkinType'] : [];
-                    // 去重
-                    useSkinType.push(_currentOther.name, _currentProp.name, _currentSkin.name);
-                    useSkinType = Tools.arrayUnique_03(useSkinType);
-                }
-            } catch (error) {
-
-            }
-            // 上传
-            let data = {
-                Shop_useSkinType: useSkinType,
-            }
-            Laya.LocalStorage.setJSON('Shop_useSkinType', JSON.stringify(data));
-            return useSkinType.length;
-        }
-
-        /**
-         * 通过名称获取商品的一个属性值
-         * @param goodsClass 品类名称
-         * @param name 商品名称
-         * @param property 商品属性
-         * */
-        export function getProperty(goodsClass: string, name: string, property: string): any {
-            let pro = null;
-            let arr = getClassArr(goodsClass);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个商品的一个属性值
-         * @param goodsClass 品类名称
-         * @param name 商品名称
-         * @param property 设置或者增加商品属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(goodsClass: string, name: string, property: string, value: any): void {
-            let arr = getClassArr(goodsClass);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[goodsClass] = arr;
-            Laya.LocalStorage.setJSON(goodsClass, JSON.stringify(data));
-            if (_ShopList) {
-                _ShopList.refresh();
-            }
-        }
-
-        /**
-         * 返回当前品类中已经拥有的商品
-         * @param   goodsClass 商品品类
-        */
-        export function getHaveArr(goodsClass: string): Array<any> {
-            let arr = getClassArr(goodsClass);
-            let arrHave = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element[GoodsProperty.have]) {
-                    arrHave.push(element);
-                }
-            }
-            return arrHave;
-        }
-
-        /**
-         * 返回当前只能用金币购买的商品数组
-         * @param goodsClass 商品品类
-         * @param have 是否显示获取到的，true为已获得，flase为没有获得，不传则是全部
-         * @param excludeCurrent 假设当前的装扮的皮肤恰好是金币购买的，是否排除这个皮肤，默认为不排除
-         * */
-        export function getwayGoldArr(goodsClass: string, have?: boolean, excludeCurrent?: boolean) {
-            let arr = getClassArr(goodsClass);
-            let arrNoHave = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (have && have !== undefined) {
-                    if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-                else if (!have && have !== undefined) {
-                    if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-                else if (have == undefined) {
-                    if (element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-            }
-
-            if (excludeCurrent && excludeCurrent !== undefined) {
-                for (let index = 0; index < arrNoHave.length; index++) {
-                    const element = arrNoHave[index];
-                    if (element[GoodsProperty.name] === get_Current(goodsClass)) {
-                        arrNoHave.splice(index, 1);
-                        break;
-                    }
-                }
-            }
-            return arrNoHave;
-        }
-
-        /**
-         * 返回当前只能通过关卡进度获取的商品品类
-         * @param goodsClass 商品品类
-         * @param have 是否显示获取到的，true为已获得，flase为没有获得，不传则是全部
-         * */
-        export function getwayIneedwinArr(goodsClass: string, have?: boolean) {
-            let arr = getClassArr(goodsClass);
-            let arrIneedwin = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (have && have !== undefined) {
-                    if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                } else if (!have && have !== undefined) {
-                    if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                } else if (have == undefined) {
-                    if (element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                }
-            }
-            return arrIneedwin;
-        }
-
-        /**根据品类返回当前使用的皮肤*/
-        export function get_Current(goodsClass: string): string {
-            let _current = null;
-            switch (goodsClass) {
-                case GoodsClass.Skin:
-                    _current = _currentSkin.name;
-                    break;
-                case GoodsClass.Props:
-                    _current = _currentProp.name;
-                    break;
-                case GoodsClass.Other:
-                    _current = _currentOther.name;
-                    break;
-                default:
-                    break;
-            }
-            return _current;
-        }
-
-        /**根据品类返回品类名称数组*/
-        export function getClassArr(goodsClass: string): Array<any> {
-            let arr = [];
-            switch (goodsClass) {
-                case GoodsClass.Skin:
-                    arr = allSkin;
-                    break;
-                case GoodsClass.Props:
-                    arr = allProps;
-                    break;
-                case GoodsClass.Other:
-                    arr = allOther;
-                    break;
-
-                default:
-                    break;
-            }
-            return arr;
-        }
-
-        /**
-         * 通过resCondition/condition，购买商品，有些商品需要购买很多次，购买后，并且设置成购买状态，返回false表示没有购买完成，true刚好完成，-1已经拥有或者是没有改商品
-         * @param calssName 商品种类
-         * @param name 商品名称
-         * @param number 购买几次，不传则默认为1次
-         */
-        export function buyGoods(calssName: string, name: string, number?: number): any {
-            if (!number) {
-                number = 1;
-            }
-            let resCondition = getProperty(calssName, name, GoodsProperty.resCondition);
-            let condition = getProperty(calssName, name, GoodsProperty.condition);
-            let have = getProperty(calssName, name, GoodsProperty.have);
-            if (have !== true && have !== null) {
-                if (condition <= resCondition + number) {
-                    setProperty(calssName, name, GoodsProperty.resCondition, condition);
-                    setProperty(calssName, name, GoodsProperty.have, true);
-                    if (_ShopList) {
-                        _ShopList.refresh();
-                    }
-                    return true;
-                } else {
-                    setProperty(calssName, name, GoodsProperty.resCondition, resCondition + number);
-                    if (_ShopList) {
-                        _ShopList.refresh();
-                    }
-                    return false;
-                }
-            } else {
-                return -1;
-            }
-        }
-
-        /**在startLoding界面或者开始界面执行一次！*/
-        export function initShop(): void {
-            //如果上个日期等于今天的日期，那么从存储中获取，如果不相等则直接从数据表中获取
-            Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-            Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-            Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-        }
-
-        /**商品属性列表，数据表中的商品应该有哪些属性,name和have是必须有的属性,可以无限增加*/
-        export enum GoodsProperty {
-            /**名称*/
-            name = 'name',
-            /**获取途径*/
-            getway = 'getway',
-            /**根据获取途径，给予需要条件的总量*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**排列顺序*/
-            arrange = 'arrange',
-            /**获得顺序，我们可能会给予玩家固定的获得顺序*/
-            getOder = 'getOder',
-            /**是否已经拥有*/
-            have = 'have',
-        }
-
-        /**获得方式列举,方式可以添加*/
-        export enum Getway {
-            /**免费获取*/
-            free = 'free',
-            /**看广告*/
-            ads = 'ads',
-            /**特殊页面看广告*/
-            adsXD = 'adsXD',
-            /**关卡中获得，或者是过了多少关获得*/
-            ineedwin = 'ineedwin',
-            /**金币购买*/
-            gold = 'gold',
-            /**钻石购买购买*/
-            diamond = 'diamond',
-            /**彩蛋获取*/
-            easte_registerg = 'easte_registerg',
-            /**其他方式*/
-            other = 'other',
-        }
-
-        /**商店中的商品大致类别,同时对应图片地址的文件夹*/
-        export enum GoodsClass {
-            /**皮肤*/
-            Skin = 'Shop_Skin',
-            /**道具*/
-            Props = 'Shop_Props',
-            /**其他商品*/
-            Other = 'Shop_Other',
-        }
-        /**事件名称*/
-        export enum EventType {
-            select = 'select',
-        }
-
-        export class ShopScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                Shop._ShopTap = this.Owner['MyTap'];
-                Shop._ShopList = this.Owner['MyList'];
-                if (!Shop.allSkin) {
-                    Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-                }
-                if (!Shop.allProps) {
-                    Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-                }
-                if (!Shop.allOther) {
-                    Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-                }
-                goodsClassArr = [Shop.allSkin, Shop.allProps, Shop.allOther];
-                classWarehouse = [GoodsClass.Skin, GoodsClass.Props, GoodsClass.Skin];
-            }
-            moduleOnEnable(): void {
-                this.myList_Create();
-                this.myTap_Create();
-            }
-            /**Tap初始化*/
-            myTap_Create(): void {
-                Shop._ShopTap.selectHandler = new Laya.Handler(this, this.myTap_Select);
-            }
-            /**myTap的触摸监听*/
-            myTap_Select(index: number): void { }
-            /**初始化list*/
-            myList_Create(): void {
-                Shop._ShopList.selectEnable = true;
-                // Shop._ShopList.vScrollBarSkin = "";
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                Shop._ShopList.selectHandler = new Laya.Handler(this, this.myList_Scelet);
-                Shop._ShopList.renderHandler = new Laya.Handler(this, this.myList_Update);
-                this.myList_refresh();
-            }
-            /**list选中监听*/
-            myList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            myList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            myList_refresh(): void {
-                if (Shop._ShopList && goodsClassArr.length > 0) {
-                    Shop._ShopList.array = goodsClassArr[0];
-                    Shop._ShopList.refresh();
-                }
-            }
-        }
-    }
-
-    /**胜利宝箱模块*/
-    export module VictoryBox {
-        /**宝箱列表组件*/
-        export let _BoxList: Laya.List;
-        /**宝箱数据集合*/
-        export let _BoxArray = [];
-        /**还可以打开宝箱的次数,初始默认为三次，重写覆盖*/
-        export let _canOpenNum: number = 3;
-        /**已经领取了几次奖励*/
-        export let _alreadyOpenNum: number = 0;
-        /**看宝箱可以领取的最大次数*/
-        export let _adsMaxOpenNum: number = 6;
-        /**第几次打开宝箱界面*/
-        export let _openVictoryBoxNum: number = 0;
-        /**当前被选中的那个宝箱是什么宝箱*/
-        export let _selectBox: string;
-        /**
-         * 通过名称获取宝箱的一个属性值
-         * @param name 宝箱名称
-         * @param property 宝箱属性名称
-         * */
-        export function getProperty(name: string, property: string): any {
-            let pro = null;
-            for (let index = 0; index < _BoxArray.length; index++) {
-                const element = _BoxArray[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个宝箱的一个属性值
-         * @param name 宝箱名称
-         * @param property 宝箱属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(name: string, property: string, value: any): void {
-            for (let index = 0; index < _BoxArray.length; index++) {
-                const element = _BoxArray[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            if (_BoxList) {
-                _BoxList.refresh();
-            }
-        }
-
-        /**宝箱属性*/
-        export enum BoxProperty {
-            /**奖励名称*/
-            name = 'name',
-            /**奖励类型*/
-            rewardType = 'rewardType',
-            /**奖励数量*/
-            rewardNum = 'rewardNum',
-            /**是否已经被打开*/
-            openState = 'openState',
-            /**是否需要看广告*/
-            ads = 'ads',
-            /**是否被选中*/
-            select = 'select',
-        }
-
-        /**事件类型*/
-        export enum EventType {
-            /**开宝箱*/
-            openBox = 'openBox',
-        }
-        /**胜利宝箱场景父类*/
-        export class VictoryBoxScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                VictoryBox._BoxList = this.Owner['MyList'];
-                //注意这里要复制数组，不可以直接赋值
-                _BoxArray = Tools.objArray_Copy(Laya.loader.getRes("GameData/VictoryBox/VictoryBox.json")['RECORDS']);
-                _selectBox = null;
-                _canOpenNum = 3;
-                _openVictoryBoxNum++;
-                _adsMaxOpenNum = 6;
-                _alreadyOpenNum = 0;
-            }
-            moduleOnEnable(): void {
-                this.boxList_Create();
-            }
-            /**初始化list*/
-            boxList_Create(): void {
-                VictoryBox._BoxList.selectEnable = true;
-                // VictoryBox._BoxList.vScrollBarSkin = "";//不需要移动时，就不设置移动条
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                VictoryBox._BoxList.selectHandler = new Laya.Handler(this, this.boxList_Scelet);
-                VictoryBox._BoxList.renderHandler = new Laya.Handler(this, this.boxList_Update);
-                this.boxList_refresh();
-            }
-            /**list选中监听*/
-            boxList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            boxList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            boxList_refresh(): void {
-                if (VictoryBox._BoxList) {
-                    VictoryBox._BoxList.array = _BoxArray;
-                    VictoryBox._BoxList.refresh();
-                }
-            }
-        }
-    }
-
-    /**签到模块*/
-    export module CheckIn {
-        /**从哪个界面弹出的签到*/
-        export let _fromWhich: string = Admin._SceneName.PreLoad;
-        /**签到list列表*/
-        export let _checkList: Laya.List;
-        /**列表信息*/
-        export let _checkArray: Array<any>;
-        /**上次的签到日期，主要判断今日会不会弹出签到，不一样则弹出签到，一样则不弹出签到*/
-        export let _lastCheckDate = {
-            get date(): number {
-                return Laya.LocalStorage.getItem('Check_lastCheckDate') ? Number(Laya.LocalStorage.getItem('Check_lastCheckDate')) : -1;
-            },
-            // 日期写数字
-            set date(date: number) {
-                Laya.LocalStorage.setItem('Check_lastCheckDate', date.toString());
-            }
-        }
-        /**当前签到第几天了，7日签到为7天一个循环*/
-        export let _checkInNum = {
-            get number(): number {
-                return Laya.LocalStorage.getItem('Check_checkInNum') ? Number(Laya.LocalStorage.getItem('Check_checkInNum')) : 0;
-            },
-            /**次数写数字*/
-            set number(num: number) {
-                Laya.LocalStorage.setItem('Check_checkInNum', num.toString());
-            }
-        }
-
-        /**
-         * 今天是否已经签到
-         */
-        export let _todayCheckIn = {
-            get bool(): boolean {
-                return _lastCheckDate.date == DateAdmin._date.date ? true : false;
-            },
-        }
-
-        /**
-         * 通过名称获取签到的一个属性值
-         * @param name 签到名称
-         * @param property 签到属性名称
-         * */
-        export function getProperty(name: string, property: string): any {
-            let pro = null;
-            for (let index = 0; index < _checkArray.length; index++) {
-                const element = _checkArray[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个签到的一个属性值
-         * @param className 签到种类
-         * @param name 签到类型
-         * @param property 签到属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(className, name: string, property: string, value: any): void {
-            for (let index = 0; index < _checkArray.length; index++) {
-                const element = _checkArray[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[className] = _checkArray;
-            Laya.LocalStorage.setJSON(className, JSON.stringify(data));
-            if (_checkList) {
-                _checkList.refresh();
-            }
-        }
-
-        /**
-         * 是否弹出签到页面
-         */
-        export function openCheckIn(): void {
-            if (!_todayCheckIn.bool) {
-                console.log('没有签到过，弹出签到页面！');
-                Admin._openScene(Admin._SceneName.CheckIn);
-            } else {
-                if (SkinQualified._adsNum.value < 7) {
-                    Admin._openScene(Admin._SceneName.SkinQualified);
-                }
-                console.log('签到过了，今日不可以再签到');
-            }
-        }
-
-        /**
-         * 七日签到，签到一次并且返回今天的奖励
-        */
-        export function todayCheckIn_7Days(): number {
-            _lastCheckDate.date = DateAdmin._date.date;
-            _checkInNum.number++;
-            setProperty(CheckClass.chek_7Days, 'day' + _checkInNum.number, CheckProPerty.checkInState, true);
-            let rewardNum = getProperty('day' + _checkInNum.number, CheckProPerty.rewardNum);
-            return rewardNum;
-        }
-
-        /**
-         * 签到初始化
-         * */
-        export function init(): void {
-            if (_checkInNum.number === 7 && !_todayCheckIn.bool) {
-                _checkInNum.number = 0;
-                Laya.LocalStorage.removeItem(CheckClass.chek_7Days);
-            }
-        }
-
-        /**签到种类*/
-        export enum CheckClass {
-            chek_7Days = 'Chek_7Days',
-            chek_15Days = 'Chek_15Days',
-            chek_30Days = 'Chek_30Days',
-        }
-
-        /**签到中的属性*/
-        export enum CheckProPerty {
-            /**名称，第几天*/
-            name = 'name',
-            /**奖励类型*/
-            rewardType = 'rewardType',
-            /**签到奖励*/
-            rewardNum = 'rewardNum',
-            /**是否签到过了*/
-            checkInState = 'checkInState',
-            /**排列顺序*/
-            arrange = 'arrange',
-        }
-
-        /**事件类型*/
-        export enum EventType {
-            /**移除签到按钮*/
-            removeCheckBtn = 'removeCheckBtn',
-        }
-
-        export class CheckInScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                CheckIn._checkList = this.Owner['CheckList'];
-                //注意这里要复制数组，不可以直接赋值
-                _checkArray = Tools.jsonCompare('GameData/CheckIn/CheckIn.json', CheckClass.chek_7Days, CheckProPerty.name);
-            }
-            moduleOnEnable(): void {
-                this.checkList_Create();
-            }
-            moduleEventRegister(): void {
-
-            }
-            /**初始化list*/
-            checkList_Create(): void {
-                CheckIn._checkList.selectEnable = true;
-                // CheckIn._checkList.vScrollBarSkin = "";//不需要移动时，就不设置移动条
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回����时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                CheckIn._checkList.selectHandler = new Laya.Handler(this, this.checkList_Scelet);
-                CheckIn._checkList.renderHandler = new Laya.Handler(this, this.checkList_Update);
-                this.checkList_refresh();
-            }
-            /**list选中监听*/
-            checkList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            checkList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            checkList_refresh(): void {
-                if (CheckIn._checkList) {
-                    CheckIn._checkList.array = _checkArray;
-                    CheckIn._checkList.refresh();
-                }
-            }
-        }
-    }
-
-    /**限定皮肤模块*/
-    export module SkinQualified {
-        /**从哪个界面弹出了XDSkin*/
-        export let _fromScene: string;
-        /**需要看几次广告才可以获得限定皮肤,默认三次，重写覆盖*/
-        export let _needAdsNum: number;
-        /**已经几次看广告*/
-        export let _adsNum = {
-            get value(): number {
-                return Laya.LocalStorage.getItem('SkinQualified_adsNum') ? Number(Laya.LocalStorage.getItem('SkinQualified_adsNum')) : 0;
-            },
-            /**次数写数字*/
-            set value(value: number) {
-                Laya.LocalStorage.setItem('SkinQualified_adsNum', value.toString());
-            }
-        }
-        /**
-         * 是否弹出限定皮肤界面
-         * @param fromScene 从哪个界面进来的
-        */
-        export function openUISkinQualified(fromScene): void {
-            if (_adsNum.value >= _needAdsNum) {
-                return;
-            } else {
-                Admin._openScene(Admin._SceneName.SkinQualified);
-                _fromScene = fromScene;
-            }
-        }
-
-        export enum EventType {
-            /**获得限定皮肤*/
-            acquisition = 'acquisition',
-        }
-
-        /**限定皮肤场景父类*/
-        export class SkinQualifiedScene extends Admin._SceneBase {
-            moduleOnEnable(): void {
-                _needAdsNum = 3;
-            }
-        }
-    }
-
-    /**皮肤装扮界面*/
-    export module Skin {
-        /**皮肤list*/
-        export let _SkinList: Laya.List;
-        /**皮肤切换页*/
-        export let _SkinTap: Laya.Tab;
-        /**皮肤总数集合*/
-        export let _skinClassArr = [];
-
-        /**头部装饰数组*/
-        export let _headSkinArr = [];
-        /**当前眼部的装扮*/
-        export let _currentHead = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Skin_currentHead') ? Laya.LocalStorage.getItem('Skin_currentHead') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Skin_currentHead', name);
-            }
-
-        };
-        /**眼部装饰数组*/
-        export let _eyeSkinArr = [];
-        /**当前眼部的装扮*/
-        export let _currentEye = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Skin_currentEye') ? Laya.LocalStorage.getItem('Skin_currentEye') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Skin_currentEye', name);
-            }
-        };
-
-        /**装饰类别*/
-        export enum SkinClass {
-            head = 'head',
-            eye = 'eye',
-            body = 'body',
-            upperBody = 'upperBody',
-            lowerBody = 'lowerBody',
-        }
-
-        export enum SkinProperty {
-            /**名称*/
-            name = 'name',
-            /**获取途径*/
-            getway = 'getway',
-            /**根据获取途径，给予需要条件的总量*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**排列顺序*/
-            arrange = 'arrange',
-            /**获得顺序，我们可能会给予玩家固定的获得顺序*/
-            getOder = 'getOder',
-            /**类别*/
-            classify = 'classify',
-            /**是否已经拥有*/
-            have = 'have',
-        }
-
-        /**事件名称*/
-        export enum EventType {
-            /**购买*/
-            purchase = 'purchase',
-            /**选择*/
-            select = 'select',
-        }
-        export class SkinScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                Skin._SkinTap = this.Owner['SkinTap'];
-                Skin._SkinList = this.Owner['SkinList'];
-
-                _skinClassArr = [_eyeSkinArr, _headSkinArr];
-            }
-            moduleOnEnable(): void {
-                this.skinList_Create();
-                this.skinTap_Create();
-            }
-            /**Tap初始化*/
-            skinTap_Create(): void {
-                Skin._SkinTap.selectHandler = new Laya.Handler(this, this.skinTap_Select);
-            }
-            /**skinTap的触摸监听*/
-            skinTap_Select(index: number): void { }
-            /**初始化list*/
-            skinList_Create(): void {
-                Skin._SkinList.selectEnable = true;
-                // Skin._SkinList.vScrollBarSkin = "";
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                Skin._SkinList.selectHandler = new Laya.Handler(this, this.skinList_Scelet);
-                Skin._SkinList.renderHandler = new Laya.Handler(this, this.skinList_Update);
-                this.skinList_refresh();
-            }
-            /**list选中监听*/
-            skinList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            skinList_Update(cell: Laya.Box, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            skinList_refresh(): void {
-                if (Skin._SkinList && _skinClassArr.length > 1) {
-                    Skin._SkinList.array = _skinClassArr[0];
-                    Skin._SkinList.refresh();
-                }
-            }
-        }
-    }
-    /**对游戏总的一些彩蛋进行管理*/
-    export module Easte_registerg {
-        /**彩蛋1任务集合*/
-        export let _easte_registerg_1Arr: Array<any> = [];
-
-        /**彩蛋1是否已经被触发*/
-        export let _easte_registerg_1 = {
-            get value(): boolean {
-                if (!Laya.LocalStorage.getItem('_easte_registerg_01')) {
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-            set value(val: boolean) {
-                Laya.LocalStorage.setItem('_easte_registerg_01', val.toString());
-            }
-        };
-        /**彩蛋1是否达成*/
-        export let _easte_registerg_1Complete: boolean;
-
-        /**初始化彩蛋模块*/
-        export function initEaste_registerg(): void {
-            _easte_registerg_1Arr = Tools.jsonCompare("GameData/Easte_registerg/Easte_registerg.json", Classify.Easte_registerg_01, Property.name);
-            Laya.loader.getRes("GameData/Easte_registerg/Easte_registerg.json")['RECORDS'];
-        }
-
-        /**
-         * 获取一个彩蛋中的某个属性信息
-         * @param className 彩蛋种类
-         * @param name 某个任务名称
-         * @param property 属性名
-         * */
-        export function getProperty(classify: string, name: string, property: string): any {
-            let pro = null;
-            let arr = getClassArr(classify);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 设置某个彩蛋的某个属性，并且返回这个值
-         * @param classify 彩蛋种类
-         * @param name 彩蛋中某个任务名称
-         * @param property 彩蛋属性
-         * @param value 属性值
-        */
-        export function setProperty(classify: string, name: string, property: string, value: any): void {
-            let arr = getClassArr(classify);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[classify] = arr;
-            Laya.LocalStorage.setJSON(classify, JSON.stringify(data));
-        }
-
-        /**根据彩蛋类型返回一个彩蛋的所有任务*/
-        export function getClassArr(classify: string): Array<any> {
-            let arr = [];
-            switch (classify) {
-                case Classify.Easte_registerg_01:
-                    arr = _easte_registerg_1Arr;
-                    break;
-                default:
-                    break;
-            }
-            return arr;
-        }
-
-        /** 
-         * 通过resCondition/condition，做任务并且完成了这次任务，然后检总进度是否完成,返回是否完成
-        * @param classify 任务种类
-        * @param name 任务名称
-        * @param number 做几次任务，不传则默认为0次，不传则是检测完成状况
-        */
-        export function doDetection(classify: string, name: string, number?: number): any {
-            if (!number) {
-                number = 0;
-            }
-            let resCondition = getProperty(classify, name, Property.resCondition);
-            let condition = getProperty(classify, name, Property.condition);
-            if (!getProperty(classify, name, Property.complete)) {
-                if (condition <= resCondition + number) {
-                    setProperty(classify, name, Property.resCondition, condition);
-                    setProperty(classify, name, Property.complete, true);
-                    console.log(getProperty(classify, name, Property.complete));
-                    return true;
-                } else {
-                    setProperty(classify, name, Property.resCondition, resCondition + number);
-
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        }
-
-        /**
-         * 检测所有彩蛋任务是否完成,完成则返回1，没有完成则返回0
-         * @param classify 哪一个彩蛋
-         * */
-        export function detectAllTasks(classify: string): number {
-            let num = 1;
-            let arr = getClassArr(classify);
-            for (const key in arr) {
-                if (arr.hasOwnProperty(key)) {
-                    const element = arr[key];
-                    let resCondition = getProperty(classify, element.name, Property.resCondition);
-                    let condition = getProperty(classify, element.name, Property.condition);
-                    if (condition > resCondition) {
-                        num = 0;
-                    }
-                }
-            }
-            if (num == 1) {
-                console.log(classify, '完成了！');
-            } else {
-                console.log(classify, '没有完成！');
-            }
-            return num;
-        }
-
-        /**奖励类型*/
-        export enum rewardType {
-            gold = 'gold',
-            diamond = 'diamond',
-            /**部件*/
-            assembly = 'assembly',
-        }
-
-        /**
-         * 彩蛋中通用属性
-         */
-        export enum Property {
-            /**名称*/
-            name = 'name',
-            /**彩蛋描述*/
-            explain = 'explain',
-            /**需要完成任务的总数*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**是否完成*/
-            complete = 'complete',
-        }
-
-        /**彩蛋列表种类*/
-        export enum Classify {
-            Easte_registerg_01 = 'Easte_registerg_01',
-        }
-
-        /**彩蛋中的任务名称*/
-        export enum Name {
-            assembly_1 = 'assembly_1',
-            assembly_2 = 'assembly_2',
-            assembly_3 = 'assembly_3',
-            assembly_4 = 'assembly_4',
-            assembly_5 = 'assembly_5',
-        }
-
-        /**彩蛋模块事件类型*/
-        export enum EventType {
-            /**触发彩蛋*/
-            trigger = 'trigger',
-            /**看广告完成任务*/
-            easte_registergAds = 'easte_registergAds',
-        }
-
-        /**彩蛋场景继承类*/
-        export class Easte_registergScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-            }
-            /**初始化json数据*/
-            moduleOnEnable(): void {
-
-            }
-            moduleEventRegister(): void {
-
-            }
-        }
-    }
-
-    /**胜利模块*/
-    export module Victory {
-        export class VictoryScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-    /**失败模块*/
-    export module Defeated {
-        export class DefeatedScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**抽卡模块*/
-    export module DrawCard {
-
-        /**
-         * 当前免费抽奖看广告次数
-         * */
-        export let _freeAds = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_freeAdsNum') ? Number(Laya.LocalStorage.getItem('DrawCard_freeAdsNum')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_freeAdsNum', val.toString());
-            }
-        }
-
-        /**
-         * 剩余抽奖次数,初始化为2次
-         */
-        export let _residueDraw = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_residueDraw') ? Number(Laya.LocalStorage.getItem('DrawCard_residueDraw')) : 2;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_residueDraw', val.toString());
-            }
-        };
-
-        /**
-         * 总共抽了几次卡牌
-         * */
-        export let _drawCount = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_drawCount') ? Number(Laya.LocalStorage.getItem('DrawCard_drawCount')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_drawCount', val.toString());
-            }
-        }
-
-        /**抽奖通用场景*/
-        export class DrawCardScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**
-     * 分享模块
-     */
-    export module Share {
-
-        /**从哪个界面弹出的分享*/
-        export let _fromWhich: string = Admin._SceneName.Victory;
-
-        export class ShareScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**道具试用模块*/
-    export module PropTry {
-        export class PropTryScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**背包系统*/
-    export module Backpack {
-        /**特殊道具1*/
-        export let _prop1 = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_prop1') ? Number(Laya.LocalStorage.getItem('Backpack_prop1')) : 1;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_prop1', val.toString());
-            }
-        }
-        /**特殊道具2*/
-        export let _prop2 = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_prop2') ? Number(Laya.LocalStorage.getItem('Backpack_prop2')) : 1;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_prop2', val.toString());
-            }
-        }
-
-        /**奖杯数量*/
-        export let _trophy = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_trophy') ? Number(Laya.LocalStorage.getItem('Backpack_trophy')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_trophy', val.toString());
-            }
-        }
-
-        /**
-         * 当前拥有的卡牌
-         */
-        export let _haveCardArray = {
-            get arr(): Array<string> {
-                try {
-                    let data = Laya.LocalStorage.getJSON('Backpack_haveCardArray')
-                    if (data) {
-                        return JSON.parse(data);;
-                    } else {
-                        return [];
-                    }
-                } catch (error) {
-                    return [];
-                }
-            },
-
-            set arr(array: Array<string>) {
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(array));
-            },
-
-            /**增加,数组形式，可添加多个,会自动除去重复的卡牌*/
-            add(arr1: Array<string>): Array<string> {
-                let arr0 = _haveCardArray.arr;
-                for (let index = 0; index < arr1.length; index++) {
-                    arr0.push(arr1[index]);
-                }
-                let arr00 = Tools.arrayUnique_01(arr0);
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr00));
-                return arr00;
-            },
-            /**减少,数组形式，可减少多个*/
-            sub(arr1: Array<string>): Array<string> {
-                let arr0 = _haveCardArray.arr;
-                for (let i = 0; i < arr0.length; i++) {
-                    for (let j = 0; j < arr1.length; j++) {
-                        if (arr0[i] == arr1[j]) {
-                            arr0.splice(i, 1);
-                            i--;
-                        }
-                    }
-                }
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr0));
-                return arr0;
-            }
-        }
-
-        /**当前还没有获得的卡牌*/
-        // export let _noHaveCard = {
-        //     get arr(): Array<string> {
-        //         let arr0 = _haveCardArray.arr;
-        //         let arr = Tools.array1ExcludeArray2(Game3D.getAllCardName(), arr0);
-        //         return arr;
-        //     },
-        // }
-
-        /**
-         * 道具数组,对象数组的数组
-         * */
-        export let _backpackArray: Array<Array<{}>> = [];
-
-        export class BackpackScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-            };
-            moduleEventRegister(): void {
-            };
-            moduleOnEnable(): void {
-            };
-        }
-    }
-
     export module LwgPreLoad {
         /**3D场景的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
         let _scene3D: Array<string> = [];
@@ -7145,8 +5933,8 @@ export module lwg {
                     let time = this.lwgAllComplete();
                     Laya.timer.once(time, this, () => {
                         // 通过预加载进入页面
-                        this.Owner.name = _whereToLoad;
-                        Admin._sceneControl[_whereToLoad] = this.Owner;
+                        this._Owner.name = _whereToLoad;
+                        Admin._sceneControl[_whereToLoad] = this._Owner;
                         if (_whereToLoad !== Admin._SceneName.PreLoad) {
                             if (Admin._preLoadOpenSceneLater.openSceneName) {
                                 Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
@@ -7418,8 +6206,8 @@ export module lwg {
         export class _LwgInitScene extends Admin._SceneBase {
             moduleOnStart(): void {
                 _init();
-                this.lwgOpenScene(_SceneName.PreLoad, null, () => {
-                    // this.Owner.close();
+                this._openScene(_SceneName.PreLoad, null, () => {
+                    // this._Owner.close();
                 });
             };
         }
@@ -7445,36 +6233,9 @@ export let Dialogue = lwg.Dialogue;
 export let Animation2D = lwg.Animation2D;
 export let Animation3D = lwg.Animation3D;
 export let Tools = lwg.Tools;
-export let Elect = lwg.Elect;
-//场景相关 
+//预加载和初始化
 export let _LwgPreLoad = lwg.LwgPreLoad;
 export let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
 export let _LwgInit = lwg._LwgInit;
 export let _LwgInitScene = lwg._LwgInit._LwgInitScene;
-
-export let Shop = lwg.Shop;
-export let ShopScene = lwg.Shop.ShopScene;
-export let VictoryBox = lwg.VictoryBox;
-export let VictoryBoxScene = lwg.VictoryBox.VictoryBoxScene;
-export let CheckIn = lwg.CheckIn;
-export let CheckInScene = lwg.CheckIn.CheckInScene;
-export let SkinQualified = lwg.SkinQualified;
-export let SkinXDScene = lwg.SkinQualified.SkinQualifiedScene;
-export let Skin = lwg.Skin;
-export let SkinScene = lwg.Skin.SkinScene;
-export let Easte_registerg = lwg.Easte_registerg;
-export let Victory = lwg.Victory;
-export let VictoryScene = lwg.Victory.VictoryScene;
-export let Defeated = lwg.Defeated;
-export let DefeatedScene = lwg.Defeated.DefeatedScene;
-export let DrawCard = lwg.DrawCard;
-export let DrawCardScene = lwg.DrawCard.DrawCardScene;
-export let Share = lwg.Share;
-export let ShareScene = lwg.Share.ShareScene;
-export let PropTry = lwg.PropTry;
-export let PropTryScene = lwg.PropTry.PropTryScene;
-export let Backpack = lwg.Backpack;
-export let BackpackScene = lwg.Backpack.BackpackScene;
-// 其他
-
 

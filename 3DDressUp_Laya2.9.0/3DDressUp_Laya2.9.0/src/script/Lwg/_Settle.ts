@@ -28,19 +28,6 @@ export module _Settle {
             // Sp.graphics.drawTexture(_PreloadUrl._list.texture.bishua1.texture, 0, 0, 100, 100, null, 0, null, null);
         }
         lwgBtnClick(): void {
-            Click._on(Click._Type.largen, this.btnVar('BtnPlayAni'), this, null, null, () => {
-                EventAdmin._notify(_Game._Event.playAni1, [false]);
-                ADManager.TAPoint(TaT.BtnClick, 'act_ACT');
-            });
-            Click._on(Click._Type.largen, this.btnVar('BtnContinue'), this, null, null, () => {
-                EventAdmin._notify(_Game._Event.Photo);
-                this.lwgOpenScene(_SceneName.Share);
-            });
-            // Click._on(Click._Type.largen, this.btnVar('BtnShare'), this, null, null, () => {
-            //     RecordManager._share('noAward', () => {
-            //         ADManager.TAPoint(TaT.BtnClick, 'share_ACT');
-            //     });
-            // });
         }
 
         lwgOnDisable(): void {

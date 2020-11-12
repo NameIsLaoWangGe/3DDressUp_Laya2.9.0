@@ -140,12 +140,12 @@ export module _SelectLevel {
     export class _SelectLevelItem extends Admin._Object {
         lwgOnEnable(): void {
             ADManager.TAPoint(TaT.BtnShow, 'ADrewardbt_choosecard');
-            // let Content = this.Owner.getChildByName('Content') as Laya.Image;
+            // let Content = this._Owner.getChildByName('Content') as Laya.Image;
             // let BtnContent = Content.getChildByName('BtnContent') as Laya.Image;
             // let IconLock = BtnContent.getChildByName('IconLock') as Laya.Image;
             // Tools.Node.changePovit(IconLock, IconLock.width / 2, IconLock.height / 2);
             // let ani = () => {
-            //     if (this.Owner['_dataSource'][_Data._property.unlock] && !this.Owner['_dataSource'][_Data._property.haveBeenDrawn]) {
+            //     if (this._Owner['_dataSource'][_Data._property.unlock] && !this._Owner['_dataSource'][_Data._property.haveBeenDrawn]) {
             //         Animation2D.circulation_scale(IconLock, 0.2, 500, 0, () => {
             //             ani();
             //         });
@@ -154,20 +154,20 @@ export module _SelectLevel {
             // ani();
         }
         lwgBtnClick(): void {
-            let BtnContent = (this.Owner.getChildByName('Content') as Laya.Image).getChildByName('BtnContent');
+            let BtnContent = (this._Owner.getChildByName('Content') as Laya.Image).getChildByName('BtnContent');
             Click._on(Click._Type.largen, BtnContent, this, null, null, () => {
                 if (!this.owner['_dataSource'][_Data._property.unlock]) {
                     switch (this.owner['_dataSource'][_Data._property.unlockWay]) {
                         case _Data._unlockWay.ads:
                             ADManager.ShowReward(() => {
                                 ADManager.TAPoint(TaT.BtnClick, 'ADrewardbt_choosecard');
-                                _Data._setProperty(this.Owner['_dataSource'][_Data._property.name], _Data._property.unlock, true);
+                                _Data._setProperty(this._Owner['_dataSource'][_Data._property.name], _Data._property.unlock, true);
                             });
                             break;
                         case _Data._unlockWay.gold:
                             let num = this.owner['_dataSource'][_Data._property.condition]
                             if (_Gold._num.value >= num) {
-                                _Data._setProperty(this.Owner['_dataSource'][_Data._property.name], _Data._property.unlock, true);
+                                _Data._setProperty(this._Owner['_dataSource'][_Data._property.name], _Data._property.unlock, true);
                                 _Gold._num.value -= num;
                             } else {
                                 Dialogue.createHint_Middle('金币不够了！');
@@ -177,7 +177,7 @@ export module _SelectLevel {
                             break;
                     }
                 } else {
-                    _SelectLevel._Data._pich.customs = this.Owner['_dataSource'][_SelectLevel._Data._property.name];
+                    _SelectLevel._Data._pich.customs = this._Owner['_dataSource'][_SelectLevel._Data._property.name];
                     Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
                     this.lwgOpenScene(_SceneName.PropTry, false);
                 }
@@ -189,7 +189,7 @@ export module _SelectLevel {
     export class SelectLevelBase extends Admin._SceneBase {
         moduleOnAwake(): void {
             ADManager.TAPoint(TaT.PageShow, 'choosecardpage');
-            _MyList = this.ListVar('MyList');
+            _MyList = this._ListVar('MyList');
             _MyList.array = _Data._getClassifyArr(_Data._pich.classify);
             _MyList.selectEnable = true;
             _MyList.vScrollBarSkin = "";
@@ -278,8 +278,8 @@ export module _SelectLevel {
         lwgOnAwake(): void {
             console.log(_Data._pich.classify);
             _PropTry._comeFrom = _SceneName.SelectLevel;
-            for (let index = 0; index < this.ImgVar('CutBtn').numChildren; index++) {
-                const element = this.ImgVar('CutBtn').getChildAt(index) as Laya.Image;
+            for (let index = 0; index < this._ImgVar('CutBtn').numChildren; index++) {
+                const element = this._ImgVar('CutBtn').getChildAt(index) as Laya.Image;
                 if (element.name == _Data._pich.classify) {
                     element.y = 11;
                 } else {
@@ -288,18 +288,18 @@ export module _SelectLevel {
             }
         }
         lwgAdaptive(): void {
-            this.ImgVar('UiLand').y = Laya.stage.height - 74;
-            this.ImgVar('BtnBack').y = Laya.stage.height - 80;
-            this.ListVar('MyList').height = Laya.stage.height - 320;
+            this._ImgVar('UiLand').y = Laya.stage.height - 74;
+            this._ImgVar('BtnBack').y = Laya.stage.height - 80;
+            this._ListVar('MyList').height = Laya.stage.height - 320;
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event._SelectLevel_Close, this, () => {
-                this.lwgCloseScene();
+                this._closeScene();
             })
         }
         lwgBtnClick(): void {
-            Click._on(Click._Type.largen, this.ImgVar('BtnBack'), this, null, null, () => {
-                this.lwgOpenScene(_SceneName.Start);
+            Click._on(Click._Type.largen, this._ImgVar('BtnBack'), this, null, null, () => {
+                this._openScene(_SceneName.Start);
             });
             if (_MyList.cells.length !== 0) {
                 for (let index = 0; index < _MyList.cells.length; index++) {
@@ -310,16 +310,16 @@ export module _SelectLevel {
                 }
             }
 
-            for (let index = 0; index < this.ImgVar('CutBtn').numChildren; index++) {
-                const element = this.ImgVar('CutBtn').getChildAt(index) as Laya.Image;
+            for (let index = 0; index < this._ImgVar('CutBtn').numChildren; index++) {
+                const element = this._ImgVar('CutBtn').getChildAt(index) as Laya.Image;
                 if (element.name == _Data._pich.classify) {
                     element.y = 11;
                 } else {
                     element.y = 69;
                 }
                 Click._on(Click._Type.largen, element, this, null, null, (e: Laya.Event) => {
-                    for (let index = 0; index < this.ImgVar('CutBtn').numChildren; index++) {
-                        const Btn = this.ImgVar('CutBtn').getChildAt(index) as Laya.Image;
+                    for (let index = 0; index < this._ImgVar('CutBtn').numChildren; index++) {
+                        const Btn = this._ImgVar('CutBtn').getChildAt(index) as Laya.Image;
                         if (Btn == e.currentTarget) {
                             Btn.y = 35;
                             _Data._pich.classify = Btn.name;

@@ -207,8 +207,8 @@ export module _Task {
     export class _TaskBase extends Admin._SceneBase {
         moduleOnAwake(): void {
             _allClassifyArr = [_Task._everydayTask];
-            _Task._TaskTap = this.Owner['TaskTap'];
-            _Task._TaskList = this.Owner['TaskList'];
+            _Task._TaskTap = this._Owner['TaskTap'];
+            _Task._TaskList = this._Owner['TaskList'];
         }
         moduleOnEnable(): void {
             this.lwgTapCreate();
