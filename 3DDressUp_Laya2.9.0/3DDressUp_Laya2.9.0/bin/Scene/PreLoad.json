@@ -1,0 +1,1 @@
+{"type":"View","props":{"width":720,"height":1280},"compId":2,"child":[{"type":"Sprite","props":{"y":890,"x":335,"texture":"Lwg/UI/ui_orthogon_purple.png"},"compId":3}],"loadList":["Lwg/UI/ui_orthogon_purple.png"],"loadList3D":[]}
