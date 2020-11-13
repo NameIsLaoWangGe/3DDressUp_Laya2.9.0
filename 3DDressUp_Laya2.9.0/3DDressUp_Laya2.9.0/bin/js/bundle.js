@@ -1062,7 +1062,7 @@
                     Admin._clickLock.switch = false;
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
-                        Scene[Scene.name].lwgBtnClick();
+                        Scene[Scene.name].lwgBtnRegister();
                     }
                 };
                 switch (Admin._sceneAnimation.presentAni) {
@@ -1254,14 +1254,14 @@
                     this.moduleOnStart();
                     this.lwgOnStart();
                 }
-                _btnUpRig(effect, target, up) {
-                    Click._on(effect, target, this, null, null, up, null);
+                _btnUp(target, up, effect) {
+                    Click._on(effect ? effect : Click._Type.largen, target, this, null, null, up, null);
                 }
-                _btnDownRig(effect, target, down) {
-                    Click._on(effect, target, this, down, null, null, null);
+                _btnDown(target, down, effect) {
+                    Click._on(effect ? effect : Click._Type.largen, target, this, down, null, null, null);
                 }
-                _btnRig(effect, target, down, move, up, out) {
-                    Click._on(effect, target, this, down, move, up, out);
+                _btnAll(target, down, move, up, out, effect) {
+                    Click._on(effect ? effect : Click._Type.largen, target, this, down, move, up, out);
                 }
                 _openScene(openSceneName, closeSelf, func, zOrder) {
                     let closeName;
@@ -1281,7 +1281,7 @@
                         Laya.timer.once(time, this, () => {
                             Admin._clickLock.switch = false;
                             this.lwgOpenAniAfter();
-                            this.lwgBtnClick();
+                            this.lwgBtnRegister();
                         });
                     }
                     else {
@@ -1292,7 +1292,7 @@
                 ;
                 lwgOpenAniAfter() { }
                 ;
-                lwgBtnClick() { }
+                lwgBtnRegister() { }
                 ;
                 lwgAdaptiveHeight(arr) {
                     for (let index = 0; index < arr.length; index++) {
@@ -1370,12 +1370,12 @@
                 }
                 lwgOnAwake() { }
                 onEnable() {
-                    this.lwgBtnClick();
+                    this.lwgBtnRegister();
                     this.lwgEventRegister();
                     this.lwgOnEnable();
                 }
                 lwgOnEnable() { }
-                lwgBtnClick() { }
+                lwgBtnRegister() { }
                 lwgEventRegister() { }
                 onStart() {
                     this.lwgOnStart();
@@ -4182,7 +4182,7 @@
             LwgPreLoad._sumProgress = 0;
             LwgPreLoad._loadOrder = [];
             LwgPreLoad._loadOrderIndex = 0;
-            LwgPreLoad._whereToLoad = Admin._SceneName.PreLoad;
+            LwgPreLoad._loadType = Admin._SceneName.PreLoad;
             let _ListName;
             (function (_ListName) {
                 _ListName["scene3D"] = "scene3D";
@@ -4208,7 +4208,6 @@
                             return;
                         }
                         console.log('当前进度条进度为:', LwgPreLoad._currentProgress.value / LwgPreLoad._sumProgress);
-                        console.log('进度条停止！');
                         console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
                         EventAdmin._notify(LwgPreLoad._Event.complete);
                     }
@@ -4323,13 +4322,13 @@
                     EventAdmin._register(_Event.complete, this, () => {
                         let time = this.lwgAllComplete();
                         Laya.timer.once(time, this, () => {
-                            this._Owner.name = LwgPreLoad._whereToLoad;
-                            Admin._sceneControl[LwgPreLoad._whereToLoad] = this._Owner;
-                            if (LwgPreLoad._whereToLoad !== Admin._SceneName.PreLoad) {
+                            this._Owner.name = LwgPreLoad._loadType;
+                            Admin._sceneControl[LwgPreLoad._loadType] = this._Owner;
+                            if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
                                 if (Admin._preLoadOpenSceneLater.openSceneName) {
                                     Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
                                         Admin._preLoadOpenSceneLater.func;
-                                        Admin._closeScene(LwgPreLoad._whereToLoad);
+                                        Admin._closeScene(LwgPreLoad._loadType);
                                     }, Admin._preLoadOpenSceneLater.zOrder);
                                 }
                             }
@@ -4346,8 +4345,8 @@
                                     }
                                 }
                                 PalyAudio.playMusic();
-                                Admin._closeScene(LwgPreLoad._whereToLoad, () => {
-                                    LwgPreLoad._whereToLoad = Admin._SceneName.PreLoadStep;
+                                this._openScene(_SceneName.Guide, true, () => {
+                                    LwgPreLoad._loadType = Admin._SceneName.PreLoadStep;
                                 });
                             }
                         });
@@ -4403,7 +4402,7 @@
                                     console.log('XXXXXXXXXXX3D场景' + _scene3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _scene3D[index]['scene'] = Scene;
+                                    _scene3D[index]['Scene'] = Scene;
                                     console.log('3D场景' + _scene3D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -4415,7 +4414,7 @@
                                     console.log('XXXXXXXXXXX3D预设体' + _prefab3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _prefab3D[index]['prefab'] = Sp;
+                                    _prefab3D[index]['Prefab'] = Sp;
                                     console.log('3D预制体' + _prefab3D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -4615,6 +4614,180 @@
     let _LwgInit = lwg._LwgInit;
     let _LwgInitScene = lwg._LwgInit._LwgInitScene;
 
+    var _Game;
+    (function (_Game) {
+        let _Event;
+        (function (_Event) {
+            _Event["start"] = "_Game_start";
+            _Event["showStepBtn"] = "_Game_showStepBtn";
+            _Event["lastStep"] = "_Game_lastStep";
+            _Event["nextStep"] = "_Game_nextStep";
+            _Event["compelet"] = "_Game_compelet";
+            _Event["playAni1"] = "_Game_playAni1";
+            _Event["playAni2"] = "_Game_playAni2";
+            _Event["restoreZOder"] = "_Game_restoreZoder";
+            _Event["colseScene"] = "_Game_colseScene";
+            _Event["victory"] = "_Game_victory";
+            _Event["Photo"] = "_Game_Photo";
+            _Event["turnRight"] = "_Game_turnRight";
+            _Event["turnLeft"] = "_Game_turnLeft";
+            _Event["generalRefresh"] = "_Game_generalRefresh";
+        })(_Event = _Game._Event || (_Game._Event = {}));
+        let _Animation;
+        (function (_Animation) {
+            _Animation["action1"] = "action1";
+            _Animation["action2"] = "action2";
+        })(_Animation = _Game._Animation || (_Game._Animation = {}));
+        function _init() {
+        }
+        _Game._init = _init;
+        class Game extends Admin._SceneBase {
+        }
+        _Game.Game = Game;
+    })(_Game || (_Game = {}));
+    var _Game$1 = _Game.Game;
+
+    var _Guide;
+    (function (_Guide) {
+        _Guide._complete = {
+            get bool() {
+                if (Laya.LocalStorage.getItem('_Guide_complete')) {
+                    if (Number(Laya.LocalStorage.getItem('_Guide_complete')) == 0) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else {
+                    return false;
+                }
+            },
+            set bool(bol) {
+                if (bol == true) {
+                    bol = 1;
+                }
+                Laya.LocalStorage.setItem('_Guide_complete', bol.toString());
+            }
+        };
+        _Guide._whichStep = {
+            get num() {
+                return Laya.LocalStorage.getItem('_Guide_whichStep') ? Number(Laya.LocalStorage.getItem('_Guide_whichStep')) : 1;
+            },
+            set num(num0) {
+                Laya.LocalStorage.setItem('_Guide_whichStep', num0.toString());
+            }
+        };
+        _Guide._whichStepNum = 1;
+        let _Event;
+        (function (_Event) {
+            _Event["onStep"] = "_Guide_onStep";
+            _Event["stepComplete"] = "_Guide_stepComplete";
+            _Event["appear"] = "_Guide_appear";
+            _Event["start"] = "_Guide_start";
+            _Event["complete"] = "_Guide_complete";
+        })(_Event = _Guide._Event || (_Guide._Event = {}));
+        function _init() {
+        }
+        _Guide._init = _init;
+        class Guide extends Admin._SceneBase {
+            lwgOnEnable() {
+            }
+            lwgOnStart() {
+                console.log('新手引导完成！');
+                this._openScene(_SceneName.Start);
+            }
+            lwgEventRegister() {
+            }
+        }
+        _Guide.Guide = Guide;
+    })(_Guide || (_Guide = {}));
+    var _Guide$1 = _Guide.Guide;
+
+    var _MakeClothes;
+    (function (_MakeClothes) {
+        class MakeClothes extends Admin._SceneBase {
+            lwgBtnRegister() {
+                this._btnUp(this._ImgVar('BtnBack'), () => {
+                    this._openScene(_SceneName.Start);
+                });
+            }
+        }
+        _MakeClothes.MakeClothes = MakeClothes;
+    })(_MakeClothes || (_MakeClothes = {}));
+
+    var _Res;
+    (function (_Res) {
+        _Res._list = {
+            scene3D: {
+                MakeScene: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
+                    Scene: null,
+                },
+            },
+            scene2D: {
+                Start: `Scene/${_SceneName.Start}.json`,
+                Guide: `Scene/${_SceneName.Guide}.json`,
+                PreLoadStep: `Scene/${_SceneName.PreLoadStep}.json`,
+            },
+        };
+    })(_Res || (_Res = {}));
+    var _PreLoad;
+    (function (_PreLoad) {
+        class PreLoad extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+            }
+            lwgOpenAni() { return 1; }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+            lwgOnDisable() {
+            }
+        }
+        _PreLoad.PreLoad = PreLoad;
+    })(_PreLoad || (_PreLoad = {}));
+
+    var _PreLoadStepUrl;
+    (function (_PreLoadStepUrl) {
+        _PreLoadStepUrl._game = {};
+    })(_PreLoadStepUrl || (_PreLoadStepUrl = {}));
+    var _PreLoadStep;
+    (function (_PreLoadStep) {
+        class PreLoadStep extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                switch (Admin._preLoadOpenSceneLater.openSceneName) {
+                    case _SceneName.Game:
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        _PreLoadStep.PreLoadStep = PreLoadStep;
+    })(_PreLoadStep || (_PreLoadStep = {}));
+    ;
+    var _PreLoadStep$1 = _PreLoadStep.PreLoadStep;
+
+    var _Start;
+    (function (_Start) {
+        function _init() {
+        }
+        _Start._init = _init;
+        class Start extends Admin._SceneBase {
+            lwgBtnRegister() {
+                this._btnUp(this._ImgVar('BtnStart'), () => {
+                    this._openScene('MakeClothes');
+                });
+            }
+        }
+        _Start.Start = Start;
+    })(_Start || (_Start = {}));
+    var _Start$1 = _Start.Start;
+
     var SceneName;
     (function (SceneName) {
     })(SceneName || (SceneName = {}));
@@ -4623,7 +4796,14 @@
             _LwgInit._pkgInfo = [];
             Admin._platform.name = Admin._platform.tpye.Bytedance;
             Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
-            Admin._moudel = {};
+            Admin._moudel = {
+                _PreLoad: _PreLoad,
+                _Guide: _Guide,
+                _Start: _Start,
+                _Game: _Game,
+                _PreLoadStep: _PreLoadStep,
+                _MakeClothes: _MakeClothes,
+            };
         }
     }
 

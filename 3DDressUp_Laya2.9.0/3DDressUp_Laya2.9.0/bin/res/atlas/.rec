@@ -109,7 +109,6 @@ P C36AA67B icon_execution.png
 P A5763191 icon_gold.png
 P 7A9D5B20 icon_hand.png
 P BF63B6AC icon_set.png
-R 620F3DBE lALPGoU8eRRGnZNQzQIX_535_80.png
 P CD257D00 reverseMask.png
 P A173F0A1 ui_circle_001.png
 P 14E83654 ui_circle_002.png
@@ -147,6 +146,7 @@ P 86BE810F ui_l_orthogon_yellow.png
 P 1F7E5653 ui_orthogon_black.png
 P 5847F2F1 ui_orthogon_black_0.7.png
 P 1E503E23 ui_orthogon_cycn.png
+P EB1E19F8 ui_orthogon_grass.png
 P 0CA59940 ui_orthogon_green.png
 P 1518D67A ui_orthogon_magenta.png
 P 2FAF870C ui_orthogon_orange.png
@@ -182,446 +182,51 @@ R 9B501DC8 chijinbi.wav
 R E23D09D2 guoguan.wav
 R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
-D Game/UI/AdsHint
-D Game/UI/Card
-D Game/UI/CheckIn
+D Game/UI/01_Repertory
 D Game/UI/Common
-P 50A4ECB6 a.png
-R 5F25687D bg1.png
-R 311DBFF1 bj.png
-R AD876E59 d.png
-R 01AACCAC d2.png
-P 3F3A6FD8 jb.png
-P 7A9FD0DE kggsy.png
-P 954962E8 lan.png
-P C93A3527 y.png
-P 74712E39 y2.png
-P 2F4BEF3D zan.png
-D Game/UI/Compound
-P E906685B an.png
-P 910F2AAA bi1.png
-P 97ED9C42 bi2.png
-P 18FF3088 gxhd.png
-R 6F816EA8 hf.png
-P DA99B524 k.png
-P 5056AABD qd.png
-D Game/UI/Defeated
 D Game/UI/DesignPic
-R F57C45EB Compound1.png
-R F7EA23D4 Compound2.png
-R 3D70B944 game.png
-R 22791D75 loding.png
-R 81F38B33 Proptry.png
-R 361B735A SelectLevel.png
-R 8DAFDA6B settle.png
-R 442BC8D2 Share.png
-R 73EEC04A Special.png
-R 6762E2C4 start.png
-R 7EA3E409 Victory.png
-D Game/UI/DrawCard
-D Game/UI/GameScene
-P C126C72F bishua1.png
-P 2E876767 bishua2.png
-P DBB72208 bishua3.png
-P D7DB889B bishua4.png
-P 4FF59F0F bishua5.png
-P 1DB5E033 bishua6.png
-P 32ED7CCC blink1.png
-P CB027B41 blink2.png
-P A75206AA blink3.png
-P 32656C70 blink4.png
-P 774A2C20 compelet.png
-P ABC0EF21 y.png
-P 752BA2A5 you.png
-P E95EECB0 z.png
-P 3DB351A5 zuo.png
+D Game/UI/MakeClothes
+P C204DF09 dottedline1.png
+P E954A4F4 dottedline2.png
+P 97AE6A7B dottedline3.png
+P 9B527ADD dottedline4.png
+P FE95E449 dottedline5.png
+P 66DDA994 dottedline6.png
+P 95924770 dottedline7.png
+P 82029C53 scissors_01.png
+P 9131BB5C scissors_02.png
+P 280897B1 tailor1.png
+P 10822C9B tailor2.png
+P AE2B241D tailor3.png
+P 99F0EC59 tailor4.png
+P 5BE85F42 tailor5.png
+P E4AD4E79 tailor6.png
+P 9A13CF9E tailor7.png
+R 3B312ECD ultimately.png
 D Game/UI/PreLoad
-P A706EC07 baifenbi.png
-P 99D990F7 bi.png
-P 221BB173 jdk.png
-P 35503251 jindutiao.png
-P 9A32446C ty.png
-R 18763D65 tyxhs.png
-D Game/UI/PropTry
-P 906B2891 an.png
-P 1FF4D7C9 c.png
-P FE2F7986 djkb.png
-P 7A9FD0DE kgg.png
-P 74712E39 kxy.png
-P 9CB2EDC2 pfsy.png
-P 8192E214 qd.png
-P D6035327 sp.png
-P C93A3527 sxy.png
-R 66F7A46E tmd.png
-R 7B9CFE0D xd.png
-D Game/UI/Resurgence
-D Game/UI/SelectLevel
-P 50A4ECB6 an1.png
-P E6449A72 anb.png
-P C22B6FB7 dw.png
-P 4BB3B516 dwdi.png
-P 63F6C9BD dyxd.png
-P 1BAE3336 e.png
-P A4E7EB8E hf.png
-P 961491C3 hong.png
-P 3E5E73CA huang.png
-P 90E58735 icon_back.png
-P 2E9C2C1A icon_can.png
-P 3F3A6FD8 jb.png
-P 4F02661D jiu.png
-P 215D1BF0 ks.png
-P 0941D66B qt.png
-R 2786EDAB sc.png
-P 36732A27 sp.png
-P F0ABED94 suo.png
-R 96D1BAF1 xianlu.png
-P 0CB6901E xianlu1.png
-P 9188B8FD xianlu2.png
-P B6F0119A y.png
-P FC08AE87 yuan.png
-P C3F5BB04 yuan1.png
-P 4A6923CF zhiwu.png
-P 1B4E2786 zhiwudi.png
-D Game/UI/Set
-P A7A6D598 di1.png
-P 4B6DCFBD di2.png
-P 156EDBC6 guan.png
-P 86A8855F kai.png
-P B3373FD9 shehzi.png
-P 59203D00 yinxiao.png
-P 0DF2AC23 yinyue.png
-P 7023981F zhendong.png
-D Game/UI/Settle
-P 50A4ECB6 an.png
-P 20958F6C an1.png
-P FDFEF0BF an2.png
-P ABF9DAC7 an3.png
-P 12C29C90 fx.png
-P CC68C899 g.png
-P 3F3A6FD8 jb.png
-P A6DDA20F jx.png
-P AD1107FB s.png
-P 4F02661D sz.png
-P E708242A x.png
-P 409DB881 y.png
-D Game/UI/Share
-P D9292306 an.png
-P 8E68D3FA fx.png
-R CD765C86 hf.png
-P 56EE0949 jx.png
-R E25B0592 k.png
-P 56E331BC spfx.png
-R B9862FF0 zhezhao.png
-P 66B6CA88 形状 19.png
-D Game/UI/Shop
-D Game/UI/Skin
-D Game/UI/SkinQualified
-D Game/UI/Special
-P 50A4ECB6 an.png
-P 22C27DF0 an1.png
-P 618303C9 cj.png
-R 311DBFF1 d.png
-R 673BB5EF erdi.png
-P 43381864 h.png
-P 3F3A6FD8 jb.png
-P FB82BEF6 kr.png
-P 24ED0725 sp.png
-P 4F02661D sz.png
-P 85EB1AE1 tsmj.png
-P E91FE6FE x.png
 D Game/UI/Start
-P 50A4ECB6 an.png
-P 10895799 an1.png
-P 7EDE2982 cd.png
-R 6C3949D7 daping.png
-P F48C3762 dh.png
-P 657F1FB4 gqan.png
-P 09886A27 hf.png
-P 3F3A6FD8 jb.png
-P CBD5A38C ksyx.png
-P 4F02661D sz.png
-P 7C3E1466 xd.png
-D Game/UI/Task
-D Game/UI/Victory
-P 173D889B an.png
-P CC68C899 g.png
-P 941E2685 gxwc.png
-P EE2AB425 ht.png
-P 3F3A6FD8 jb.png
-P EF1DA0F4 jmjl.png
-P B0E3502B lt.png
-P CA46521C pptt.png
-P 439A4834 s.png
-P 6D43035A sbml.png
-P 24ED0725 spp.png
-P A116030B sz.png
-P 3492B417 tie.png
-P CC8BE738 xyg.png
-R D5B85F64 组 20.png
-D Game/UI/VictoryBox
-D Game/UI/CheckIn/SelectLevel
-D Game/UI/GameScene/design
-R F47D84BE lADPD4BhrZITvbfNBQDNAtA_720_1280.jpg
-R 8A3D0CE5 level1.png
-P 68EF1D68 Level10.png
-P 3747F882 Level11.png
-P D7DED785 Level12.png
-P 5AC6070B level2.png
-P C44D3C5E level3.png
-P 65FBBA7A Level4.jpg
-R 127621AF Level5.png
-R 8602845D Level6.png
-R 2170C7A5 Level8.png
-R FE705D2B Level9.png
-D Game/UI/GameScene/Level1
-R 5B2D0DC8 huaban.png
-R 4C0E95FD huabanmask.png
-P 108A7A3C lian.png
-P F5D1385E lianmask.png
-P 59263A82 tengman .png
-P FA49C30E tengman mask.png
-P 53994BAC yanjing.png
-P 49040E28 youyepian.png
-P F7CDCD05 youyepianmask.png
-P BDEBD58E zui .png
-P D6036451 zuimask.png
-P 6CA8B783 zuoyepian .png
-P AEB53829 zuoyepian mask.png
-D Game/UI/GameScene/Level10
-P 56A86E27 bizi.png
-P E76DB9AF bizimask.png
-P BCD35A32 erduo.png
-P C6799E68 erduomask.png
-P 5F94A0DD lian.png
-P 60099925 lianmask.png
-P 93B52C88 shoubi.png
-P 5560023B shoubimask.png
-P A7B5A56E tanghulu.png
-P A98EF17B tanghulumask.png
-P 5C2C51B4 toufa.png
-P 2B6EC79C toufamask.png
-P BACAAEC8 tui.png
-P C50EA45B tuimask.png
-P 43FC8BA5 yanjing.png
-P 8D28EB21 yanjingmask.png
-P 5DCE4904 yanjingmaskBoard.png
-P 31795A0D yifu.png
-P 06503D73 yifumask.png
-P 87149377 zouwen.png
-P A472F36F zouwenmask.png
-P C44D17E7 zui.png
-P 57B66DA7 zuimask.png
-D Game/UI/GameScene/Level11
-P 5C501079 bizi.png
-P CA70C4B1 bizimask.png
-P BCD35A32 erduo.png
-P 5F1E50BA erduomask.png
-P 74B2BC22 faji.png
-P 86B08AAE fajimask.png
-P 4485CF4F kouzi.png
-P C5FB89F2 kouzimask.png
-P 271C01E3 lian.png
-P 80A6C6E7 lianmask.png
-P 93B52C88 shoubi.png
-P 72B8FC2E shoubimask.png
-P BC5728D9 toufa.png
-P F690D8BB toufamask.png
-P BACAAEC8 tui.png
-P 9F2C085F tuimask.png
-P DA012DB2 yanjing.png
-P 788D8CDD yanjingmask.png
-P E5638A5B yifu.png
-P A9E7DE9C yifumask.png
-P 87149377 zouwen.png
-P 76B82AB6 zouwenmask.png
-P B3C78340 zui.png
-P B692CA8D zuimask.png
-D Game/UI/GameScene/Level12
-P 715E6617 bizi.png
-P 9BEF61EF bizimask.png
-P 57AF5CF3 bozi .png
-P 7FA0B666 bozi mask.png
-P B15C7806 san.png
-P 895E4FFF sanmask.png
-P 1F14D0CA tou.png
-P 42FE655F toumask.png
-P 045FCD2D yanjing.png
-P 59CB690A yanjingmask.png
-P 6BAA3FDE yanzhu.png
-P 3695D6A8 yifu.png
-P 12BBF6C4 yifumask.png
-P 8C248C03 zui.png
-P 48C6CB71 zuimask.png
-D Game/UI/GameScene/Level2
-P 664D06B6 guiixan4.png
-P 58305064 guike.png
-P 83F6D61C guikemask.png
-P 064DF43F guitou.png
-P DB194E7D guitoumask.png
-P BFAFD6B2 guixian.png
-P 29E99FAD guixian2.png
-P 28DE299A guixian2mask.png
-P 46D86BDA guixian3.png
-P 6FDA1EE5 guixian3mask.png
-P 83D3846E guixian4mask.png
-P 9B57690A guixianmask.png
-P 102ADB21 houtui.png
-P 102ADB21 houtui2.png
-P E432EFAA houtui2mask.png
-P 06E8DB30 houtuimask.png
-P 961D4D0E qiantui.png
-P 997337BD qiantui2.png
-P 35B49A83 qiantui2mask.png
-P 460FF788 qiantuimask.png
-P 953F932A wei.png
-P 2C2C3121 weimask.png
-P 4F849911 yan.png
-P 4F849911 yan2.png
-P BB747BC6 zui.png
-P 1C982B59 zuimask.png
-D Game/UI/GameScene/Level3
-P 70F49352 bizi.png
-P FD93A886 bizimask.png
-P 58226489 hudiejie.png
-P 4E039249 hudiejiemask.png
-P EC474BFC lian.png
-P A613D4C8 lianmask.png
-P 7A872809 shenti.png
-P EB0B5A8F shenzimask.png
-P 96235149 weiba.png
-P F2233F7E weibamask.png
-P 9AC0F03F yan.png
-P 9899FA3E yan2.png
-P 23FEF644 youer.png
-P 2C5FCAD3 youermask.png
-P 6F2BEF1B youjiao.png
-P E1FABDBB youjiaomask.png
-P 285F9B30 youshou.png
-P C552B39D youshoumask.png
-P 009615F4 zui.png
-P 0B39E777 zuimask.png
-P 51856A1E zuoer.png
-P 50C750BB zuoermask.png
-P 6F2BEF1B zuojiao.png
-P 027348B5 zuojiaomask.png
-P A800FCD3 zuoshou.png
-P 68EAC4BB zuoshoumask.png
-D Game/UI/GameScene/Level4
-P E9DA4813 fuqi.png
-P C0884B13 fuqimask.png
-P 822461B3 shenzi.png
-P 85040B9D shenzimask.png
-P F198951D yajnzhuzi.png
-P 837D5434 yiba.png
-P CEB0A596 yibamask.png
-P EE4727D5 yuqi.png
-P CFF00F8F yuqimask.png
-P 08502758 zui.png
-P EA4F63E0 zuimask.png
-D Game/UI/GameScene/Level5
-P BDDAC738 chechuang.png
-P F3F3AE2C chechuangmask.png
-P 7FF10C30 chelun.png
-P DE0F855B chelunmask.png
-P E000FB1D cheshen.png
-P F0E0FA77 cheshenmask.png
-D Game/UI/GameScene/Level6
-P 7548AE34 bikong.png
-P B444C3A9 niu shenti .png
-P 05EB3CEC niu shenti mask.png
-P 4C20DB40 niuerduio.png
-P 54938FD4 niuerduiomask.png
-P D2FF175A niujiao.png
-P C7954A2E niujiaomask.png
-P 462E3C28 niulian .png
-P 4BA296F4 niulian mask.png
-P DD2D7DED niunaizi.png
-P AE8F3297 niunaizimask.png
-P E09451D3 niutui.png
-P 52CE106A niutuimask.png
-P 68BDF959 niuyan .png
-P C7AAFDDB niuyiba.png
-P 4C182FA5 niuyibamask.png
-D Game/UI/GameScene/Level7
-P F3787AC3 nanguatou .png
-P 55D354FC nanguatou mask.png
-R E6D498DC shenti .png
-R 3E7F0529 shenti mask.png
-P F30CBDB4 yanjing .png
-P 6B2095E0 zuiba .png
-P 950031BD zuiba mask.png
-D Game/UI/GameScene/Level8
-P F5110C47 ahuzi .png
-P F88DC75F ahuzi mask.png
-P 2FAA41D9 aixin.png
-P 996344F4 aixinmask.png
-P 2F6AB139 duzi.png
-P A84A0408 duzimask.png
-P 70E18662 erduo .png
-P 7F4DA511 erduo mask.png
-P 1E8D4F85 lian.png
-P 5FDA35A0 lianmask.png
-P D6F49D25 xiaochibang.png
-P A9572106 xiaochibangmask.png
-P 328D801A yanjing.png
-P AD7FB515 yanjingmask.png
-P 90B9752E zui.png
-P 17F6D688 zuimask.png
-D Game/UI/GameScene/Level9
-P ACDA1BB6 lian.png
-P DEE964C2 lianmask.png
-P 8BE9968B shenzi.png
-P C5B15D64 shenzimask.png
-P ECC6B8F7 yanzhuzi .png
-P 28C12A3B zui.png
-P 8D06BA1B zuimask.png
-D Game/UI/GameScene/Pencils
-D Game/UI/SelectLevel/IconDress
-P 79172350 bi.png
-P 6679A4C9 bz.png
-P D4D8F8E8 shu.png
-D Game/UI/SelectLevel/Name
-P E6875BCE dinglaotai.png
-P 43B7BC6A dinglaotou.png
-P 512E216B haitun.png
-P 26CF8D2B maomaochong.png
-P 1C15D9A9 maotouying.png
-P 3137AD3A wanshengnangua.png
-P 89212C67 wugui.png
-P 0DDA05BE xiaohonghua.png
-P 42CABCFA xiaohuamao.png
-P 30CAB7B3 xiaonainiu.png
-P 87AC5571 xiaoqiche.png
-P 48E6A39F zhangyugege.png
-D Game/UI/GameScene/Pencils/Blink
-P 1F892192 chengse.png
-P 318A0B0A eraser.png
-P 4597D229 heise.png
-P 5CC15B2E hese.png
-P AAB5203C hongse.png
-P DBD66B9B huangse.png
-P D88F2D82 lanse.png
-P 01C47DCA lvse.png
-P 4A868E92 taohong.png
-P 32E07411 tianlan.png
-P BD9412AB zise.png
-D Game/UI/GameScene/Pencils/ColoursPencils
-P 7375C4D4 caise1.png
-P 62888DA4 caise2.png
-P FF3F0E42 caise3.png
-P 06BCD147 caise4.png
-P B0FFC1DF caise5.png
-P 148E52E8 caise6.png
-P 781DF7C6 caise7.png
-D Game/UI/GameScene/Pencils/Single
-P 3C5EFC2C chengse.png
-P 318A0B0A eraser.png
-P E80CD1D3 heise.png
-P 1B7F2FA5 hese.png
-P C93336CB hongse.png
-P 565F5CA2 huangse.png
-P 8870D672 lanse.png
-P D29616FE lvse.png
-P 085DBFD1 taohong.png
-P 38A9C84D tianlan.png
-P 58A2E292 zise.png
+D Game/UI/01_Repertory/AdsHint
+D Game/UI/01_Repertory/Card
+D Game/UI/01_Repertory/CheckIn
+D Game/UI/01_Repertory/Common
+D Game/UI/01_Repertory/Compound
+D Game/UI/01_Repertory/Defeated
+D Game/UI/01_Repertory/DesignPic
+D Game/UI/01_Repertory/DrawCard
+D Game/UI/01_Repertory/Game
+D Game/UI/01_Repertory/MakeClothes
+D Game/UI/01_Repertory/PreLoad
+D Game/UI/01_Repertory/PropTry
+D Game/UI/01_Repertory/Resurgence
+D Game/UI/01_Repertory/SelectLevel
+D Game/UI/01_Repertory/Set
+D Game/UI/01_Repertory/Settle
+D Game/UI/01_Repertory/Share
+D Game/UI/01_Repertory/Shop
+D Game/UI/01_Repertory/Skin
+D Game/UI/01_Repertory/SkinQualified
+D Game/UI/01_Repertory/Special
+D Game/UI/01_Repertory/Start
+D Game/UI/01_Repertory/Task
+D Game/UI/01_Repertory/Victory
+D Game/UI/01_Repertory/VictoryBox

@@ -1,4 +1,5 @@
 import { Admin, DateAdmin, Tools } from "./Lwg";
+import { _SkinQualified } from "./_SkinQualified";
 
     /**签到模块*/
     export module CheckIn {
@@ -91,7 +92,7 @@ import { Admin, DateAdmin, Tools } from "./Lwg";
                 console.log('没有签到过，弹出签到页面！');
                 Admin._openScene(Admin._SceneName.CheckIn);
             } else {
-                if (SkinQualified._adsNum.value < 7) {
+                if (_SkinQualified._adsNum.value < 7) {
                     Admin._openScene(Admin._SceneName.SkinQualified);
                 }
                 console.log('签到过了，今日不可以再签到');
@@ -149,7 +150,7 @@ import { Admin, DateAdmin, Tools } from "./Lwg";
         export class CheckInScene extends Admin._SceneBase {
             moduleOnAwake(): void {
                 /**结构，如果没有则为null*/
-                CheckIn._checkList = this.Owner['CheckList'];
+                CheckIn._checkList = this._Owner['CheckList'];
                 //注意这里要复制数组，不可以直接赋值
                 _checkArray = Tools.jsonCompare('GameData/CheckIn/CheckIn.json', CheckClass.chek_7Days, CheckProPerty.name);
             }

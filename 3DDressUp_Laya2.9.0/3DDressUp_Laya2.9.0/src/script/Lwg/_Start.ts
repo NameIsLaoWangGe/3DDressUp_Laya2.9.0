@@ -7,18 +7,13 @@ import { _SelectLevel } from "./_SelectLevel";
  * 那么在这个默认类中进行添加，或者在其他地方动态添加*/
 export module _Start {
     export function _init(): void {
+
     }
     export class Start extends Admin._SceneBase {
-        lwgOnAwake(): void {
-        }
-        lwgOnStart(): void {
-        }
-        lwgOpenAniAfter(): void {
-        }
-        lwgBtnClick(): void {
-        }
-        lwgOnDisable(): void {
-            ADManager.TAPoint(TaT.PageLeave, 'mainpage');
+        lwgBtnRegister(): void {
+            this._btnUp(this._ImgVar('BtnStart'), () => {
+                this._openScene('MakeClothes');
+            })
         }
     }
 }

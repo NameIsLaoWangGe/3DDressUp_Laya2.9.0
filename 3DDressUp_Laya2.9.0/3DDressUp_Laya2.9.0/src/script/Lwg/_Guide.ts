@@ -55,10 +55,10 @@ export module _Guide {
         //     Backpack._haveCardArray.arr = [];
         //     DrawCard._drawCount.num = 0;
         //     DrawCard._residueDraw.num = 2;
-        console.log('开始进行新手引导！');
-        Admin._openScene(_SceneName.Start, null, () => {
-            console.log('新手引导完成！')
-        });
+        // console.log('开始进行新手引导！');
+        // Admin._openScene(_SceneName.Start, null, () => {
+        //     console.log('新手引导完成！')
+        // });
         //     Admin._openScene(Admin._SceneName.UIDrawCard, this.calssName, () => {
         //         let caller = {};
         //         TimerAdmin._frameLoop(1, caller, () => {
@@ -70,157 +70,154 @@ export module _Guide {
         //     });
         // }
     }
-    /**通用类，进行通用初始化，可在每个游戏中重复使用*/
-    export class _GuideBase extends Admin._SceneBase {
-        moduleOnAwake(): void { }
-        moduleOnEnable(): void { }
-        moduleEventRegister(): void { }
-    }
-
-    export class Guide extends _Guide._GuideBase {
+    export class Guide extends Admin._SceneBase {
         lwgOnEnable(): void {
-            this.Owner['Background'].alpha = 0;
-            this.Owner['Hand'].alpha = 0;
-            EventAdmin._notify(_Guide._Event.onStep);
+            // this._Owner['Background'].alpha = 0;
+            // this._Owner['Hand'].alpha = 0;
+            // EventAdmin._notify(_Guide._Event.onStep);
 
-            this.Owner["Draw"].on(Laya.Event.LABEL, this, (labal) => {
-                if (labal === 'start') {
-                    let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                    if (!DrawCanvas) {
-                        let DrawCanvas = new Laya.Sprite();
-                        DrawCanvas.name = 'DrawCanvas';
-                        this.Owner['Hand'].addChild(DrawCanvas);
-                        this.Owner['Handpic'].pos(0, 0);
-                        this.Owner['Handpic'].pivotX = 0;
-                        this.Owner['Handpic'].pivotY = 0;
-                        this['drawLinePos'] = new Laya.Point(this.Owner['Handpic'].x, this.Owner['Handpic'].y);
-                    }
-                } else if (labal === 'end') {
-                    let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                    if (this.Owner['Hand'].getChildByName('DrawCanvas')) {
-                        this['drawLinePos'] == false;
-                        DrawCanvas.removeSelf();
-                    }
-                }
-            });
+            // this._Owner["Draw"].on(Laya.Event.LABEL, this, (labal) => {
+            //     if (labal === 'start') {
+            //         let DrawCanvas = this._Owner['Hand'].getChildByName('DrawCanvas');
+            //         if (!DrawCanvas) {
+            //             let DrawCanvas = new Laya.Sprite();
+            //             DrawCanvas.name = 'DrawCanvas';
+            //             this._Owner['Hand'].addChild(DrawCanvas);
+            //             this._Owner['Handpic'].pos(0, 0);
+            //             this._Owner['Handpic'].pivotX = 0;
+            //             this._Owner['Handpic'].pivotY = 0;
+            //             this['drawLinePos'] = new Laya.Point(this._Owner['Handpic'].x, this._Owner['Handpic'].y);
+            //         }
+            //     } else if (labal === 'end') {
+            //         let DrawCanvas = this._Owner['Hand'].getChildByName('DrawCanvas');
+            //         if (this._Owner['Hand'].getChildByName('DrawCanvas')) {
+            //             this['drawLinePos'] == false;
+            //             DrawCanvas.removeSelf();
+            //         }
+            //     }
+            // });
 
-            TimerAdmin._frameLoop(1, this, () => {
-                let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                if (DrawCanvas) {
-                    if (this['drawLinePos']) {
-                        DrawCanvas.graphics.drawLine(this['drawLinePos'].x, this['drawLinePos'].y, this.Owner['Handpic'].x, this.Owner['Handpic'].y, "#000000", 8);
-                        DrawCanvas.graphics.drawCircle(this.Owner['Handpic'].x, this.Owner['Handpic'].y, 4, "#000000");
-                        this['drawLinePos'] = new Laya.Point(this.Owner['Handpic'].x, this.Owner['Handpic'].y);
-                    }
-                }
-            })
+            // TimerAdmin._frameLoop(1, this, () => {
+            //     let DrawCanvas = this._Owner['Hand'].getChildByName('DrawCanvas');
+            //     if (DrawCanvas) {
+            //         if (this['drawLinePos']) {
+            //             DrawCanvas.graphics.drawLine(this['drawLinePos'].x, this['drawLinePos'].y, this._Owner['Handpic'].x, this._Owner['Handpic'].y, "#000000", 8);
+            //             DrawCanvas.graphics.drawCircle(this._Owner['Handpic'].x, this._Owner['Handpic'].y, 4, "#000000");
+            //             this['drawLinePos'] = new Laya.Point(this._Owner['Handpic'].x, this._Owner['Handpic'].y);
+            //         }
+            //     }
+            // })
+        }
+        lwgOnStart(): void {
+            console.log('新手引导完成！')
+            this._openScene(_SceneName.Start)
         }
         lwgEventRegister(): void {
             /**第一次十连抽*/
-            var step1 = () => {
-                this.Owner["Draw"].play(0, true);
-                EventAdmin._notify(_Guide._Event.appear);
-                this.Owner['Hand'].pos(198, 523);
-                Tools.Draw.reverseRoundMask(this.Owner['Background'], 360, 598, 350, true);
-            }
-            /**第一次收取卡牌*/
-            var step2 = () => {
-                EventAdmin._notify(_Guide._Event.appear);
-                this.Owner['Hand'].pos(360, 1161);
-                this.Owner["Click"].play(0, true);
-                Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 360, 1161, 320, 150, 40, true);
-            }
-            /**第二次十连抽*/
-            var step3 = () => {
-                step1();
-            }
-            /**第二次收取卡牌*/
-            var step4 = () => {
-                step2();
-            }
-            /**关闭抽卡场景*/
-            var step5 = () => {
-                EventAdmin._notify(_Guide._Event.appear);
-                this.Owner['Hand'].pos(75, 102);
-                this.Owner["Click"].play(0, true);
-                Tools.Draw.reverseRoundMask(this.Owner['Background'], 72, 105, 60);
-            }
-            // 点击卡牌展示界面
-            var step6 = () => {
-                EventAdmin._notify(_Guide._Event.appear);
-                this.Owner['Hand'].pos(630, 790);
-                this.Owner["Click"].play(0, true);
-                Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 653, 758, 130, 150, 20, true);
-            }
-            // 关闭卡牌界面
-            var step7 = () => {
-                step5();
-            }
-            // 点击开始游戏按钮
-            var step8 = () => {
-                EventAdmin._notify(_Guide._Event.appear);
-                this.Owner['Hand'].pos(360, Laya.stage.height * 0.779);
-                this.Owner["Click"].play(0, true);
-                Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 360, Laya.stage.height * 0.779, 450, 180, 20, true);
-            }
-            // 执行
-            EventAdmin._register(_Guide._Event.onStep, this, () => {
-                Laya.timer.once(500, this, () => {
-                    console.log('新手引导到了第：', _Guide._whichStepNum + '步了');
-                    switch (_Guide._whichStepNum) {
-                        case 1:
-                            step1();
-                            break;
-                        case 2:
-                            step2()
-                            break;
-                        case 3:
-                            step3();
-                            break;
-                        case 4:
-                            step4();
-                            break;
-                        case 5:
-                            step5();
-                            break;
-                        case 6:
-                            step6();
-                            break;
-                        case 7:
-                            step7();
-                            break;
-                        case 8:
-                            step8();
-                            break;
-                        default:
-                            break;
-                    }
-                })
-            })
-            EventAdmin._register(_Guide._Event.appear, this, (func) => {
-                Animation2D.fadeOut(this.Owner['Hand'], 0, 1, 150);
-                Animation2D.fadeOut(this.Owner['Background'], 0, 0.5, 300);
-            })
-            EventAdmin._register(_Guide._Event.stepComplete, this, () => {
-                _Guide._whichStepNum++;
-                let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                if (this.Owner['Hand'].getChildByName('DrawCanvas')) {
-                    this['drawLinePos'] == false;
-                    DrawCanvas.removeSelf();
-                }
-                Animation2D.fadeOut(this.Owner['Hand'], 1, 0, 150);
-                Animation2D.fadeOut(this.Owner['Background'], 0.5, 0, 300, 0, () => {
-                    (this.Owner["Draw"] as Laya.Animation).stop();
-                    (this.Owner["Click"] as Laya.Animation).stop();
-                });
-            })
-            EventAdmin._register(_Guide._Event.complete, this, () => {
-                Animation2D.fadeOut(this.Owner['Hand'], 1, 0, 150);
-                Animation2D.fadeOut(this.Owner['Background'], 0.5, 0, 300, 0, () => {
-                    _Guide._complete.bool = true;
-                    Admin._closeScene(this.Owner.name);
-                });
-            })
+            // var step1 = () => {
+            //     this._Owner["Draw"].play(0, true);
+            //     EventAdmin._notify(_Guide._Event.appear);
+            //     this._Owner['Hand'].pos(198, 523);
+            //     Tools.Draw.reverseRoundMask(this._Owner['Background'], 360, 598, 350, true);
+            // }
+            // /**第一次收取卡牌*/
+            // var step2 = () => {
+            //     EventAdmin._notify(_Guide._Event.appear);
+            //     this._Owner['Hand'].pos(360, 1161);
+            //     this._Owner["Click"].play(0, true);
+            //     Tools.Draw.reverseRoundrectMask(this._Owner['Background'], 360, 1161, 320, 150, 40, true);
+            // }
+            // /**第二次十连抽*/
+            // var step3 = () => {
+            //     step1();
+            // }
+            // /**第二次收取卡牌*/
+            // var step4 = () => {
+            //     step2();
+            // }
+            // /**关闭抽卡场景*/
+            // var step5 = () => {
+            //     EventAdmin._notify(_Guide._Event.appear);
+            //     this._Owner['Hand'].pos(75, 102);
+            //     this._Owner["Click"].play(0, true);
+            //     Tools.Draw.reverseRoundMask(this._Owner['Background'], 72, 105, 60);
+            // }
+            // // 点击卡牌展示界面
+            // var step6 = () => {
+            //     EventAdmin._notify(_Guide._Event.appear);
+            //     this._Owner['Hand'].pos(630, 790);
+            //     this._Owner["Click"].play(0, true);
+            //     Tools.Draw.reverseRoundrectMask(this._Owner['Background'], 653, 758, 130, 150, 20, true);
+            // }
+            // // 关闭卡牌界面
+            // var step7 = () => {
+            //     step5();
+            // }
+            // // 点击开始游戏按钮
+            // var step8 = () => {
+            //     EventAdmin._notify(_Guide._Event.appear);
+            //     this._Owner['Hand'].pos(360, Laya.stage.height * 0.779);
+            //     this._Owner["Click"].play(0, true);
+            //     Tools.Draw.reverseRoundrectMask(this._Owner['Background'], 360, Laya.stage.height * 0.779, 450, 180, 20, true);
+            // }
+            // // 执行
+            // EventAdmin._register(_Guide._Event.onStep, this, () => {
+            //     Laya.timer.once(500, this, () => {
+            //         console.log('新手引导到了第：', _Guide._whichStepNum + '步了');
+            //         switch (_Guide._whichStepNum) {
+            //             case 1:
+            //                 step1();
+            //                 break;
+            //             case 2:
+            //                 step2()
+            //                 break;
+            //             case 3:
+            //                 step3();
+            //                 break;
+            //             case 4:
+            //                 step4();
+            //                 break;
+            //             case 5:
+            //                 step5();
+            //                 break;
+            //             case 6:
+            //                 step6();
+            //                 break;
+            //             case 7:
+            //                 step7();
+            //                 break;
+            //             case 8:
+            //                 step8();
+            //                 break;
+            //             default:
+            //                 break;
+            //         }
+            //     })
+            // })
+            // EventAdmin._register(_Guide._Event.appear, this, (func) => {
+            //     Animation2D.fadeOut(this._Owner['Hand'], 0, 1, 150);
+            //     Animation2D.fadeOut(this._Owner['Background'], 0, 0.5, 300);
+            // })
+            // EventAdmin._register(_Guide._Event.stepComplete, this, () => {
+            //     _Guide._whichStepNum++;
+            //     let DrawCanvas = this._Owner['Hand'].getChildByName('DrawCanvas');
+            //     if (this._Owner['Hand'].getChildByName('DrawCanvas')) {
+            //         this['drawLinePos'] == false;
+            //         DrawCanvas.removeSelf();
+            //     }
+            //     Animation2D.fadeOut(this._Owner['Hand'], 1, 0, 150);
+            //     Animation2D.fadeOut(this._Owner['Background'], 0.5, 0, 300, 0, () => {
+            //         (this._Owner["Draw"] as Laya.Animation).stop();
+            //         (this._Owner["Click"] as Laya.Animation).stop();
+            //     });
+            // })
+            // EventAdmin._register(_Guide._Event.complete, this, () => {
+            //     Animation2D.fadeOut(this._Owner['Hand'], 1, 0, 150);
+            //     Animation2D.fadeOut(this._Owner['Background'], 0.5, 0, 300, 0, () => {
+            //         _Guide._complete.bool = true;
+            //         Admin._closeScene(this._Owner.name);
+            //     });
+            // })
         }
     }
 }

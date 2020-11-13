@@ -1357,7 +1357,7 @@ export module lwg {
             type: {
                 /**渐隐渐出*/
                 fadeOut: 'fadeOut',
-                /**类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
+                /**用于竖屏,类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
                 stickIn: {
                     random: 'random',
                     // left: 'left',
@@ -1410,7 +1410,7 @@ export module lwg {
                 _clickLock.switch = false;
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
-                    Scene[Scene.name].lwgBtnClick();
+                    Scene[Scene.name].lwgBtnRegister();
                 }
             }
             switch (_sceneAnimation.presentAni) {
@@ -1619,25 +1619,24 @@ export module lwg {
             }
             /**
              * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
-             * @param effect 效果类型 1.'largen'
              * @param target 节点
              * @param up 抬起函数
-             * @param out 出屏幕函数
+             * @param effect 效果类型 1.'largen',默认为点击放大
            * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
            */
-            _btnUpRig(effect: string, target: Laya.Node, up: Function): void {
-                Click._on(effect, target, this, null, null, up, null);
+            _btnUp(target: Laya.Node, up: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Type.largen, target, this, null, null, up, null);
             }
             /**
              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
-             * @param effect 效果类型 1.'largen'
              * @param target 节点
              * @param caller 执行域
              * @param down 按下
+             * @param effect 效果类型 1.'largen'
              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
             */
-            _btnDownRig(effect: string, target: Laya.Node, down?: Function): void {
-                Click._on(effect, target, this, down, null, null, null);
+            _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Type.largen, target, this, down, null, null, null);
             }
             /**
               * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
@@ -1650,8 +1649,8 @@ export module lwg {
               * @param out 按下
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
-            _btnRig(effect: string, target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function): void {
-                Click._on(effect, target, this, down, move, up, out);
+            _btnAll(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Type.largen, target, this, down, move, up, out);
             }
             /**
               * 打开场景
@@ -1685,7 +1684,7 @@ export module lwg {
                     Laya.timer.once(time, this, () => {
                         _clickLock.switch = false;
                         this.lwgOpenAniAfter();
-                        this.lwgBtnClick();
+                        this.lwgBtnRegister();
                     });
                 } else {
                     time = _commonOpenAni(this._Owner);
@@ -1696,7 +1695,7 @@ export module lwg {
             /**开场动画之后执行*/
             lwgOpenAniAfter(): void { };
             /**按钮点击事件注册*/
-            lwgBtnClick(): void { };
+            lwgBtnRegister(): void { };
             /**按照当前Y轴坐标的高度的比例适配*/
             lwgAdaptiveHeight(arr: Array<Laya.Sprite>): void {
                 for (let index = 0; index < arr.length; index++) {
@@ -1792,14 +1791,14 @@ export module lwg {
             /**声明一些节点*/
             lwgOnAwake(): void { }
             onEnable(): void {
-                this.lwgBtnClick();
+                this.lwgBtnRegister();
                 this.lwgEventRegister();
                 this.lwgOnEnable();
             }
             /**初始化，在onEnable中执行，重写即可覆盖*/
             lwgOnEnable(): void { }
             /**点击事件注册*/
-            lwgBtnClick(): void { }
+            lwgBtnRegister(): void { }
             /**事件注册*/
             lwgEventRegister(): void { }
             onStart(): void {
@@ -5786,8 +5785,8 @@ export module lwg {
         /**当前加载到哪个分类数组*/
         export let _loadOrderIndex: number = 0;
 
-        /**在何处加载，是初始化加载还是页面中加载*/
-        export let _whereToLoad: string = Admin._SceneName.PreLoad;
+        /**两种类型，页面前加载还是初始化前*/
+        export let _loadType: string = Admin._SceneName.PreLoad;
         export enum _ListName {
             scene3D = 'scene3D',
             prefab3D = 'prefab3D',
@@ -5815,7 +5814,7 @@ export module lwg {
                         return;
                     }
                     console.log('当前进度条进度为:', _currentProgress.value / _sumProgress);
-                    console.log('进度条停止！');
+                    // console.log('进度条停止！');
                     console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
                     EventAdmin._notify(LwgPreLoad._Event.complete);
                 } else {
@@ -5933,13 +5932,13 @@ export module lwg {
                     let time = this.lwgAllComplete();
                     Laya.timer.once(time, this, () => {
                         // 通过预加载进入页面
-                        this._Owner.name = _whereToLoad;
-                        Admin._sceneControl[_whereToLoad] = this._Owner;
-                        if (_whereToLoad !== Admin._SceneName.PreLoad) {
+                        this._Owner.name = _loadType;
+                        Admin._sceneControl[_loadType] = this._Owner;
+                        if (_loadType !== Admin._SceneName.PreLoad) {
                             if (Admin._preLoadOpenSceneLater.openSceneName) {
                                 Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
                                     Admin._preLoadOpenSceneLater.func;
-                                    Admin._closeScene(_whereToLoad);
+                                    Admin._closeScene(_loadType);
                                 }, Admin._preLoadOpenSceneLater.zOrder);
                             }
                         } else {
@@ -5955,9 +5954,9 @@ export module lwg {
                                 }
                             }
                             PalyAudio.playMusic();
-                            Admin._closeScene(_whereToLoad, () => {
-                                _whereToLoad = Admin._SceneName.PreLoadStep;
-                            });
+                            this._openScene(_SceneName.Guide, true, () => {
+                                _loadType = Admin._SceneName.PreLoadStep;
+                            })
                         }
                     })
                 });
@@ -6017,7 +6016,7 @@ export module lwg {
                             if (Scene == null) {
                                 console.log('XXXXXXXXXXX3D场景' + _scene3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _scene3D[index]['scene'] = Scene;
+                                _scene3D[index]['Scene'] = Scene;
                                 console.log('3D场景' + _scene3D[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
@@ -6030,7 +6029,7 @@ export module lwg {
                             if (Sp == null) {
                                 console.log('XXXXXXXXXXX3D预设体' + _prefab3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _prefab3D[index]['prefab'] = Sp;
+                                _prefab3D[index]['Prefab'] = Sp;
                                 console.log('3D预制体' + _prefab3D[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
