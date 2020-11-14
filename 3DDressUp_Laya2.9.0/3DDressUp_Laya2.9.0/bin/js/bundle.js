@@ -1445,30 +1445,32 @@
                 }
             }
             DataAdmin._Store = _Store;
-            class _DataTable {
+            class _Table {
                 constructor(dataName, arrUrl, localStorage, proName) {
                     this._property = {
                         name: 'name',
                         chName: 'chName',
                         classify: 'classify',
                         unlockWay: 'unlockWay',
-                        conditionNum: 'condition',
-                        degreeNum: 'degree',
+                        conditionNum: 'conditionNum',
+                        degreeNum: 'degreeNum',
+                        compelet: 'compelet',
                         unlock: 'unlock',
                         have: 'have',
-                        compelet: 'compelet',
                         getAward: 'getAward',
                     };
                     this._arr = [];
-                    if (localStorage) {
-                        this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
-                    }
-                    else {
-                        if (Laya.Loader.getRes(arrUrl)) {
-                            this._arr = Laya.Loader.getRes(arrUrl);
+                    if (dataName) {
+                        if (localStorage) {
+                            this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
                         }
                         else {
-                            console.log(arrUrl, '数据表不存在！');
+                            if (Laya.Loader.getRes(arrUrl)) {
+                                this._arr = Laya.Loader.getRes(arrUrl);
+                            }
+                            else {
+                                console.log(arrUrl, '数据表不存在！');
+                            }
                         }
                     }
                 }
@@ -1545,18 +1547,18 @@
                 }
                 _checkCondition(name, number, func) {
                     let chek = null;
-                    number = number == undefined ? number : 1;
-                    let resCondition = this._getProperty(name, this._property.degreeNum);
+                    number = number == undefined ? 1 : number;
+                    let degreeNum = this._getProperty(name, this._property.degreeNum);
                     let condition = this._getProperty(name, this._property.conditionNum);
                     let compelet = this._getProperty(name, this._property.compelet);
-                    if (compelet !== true && compelet !== null) {
-                        if (condition <= resCondition + number) {
+                    if (!compelet) {
+                        if (condition <= degreeNum + number) {
                             this._setProperty(name, this._property.degreeNum, condition);
                             this._setProperty(name, this._property.compelet, true);
                             chek = true;
                         }
                         else {
-                            this._setProperty(name, this._property.degreeNum, resCondition + number);
+                            this._setProperty(name, this._property.degreeNum, degreeNum + number);
                             chek = false;
                         }
                     }
@@ -1569,7 +1571,7 @@
                     return chek;
                 }
             }
-            DataAdmin._DataTable = _DataTable;
+            DataAdmin._Table = _Table;
         })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
@@ -2810,6 +2812,9 @@
                 }), delayed ? delayed : 0);
             }
             Animation2D.move_Scale = move_Scale;
+            function move_rotate() {
+            }
+            Animation2D.move_rotate = move_rotate;
             function rotate_Scale(target, fRotate, fScaleX, fScaleY, eRotate, eScaleX, eScaleY, time, delayed, func) {
                 target.scaleX = fScaleX;
                 target.scaleY = fScaleY;
@@ -3278,11 +3283,11 @@
         (function (PalyAudio) {
             let voiceUrl;
             (function (voiceUrl) {
-                voiceUrl["btn"] = "Frame/Voice/btn.wav";
-                voiceUrl["bgm"] = "Frame/Voice/bgm.mp3";
-                voiceUrl["victory"] = "Frame/Voice/guoguan.wav";
-                voiceUrl["defeated"] = "Frame/Voice/wancheng.wav";
-                voiceUrl["huodejinbi"] = "Frame/Voice/huodejinbi.wav";
+                voiceUrl["btn"] = "Lwg/Voice/btn.wav";
+                voiceUrl["bgm"] = "Lwg/Voice/bgm.mp3";
+                voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
+                voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
+                voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
             })(voiceUrl = PalyAudio.voiceUrl || (PalyAudio.voiceUrl = {}));
             function playSound(url, number, func) {
                 if (!url) {
@@ -4760,34 +4765,47 @@
 
     var _MakeClothes;
     (function (_MakeClothes) {
-        class DottedLine extends DataAdmin._DataTable {
-            constructor(Root) {
+        let _Event;
+        (function (_Event) {
+            _Event["trigger"] = "_MakeClothes_trigger";
+        })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
+        class DottedLine extends DataAdmin._Table {
+            constructor(Root, LineParent) {
                 super();
                 this.Root = Root;
-                this.init();
+                this.LineParent = LineParent;
+                for (let index = 0; index < this.LineParent.numChildren; index++) {
+                    const element = this.LineParent.getChildAt(index);
+                    if (element.getComponents(Laya.BoxCollider)) {
+                        let data = {};
+                        data['Img'] = element;
+                        data[this._property.name] = element.name;
+                        data[this._property.conditionNum] = element.getComponents(Laya.BoxCollider).length;
+                        data[this._property.degreeNum] = 0;
+                        this._arr.push(data);
+                    }
+                }
             }
-            init() {
-                for (let index = 0; index < this.Root.numChildren; index++) {
-                    const element = this.Root.getChildAt(index);
-                    this._arr.push({
-                        Img: element,
-                        name: element.name,
-                        condition: element.getComponents(Laya.BoxCollider).length,
-                        degree: 0,
-                    });
+            removeCloth(name) {
+                this.LineParent.getChildByName(name).removeSelf();
+                let Cloth = this.Root.getChildByName(`Cloth${name.substr(4)}`);
+                if (Cloth) {
+                    Animation2D.rotate_Scale;
+                    Cloth.removeSelf();
+                }
+                else {
+                    console.log('当前虚线上没有可以裁剪布料，请查看');
                 }
             }
         }
         _MakeClothes.DottedLine = DottedLine;
         class Scissor extends Admin._ObjectBase {
-            constructor() {
-                super(...arguments);
-                this.num = 0;
-            }
             onTriggerEnter(other, self) {
-                this.num++;
-                other.destroy();
-                console.log(this.num);
+                if (!other['cut']) {
+                    other['cut'] = true;
+                    EventAdmin._notify(_Event.trigger, [other.owner.name]);
+                    other.destroy();
+                }
             }
         }
         _MakeClothes.Scissor = Scissor;
@@ -4799,21 +4817,30 @@
                         return this._ImgVar('Scissor');
                     },
                     touchP: new Laya.Point(),
-                    diffP: new Laya.Point(),
+                    maxSpeed: 30,
+                    get diffP() {
+                        return this['_diffP'] ? this['_diffP'] : new Laya.Point();
+                    },
+                    set diffP(p) {
+                        p.x = p.x > this['maxSpeed'] ? this['maxSpeed'] : p.x;
+                        p.x = p.x < -this['maxSpeed'] ? -this['maxSpeed'] : p.x;
+                        p.y = p.y > this['maxSpeed'] ? this['maxSpeed'] : p.y;
+                        p.y = p.y < -this['maxSpeed'] ? -this['maxSpeed'] : p.y;
+                        this['_diffP'] = p;
+                    },
                     EraserSp: () => {
                         if (!this._ImgVar('LineParent').getChildByName('EraserSp')) {
                             let Sp = new Laya.Sprite();
                             Sp.name = 'EraserSp';
                             Sp.blendMode = "destination-out";
                             this._ImgVar('LineParent').addChild(Sp);
-                            this._ImgVar('LineParent').cacheAs = "bitmap";
                             return Sp;
                         }
                         else {
                             return this._ImgVar('LineParent').getChildByName('EraserSp');
                         }
                     },
-                    EraserSize: 60,
+                    EraserSize: 34,
                     erasureLine: () => {
                         let gPos = this.Cutting.Scissor().parent.localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
                         let localPos = this.Cutting.EraserSp().globalToLocal(gPos);
@@ -4822,9 +4849,17 @@
                 };
             }
             lwgOnAwake() {
-                let task = new DottedLine(this._ImgVar('Root'));
-                console.log(task);
+                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'));
                 this._ImgVar('Scissor').addComponent(Scissor);
+                this._ImgVar('LineParent').cacheAs = "bitmap";
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.trigger, this, (name) => {
+                    let value = this.DottedLineControl._checkCondition(name);
+                    if (value) {
+                        this.DottedLineControl.removeCloth(name);
+                    }
+                });
             }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnBack'), () => {
@@ -4836,8 +4871,7 @@
             }
             onStageMouseMove(e) {
                 if (this.Cutting.touchP) {
-                    this.Cutting.diffP.x = e.stageX - this.Cutting.touchP.x;
-                    this.Cutting.diffP.y = e.stageY - this.Cutting.touchP.y;
+                    this.Cutting.diffP = new Laya.Point(e.stageX - this.Cutting.touchP.x, e.stageY - this.Cutting.touchP.y);
                     this.Cutting.Scissor().x += this.Cutting.diffP.x;
                     this.Cutting.Scissor().y += this.Cutting.diffP.y;
                     this.Cutting.erasureLine();
@@ -4923,13 +4957,10 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
-    var SceneName;
-    (function (SceneName) {
-    })(SceneName || (SceneName = {}));
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Admin._platform.ues = Admin._platform.tpye.Bytedance;
+            Admin._platform.ues = Admin._platform.tpye.Research;
             Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
             Click._Effect.use = Click._Effect.type.largen;
             Admin._moudel = {
@@ -4943,12 +4974,13 @@
         }
     }
 
+    var Scene = Laya.Scene;
     var REG = Laya.ClassUtils.regClass;
     var ui;
     (function (ui) {
         var test;
         (function (test) {
-            class TestSceneUI extends Laya.Scene {
+            class TestSceneUI extends Scene {
                 constructor() { super(); }
                 createChildren() {
                     super.createChildren();

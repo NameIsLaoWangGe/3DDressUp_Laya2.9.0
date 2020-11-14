@@ -22,32 +22,16 @@ export module _Res {
         // },
         // mesh3D: {},
         // material: {},
-        // prefab2D: {
-        //     LwgGold: {
-        //         url: 'Prefab/LwgGold.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        //     PencilsList: {
-        //         url: 'Prefab/PencilsList.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        //     StepSwitch: {
-        //         url: 'Prefab/StepSwitch.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        //     BtnCompelet: {
-        //         url: 'Prefab/BtnCompelet.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        //     BtnTurnLeft: {
-        //         url: 'Prefab/BtnTurnLeft.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        //     BtnTurnRight: {
-        //         url: 'Prefab/BtnTurnRight.json',
-        //         prefab: new Laya.Prefab,
-        //     },
-        // },
+        prefab2D: {
+            // LwgGold: {
+            //     url: 'Prefab/LwgGold.json',
+            //     prefab: new Laya.Prefab,
+            // },
+            BtnCompelet: {
+                url: 'Prefab/BtnCompelet.json',
+                prefab: new Laya.Prefab,
+            },
+        },
         // texture: {
         //     bishua1: {
         //         url: 'Game/UI/GameScene/bishua1.png',

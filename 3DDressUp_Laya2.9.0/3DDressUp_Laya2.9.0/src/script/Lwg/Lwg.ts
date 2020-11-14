@@ -1606,7 +1606,7 @@ export module lwg {
             }
             /**每个模块优先执行的初始化函数，比lwgOnEnable早执行*/
             moduleOnEnable(): void { };
-            /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
+            /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
             lwgEventRegister(): void { };
             /**模块中的事件*/
             moduleEventRegister(): void { };
@@ -1660,7 +1660,7 @@ export module lwg {
             lwgOpenAni(): number { return null };
             /**开场动画之后执行*/
             lwgOpenAniAfter(): void { };
-            /**按钮点击事件注册*/
+            /**按钮点击事件注册，在开场动画执行之后注册，在onEnable中完成*/
             lwgBtnRegister(): void { };
             /**
              * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
@@ -1902,35 +1902,38 @@ export module lwg {
 
             }
         }
-        /**new出一个通用数据管理对象，如果不通用，则可以继承使用*/
-        export class _DataTable {
+        /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
+        export class _Table {
             /**一些通用的属性名称*/
             _property = {
                 name: 'name',
                 chName: 'chName',
                 classify: 'classify',
                 unlockWay: 'unlockWay',
-                conditionNum: 'condition',
-                degreeNum: 'degree',
+                conditionNum: 'conditionNum',
+                degreeNum: 'degreeNum',
+                compelet: 'compelet',
                 unlock: 'unlock',
                 have: 'have',
-                compelet: 'compelet',
                 getAward: 'getAward',
             };
             _arr: Array<any> = [];
             /**
              * @param {string} dataName 在本地
-             * @param {Array<any>} arrUrl 数据地址
+             * @param {Array<any>} arrUrl 数据表地址
+             * @param localStorage 是否存储在本地
              * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
              */
             constructor(dataName?: string, arrUrl?: string, localStorage?: boolean, proName?: string) {
-                if (localStorage) {
-                    this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
-                } else {
-                    if (Laya.Loader.getRes(arrUrl)) {
-                        this._arr = Laya.Loader.getRes(arrUrl);
+                if (dataName) {
+                    if (localStorage) {
+                        this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
                     } else {
-                        console.log(arrUrl, '数据表不存在！');
+                        if (Laya.Loader.getRes(arrUrl)) {
+                            this._arr = Laya.Loader.getRes(arrUrl);
+                        } else {
+                            console.log(arrUrl, '数据表不存在！');
+                        }
                     }
                 }
             }
@@ -2033,26 +2036,27 @@ export module lwg {
                 }
                 return arr;
             }
+
             /**
               * 通过resCondition/degree,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
               * @param calssName 商品种类
               * @param name 商品名称
-              * @param number 购买几次，不传则默认为1次
+              * @param number 完成几次，不传则默认为1次
               * @param func 回调函数，可以在条件完成数次后执行某个步骤
              */
             _checkCondition(name: string, number?: number, func?: Function): any {
                 let chek: any = null;
-                number = number == undefined ? number : 1;
-                let resCondition = this._getProperty(name, this._property.degreeNum);
+                number = number == undefined ? 1 : number;
+                let degreeNum = this._getProperty(name, this._property.degreeNum);
                 let condition = this._getProperty(name, this._property.conditionNum);
                 let compelet = this._getProperty(name, this._property.compelet);
-                if (compelet !== true && compelet !== null) {
-                    if (condition <= resCondition + number) {
+                if (!compelet) {
+                    if (condition <= degreeNum + number) {
                         this._setProperty(name, this._property.degreeNum, condition);
                         this._setProperty(name, this._property.compelet, true);
                         chek = true;
                     } else {
-                        this._setProperty(name, this._property.degreeNum, resCondition + number);
+                        this._setProperty(name, this._property.degreeNum, degreeNum + number);
                         chek = false;
                     }
                 } else {
@@ -2063,6 +2067,7 @@ export module lwg {
                 }
                 return chek;
             }
+            // _checkCondition
         }
     }
 
@@ -3778,6 +3783,9 @@ export module lwg {
             }), delayed ? delayed : 0);
         }
 
+        export function move_rotate(): void {
+
+        }
         /**
          *旋转+放大缩小 
          * @param target 目标节点
@@ -4556,11 +4564,11 @@ export module lwg {
     export module PalyAudio {
         /**音效地址*/
         export enum voiceUrl {
-            btn = 'Frame/Voice/btn.wav',
-            bgm = 'Frame/Voice/bgm.mp3',
-            victory = 'Frame/Voice/guoguan.wav',
-            defeated = 'Frame/Voice/wancheng.wav',
-            huodejinbi = 'Frame/Voice/huodejinbi.wav',
+            btn = 'Lwg/Voice/btn.wav',
+            bgm = 'Lwg/Voice/bgm.mp3',
+            victory = 'Lwg/Voice/guoguan.wav',
+            defeated = 'Lwg/Voice/wancheng.wav',
+            huodejinbi = 'Lwg/Voice/huodejinbi.wav',
         }
 
         /**通用音效播放
@@ -6323,4 +6331,3 @@ export let _LwgPreLoad = lwg.LwgPreLoad;
 export let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
 export let _LwgInit = lwg._LwgInit;
 export let _LwgInitScene = lwg._LwgInit._LwgInitScene;
-

@@ -5,8 +5,6 @@ import { _MakeClothes } from "./_MakeClothes";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadStep } from "./_PreLoadStep";
 import { _Start } from "./_Start";
-export enum SceneName {
-}
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -14,7 +12,7 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
-        Admin._platform.ues = Admin._platform.tpye.Bytedance;
+        Admin._platform.ues = Admin._platform.tpye.Research;
         Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
         Click._Effect.use = Click._Effect.type.largen;
         Admin._moudel = {
