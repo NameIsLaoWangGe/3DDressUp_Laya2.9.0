@@ -16,7 +16,7 @@
                     sp.zOrder = 0;
                     Pause.BtnPauseNode = sp;
                     Pause.BtnPauseNode.name = 'BtnPauseNode';
-                    Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
+                    Click._on(Click._Effect.type.largen, sp, null, null, btnPauseUp, null);
                 }));
             }
             Pause._createBtnPause = _createBtnPause;
@@ -744,10 +744,10 @@
                     WebTest: 'WebTest',
                     Research: 'Research',
                 },
-                get name() {
+                get ues() {
                     return this['_platform_name'] ? this['_platform_name'] : null;
                 },
-                set name(val) {
+                set ues(val) {
                     this['_platform_name'] = val;
                     switch (val) {
                         case Admin._platform.tpye.WebTest:
@@ -841,7 +841,7 @@
                             __stageClickLock__.width = Laya.stage.width;
                             __stageClickLock__.height = Laya.stage.height;
                             __stageClickLock__.pos(0, 0);
-                            Click._on(Click._Type.noEffect, __stageClickLock__, this, null, null, (e) => {
+                            Click._on(Click._Effect.type.no, __stageClickLock__, this, null, null, (e) => {
                                 console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
                                 e.stopPropagation();
                             });
@@ -865,7 +865,7 @@
                 __lockClick__.width = Laya.stage.width;
                 __lockClick__.height = Laya.stage.height;
                 __lockClick__.pos(0, 0);
-                Click._on(Click._Type.noEffect, __lockClick__, this, null, null, (e) => {
+                Click._on(Click._Effect.type.no, __lockClick__, this, null, null, (e) => {
                     console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
                     e.stopPropagation();
                 });
@@ -920,38 +920,38 @@
                 _SceneName["Special"] = "Special";
                 _SceneName["Compound"] = "Compound";
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
-            function _preLoadOpenScene(openSceneName, cloesSceneName, func, zOrder) {
+            function _preLoadOpenScene(openName, cloesName, func, zOrder) {
                 _openScene(_SceneName.PreLoadStep);
-                Admin._preLoadOpenSceneLater.openSceneName = openSceneName;
-                Admin._preLoadOpenSceneLater.cloesSceneName = cloesSceneName;
+                Admin._preLoadOpenSceneLater.openName = openName;
+                Admin._preLoadOpenSceneLater.cloesName = cloesName;
                 Admin._preLoadOpenSceneLater.func = func;
                 Admin._preLoadOpenSceneLater.zOrder = zOrder;
             }
             Admin._preLoadOpenScene = _preLoadOpenScene;
             Admin._preLoadOpenSceneLater = {
-                openSceneName: null,
-                cloesSceneName: null,
+                openName: null,
+                cloesName: null,
                 func: null,
                 zOrder: null,
             };
-            function _openScene(openSceneName, cloesSceneName, func, zOrder) {
+            function _openScene(openName, cloesName, func, zOrder) {
                 Admin._clickLock.switch = true;
-                Laya.Scene.load('Scene/' + openSceneName + '.json', Laya.Handler.create(this, function (scene) {
-                    if (Admin._moudel['_' + openSceneName]) {
-                        if (Admin._moudel['_' + openSceneName][openSceneName]) {
-                            if (!scene.getComponent(Admin._moudel['_' + openSceneName][openSceneName])) {
-                                scene.addComponent(Admin._moudel['_' + openSceneName][openSceneName]);
+                Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
+                    if (Admin._moudel['_' + openName]) {
+                        if (Admin._moudel['_' + openName][openName]) {
+                            if (!scene.getComponent(Admin._moudel['_' + openName][openName])) {
+                                scene.addComponent(Admin._moudel['_' + openName][openName]);
                             }
                         }
                     }
                     else {
-                        console.log(`${openSceneName}场景没有同名脚本！`);
+                        console.log(`${openName}场景没有同名脚本！`);
                     }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
                     var openf = () => {
-                        if (Tools.Node.checkChildren(Laya.stage, openSceneName)) {
-                            console.log(openSceneName, '场景重复出现！请检查代码');
+                        if (Tools.Node.checkChildren(Laya.stage, openName)) {
+                            console.log(openName, '场景重复出现！请检查代码');
                             return;
                         }
                         if (zOrder) {
@@ -964,15 +964,15 @@
                             func();
                         }
                     };
-                    scene.name = openSceneName;
-                    Admin._sceneControl[openSceneName] = scene;
+                    scene.name = openName;
+                    Admin._sceneControl[openName] = scene;
                     let background = scene.getChildByName('Background');
                     if (background) {
                         background.width = Laya.stage.width;
                         background.height = Laya.stage.height;
                     }
-                    if (Admin._sceneControl[cloesSceneName]) {
-                        _closeScene(cloesSceneName, openf);
+                    if (Admin._sceneControl[cloesName]) {
+                        _closeScene(cloesName, openf);
                     }
                     else {
                         openf();
@@ -1030,13 +1030,13 @@
                 },
                 vanishSwitch: false,
                 openSwitch: true,
-                presentAni: 'fadeOut',
+                use: 'fadeOut',
             };
             function _commonVanishAni(CloseScene, closeFunc) {
                 CloseScene[CloseScene.name].lwgBeforeVanishAni();
                 let time;
                 let delay;
-                switch (Admin._sceneAnimation.presentAni) {
+                switch (Admin._sceneAnimation.use) {
                     case Admin._sceneAnimation.type.fadeOut:
                         time = 150;
                         delay = 50;
@@ -1065,7 +1065,7 @@
                         Scene[Scene.name].lwgBtnRegister();
                     }
                 };
-                switch (Admin._sceneAnimation.presentAni) {
+                switch (Admin._sceneAnimation.use) {
                     case Admin._sceneAnimation.type.fadeOut:
                         time = 400;
                         delay = 300;
@@ -1254,21 +1254,12 @@
                     this.moduleOnStart();
                     this.lwgOnStart();
                 }
-                _btnUp(target, up, effect) {
-                    Click._on(effect ? effect : Click._Type.largen, target, this, null, null, up, null);
-                }
-                _btnDown(target, down, effect) {
-                    Click._on(effect ? effect : Click._Type.largen, target, this, down, null, null, null);
-                }
-                _btnAll(target, down, move, up, out, effect) {
-                    Click._on(effect ? effect : Click._Type.largen, target, this, down, move, up, out);
-                }
-                _openScene(openSceneName, closeSelf, func, zOrder) {
+                _openScene(openName, closeSelf, func, zOrder) {
                     let closeName;
                     if (closeSelf == undefined || closeSelf == true) {
                         closeName = this._Owner.name;
                     }
-                    Admin._openScene(openSceneName, closeName, func, zOrder);
+                    Admin._openScene(openName, closeName, func, zOrder);
                 }
                 _closeScene(sceneName, func) {
                     Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
@@ -1294,21 +1285,30 @@
                 ;
                 lwgBtnRegister() { }
                 ;
-                lwgAdaptiveHeight(arr) {
+                _btnUp(target, up, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                }
+                _btnDown(target, down, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+                }
+                _btnAll(target, down, move, up, out, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                }
+                lwgAdaptive() { }
+                ;
+                _adaptiveHeight(arr) {
                     for (let index = 0; index < arr.length; index++) {
                         const element = arr[index];
                         element.y / GameConfig.height * Laya.stage.height;
                     }
                 }
                 ;
-                lwgAdaptiveWidth(arr) {
+                _adaptiveWidth(arr) {
                     for (let index = 0; index < arr.length; index++) {
                         const element = arr[index];
                         element.x / GameConfig.width * Laya.stage.width;
                     }
                 }
-                ;
-                lwgAdaptive() { }
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
                 ;
@@ -1328,42 +1328,77 @@
                 ;
             }
             Admin._SceneBase = _SceneBase;
-            class _Object extends Laya.Script {
+            class _ObjectBase extends Laya.Script {
                 constructor() {
                     super();
                 }
                 get _Owner() {
                     return this.owner;
                 }
-                get OwnerScene() {
+                get _OwnerScene() {
                     return this.owner.scene;
                 }
-                get OwnerRig() {
-                    if (!this._Owner['_OwnerRig']) {
-                        this._Owner['_OwnerRig'] = this._Owner.getComponent(Laya.RigidBody);
+                get _RigidBody() {
+                    if (!this._Owner['_OwnerRigidBody']) {
+                        this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
                     }
-                    return this._Owner['_OwnerRig'];
+                    return this._Owner['_OwnerRigidBody'];
+                }
+                get _BoxCollier() {
+                    if (!this._Owner['_OwnerBoxCollier']) {
+                        this._Owner['_OwnerBoxCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerBoxCollier'];
+                }
+                get _CilrcleCollier() {
+                    if (!this._Owner['_OwnerCilrcleCollier']) {
+                        this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerCilrcleCollier'];
+                }
+                get _PolygonCollier() {
+                    if (!this._Owner['_OwnerPolygonCollier']) {
+                        this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerPolygonCollier'];
                 }
                 onAwake() {
                     let _calssName = this['__proto__']['constructor'].name;
                     this._Owner[_calssName] = this;
                     this.lwgOnAwake();
+                    this.lwgAdaptive();
                 }
-                ImgChild(str) {
+                lwgAdaptive() { }
+                ;
+                _adaptiveHeight(arr) {
+                    for (let index = 0; index < arr.length; index++) {
+                        const element = arr[index];
+                        element.y / GameConfig.height * Laya.stage.height;
+                    }
+                }
+                ;
+                _adaptiveWidth(arr) {
+                    for (let index = 0; index < arr.length; index++) {
+                        const element = arr[index];
+                        element.x / GameConfig.width * Laya.stage.width;
+                    }
+                }
+                ;
+                _ImgChild(str) {
                     if (this._Owner.getChildByName(str)) {
                         return this._Owner.getChildByName(str);
                     }
                     else {
                         console.log('场景内不存在子节点：', str);
-                        return undefined;
+                        return null;
                     }
                 }
-                lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
+                lwgOpenScene(openName, closeSelf, func, zOrder) {
                     let closeName;
                     if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this.OwnerScene.name;
+                        closeName = this._OwnerScene.name;
                     }
-                    Admin._openScene(openSceneName, closeName, func, zOrder);
+                    Admin._openScene(openName, closeName, func, zOrder);
                 }
                 lwgCloseScene(sceneName, func) {
                     Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
@@ -1376,6 +1411,15 @@
                 }
                 lwgOnEnable() { }
                 lwgBtnRegister() { }
+                _btnUp(target, up, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                }
+                _btnDown(target, down, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+                }
+                _btnAll(target, down, move, up, out, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                }
                 lwgEventRegister() { }
                 onStart() {
                     this.lwgOnStart();
@@ -1392,15 +1436,15 @@
                 }
                 lwgOnDisable() { }
             }
-            Admin._Object = _Object;
+            Admin._ObjectBase = _ObjectBase;
         })(Admin = lwg.Admin || (lwg.Admin = {}));
-        let _DataAdmin;
-        (function (_DataAdmin) {
+        let DataAdmin;
+        (function (DataAdmin) {
             class _Store {
                 getVariables() {
                 }
             }
-            _DataAdmin._Store = _Store;
+            DataAdmin._Store = _Store;
             class _DataTable {
                 constructor(dataName, arrUrl, localStorage, proName) {
                     this._property = {
@@ -1408,13 +1452,14 @@
                         chName: 'chName',
                         classify: 'classify',
                         unlockWay: 'unlockWay',
-                        condition: 'condition',
-                        resCondition: 'resCondition',
+                        conditionNum: 'condition',
+                        degreeNum: 'degree',
                         unlock: 'unlock',
                         have: 'have',
                         compelet: 'compelet',
                         getAward: 'getAward',
                     };
+                    this._arr = [];
                     if (localStorage) {
                         this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
                     }
@@ -1498,29 +1543,34 @@
                     }
                     return arr;
                 }
-                _checkCondition(name, number) {
+                _checkCondition(name, number, func) {
+                    let chek = null;
                     number = number == undefined ? number : 1;
-                    let resCondition = this._getProperty(name, this._property.resCondition);
-                    let condition = this._getProperty(name, this._property.condition);
+                    let resCondition = this._getProperty(name, this._property.degreeNum);
+                    let condition = this._getProperty(name, this._property.conditionNum);
                     let compelet = this._getProperty(name, this._property.compelet);
                     if (compelet !== true && compelet !== null) {
                         if (condition <= resCondition + number) {
-                            this._setProperty(name, this._property.resCondition, condition);
+                            this._setProperty(name, this._property.degreeNum, condition);
                             this._setProperty(name, this._property.compelet, true);
-                            return true;
+                            chek = true;
                         }
                         else {
-                            this._setProperty(name, this._property.resCondition, resCondition + number);
-                            return false;
+                            this._setProperty(name, this._property.degreeNum, resCondition + number);
+                            chek = false;
                         }
                     }
                     else {
-                        return -1;
+                        chek = -1;
                     }
+                    if (func) {
+                        func();
+                    }
+                    return chek;
                 }
             }
-            _DataAdmin._DataTable = _DataTable;
-        })(_DataAdmin = lwg._DataAdmin || (lwg._DataAdmin = {}));
+            DataAdmin._DataTable = _DataTable;
+        })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
             function RGBToHexString(r, g, b) {
@@ -2334,26 +2384,28 @@
                 let label = new Laya.Label();
             }
             Click._createButton = _createButton;
-            let _Type;
-            (function (_Type) {
-                _Type["noEffect"] = "noEffect";
-                _Type["largen"] = "largen";
-                _Type["balloon"] = "balloon";
-                _Type["beetle"] = "beetle";
-            })(_Type = Click._Type || (Click._Type = {}));
+            Click._Effect = {
+                use: 'largen',
+                type: {
+                    no: 'no',
+                    largen: 'largen',
+                    balloon: 'balloon',
+                    beetle: 'beetle',
+                },
+            };
             function _on(effect, target, caller, down, move, up, out) {
                 let btnEffect;
                 switch (effect) {
-                    case _Type.noEffect:
+                    case Click._Effect.type.no:
                         btnEffect = new Btn_NoEffect();
                         break;
-                    case _Type.largen:
+                    case Click._Effect.type.largen:
                         btnEffect = new Btn_LargenEffect();
                         break;
-                    case _Type.balloon:
+                    case Click._Effect.type.balloon:
                         btnEffect = new Btn_Balloon();
                         break;
-                    case _Type.balloon:
+                    case Click._Effect.type.balloon:
                         btnEffect = new Btn_Beetle();
                         break;
                     default:
@@ -2373,16 +2425,16 @@
             function _off(effect, target, caller, down, move, up, out) {
                 let btnEffect;
                 switch (effect) {
-                    case _Type.noEffect:
+                    case Click._Effect.type.no:
                         btnEffect = new Btn_NoEffect();
                         break;
-                    case _Type.largen:
+                    case Click._Effect.type.largen:
                         btnEffect = new Btn_LargenEffect();
                         break;
-                    case _Type.balloon:
+                    case Click._Effect.type.balloon:
                         btnEffect = new Btn_Balloon();
                         break;
-                    case _Type.balloon:
+                    case Click._Effect.type.balloon:
                         btnEffect = new Btn_Beetle();
                         break;
                     default:
@@ -3181,7 +3233,7 @@
                     e.stopPropagation();
                     Admin._openScene(Admin._SceneName.Set);
                 };
-                Click._on(Click._Type.largen, btn, null, null, btnSetUp, null);
+                Click._on(Click._Effect.type.largen, btn, null, null, btnSetUp, null);
                 Setting.BtnSetNode = btn;
                 Setting.BtnSetNode.name = 'BtnSetNode';
                 return btn;
@@ -4325,8 +4377,8 @@
                             this._Owner.name = LwgPreLoad._loadType;
                             Admin._sceneControl[LwgPreLoad._loadType] = this._Owner;
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
-                                if (Admin._preLoadOpenSceneLater.openSceneName) {
-                                    Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
+                                if (Admin._preLoadOpenSceneLater.openName) {
+                                    Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
                                         Admin._preLoadOpenSceneLater.func;
                                         Admin._closeScene(LwgPreLoad._loadType);
                                     }, Admin._preLoadOpenSceneLater.zOrder);
@@ -4528,7 +4580,7 @@
                 _Event["compelet"] = "_ResPrepare_compelet";
             })(_Event = _LwgInit._Event || (_LwgInit._Event = {}));
             function _init() {
-                switch (Admin._platform.name) {
+                switch (Admin._platform.ues) {
                     case Admin._platform.tpye.WeChat:
                         _loadPkg_Wechat();
                         break;
@@ -4593,6 +4645,8 @@
     var lwg$1 = lwg;
     let Admin = lwg.Admin;
     let _SceneBase = Admin._SceneBase;
+    let _ObjectBase = Admin._ObjectBase;
+    let DataAdmin = lwg.DataAdmin;
     let _SceneName = Admin._SceneName;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
@@ -4706,7 +4760,35 @@
 
     var _MakeClothes;
     (function (_MakeClothes) {
-        class Scissor extends Admin._Object {
+        class DottedLine extends DataAdmin._DataTable {
+            constructor(Root) {
+                super();
+                this.Root = Root;
+                this.init();
+            }
+            init() {
+                for (let index = 0; index < this.Root.numChildren; index++) {
+                    const element = this.Root.getChildAt(index);
+                    this._arr.push({
+                        Img: element,
+                        name: element.name,
+                        condition: element.getComponents(Laya.BoxCollider).length,
+                        degree: 0,
+                    });
+                }
+            }
+        }
+        _MakeClothes.DottedLine = DottedLine;
+        class Scissor extends Admin._ObjectBase {
+            constructor() {
+                super(...arguments);
+                this.num = 0;
+            }
+            onTriggerEnter(other, self) {
+                this.num++;
+                other.destroy();
+                console.log(this.num);
+            }
         }
         _MakeClothes.Scissor = Scissor;
         class MakeClothes extends Admin._SceneBase {
@@ -4739,14 +4821,14 @@
                     }
                 };
             }
+            lwgOnAwake() {
+                let task = new DottedLine(this._ImgVar('Root'));
+                console.log(task);
+                this._ImgVar('Scissor').addComponent(Scissor);
+            }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnBack'), () => {
                     this._openScene(_SceneName.Start);
-                });
-                this._btnAll(this._ImgVar('Scissor'), () => {
-                }, () => {
-                }, () => {
-                }, () => {
                 });
             }
             onStageMouseDown(e) {
@@ -4811,7 +4893,7 @@
     (function (_PreLoadStep) {
         class PreLoadStep extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                switch (Admin._preLoadOpenSceneLater.openSceneName) {
+                switch (Admin._preLoadOpenSceneLater.openName) {
                     case _SceneName.Game:
                         EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
                         break;
@@ -4847,8 +4929,9 @@
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Admin._platform.name = Admin._platform.tpye.Bytedance;
-            Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
+            Admin._platform.ues = Admin._platform.tpye.Bytedance;
+            Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
+            Click._Effect.use = Click._Effect.type.largen;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
                 _Guide: _Guide,

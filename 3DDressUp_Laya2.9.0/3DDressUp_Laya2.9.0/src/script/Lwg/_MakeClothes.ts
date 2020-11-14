@@ -1,19 +1,47 @@
-import { Admin, _SceneName } from "./Lwg";
+import lwg, { Admin, DataAdmin, _SceneName } from "./Lwg";
 
 export module _MakeClothes {
-    export class Scissor extends Admin._Object {
-        onTriggerEnter(): void {
 
+    export class DottedLine extends DataAdmin._DataTable {
+        constructor(Root: Laya.Image) {
+            super();
+            this.Root = Root;
+            this.init();
+        }
+        Root: Laya.Image;
+        init(): void {
+            for (let index = 0; index < this.Root.numChildren; index++) {
+                const element = this.Root.getChildAt(index) as Laya.Image;
+                this._arr.push({
+                    Img: element,
+                    name: element.name,
+                    condition: element.getComponents(Laya.BoxCollider).length,
+                    degree: 0,
+                })
+            }
         }
     }
+    export class Scissor extends Admin._ObjectBase {
+        num = 0;
+        onTriggerEnter(other: Laya.BoxCollider, self: Laya.CircleCollider): void {
+            this.num++;
+            other.destroy();
+            console.log(this.num);
+        }
+    }
+
     export class MakeClothes extends Admin._SceneBase {
+        lwgOnAwake(): void {
+            let task = new DottedLine(this._ImgVar('Root'));
+            console.log(task);
+            this._ImgVar('Scissor').addComponent(Scissor);
+        }
         lwgBtnRegister(): void {
             this._btnUp(this._ImgVar('BtnBack'), () => {
                 this._openScene(_SceneName.Start);
             })
         }
-
-        /**裁剪控制*/ 
+        /**裁剪控制*/
         Cutting = {
             Scissor: () => {
                 return this._ImgVar('Scissor');

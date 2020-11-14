@@ -20,7 +20,7 @@ export module lwg {
                 sp.zOrder = 0;
                 BtnPauseNode = sp;
                 BtnPauseNode.name = 'BtnPauseNode';
-                Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
+                Click._on(Click._Effect.type.largen, sp, null, null, btnPauseUp, null);
             }));
         }
         export function btnPauseUp(event) {
@@ -1043,10 +1043,10 @@ export module lwg {
                 /**研发中*/
                 Research: 'Research',
             },
-            get name(): string {
+            get ues(): string {
                 return this['_platform_name'] ? this['_platform_name'] : null;
             },
-            set name(val: string) {
+            set ues(val: string) {
                 this['_platform_name'] = val;
                 switch (val) {
                     case _platform.tpye.WebTest:
@@ -1149,7 +1149,7 @@ export module lwg {
                         __stageClickLock__.width = Laya.stage.width;
                         __stageClickLock__.height = Laya.stage.height;
                         __stageClickLock__.pos(0, 0);
-                        Click._on(Click._Type.noEffect, __stageClickLock__, this, null, null, (e: Laya.Event) => {
+                        Click._on(Click._Effect.type.no, __stageClickLock__, this, null, null, (e: Laya.Event) => {
                             console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
                             e.stopPropagation();
                         });
@@ -1178,7 +1178,7 @@ export module lwg {
             __lockClick__.width = Laya.stage.width;
             __lockClick__.height = Laya.stage.height;
             __lockClick__.pos(0, 0);
-            Click._on(Click._Type.noEffect, __lockClick__, this, null, null, (e: Laya.Event) => {
+            Click._on(Click._Effect.type.no, __lockClick__, this, null, null, (e: Laya.Event) => {
                 console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
                 e.stopPropagation();
             });
@@ -1240,49 +1240,49 @@ export module lwg {
 
         /**
          *预加载后打开场景，预加载内容将在预加载界面按照界面名称执行
-         * @param {string} openSceneName 需要打开的场景名称
-         * @param {string} [cloesSceneName] 需要关闭的场景，默认为null
+         * @param {string} openName 需要打开的场景名称
+         * @param {string} [cloesName] 需要关闭的场景，默认为null
          * @param {Function} [func] 完成回调，默认为null
          * @param {number} [zOrder] 指定层级，默认为最上层
          */
-        export function _preLoadOpenScene(openSceneName: string, cloesSceneName?: string, func?: Function, zOrder?: number) {
+        export function _preLoadOpenScene(openName: string, cloesName?: string, func?: Function, zOrder?: number) {
             _openScene(_SceneName.PreLoadStep);
-            _preLoadOpenSceneLater.openSceneName = openSceneName;
-            _preLoadOpenSceneLater.cloesSceneName = cloesSceneName;
+            _preLoadOpenSceneLater.openName = openName;
+            _preLoadOpenSceneLater.cloesName = cloesName;
             _preLoadOpenSceneLater.func = func;
             _preLoadOpenSceneLater.zOrder = zOrder;
         }
         /**预加载完毕后，需要打开的场景信息*/
         export let _preLoadOpenSceneLater = {
-            openSceneName: null,
-            cloesSceneName: null,
+            openName: null,
+            cloesName: null,
             func: null,
             zOrder: null,
         }
         /**
           * 打开场景
-          * @param openSceneName 需要打开的场景名称
-          * @param cloesSceneName 需要关闭的场景，默认为null
+          * @param openName 需要打开的场景名称
+          * @param cloesName 需要关闭的场景，默认为null
           * @param func 完成回调，默认为null
           * @param zOrder 指定层级
          */
-        export function _openScene(openSceneName: string, cloesSceneName?: string, func?: Function, zOrder?: number): void {
+        export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
             Admin._clickLock.switch = true;
-            Laya.Scene.load('Scene/' + openSceneName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
-                if (_moudel['_' + openSceneName]) {
-                    if (_moudel['_' + openSceneName][openSceneName]) {
-                        if (!scene.getComponent(_moudel['_' + openSceneName][openSceneName])) {
-                            scene.addComponent(_moudel['_' + openSceneName][openSceneName]);
+            Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
+                if (_moudel['_' + openName]) {
+                    if (_moudel['_' + openName][openName]) {
+                        if (!scene.getComponent(_moudel['_' + openName][openName])) {
+                            scene.addComponent(_moudel['_' + openName][openName]);
                         }
                     }
                 } else {
-                    console.log(`${openSceneName}场景没有同名脚本！`);
+                    console.log(`${openName}场景没有同名脚本！`);
                 }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
                 var openf = () => {
-                    if (Tools.Node.checkChildren(Laya.stage, openSceneName)) {
-                        console.log(openSceneName, '场景重复出现！请检查代码');
+                    if (Tools.Node.checkChildren(Laya.stage, openName)) {
+                        console.log(openName, '场景重复出现！请检查代码');
                         return;
                     }
                     if (zOrder) {
@@ -1294,16 +1294,16 @@ export module lwg {
                         func();
                     }
                 }
-                scene.name = openSceneName;
-                _sceneControl[openSceneName] = scene;//装入场景容器，此容器内每个场景唯一
+                scene.name = openName;
+                _sceneControl[openName] = scene;//装入场景容器，此容器内每个场景唯一
                 // 背景图自适应并且居中
                 let background = scene.getChildByName('Background') as Laya.Image;
                 if (background) {
                     background.width = Laya.stage.width;
                     background.height = Laya.stage.height;
                 }
-                if (_sceneControl[cloesSceneName]) {
-                    _closeScene(cloesSceneName, openf);
+                if (_sceneControl[cloesName]) {
+                    _closeScene(cloesName, openf);
                 } else {
                     openf();
                 }
@@ -1373,7 +1373,7 @@ export module lwg {
             },
             vanishSwitch: false,
             openSwitch: true,
-            presentAni: 'fadeOut',
+            use: 'fadeOut',
         }
 
         /**通用场景消失动画*/
@@ -1381,7 +1381,7 @@ export module lwg {
             CloseScene[CloseScene.name].lwgBeforeVanishAni();
             let time: number;
             let delay: number;
-            switch (_sceneAnimation.presentAni) {
+            switch (_sceneAnimation.use) {
                 case _sceneAnimation.type.fadeOut:
                     time = 150;
                     delay = 50;
@@ -1413,7 +1413,7 @@ export module lwg {
                     Scene[Scene.name].lwgBtnRegister();
                 }
             }
-            switch (_sceneAnimation.presentAni) {
+            switch (_sceneAnimation.use) {
                 case _sceneAnimation.type.fadeOut:
                     time = 400;
                     delay = 300;
@@ -1617,54 +1617,20 @@ export module lwg {
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
-            /**
-             * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
-             * @param target 节点
-             * @param up 抬起函数
-             * @param effect 效果类型 1.'largen',默认为点击放大
-           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
-           */
-            _btnUp(target: Laya.Node, up: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Type.largen, target, this, null, null, up, null);
-            }
-            /**
-             * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
-             * @param target 节点
-             * @param caller 执行域
-             * @param down 按下
-             * @param effect 效果类型 1.'largen'
-             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
-            */
-            _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Type.largen, target, this, down, null, null, null);
-            }
-            /**
-              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
-              * @param effect 效果类型 1.'largen'
-              * @param target 节点
-              * @param caller 执行域
-              * @param down 按下
-              * @param move 移动
-              * @param up 抬起
-              * @param out 按下
-              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
-             */
-            _btnAll(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Type.largen, target, this, down, move, up, out);
-            }
+
             /**
               * 打开场景
-              * @param openSceneName 需要打开的场景名称
+              * @param openName 需要打开的场景名称
               * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
               * @param func 完成回调，默认为null
               * @param zOrder 指定层级
              */
-            _openScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
+            _openScene(openName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
                 let closeName;
                 if (closeSelf == undefined || closeSelf == true) {
                     closeName = this._Owner.name;
                 }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
+                Admin._openScene(openName, closeName, func, zOrder);
             }
             /**
              * 关闭场景，
@@ -1696,22 +1662,58 @@ export module lwg {
             lwgOpenAniAfter(): void { };
             /**按钮点击事件注册*/
             lwgBtnRegister(): void { };
+            /**
+             * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param up 抬起函数
+             * @param effect 效果类型 1.'largen',默认为点击放大
+           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+           */
+            _btnUp(target: Laya.Node, up: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+            }
+            /**
+             * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param caller 执行域
+             * @param down 按下
+             * @param effect 效果类型 1.'largen'
+             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+            */
+            _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+            }
+            /**
+              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param effect 效果类型 1.'largen'
+              * @param target 节点
+              * @param caller 执行域
+              * @param down 按下
+              * @param move 移动
+              * @param up 抬起
+              * @param out 按下
+              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnAll(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+            }
+
+            /**适配位置*/
+            lwgAdaptive(): void { };
             /**按照当前Y轴坐标的高度的比例适配*/
-            lwgAdaptiveHeight(arr: Array<Laya.Sprite>): void {
+            _adaptiveHeight(arr: Array<Laya.Sprite>): void {
                 for (let index = 0; index < arr.length; index++) {
                     const element = arr[index] as Laya.Sprite;
                     element.y / GameConfig.height * Laya.stage.height;
                 }
             };
             /**按照当前X轴的高度的比例适配*/
-            lwgAdaptiveWidth(arr: Array<Laya.Sprite>): void {
+            _adaptiveWidth(arr: Array<Laya.Sprite>): void {
                 for (let index = 0; index < arr.length; index++) {
                     const element = arr[index] as Laya.Sprite;
                     element.x / GameConfig.width * Laya.stage.width;
                 }
             };
-            /**随意适配*/
-            lwgAdaptive(): void { };
             onUpdate(): void { this.lwgOnUpdate() };
             /**每帧执行*/
             lwgOnUpdate(): void { };
@@ -1730,8 +1732,9 @@ export module lwg {
             /**离开时执行，子类不执行onDisable，只执行lwgDisable*/
             lwgOnDisable(): void { };
         }
+
         /**2D角色、物件通用父类*/
-        export class _Object extends Laya.Script {
+        export class _ObjectBase extends Laya.Script {
             constructor() {
                 super();
             }
@@ -1739,15 +1742,36 @@ export module lwg {
             get _Owner(): Laya.Sprite {
                 return this.owner as Laya.Sprite;
             }
-            get OwnerScene(): Laya.Sprite {
+            get _OwnerScene(): Laya.Sprite {
                 return this.owner.scene as Laya.Scene;
             }
             /**物理组件*/
-            get OwnerRig(): Laya.RigidBody {
-                if (!this._Owner['_OwnerRig']) {
-                    this._Owner['_OwnerRig'] = this._Owner.getComponent(Laya.RigidBody)
+            get _RigidBody(): Laya.RigidBody {
+                if (!this._Owner['_OwnerRigidBody']) {
+                    this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
                 }
-                return this._Owner['_OwnerRig'];
+                return this._Owner['_OwnerRigidBody'];
+            }
+            /**碰撞组件*/
+            get _BoxCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerBoxCollier']) {
+                    this._Owner['_OwnerBoxCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerBoxCollier'];
+            }
+            /**碰撞组件*/
+            get _CilrcleCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerCilrcleCollier']) {
+                    this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerCilrcleCollier'];
+            }
+            /**碰撞组件*/
+            get _PolygonCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerPolygonCollier']) {
+                    this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerPolygonCollier'];
             }
             onAwake(): void {
                 // 类名
@@ -1755,30 +1779,47 @@ export module lwg {
                 // 组件变为的self属性
                 this._Owner[_calssName] = this;
                 this.lwgOnAwake();
+                this.lwgAdaptive();
             }
+            /**随意适配*/
+            lwgAdaptive(): void { };
+            /**按照当前Y轴坐标的高度的比例适配*/
+            _adaptiveHeight(arr: Array<Laya.Sprite>): void {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index] as Laya.Sprite;
+                    element.y / GameConfig.height * Laya.stage.height;
+                }
+            };
+            /**按照当前X轴的高度的比例适配*/
+            _adaptiveWidth(arr: Array<Laya.Sprite>): void {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index] as Laya.Sprite;
+                    element.x / GameConfig.width * Laya.stage.width;
+                }
+            };
 
-            ImgChild(str: string): Laya.Image {
+            _ImgChild(str: string): Laya.Image {
                 if (this._Owner.getChildByName(str)) {
                     return this._Owner.getChildByName(str) as Laya.Image;
                 } else {
                     console.log('场景内不存在子节点：', str);
-                    return undefined;
+                    return null;
                 }
             }
 
             /**
               * 打开场景
-              * @param openSceneName 需要打开的场景名称
+              * @param openName 需要打开的场景名称
               * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
               * @param func 完成回调，默认为null
               * @param zOrder 指定层级
              */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
+            lwgOpenScene(openName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
                 let closeName;
                 if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.OwnerScene.name;
+                    closeName = this._OwnerScene.name;
                 }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
+                Admin._openScene(openName, closeName, func, zOrder);
             }
             /**
             * 关闭场景，
@@ -1799,6 +1840,41 @@ export module lwg {
             lwgOnEnable(): void { }
             /**点击事件注册*/
             lwgBtnRegister(): void { }
+            /**
+             * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param up 抬起函数
+             * @param effect 效果类型 1.'largen',默认为点击放大
+           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+           */
+            _btnUp(target: Laya.Node, up: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+            }
+            /**
+             * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param caller 执行域
+             * @param down 按下
+             * @param effect 效果类型 1.'largen'
+             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+            */
+            _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+            }
+            /**
+              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param effect 效果类型 1.'largen'
+              * @param target 节点
+              * @param caller 执行域
+              * @param down 按下
+              * @param move 移动
+              * @param up 抬起
+              * @param out 按下
+              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnAll(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
+                Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+            }
             /**事件注册*/
             lwgEventRegister(): void { }
             onStart(): void {
@@ -1820,7 +1896,7 @@ export module lwg {
     }
 
     /**数据管理*/
-    export module _DataAdmin {
+    export module DataAdmin {
         export class _Store {
             getVariables(): void {
 
@@ -1834,20 +1910,20 @@ export module lwg {
                 chName: 'chName',
                 classify: 'classify',
                 unlockWay: 'unlockWay',
-                condition: 'condition',
-                resCondition: 'resCondition',
+                conditionNum: 'condition',
+                degreeNum: 'degree',
                 unlock: 'unlock',
                 have: 'have',
                 compelet: 'compelet',
                 getAward: 'getAward',
             };
-            _arr: Array<any>;
+            _arr: Array<any> = [];
             /**
-             * @param {string} name 在本地
-             * @param {Array<any>} arrUrl 数据
+             * @param {string} dataName 在本地
+             * @param {Array<any>} arrUrl 数据地址
              * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
              */
-            constructor(dataName: string, arrUrl: string, localStorage?: boolean, proName?: string,) {
+            constructor(dataName?: string, arrUrl?: string, localStorage?: boolean, proName?: string) {
                 if (localStorage) {
                     this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
                 } else {
@@ -1958,28 +2034,34 @@ export module lwg {
                 return arr;
             }
             /**
-              * 通过resCondition/condition对比,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
+              * 通过resCondition/degree,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
               * @param calssName 商品种类
               * @param name 商品名称
               * @param number 购买几次，不传则默认为1次
+              * @param func 回调函数，可以在条件完成数次后执行某个步骤
              */
-            _checkCondition(name: string, number?: number): any {
+            _checkCondition(name: string, number?: number, func?: Function): any {
+                let chek: any = null;
                 number = number == undefined ? number : 1;
-                let resCondition = this._getProperty(name, this._property.resCondition);
-                let condition = this._getProperty(name, this._property.condition);
+                let resCondition = this._getProperty(name, this._property.degreeNum);
+                let condition = this._getProperty(name, this._property.conditionNum);
                 let compelet = this._getProperty(name, this._property.compelet);
                 if (compelet !== true && compelet !== null) {
                     if (condition <= resCondition + number) {
-                        this._setProperty(name, this._property.resCondition, condition);
+                        this._setProperty(name, this._property.degreeNum, condition);
                         this._setProperty(name, this._property.compelet, true);
-                        return true;
+                        chek = true;
                     } else {
-                        this._setProperty(name, this._property.resCondition, resCondition + number);
-                        return false;
+                        this._setProperty(name, this._property.degreeNum, resCondition + number);
+                        chek = false;
                     }
                 } else {
-                    return -1;
+                    chek = -1;
                 }
+                if (func) {
+                    func();
+                }
+                return chek;
             }
         }
     }
@@ -2009,7 +2091,6 @@ export module lwg {
             // b = 0xff & str
             return arr
         }
-
 
         /**
          * 给一张图片染色,包括其子节点,也可以设置一个消失时间
@@ -3002,16 +3083,19 @@ export module lwg {
             let img = new Laya.Image();
             let label = new Laya.Label();
         }
-        /**点击事件类型*/
-        export enum _Type {
-            /**无效果*/
-            noEffect = 'noEffect',
-            /**点击放大*/
-            largen = 'largen',
-            /**类似气球*/
-            balloon = 'balloon',
-            /**小虫子*/
-            beetle = 'beetle',
+        /**点击效果类型*/
+        export let _Effect = {
+            use: 'largen',
+            type: {
+                /**无效果*/
+                no: 'no',
+                /**点击放大*/
+                largen: 'largen',
+                /**类似气球*/
+                balloon: 'balloon',
+                /**小虫子*/
+                beetle: 'beetle',
+            },
         }
 
         /**按钮音效*/
@@ -3038,16 +3122,16 @@ export module lwg {
         export function _on(effect, target: Laya.Node, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
             let btnEffect;
             switch (effect) {
-                case _Type.noEffect:
+                case _Effect.type.no:
                     btnEffect = new Btn_NoEffect();
                     break;
-                case _Type.largen:
+                case _Effect.type.largen:
                     btnEffect = new Btn_LargenEffect();
                     break;
-                case _Type.balloon:
+                case _Effect.type.balloon:
                     btnEffect = new Btn_Balloon();
                     break;
-                case _Type.balloon:
+                case _Effect.type.balloon:
                     btnEffect = new Btn_Beetle();
                     break;
                 default:
@@ -3080,16 +3164,16 @@ export module lwg {
         export function _off(effect, target, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
             let btnEffect;
             switch (effect) {
-                case _Type.noEffect:
+                case _Effect.type.no:
                     btnEffect = new Btn_NoEffect();
                     break;
-                case _Type.largen:
+                case _Effect.type.largen:
                     btnEffect = new Btn_LargenEffect();
                     break;
-                case _Type.balloon:
+                case _Effect.type.balloon:
                     btnEffect = new Btn_Balloon();
                     break;
-                case _Type.balloon:
+                case _Effect.type.balloon:
                     btnEffect = new Btn_Beetle();
                     break;
                 default:
@@ -4417,7 +4501,7 @@ export module lwg {
                 e.stopPropagation();
                 Admin._openScene(Admin._SceneName.Set);
             }
-            Click._on(Click._Type.largen, btn, null, null, btnSetUp, null);
+            Click._on(Click._Effect.type.largen, btn, null, null, btnSetUp, null);
             BtnSetNode = btn;
             BtnSetNode.name = 'BtnSetNode';
             return btn;
@@ -5935,8 +6019,8 @@ export module lwg {
                         this._Owner.name = _loadType;
                         Admin._sceneControl[_loadType] = this._Owner;
                         if (_loadType !== Admin._SceneName.PreLoad) {
-                            if (Admin._preLoadOpenSceneLater.openSceneName) {
-                                Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
+                            if (Admin._preLoadOpenSceneLater.openName) {
+                                Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
                                     Admin._preLoadOpenSceneLater.func;
                                     Admin._closeScene(_loadType);
                                 }, Admin._preLoadOpenSceneLater.zOrder);
@@ -6152,7 +6236,7 @@ export module lwg {
         }
         /**开始*/
         export function _init() {
-            switch (Admin._platform.name) {
+            switch (Admin._platform.ues) {
                 case Admin._platform.tpye.WeChat:
                     _loadPkg_Wechat();
                     break;
@@ -6216,6 +6300,8 @@ export default lwg;
 // 全局控制
 export let Admin = lwg.Admin;
 export let _SceneBase = Admin._SceneBase;
+export let _ObjectBase = Admin._ObjectBase;
+export let DataAdmin = lwg.DataAdmin;
 export let _SceneName = Admin._SceneName;
 export let EventAdmin = lwg.EventAdmin;
 export let DateAdmin = lwg.DateAdmin;

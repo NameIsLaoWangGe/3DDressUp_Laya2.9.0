@@ -1,4 +1,4 @@
-import { Admin, _LwgInit, _LwgInitScene } from "./Lwg";
+import { Admin, Click, _LwgInit, _LwgInitScene } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _MakeClothes } from "./_MakeClothes";
@@ -14,8 +14,9 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
-        Admin._platform.name = Admin._platform.tpye.Bytedance;
-        Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
+        Admin._platform.ues = Admin._platform.tpye.Bytedance;
+        Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
+        Click._Effect.use = Click._Effect.type.largen;
         Admin._moudel = {
             _PreLoad: _PreLoad,
             _Guide: _Guide,

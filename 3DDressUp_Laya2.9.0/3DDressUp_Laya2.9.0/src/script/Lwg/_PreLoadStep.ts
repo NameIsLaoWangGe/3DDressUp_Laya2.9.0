@@ -32,7 +32,7 @@ export module _PreLoadStep {
     /**可以手动挂在脚本中的类，全脚本唯一的默认导出，也可动态添加，动态添加写在模块内更方便*/
     export class PreLoadStep extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
-            switch (Admin._preLoadOpenSceneLater.openSceneName) {
+            switch (Admin._preLoadOpenSceneLater.openName) {
                 case _SceneName.Game:
                     EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
                     break;
