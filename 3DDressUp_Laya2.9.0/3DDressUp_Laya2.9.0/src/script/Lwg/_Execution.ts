@@ -123,7 +123,7 @@ export module _Execution {
         });
     }
 }
-export default class Execution extends Admin._Object {
+export default class Execution extends Admin._ObjectBase {
     Num: Laya.FontClip;
     CountDown: Laya.Label;
     CountDown_board: Laya.Label;

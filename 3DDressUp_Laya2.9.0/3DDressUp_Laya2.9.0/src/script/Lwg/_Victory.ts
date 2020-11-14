@@ -3,7 +3,6 @@ import RecordManager from "../TJ/RecordManager";
 import lwg, { Admin, Click, _Gold, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin, PalyAudio, Effects } from "./Lwg";
 import OldEffects from "./OldEffects";
 import { _Game } from "./_Game";
-import { _PreloadUrl } from "./_PreLoad";
 import { _Share } from "./_Share";
 import { _Special } from "./_Special";
 export module _Victory {

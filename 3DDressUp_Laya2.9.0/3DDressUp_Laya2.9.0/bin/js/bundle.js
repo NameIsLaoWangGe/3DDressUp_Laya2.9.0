@@ -1570,6 +1570,17 @@
                     }
                     return chek;
                 }
+                _checkAllCompelet() {
+                    let bool = true;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (!element[this._property.compelet]) {
+                            bool = false;
+                            return bool;
+                        }
+                    }
+                    return bool;
+                }
             }
             DataAdmin._Table = _Table;
         })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
@@ -2812,7 +2823,12 @@
                 }), delayed ? delayed : 0);
             }
             Animation2D.move_Scale = move_Scale;
-            function move_rotate() {
+            function move_rotate(Node, tRotate, tPoint, time, delayed, func) {
+                Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
             }
             Animation2D.move_rotate = move_rotate;
             function rotate_Scale(target, fRotate, fScaleX, fScaleY, eRotate, eScaleX, eScaleY, time, delayed, func) {
@@ -3552,11 +3568,11 @@
                     }
                 }
                 Node.showExcludedChild3D = showExcludedChild3D;
-                function prefabCreate(prefab, name) {
+                function createPrefab(prefab, name) {
                     let sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                     return sp;
                 }
-                Node.prefabCreate = prefabCreate;
+                Node.createPrefab = createPrefab;
                 function childrenVisible2D(node, bool) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -4763,17 +4779,59 @@
     })(_Guide || (_Guide = {}));
     var _Guide$1 = _Guide.Guide;
 
-    var _MakeClothes;
-    (function (_MakeClothes) {
+    var _Res;
+    (function (_Res) {
+        _Res._list = {
+            scene3D: {
+                MakeScene: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
+                    Scene: null,
+                },
+            },
+            prefab2D: {
+                BtnCompelet: {
+                    url: 'Prefab/BtnCompelet.json',
+                    prefab: new Laya.Prefab,
+                },
+            },
+            scene2D: {
+                Start: `Scene/${_SceneName.Start}.json`,
+                Guide: `Scene/${_SceneName.Guide}.json`,
+                PreLoadStep: `Scene/${_SceneName.PreLoadStep}.json`,
+            },
+        };
+    })(_Res || (_Res = {}));
+    var _PreLoad;
+    (function (_PreLoad) {
+        class PreLoad extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+            }
+            lwgOpenAni() { return 1; }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+            lwgOnDisable() {
+            }
+        }
+        _PreLoad.PreLoad = PreLoad;
+    })(_PreLoad || (_PreLoad = {}));
+
+    var _Tailor;
+    (function (_Tailor) {
         let _Event;
         (function (_Event) {
             _Event["trigger"] = "_MakeClothes_trigger";
-        })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
+            _Event["playAni"] = "_MakeClothes_playAni";
+        })(_Event = _Tailor._Event || (_Tailor._Event = {}));
         class DottedLine extends DataAdmin._Table {
-            constructor(Root, LineParent) {
+            constructor(Root, LineParent, OwnerScene) {
                 super();
                 this.Root = Root;
                 this.LineParent = LineParent;
+                this.OwnerScene = OwnerScene;
                 for (let index = 0; index < this.LineParent.numChildren; index++) {
                     const element = this.LineParent.getChildAt(index);
                     if (element.getComponents(Laya.BoxCollider)) {
@@ -4790,26 +4848,30 @@
                 this.LineParent.getChildByName(name).removeSelf();
                 let Cloth = this.Root.getChildByName(`Cloth${name.substr(4)}`);
                 if (Cloth) {
-                    Animation2D.rotate_Scale;
-                    Cloth.removeSelf();
+                    let ani = this.OwnerScene[`ani${name.substr(4)}`];
+                    ani.play(0, false);
+                    ani.on(Laya.Event.COMPLETE, this, () => {
+                        Cloth.removeSelf();
+                        console.log('删除节点！');
+                    });
                 }
                 else {
                     console.log('当前虚线上没有可以裁剪布料，请查看');
                 }
             }
         }
-        _MakeClothes.DottedLine = DottedLine;
+        _Tailor.DottedLine = DottedLine;
         class Scissor extends Admin._ObjectBase {
             onTriggerEnter(other, self) {
+                console.log('你好！');
                 if (!other['cut']) {
                     other['cut'] = true;
                     EventAdmin._notify(_Event.trigger, [other.owner.name]);
-                    other.destroy();
                 }
             }
         }
-        _MakeClothes.Scissor = Scissor;
-        class MakeClothes extends Admin._SceneBase {
+        _Tailor.Scissor = Scissor;
+        class Tailor extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
                 this.Cutting = {
@@ -4840,7 +4902,7 @@
                             return this._ImgVar('LineParent').getChildByName('EraserSp');
                         }
                     },
-                    EraserSize: 34,
+                    EraserSize: 32,
                     erasureLine: () => {
                         let gPos = this.Cutting.Scissor().parent.localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
                         let localPos = this.Cutting.EraserSp().globalToLocal(gPos);
@@ -4849,20 +4911,35 @@
                 };
             }
             lwgOnAwake() {
-                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'));
+                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
+                this.DottedLineControl.BtnCompelet = Tools.Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
+                this._Owner.addChild(this.DottedLineControl.BtnCompelet);
+                this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
+                this.DottedLineControl.BtnCompelet.visible = false;
                 this._ImgVar('Scissor').addComponent(Scissor);
                 this._ImgVar('LineParent').cacheAs = "bitmap";
+                Laya.Physics.I.worldRoot = this._Owner;
+            }
+            lwgAdaptive() {
+                this._Owner.x += 100;
             }
             lwgEventRegister() {
                 EventAdmin._register(_Event.trigger, this, (name) => {
                     let value = this.DottedLineControl._checkCondition(name);
                     if (value) {
                         this.DottedLineControl.removeCloth(name);
+                        let boll = this.DottedLineControl._checkAllCompelet();
+                        if (boll) {
+                            this.DottedLineControl.BtnCompelet.visible = true;
+                        }
                     }
                 });
             }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnBack'), () => {
+                    this._openScene(_SceneName.Start);
+                });
+                this._btnUp(this.DottedLineControl.BtnCompelet, () => {
                     this._openScene(_SceneName.Start);
                 });
             }
@@ -4882,42 +4959,8 @@
                 this.Cutting.touchP = null;
             }
         }
-        _MakeClothes.MakeClothes = MakeClothes;
-    })(_MakeClothes || (_MakeClothes = {}));
-
-    var _Res;
-    (function (_Res) {
-        _Res._list = {
-            scene3D: {
-                MakeScene: {
-                    url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
-                    Scene: null,
-                },
-            },
-            scene2D: {
-                Start: `Scene/${_SceneName.Start}.json`,
-                Guide: `Scene/${_SceneName.Guide}.json`,
-                PreLoadStep: `Scene/${_SceneName.PreLoadStep}.json`,
-            },
-        };
-    })(_Res || (_Res = {}));
-    var _PreLoad;
-    (function (_PreLoad) {
-        class PreLoad extends _LwgPreLoad._PreLoadScene {
-            lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
-            }
-            lwgOpenAni() { return 1; }
-            lwgStepComplete() {
-            }
-            lwgAllComplete() {
-                return 1000;
-            }
-            lwgOnDisable() {
-            }
-        }
-        _PreLoad.PreLoad = PreLoad;
-    })(_PreLoad || (_PreLoad = {}));
+        _Tailor.Tailor = Tailor;
+    })(_Tailor || (_Tailor = {}));
 
     var _PreLoadStepUrl;
     (function (_PreLoadStepUrl) {
@@ -4949,7 +4992,7 @@
         class Start extends Admin._SceneBase {
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
-                    this._openScene('MakeClothes');
+                    this._openScene('Tailor');
                 });
             }
         }
@@ -4969,7 +5012,7 @@
                 _Start: _Start,
                 _Game: _Game,
                 _PreLoadStep: _PreLoadStep,
-                _MakeClothes: _MakeClothes,
+                _Tailor: _Tailor,
             };
         }
     }
@@ -5060,7 +5103,7 @@
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;
-    GameConfig.physicsDebug = false;
+    GameConfig.physicsDebug = true;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 

@@ -1,7 +1,7 @@
 import { Admin, Click, _LwgInit, _LwgInitScene } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
-import { _MakeClothes } from "./_MakeClothes";
+import { _Tailor } from "./_Tailor";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadStep } from "./_PreLoadStep";
 import { _Start } from "./_Start";
@@ -21,7 +21,7 @@ export default class LwgInit extends _LwgInitScene {
             _Start: _Start,
             _Game: _Game,
             _PreLoadStep: _PreLoadStep,
-            _MakeClothes: _MakeClothes,
+            _Tailor: _Tailor,
             // _SelectLevel: _SelectLevel,
             // _Settle: _Settle,
             // _Victory: _Victory,

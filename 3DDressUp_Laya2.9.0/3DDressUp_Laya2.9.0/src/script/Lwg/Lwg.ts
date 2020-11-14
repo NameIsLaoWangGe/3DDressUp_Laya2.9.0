@@ -2067,7 +2067,18 @@ export module lwg {
                 }
                 return chek;
             }
-            // _checkCondition
+            /**检测所有是否都完成了*/
+            _checkAllCompelet(): boolean {
+                let bool: boolean = true;
+                for (let index = 0; index < this._arr.length; index++) {
+                    const element = this._arr[index];
+                    if (!element[this._property.compelet]) {
+                        bool = false;
+                        return bool;
+                    }
+                }
+                return bool;
+            }
         }
     }
 
@@ -3783,8 +3794,21 @@ export module lwg {
             }), delayed ? delayed : 0);
         }
 
-        export function move_rotate(): void {
-
+        /**
+         * @export 移动和旋转
+         * @param {Laya.Sprite} Node 节点
+         * @param {number} tRotate 最终角度
+         * @param {number} tPoint 目标位置
+         * @param {number} time 花费时间
+         * @param {number} [delayed] 延时时间
+         * @param {Function} [func] 回调函数
+         */
+        export function move_rotate(Node: Laya.Sprite, tRotate: number, tPoint: Laya.Point, time: number, delayed?: number, func?: Function): void {
+            Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+                if (func) {
+                    func();
+                }
+            }), delayed ? delayed : 0);
         }
         /**
          *旋转+放大缩小 
@@ -4899,7 +4923,7 @@ export module lwg {
              * @param {string} [name] 名称
              * @return {*}  {Laya.Sprite}
              */
-            export function prefabCreate(prefab: Laya.Prefab, name?: string): Laya.Sprite {
+            export function createPrefab(prefab: Laya.Prefab, name?: string): Laya.Sprite {
                 let sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                 return sp;
             }
