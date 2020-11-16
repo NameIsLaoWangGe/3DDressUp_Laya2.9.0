@@ -6,6 +6,7 @@ export module _Tailor {
         trigger = '_MakeClothes_trigger',
         playAni = '_MakeClothes_playAni',
     }
+
     /**虚线控制*/
     export class DottedLine extends DataAdmin._Table {
         Root: Laya.Image;
@@ -66,7 +67,7 @@ export module _Tailor {
         lwgOnAwake(): void {
             this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
 
-            this.DottedLineControl.BtnCompelet = Tools.Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab) as Laya.Image;
+            this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab) as Laya.Image;
             this._Owner.addChild(this.DottedLineControl.BtnCompelet);
             this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
             this.DottedLineControl.BtnCompelet.visible = false;
@@ -104,7 +105,7 @@ export module _Tailor {
                 this._openScene(_SceneName.Start);
             })
             this._btnUp(this.DottedLineControl.BtnCompelet, () => {
-                this._openScene('MakeClothes');
+                this._openScene('MakeClothes', true, true);
             })
         }
 

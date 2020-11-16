@@ -1,4 +1,4 @@
-import lwg, { Admin, EventAdmin, PalyAudio, Setting, _SceneName } from "../Lwg/Lwg";
+import lwg, { Admin, EventAdmin,Audio, Setting, _SceneName } from "../Lwg/Lwg";
 import { _Task } from "../Lwg/_Task";
 export default class ADManager {
 
@@ -35,7 +35,7 @@ export default class ADManager {
             return;
         }
         if (ADManager.CanShowCD) {
-            PalyAudio.stopMusic();
+            Audio._stopMusic();
             console.log("?????");
             let p = new TJ.ADS.Param();
             p.extraAd = true;//视频结束后通常会追加一次插屏
@@ -43,7 +43,7 @@ export default class ADManager {
 
             p.cbi.Add(TJ.Define.Event.Reward, () => {
                 getReward = true;
-                PalyAudio.playMusic(PalyAudio.voiceUrl.bgm, 0, 1000);
+                Audio._playMusic(Audio._voiceUrl.bgm, 0, 1000);
                 if (rewardAction != null) {
                     rewardAction();
                     EventAdmin._notify(_Task._Event.adsTime);
@@ -53,7 +53,7 @@ export default class ADManager {
             p.cbi.Add(TJ.Define.Event.Close, () => {
 
                 if (!getReward) {
-                    PalyAudio.playMusic(PalyAudio.voiceUrl.bgm, 0, 1000);
+                    Audio._playMusic(Audio._voiceUrl.bgm, 0, 1000);
                     //UIMgr.show("UISubSkinTry", 2);
                     // Dialog.createHint_Middle(Dialog.HintContent["观看完整广告才能获取奖励哦！"]);
                     console.log('观看完整广告才能获取奖励哦！');
@@ -66,7 +66,7 @@ export default class ADManager {
                 }
             });
             p.cbi.Add(TJ.Define.Event.NoAds, () => {
-                PalyAudio.playMusic(PalyAudio.voiceUrl.bgm, 0, 1000);
+                Audio._playMusic(Audio._voiceUrl.bgm, 0, 1000);
 
                 //UIMgr.show("UISubSkinTry", 1);
                 lwg.Dialogue.createHint_Middle("暂时没有广告，过会儿再试试吧！");

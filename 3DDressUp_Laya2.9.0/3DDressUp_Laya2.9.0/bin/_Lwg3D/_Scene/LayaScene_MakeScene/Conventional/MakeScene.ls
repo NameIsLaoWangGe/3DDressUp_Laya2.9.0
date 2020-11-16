@@ -68,73 +68,8 @@
 				"child":[]
 			},
 			{
-				"type":"Sprite3D",
-				"instanceID":1,
-				"props":{
-					"name":"Hanger",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0,
-						0,
-						0
-					],
-					"rotation":[
-						0,
-						1,
-						0,
-						0
-					],
-					"scale":[
-						1,
-						1,
-						1
-					]
-				},
-				"components":[],
-				"child":[
-					{
-						"type":"MeshSprite3D",
-						"instanceID":2,
-						"props":{
-							"name":"Hanger",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								0,
-								0,
-								-1
-							],
-							"scale":[
-								1,
-								1,
-								1
-							],
-							"meshPath":"Assets/Reference/Mesh/hanger_001_01-hanger_001_01_0.lm",
-							"enableRender":true,
-							"materials":[
-								{
-									"type":"Laya.BlinnPhongMaterial",
-									"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_004.lmat"
-								}
-							]
-						},
-						"components":[],
-						"child":[]
-					}
-				]
-			},
-			{
 				"type":"DirectionLight",
-				"instanceID":3,
+				"instanceID":1,
 				"props":{
 					"name":"Directional Light",
 					"active":true,
@@ -162,6 +97,41 @@
 						1,
 						0.9568627,
 						0.8392157
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"MeshSprite3D",
+				"instanceID":2,
+				"props":{
+					"name":"Hanger",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						0,
+						0
+					],
+					"rotation":[
+						0,
+						1,
+						0,
+						0
+					],
+					"scale":[
+						1,
+						1,
+						1
+					],
+					"meshPath":"Assets/Reference/Mesh/hanger_001_01-hanger_001_01_0.lm",
+					"enableRender":true,
+					"materials":[
+						{
+							"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_004.lmat"
+						}
 					]
 				},
 				"components":[],

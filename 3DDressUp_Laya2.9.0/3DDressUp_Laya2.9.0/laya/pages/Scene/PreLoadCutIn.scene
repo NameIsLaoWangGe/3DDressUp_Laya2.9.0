@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":4,
+    "selecteID":7,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#909090","height":720},
     "nodeParent":-1,
-    "maxID":7,
+    "maxID":9,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -16,9 +16,23 @@
     "child":[
         {
             "x":15,
+            "type":"Image",
+            "searchKey":"Image,Background,Background",
+            "props":{"y":0,"x":0,"width":1280,"var":"Background","skin":"Lwg/UI/ui_orthogon_black_0.7.png","sizeGrid":"13,5,11,9","name":"Background","height":720},
+            "nodeParent":2,
+            "label":"Background",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":7,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
             "type":"Label",
             "searchKey":"Label",
-            "props":{"y":490,"width":168,"valign":"middle","text":"载入中...","height":61,"fontSize":40,"color":"#ffffff","centerX":0,"align":"center"},
+            "props":{"y":470,"width":168,"valign":"middle","text":"载入中...","height":61,"fontSize":40,"color":"#ffffff","centerX":0,"align":"center"},
             "nodeParent":2,
             "label":"Label",
             "isDirectory":false,
@@ -31,10 +45,10 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image",
-            "props":{"y":291,"width":300,"pivotY":150,"pivotX":150,"height":300,"centerX":0},
+            "searchKey":"Image,Ani,Ani",
+            "props":{"y":291,"width":300,"var":"Ani","pivotY":150,"pivotX":150,"name":"Ani","height":300,"centerX":0},
             "nodeParent":2,
-            "label":"Image",
+            "label":"Ani",
             "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
@@ -55,6 +69,20 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Label",
+            "searchKey":"Label,Schedule,Schedule",
+            "props":{"y":260.5,"width":168,"var":"Schedule","valign":"middle","text":"0","name":"Schedule","height":61,"fontSize":50,"color":"#ffffff","centerX":0,"align":"center"},
+            "nodeParent":2,
+            "label":"Schedule",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":8,
+            "child":[
+                ]
         }],
     "animations":[
         {

@@ -54,11 +54,7 @@ export default class GameUI extends ui.test.TestSceneUI {
 		this.mat1 = new Laya.BlinnPhongMaterial();
 		//加载纹理资源
 		Laya.Texture2D.load("res/wood.jpg", Laya.Handler.create(this, function(tex:Laya.Texture2D):void {
-			this.mat1.albedoTexture = tex;
-			//添加一个球体
-			Laya.timer.once(100, this, function():void {
-				this.addBox();
-			});
+		
 		}));
 		
     }

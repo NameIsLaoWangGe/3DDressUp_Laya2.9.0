@@ -225,7 +225,7 @@
                     Laya.LocalStorage.setItem('GoldNum', val.toString());
                 }
             };
-            function createGoldNode(x, y, parent) {
+            function _createGoldNode(x, y, parent) {
                 if (!parent) {
                     parent = Laya.stage;
                 }
@@ -238,30 +238,30 @@
                     _prefab.json = prefab;
                     sp = Laya.Pool.getItemByCreateFun('gold', _prefab.create, _prefab);
                     let Num = sp.getChildByName('Num');
-                    Num.text = Tools.Format.formatNumber(Gold_1._num.value);
+                    Num.text = Tools._Format.formatNumber(Gold_1._num.value);
                     parent.addChild(sp);
                     sp.pos(x, y);
                     sp.zOrder = 100;
                     Gold_1.GoldNode = sp;
                 }));
             }
-            Gold_1.createGoldNode = createGoldNode;
-            function _addGold(number) {
+            Gold_1._createGoldNode = _createGoldNode;
+            function _add(number) {
                 Gold_1._num.value += Number(number);
                 let Num = Gold_1.GoldNode.getChildByName('Num');
-                Num.text = Tools.Format.formatNumber(Gold_1._num.value);
+                Num.text = Tools._Format.formatNumber(Gold_1._num.value);
             }
-            Gold_1._addGold = _addGold;
-            function addGoldDisPlay(number) {
+            Gold_1._add = _add;
+            function _addDisPlay(number) {
                 let Num = Gold_1.GoldNode.getChildByName('Num');
                 Num.value = (Number(Num.value) + Number(number)).toString();
             }
-            Gold_1.addGoldDisPlay = addGoldDisPlay;
-            function addGoldNoDisPlay(number) {
+            Gold_1._addDisPlay = _addDisPlay;
+            function _addNoDisPlay(number) {
                 Gold_1._num.value += Number(number);
             }
-            Gold_1.addGoldNoDisPlay = addGoldNoDisPlay;
-            function goldAppear(delayed, x, y) {
+            Gold_1._addNoDisPlay = _addNoDisPlay;
+            function _nodeAppear(delayed, x, y) {
                 if (!Gold_1.GoldNode) {
                     return;
                 }
@@ -280,8 +280,8 @@
                     Gold_1.GoldNode.y = y;
                 }
             }
-            Gold_1.goldAppear = goldAppear;
-            function goldVinish(delayed) {
+            Gold_1._nodeAppear = _nodeAppear;
+            function _nodeVinish(delayed) {
                 if (!Gold_1.GoldNode) {
                     return;
                 }
@@ -294,12 +294,12 @@
                     Gold_1.GoldNode.visible = false;
                 }
             }
-            Gold_1.goldVinish = goldVinish;
+            Gold_1._nodeVinish = _nodeVinish;
             let SkinUrl;
             (function (SkinUrl) {
                 SkinUrl[SkinUrl["Frame/Effects/iconGold.png"] = 0] = "Frame/Effects/iconGold.png";
             })(SkinUrl || (SkinUrl = {}));
-            function createOneGold(width, height, url) {
+            function _createOne(width, height, url) {
                 let Gold = Laya.Pool.getItemByClass('addGold', Laya.Image);
                 Gold.name = 'addGold';
                 let num = Math.floor(Math.random() * 12);
@@ -320,14 +320,14 @@
                 }
                 return Gold;
             }
-            Gold_1.createOneGold = createOneGold;
-            function getGoldAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+            Gold_1._createOne = _createOne;
+            function _getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
                 for (let index = 0; index < number; index++) {
                     Laya.timer.once(index * 30, this, () => {
-                        let Gold = createOneGold(width, height, url);
+                        let Gold = _createOne(width, height, url);
                         parent.addChild(Gold);
                         Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                            PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                            Audio._playSound(Audio._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -345,10 +345,10 @@
                     });
                 }
             }
-            Gold_1.getGoldAni_Single = getGoldAni_Single;
-            function _getGoldAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+            Gold_1._getAni_Single = _getAni_Single;
+            function _getAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
                 for (let index = 0; index < number; index++) {
-                    let Gold = createOneGold(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
+                    let Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
                     parent = parent ? parent : Laya.stage;
                     parent.addChild(Gold);
                     firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
@@ -357,7 +357,7 @@
                     let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                     Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
                         Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                            PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                            Audio._playSound(Audio._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -375,77 +375,7 @@
                     });
                 }
             }
-            Gold_1._getGoldAni_Heap = _getGoldAni_Heap;
-            class GoldAniBase extends Laya.Script {
-                onAwake() {
-                    this.initProperty();
-                }
-                onEnable() {
-                    this._Owner = this.owner;
-                    this.selfScene = this._Owner.scene;
-                    let _calssName = this['__proto__']['constructor'].name;
-                    this._Owner[_calssName] = this;
-                    this.timer = 0;
-                    this.lwgInit();
-                    this.propertyAssign();
-                }
-                lwgInit() {
-                }
-                initProperty() {
-                }
-                propertyAssign() {
-                    if (this.startAlpha) {
-                        this._Owner.alpha = this.startAlpha;
-                    }
-                    if (this.startScale) {
-                        this._Owner.scale(this.startScale, this.startScale);
-                    }
-                    if (this.startRotat) {
-                        this._Owner.rotation = this.startRotat;
-                    }
-                }
-                commonSpeedXYByAngle(angle, speed) {
-                    this._Owner.x += Tools.Point.angleAndLenByPoint(angle, speed + this.accelerated).x;
-                    this._Owner.y += Tools.Point.angleAndLenByPoint(angle, speed + this.accelerated).y;
-                }
-                moveRules() {
-                }
-                onUpdate() {
-                    this.moveRules();
-                }
-                onDisable() {
-                    Laya.Pool.recover(this._Owner.name, this._Owner);
-                    this.destroy();
-                    Laya.Tween.clearAll(this);
-                    Laya.timer.clearAll(this);
-                }
-            }
-            Gold_1.GoldAniBase = GoldAniBase;
-            class AddGold extends GoldAniBase {
-                lwgInit() {
-                    this._Owner.width = 115;
-                    this._Owner.height = 111;
-                    this._Owner.pivotX = this._Owner.width / 2;
-                    this._Owner.pivotY = this._Owner.height / 2;
-                }
-                initProperty() {
-                }
-                moveRules() {
-                    if (this.moveSwitch) {
-                        this.timer++;
-                        if (this.timer > 0) {
-                            lwg.Animation2D.move_Scale(this._Owner, 1, this._Owner.x, this._Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
-                                this._Owner.removeSelf();
-                                if (this.func !== null) {
-                                    this.func();
-                                }
-                            });
-                            this.moveSwitch = false;
-                        }
-                    }
-                }
-            }
-            Gold_1.AddGold = AddGold;
+            Gold_1._getAni_Heap = _getAni_Heap;
         })(Gold = lwg.Gold || (lwg.Gold = {}));
         let EventAdmin;
         (function (EventAdmin) {
@@ -563,41 +493,58 @@
         })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
         let TimerAdmin;
         (function (TimerAdmin) {
+            TimerAdmin._switch = true;
             function _frameLoop(delay, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 Laya.timer.frameLoop(delay, caller, () => {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }, args, coverBefore);
             }
             TimerAdmin._frameLoop = _frameLoop;
             function _frameRandomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 var func = () => {
-                    let delay = Tools.Num.randomOneInt(delay1, delay2);
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
                     Laya.timer.frameOnce(delay, caller, () => {
-                        method();
-                        func();
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
                     }, args, coverBefore);
                 };
                 func();
             }
             TimerAdmin._frameRandomLoop = _frameRandomLoop;
-            function _frameNumLoop(delay, num, caller, method, immediately, args, coverBefore) {
+            function _frameNumLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 let num0 = 0;
                 var func = () => {
-                    num0++;
-                    if (num0 > num) {
-                        Laya.timer.clear(caller, func);
-                    }
-                    else {
-                        method();
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 >= num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
                     }
                 };
                 Laya.timer.frameLoop(delay, caller, func, args, coverBefore);
@@ -614,39 +561,53 @@
             TimerAdmin._frameOnce = _frameOnce;
             function _loop(delay, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 Laya.timer.loop(delay, caller, () => {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }, args, coverBefore);
             }
             TimerAdmin._loop = _loop;
             function _randomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 var func = () => {
-                    let delay = Tools.Num.randomOneInt(delay1, delay2);
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
                     Laya.timer.once(delay, caller, () => {
-                        method();
-                        func();
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
                     }, args, coverBefore);
                 };
                 func();
             }
             TimerAdmin._randomLoop = _randomLoop;
-            function _numLoop(delay, num, caller, method, immediately, args, coverBefore) {
+            function _numLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
                 if (immediately) {
                     method();
                 }
                 let num0 = 0;
                 var func = () => {
-                    num0++;
-                    if (num0 > num) {
-                        Laya.timer.clear(caller, func);
-                    }
-                    else {
-                        method();
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 > num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
                     }
                 };
                 Laya.timer.loop(delay, caller, func, args, coverBefore);
@@ -766,7 +727,6 @@
                 set switch(bool) {
                     if (bool) {
                         if (!Laya.stage.getChildByName('__stageClickLock__')) {
-                            console.log('锁住点击！');
                             let __stageClickLock__ = new Laya.Sprite();
                             __stageClickLock__.name = '__stageClickLock__';
                             Laya.stage.addChild(__stageClickLock__);
@@ -817,7 +777,7 @@
             let _SceneName;
             (function (_SceneName) {
                 _SceneName["PreLoad"] = "PreLoad";
-                _SceneName["PreLoadStep"] = "PreLoadStep";
+                _SceneName["PreLoadCutIn"] = "PreLoadCutIn";
                 _SceneName["Guide"] = "Guide";
                 _SceneName["Start"] = "Start";
                 _SceneName["Shop"] = "Shop";
@@ -854,7 +814,7 @@
                 _SceneName["Compound"] = "Compound";
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
             function _preLoadOpenScene(openName, cloesName, func, zOrder) {
-                _openScene(_SceneName.PreLoadStep);
+                _openScene(_SceneName.PreLoadCutIn);
                 Admin._preLoadOpenSceneLater.openName = openName;
                 Admin._preLoadOpenSceneLater.cloesName = cloesName;
                 Admin._preLoadOpenSceneLater.func = func;
@@ -883,7 +843,7 @@
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
                     var openf = () => {
-                        if (Tools.Node.checkChildren(Laya.stage, openName)) {
+                        if (Tools._Node.checkChildren(Laya.stage, openName)) {
                             console.log(openName, '场景重复出现！请检查代码');
                             return;
                         }
@@ -1030,7 +990,7 @@
                 if (Scene.getChildByName('Background')) {
                     Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
                 }
-                let stickInLeftArr = Tools.Node.zOrderByY(Scene, false);
+                let stickInLeftArr = Tools._Node.zOrderByY(Scene, false);
                 for (let index = 0; index < stickInLeftArr.length; index++) {
                     const element = stickInLeftArr[index];
                     if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
@@ -1039,15 +999,15 @@
                         switch (type) {
                             case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools.Node.changePovit(element, 0, 0);
+                                Tools._Node.changePovit(element, 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
+                                Tools._Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.random:
-                                element.rotation = Tools.Num.randomOneHalf() == 1 ? 180 : -180;
-                                Tools.Node.changePovit(element, Tools.Num.randomOneHalf() == 1 ? 0 : element.width, Tools.Num.randomOneHalf() == 1 ? 0 : element.height);
+                                element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
+                                Tools._Node.changePovit(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
                                 break;
                             default:
                                 break;
@@ -1058,7 +1018,7 @@
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
                         Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                            Tools.Node.changePovit(element, originalPovitX, originalPovitY);
+                            Tools._Node.changePovit(element, originalPovitX, originalPovitY);
                         });
                     }
                 }
@@ -1093,7 +1053,11 @@
                     }
                 }
             };
-            class ScriptBase extends Laya.Script {
+            class _ScriptBase extends Laya.Script {
+                constructor() {
+                    super(...arguments);
+                    this.ownerSceneName = '';
+                }
                 lwgOnAwake() { }
                 ;
                 lwgAdaptive() { }
@@ -1104,21 +1068,42 @@
                 lwgOnStart() { }
                 lwgBtnRegister() { }
                 ;
-                _btnUp(target, up, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
-                }
                 _btnDown(target, down, effect) {
                     Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
                 }
+                _btnMove(target, move, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, null, move, null, null);
+                }
+                _btnUp(target, up, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                }
+                _btnOut(target, out, effect) {
+                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, null, out);
+                }
                 _btnAll(target, down, move, up, out, effect) {
                     Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                }
+                _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
+                    let closeName;
+                    if (closeSelf == undefined || closeSelf == true) {
+                        closeName = this.ownerSceneName;
+                    }
+                    if (!preLoadCutIn) {
+                        Admin._openScene(openName, closeName, func, zOrder);
+                    }
+                    else {
+                        Admin._preLoadOpenScene(openName, closeName, func, zOrder);
+                    }
+                }
+                _closeScene(sceneName, func) {
+                    Admin._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
                 }
                 lwgOnUpdate() { }
                 ;
                 lwgOnDisable() { }
                 ;
             }
-            class _SceneBase extends ScriptBase {
+            class _SceneBase extends _ScriptBase {
                 constructor() {
                     super();
                     this._calssName = _SceneName.PreLoad;
@@ -1162,6 +1147,15 @@
                         return undefined;
                     }
                 }
+                _LabelVar(str) {
+                    if (this._Owner[str]) {
+                        return this._Owner[str];
+                    }
+                    else {
+                        console.log('场景内不存在var节点：', str);
+                        return undefined;
+                    }
+                }
                 _ListVar(str) {
                     if (this._Owner[str]) {
                         return this._Owner[str];
@@ -1186,7 +1180,7 @@
                         this._calssName = this._Owner.name;
                         this._Owner[this._calssName] = this;
                     }
-                    Admin._gameState.setState(this._calssName);
+                    this.ownerSceneName = this.owner.name;
                     this.moduleOnAwake();
                     this.lwgOnAwake();
                     this.lwgAdaptive();
@@ -1206,16 +1200,6 @@
                 onStart() {
                     this.moduleOnStart();
                     this.lwgOnStart();
-                }
-                _openScene(openName, closeSelf, func, zOrder) {
-                    let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this._Owner.name;
-                    }
-                    Admin._openScene(openName, closeName, func, zOrder);
-                }
-                _closeScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
                 }
                 moduleOnStart() { }
                 btnAndlwgOpenAni() {
@@ -1263,7 +1247,7 @@
                 }
             }
             Admin._SceneBase = _SceneBase;
-            class _ObjectBase extends ScriptBase {
+            class _ObjectBase extends _ScriptBase {
                 constructor() {
                     super();
                 }
@@ -1279,6 +1263,14 @@
                     }
                 }
                 _SceneImg(name) {
+                    if (this._Scene[name]) {
+                        return this._Scene[name];
+                    }
+                    else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
+                }
+                _SceneLabel(name) {
                     if (this._Scene[name]) {
                         return this._Scene[name];
                     }
@@ -1327,8 +1319,8 @@
                     return this._Owner['_OwnerPolygonCollier'];
                 }
                 onAwake() {
-                    let _calssName = this['__proto__']['constructor'].name;
-                    this._Owner[_calssName] = this;
+                    this._Owner[this['__proto__']['constructor'].name] = this;
+                    this.ownerSceneName = this._Scene.name;
                     this.lwgOnAwake();
                     this.lwgAdaptive();
                 }
@@ -1359,16 +1351,6 @@
                         return null;
                     }
                 }
-                _OpenScene(openName, closeSelf, func, zOrder) {
-                    let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this._Scene.name;
-                    }
-                    Admin._openScene(openName, closeName, func, zOrder);
-                }
-                _CloseScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
-                }
                 onEnable() {
                     this.lwgBtnRegister();
                     this.lwgEventRegister();
@@ -1391,7 +1373,7 @@
         let DataAdmin;
         (function (DataAdmin) {
             class _Store {
-                getVariables() {
+                getVariables(name) {
                 }
             }
             DataAdmin._Store = _Store;
@@ -1549,7 +1531,7 @@
                 let cf = new Laya.ColorFilter();
                 node.blendMode = 'null';
                 if (!RGBA) {
-                    cf.color(Tools.Num.randomOneBySection(255, 100, true), Tools.Num.randomOneBySection(255, 100, true), Tools.Num.randomOneBySection(255, 100, true), 1);
+                    cf.color(Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), 1);
                 }
                 else {
                     cf.color(RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
@@ -1627,7 +1609,7 @@
                     cf = node.filters[0];
                     RGBA0 = [node.filters[0]['_alpha'][0], node.filters[0]['_alpha'][1], node.filters[0]['_alpha'][2], node.filters[0]['_alpha'][3] ? node.filters[0]['_alpha'][3] : 1];
                 }
-                let RGBA = [Tools.Num.randomCountBySection(RGBA1[0], RGBA2[0])[0], Tools.Num.randomCountBySection(RGBA1[1], RGBA2[1])[0], Tools.Num.randomCountBySection(RGBA1[2], RGBA2[2])[0], Tools.Num.randomCountBySection(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
+                let RGBA = [Tools._Number.randomCountBySection(RGBA1[0], RGBA2[0])[0], Tools._Number.randomCountBySection(RGBA1[1], RGBA2[1])[0], Tools._Number.randomCountBySection(RGBA1[2], RGBA2[2])[0], Tools._Number.randomCountBySection(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
                 let speedR = (RGBA[0] - RGBA0[0]) / frameTime;
                 let speedG = (RGBA[1] - RGBA0[1]) / frameTime;
                 let speedB = (RGBA[2] - RGBA0[2]) / frameTime;
@@ -1696,24 +1678,24 @@
                         this.height = height ? height : 100;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        this.rotation = rotation ? Tools.Num.randomOneBySection(rotation[0], rotation[1]) : Tools.Num.randomOneBySection(360);
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : Tools._Number.randomOneBySection(360);
                         this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.花3;
                         this.zOrder = zOrder ? zOrder : 0;
                         this.alpha = 0;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools.Num.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                     }
                 }
                 _Aperture._ApertureImage = _ApertureImage;
                 function _continuous(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder, scale, speed, accelerated) {
                     let Img = new _ApertureImage(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let _speed = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : 0.025;
-                    let _accelerated = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : 0.0005;
-                    let _scale = scale ? Tools.Num.randomOneBySection(scale[0], scale[1]) : 2;
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : 0.025;
+                    let _accelerated = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : 0.0005;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : 2;
                     let moveCaller = {
                         alpha: true,
                         scale: false,
@@ -1758,35 +1740,35 @@
                     constructor(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder) {
                         super();
                         parent.addChild(this);
-                        let sectionWidth = sectionWH ? Tools.Num.randomOneBySection(sectionWH[0]) : Tools.Num.randomOneBySection(200);
-                        let sectionHeight = sectionWH ? Tools.Num.randomOneBySection(sectionWH[1]) : Tools.Num.randomOneBySection(50);
-                        sectionWidth = Tools.Num.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
-                        sectionHeight = Tools.Num.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
+                        let sectionWidth = sectionWH ? Tools._Number.randomOneBySection(sectionWH[0]) : Tools._Number.randomOneBySection(200);
+                        let sectionHeight = sectionWH ? Tools._Number.randomOneBySection(sectionWH[1]) : Tools._Number.randomOneBySection(50);
+                        sectionWidth = Tools._Number.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
+                        sectionHeight = Tools._Number.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
                         this.x = centerPoint ? centerPoint.x + sectionWidth : sectionWidth;
                         this.y = centerPoint ? centerPoint.y + sectionHeight : sectionHeight;
-                        this.width = width ? Tools.Num.randomOneBySection(width[0], width[1]) : Tools.Num.randomOneBySection(20, 50);
-                        this.height = height ? Tools.Num.randomOneBySection(height[0], height[1]) : this.width;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : Tools._Number.randomOneBySection(20, 50);
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
                         this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
-                        this.rotation = rotation ? Tools.Num.randomOneBySection(rotation[0], rotation[1]) : 0;
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                         this.alpha = 0;
                         this.zOrder = zOrder ? zOrder : 0;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools.Num.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                     }
                 }
                 _Particle._ParticleImgBase = _ParticleImgBase;
                 function _snow(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, rotationSpeed, speed, windX) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let _rotationSpeed = rotationSpeed ? Tools.Num.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools.Num.randomOneBySection(0, 1);
-                    _rotationSpeed = Tools.Num.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(1, 2.5);
-                    let _windX = windX ? Tools.Num.randomOneBySection(windX[0], windX[1]) : 0;
+                    let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                    _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                    let _windX = windX ? Tools._Number.randomOneBySection(windX[0], windX[1]) : 0;
                     let moveCaller = {
                         alpha: true,
                         move: false,
@@ -1794,7 +1776,7 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.Num.randomOneBySection(distance[0], distance[1]) : Tools.Num.randomOneBySection(100, 300);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         Img.x += _windX;
                         Img.rotation += _rotationSpeed;
@@ -1827,8 +1809,8 @@
                 _Particle._snow = _snow;
                 function _fallingVertical(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(4, 8);
-                    let accelerated0 = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : Tools.Num.randomOneBySection(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1837,7 +1819,7 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.Num.randomOneBySection(distance[0], distance[1]) : Tools.Num.randomOneBySection(100, 300);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.05;
@@ -1870,8 +1852,8 @@
                 _Particle._fallingVertical = _fallingVertical;
                 function _slowlyUp(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(1.5, 2);
-                    let accelerated0 = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : Tools.Num.randomOneBySection(0.001, 0.005);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.001, 0.005);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1881,7 +1863,7 @@
                     Img['moveCaller'] = moveCaller;
                     let fy = Img.y;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.Num.randomOneBySection(distance[0], distance[1]) : Tools.Num.randomOneBySection(-250, -600);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(-250, -600);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.03;
@@ -1915,8 +1897,8 @@
                 function _spray(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, moveAngle, distance, rotationSpeed, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(3, 10);
-                    let accelerated0 = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : Tools.Num.randomOneBySection(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1925,9 +1907,9 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let radius = 0;
-                    let distance1 = distance ? Tools.Num.randomOneBySection(distance[0], distance[1]) : Tools.Num.randomOneBySection(100, 200);
-                    let angle0 = moveAngle ? Tools.Num.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools.Num.randomOneBySection(0, 360);
-                    let rotationSpeed0 = rotationSpeed ? Tools.Num.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools.Num.randomOneBySection(0, 20);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         Img.rotation += rotationSpeed0;
                         if (Img.alpha < 1 && moveCaller.alpha) {
@@ -1953,7 +1935,7 @@
                             }
                             acc += accelerated0;
                             radius += speed0 + acc;
-                            let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                            let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                             Img.pos(point.x, point.y);
                         }
                     });
@@ -1964,36 +1946,36 @@
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let _angle = 0;
                     sectionWH = sectionWH ? sectionWH : [100, 100];
-                    let fixedXY = Tools.Num.randomOneHalf() == 0 ? 'x' : 'y';
+                    let fixedXY = Tools._Number.randomOneHalf() == 0 ? 'x' : 'y';
                     curtailAngle = curtailAngle ? curtailAngle : 60;
                     if (fixedXY == 'x') {
-                        if (Tools.Num.randomOneHalf() == 0) {
+                        if (Tools._Number.randomOneHalf() == 0) {
                             Img.x += sectionWH[0];
-                            _angle = Tools.Num.randomOneHalf() == 0 ? Tools.Num.randomOneBySection(0, 90 - curtailAngle) : Tools.Num.randomOneBySection(0, -90 + curtailAngle);
+                            _angle = Tools._Number.randomOneHalf() == 0 ? Tools._Number.randomOneBySection(0, 90 - curtailAngle) : Tools._Number.randomOneBySection(0, -90 + curtailAngle);
                         }
                         else {
                             Img.x -= sectionWH[0];
-                            _angle = Tools.Num.randomOneBySection(90 + curtailAngle, 270 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(90 + curtailAngle, 270 - curtailAngle);
                         }
-                        Img.y += Tools.Num.randomOneBySection(-sectionWH[1], sectionWH[1]);
+                        Img.y += Tools._Number.randomOneBySection(-sectionWH[1], sectionWH[1]);
                     }
                     else {
-                        if (Tools.Num.randomOneHalf() == 0) {
+                        if (Tools._Number.randomOneHalf() == 0) {
                             Img.y -= sectionWH[1];
-                            _angle = Tools.Num.randomOneBySection(180 + curtailAngle, 360 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(180 + curtailAngle, 360 - curtailAngle);
                         }
                         else {
                             Img.y += sectionWH[1];
-                            _angle = Tools.Num.randomOneBySection(0 + curtailAngle, 180 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(0 + curtailAngle, 180 - curtailAngle);
                         }
-                        Img.x += Tools.Num.randomOneBySection(-sectionWH[0], sectionWH[0]);
+                        Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
                     }
-                    let p = Tools.Point.angleByPoint(_angle);
-                    let _distance = distance ? Tools.Num.randomOneBySection(distance[0], distance[1]) : Tools.Num.randomOneBySection(20, 50);
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(0.5, 1);
-                    let accelerated0 = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : Tools.Num.randomOneBySection(0.25, 0.45);
+                    let p = Tools._Point.angleByPoint(_angle);
+                    let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
-                    let rotationSpeed0 = rotateSpeed ? Tools.Num.randomOneBySection(rotateSpeed[0], rotateSpeed[1]) : Tools.Num.randomOneBySection(0, 20);
+                    let rotationSpeed0 = rotateSpeed ? Tools._Number.randomOneBySection(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     let firstP = new Laya.Point(Img.x, Img.y);
                     let moveCaller = {
                         alpha: true,
@@ -2035,8 +2017,8 @@
                 function _moveToTargetToMove(parent, centerPoint, width, height, rotation, angle, urlArr, colorRGBA, zOrder, distance1, distance2, rotationSpeed, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                    let speed0 = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(5, 6);
-                    let accelerated0 = accelerated ? Tools.Num.randomOneBySection(accelerated[0], accelerated[1]) : Tools.Num.randomOneBySection(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(5, 6);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -2047,11 +2029,11 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let radius = 0;
-                    let dis1 = distance1 ? Tools.Num.randomOneBySection(distance1[0], distance1[1]) : Tools.Num.randomOneBySection(100, 200);
-                    let dis2 = distance2 ? Tools.Num.randomOneBySection(distance2[0], distance2[1]) : Tools.Num.randomOneBySection(100, 200);
-                    let angle0 = angle ? Tools.Num.randomOneBySection(angle[0], angle[1]) : Tools.Num.randomOneBySection(0, 360);
+                    let dis1 = distance1 ? Tools._Number.randomOneBySection(distance1[0], distance1[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let dis2 = distance2 ? Tools._Number.randomOneBySection(distance2[0], distance2[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = angle ? Tools._Number.randomOneBySection(angle[0], angle[1]) : Tools._Number.randomOneBySection(0, 360);
                     Img.rotation = angle0 - 90;
-                    let rotationSpeed0 = rotationSpeed ? Tools.Num.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools.Num.randomOneBySection(0, 20);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (moveCaller.alpha) {
                             acc += accelerated0;
@@ -2094,7 +2076,7 @@
                                 Laya.timer.clearAll(moveCaller);
                             }
                         }
-                        let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                        let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                         Img.pos(point.x, point.y);
                     });
                     return Img;
@@ -2104,15 +2086,15 @@
                     let Img = new Laya.Image();
                     parent.addChild(Img);
                     width = width ? width : [25, 50];
-                    Img.width = Tools.Num.randomCountBySection(width[0], width[1])[0];
-                    Img.height = height ? Tools.Num.randomCountBySection(height[0], height[1])[0] : Img.width;
+                    Img.width = Tools._Number.randomCountBySection(width[0], width[1])[0];
+                    Img.height = height ? Tools._Number.randomCountBySection(height[0], height[1])[0] : Img.width;
                     Img.pivotX = Img.width / 2;
                     Img.pivotY = Img.height / 2;
-                    Img.skin = urlArr ? Tools._Array.randomGetOut(urlArr)[0] : _SkinUrl[Tools.Num.randomCountBySection(0, 12)[0]];
-                    let radius0 = Tools.Num.randomCountBySection(radius[0], radius[1])[0];
+                    Img.skin = urlArr ? Tools._Array.randomGetOut(urlArr)[0] : _SkinUrl[Tools._Number.randomCountBySection(0, 12)[0]];
+                    let radius0 = Tools._Number.randomCountBySection(radius[0], radius[1])[0];
                     Img.alpha = 0;
-                    let speed0 = speed ? Tools.Num.randomCountBySection(speed[0], speed[1])[0] : Tools.Num.randomCountBySection(5, 10)[0];
-                    let angle = rotation ? Tools.Num.randomCountBySection(rotation[0], rotation[1])[0] : Tools.Num.randomCountBySection(0, 360)[0];
+                    let speed0 = speed ? Tools._Number.randomCountBySection(speed[0], speed[1])[0] : Tools._Number.randomCountBySection(5, 10)[0];
+                    let angle = rotation ? Tools._Number.randomCountBySection(rotation[0], rotation[1])[0] : Tools._Number.randomCountBySection(0, 360)[0];
                     let caller = {};
                     let acc = 0;
                     accelerated = accelerated ? accelerated : 0.35;
@@ -2126,7 +2108,7 @@
                             acc += accelerated;
                             radius0 -= (speed0 + acc);
                         }
-                        let point = Tools.Point.getRoundPos(angle, radius0, centerPoint);
+                        let point = Tools._Point.getRoundPos(angle, radius0, centerPoint);
                         Img.pos(point.x, point.y);
                         if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
                             Img.removeSelf();
@@ -2147,17 +2129,17 @@
                         }
                         parent.addChild(this);
                         this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.星星1;
-                        this.width = width ? Tools.Num.randomOneBySection(width[0], width[1]) : 80;
-                        this.height = height ? Tools.Num.randomOneBySection(height[0], height[1]) : this.width;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        let p = radiusXY ? Tools.Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.Point.randomPointByCenter(centerPos, 100, 100, 1);
+                        let p = radiusXY ? Tools._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools._Point.randomPointByCenter(centerPos, 100, 100, 1);
                         this.pos(p[0].x, p[0].y);
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools.Num.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                         this.alpha = 0;
                     }
@@ -2167,10 +2149,10 @@
                     let Img = new _GlitterImage(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height);
                     Img.scaleX = 0;
                     Img.scaleY = 0;
-                    let _scale = scale ? Tools.Num.randomOneBySection(scale[0], scale[1]) : Tools.Num.randomOneBySection(0.8, 1.2);
-                    let _speed = speed ? Tools.Num.randomOneBySection(speed[0], speed[1]) : Tools.Num.randomOneBySection(0.01, 0.02);
-                    let _rotateSpeed = rotateSpeed ? Tools.Num.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools.Num.randomOneInt(0, 5);
-                    _rotateSpeed = Tools.Num.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : Tools._Number.randomOneBySection(0.8, 1.2);
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.01, 0.02);
+                    let _rotateSpeed = rotateSpeed ? Tools._Number.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneInt(0, 5);
+                    _rotateSpeed = Tools._Number.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
                     let moveCaller = {
                         appear: true,
                         scale: false,
@@ -2254,15 +2236,15 @@
                         super();
                         parent.addChild(this);
                         this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形发光1;
-                        this.width = width ? Tools.Num.randomOneBySection(width[0], width[1]) : 80;
-                        this.height = height ? Tools.Num.randomOneBySection(height[0], height[1]) : this.width;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools.Num.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.Num.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools.Num.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                         this.zOrder = zOrder ? zOrder : 0;
                         this.alpha = 0;
@@ -2319,7 +2301,7 @@
                         let targetXY = [posArray[index][0], posArray[index][1]];
                         let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
                         if (parallel) {
-                            Img.rotation = Tools.Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                            Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
                         }
                         let time = speed * 100 + distance / 5;
                         if (index == posArray.length + 1) {
@@ -2360,19 +2342,19 @@
                 let btnEffect;
                 switch (effect) {
                     case Click._Effect.type.no:
-                        btnEffect = new Btn_NoEffect();
+                        btnEffect = new _NoEffect();
                         break;
                     case Click._Effect.type.largen:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _Largen();
                         break;
                     case Click._Effect.type.balloon:
-                        btnEffect = new Btn_Balloon();
+                        btnEffect = new _Balloon();
                         break;
                     case Click._Effect.type.balloon:
-                        btnEffect = new Btn_Beetle();
+                        btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _Largen();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2389,19 +2371,19 @@
                 let btnEffect;
                 switch (effect) {
                     case Click._Effect.type.no:
-                        btnEffect = new Btn_NoEffect();
+                        btnEffect = new _NoEffect();
                         break;
                     case Click._Effect.type.largen:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _Largen();
                         break;
                     case Click._Effect.type.balloon:
-                        btnEffect = new Btn_Balloon();
+                        btnEffect = new _Balloon();
                         break;
                     case Click._Effect.type.balloon:
-                        btnEffect = new Btn_Beetle();
+                        btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _Largen();
                         break;
                 }
                 target._off(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2415,7 +2397,7 @@
             }
             Click._off = _off;
         })(Click = lwg.Click || (lwg.Click = {}));
-        class Btn_NoEffect {
+        class _NoEffect {
             constructor() {
             }
             down(event) {
@@ -2427,13 +2409,13 @@
             out(event) {
             }
         }
-        lwg.Btn_NoEffect = Btn_NoEffect;
-        class Btn_LargenEffect {
+        lwg._NoEffect = _NoEffect;
+        class _Largen {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(1.1, 1.1);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             move(event) {
             }
@@ -2444,13 +2426,13 @@
                 event.currentTarget.scale(1, 1);
             }
         }
-        lwg.Btn_LargenEffect = Btn_LargenEffect;
-        class Btn_Balloon {
+        lwg._Largen = _Largen;
+        class _Balloon {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(Click._balloonScale + 0.06, Click._balloonScale + 0.06);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             up(event) {
                 event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
@@ -2462,13 +2444,13 @@
                 event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
             }
         }
-        lwg.Btn_Balloon = Btn_Balloon;
-        class Btn_Beetle {
+        lwg._Balloon = _Balloon;
+        class _Beetle {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(Click._beetleScale + 0.06, Click._beetleScale + 0.06);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             up(event) {
                 event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
@@ -2480,7 +2462,7 @@
                 event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
             }
         }
-        lwg.Btn_Beetle = Btn_Beetle;
+        lwg._Beetle = _Beetle;
         let Animation3D;
         (function (Animation3D) {
             Animation3D.tweenMap = {};
@@ -2841,13 +2823,13 @@
             Animation2D.goUp_Simple = goUp_Simple;
             function cardRotateX_TowFace(node, time, func1, delayed, func2) {
                 Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
-                    Tools.Node.childrenVisible2D(node, false);
+                    Tools._Node.childrenVisible2D(node, false);
                     if (func1) {
                         func1();
                     }
                     Laya.Tween.to(node, { scaleX: 1 }, time * 0.9, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleX: 0 }, time * 0.8, null, Laya.Handler.create(this, function () {
-                            Tools.Node.childrenVisible2D(node, true);
+                            Tools._Node.childrenVisible2D(node, true);
                             Laya.Tween.to(node, { scaleX: 1 }, time * 0.7, null, Laya.Handler.create(this, function () {
                                 if (func2) {
                                     func2();
@@ -2873,14 +2855,14 @@
             Animation2D.cardRotateX_OneFace = cardRotateX_OneFace;
             function cardRotateY_TowFace(node, time, func1, delayed, func2) {
                 Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
-                    Tools.Node.childrenVisible2D(node, false);
+                    Tools._Node.childrenVisible2D(node, false);
                     if (func1) {
                         func1();
                     }
                     Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
                             Laya.Tween.to(node, { scaleY: 1 }, time * 1 / 2, null, Laya.Handler.create(this, function () {
-                                Tools.Node.childrenVisible2D(node, true);
+                                Tools._Node.childrenVisible2D(node, true);
                                 if (func2) {
                                     func2();
                                 }
@@ -3160,12 +3142,12 @@
                     if (value) {
                         val = 1;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        PalyAudio.playMusic();
+                        Audio._playMusic();
                     }
                     else {
                         val = 0;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        PalyAudio.stopMusic();
+                        Audio._stopMusic();
                     }
                 }
             };
@@ -3184,7 +3166,7 @@
                     Laya.LocalStorage.setItem('Setting_shake', val.toString());
                 }
             };
-            function createSetBtn(x, y, width, height, skin, parent, ZOder) {
+            function _createBtnSet(x, y, width, height, skin, parent, ZOder) {
                 let btn = new Laya.Image;
                 btn.width = width ? width : 100;
                 btn.height = width ? width : 100;
@@ -3205,59 +3187,59 @@
                     Admin._openScene(Admin._SceneName.Set);
                 };
                 Click._on(Click._Effect.type.largen, btn, null, null, btnSetUp, null);
-                Setting.BtnSetNode = btn;
-                Setting.BtnSetNode.name = 'BtnSetNode';
+                Setting._BtnSet = btn;
+                Setting._BtnSet.name = 'BtnSetNode';
                 return btn;
             }
-            Setting.createSetBtn = createSetBtn;
-            function setBtnAppear(delayed, x, y) {
-                if (!Setting.BtnSetNode) {
+            Setting._createBtnSet = _createBtnSet;
+            function btnSetAppear(delayed, x, y) {
+                if (!Setting._BtnSet) {
                     return;
                 }
                 if (delayed) {
-                    Animation2D.scale_Alpha(Setting.BtnSetNode, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
-                        Setting.BtnSetNode.visible = true;
+                    Animation2D.scale_Alpha(Setting._BtnSet, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
+                        Setting._BtnSet.visible = true;
                     });
                 }
                 else {
-                    Setting.BtnSetNode.visible = true;
+                    Setting._BtnSet.visible = true;
                 }
                 if (x) {
-                    Setting.BtnSetNode.x = x;
+                    Setting._BtnSet.x = x;
                 }
                 if (y) {
-                    Setting.BtnSetNode.y = y;
+                    Setting._BtnSet.y = y;
                 }
             }
-            Setting.setBtnAppear = setBtnAppear;
-            function setBtnVinish(delayed) {
-                if (!Setting.BtnSetNode) {
+            Setting.btnSetAppear = btnSetAppear;
+            function btnSetVinish(delayed) {
+                if (!Setting._BtnSet) {
                     return;
                 }
                 if (delayed) {
-                    Animation2D.scale_Alpha(Setting.BtnSetNode, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
-                        Setting.BtnSetNode.visible = false;
+                    Animation2D.scale_Alpha(Setting._BtnSet, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
+                        Setting._BtnSet.visible = false;
                     });
                 }
                 else {
-                    Setting.BtnSetNode.visible = false;
+                    Setting._BtnSet.visible = false;
                 }
             }
-            Setting.setBtnVinish = setBtnVinish;
+            Setting.btnSetVinish = btnSetVinish;
         })(Setting = lwg.Setting || (lwg.Setting = {}));
-        let PalyAudio;
-        (function (PalyAudio) {
-            let voiceUrl;
-            (function (voiceUrl) {
-                voiceUrl["btn"] = "Lwg/Voice/btn.wav";
-                voiceUrl["bgm"] = "Lwg/Voice/bgm.mp3";
-                voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
-                voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
-                voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
-            })(voiceUrl = PalyAudio.voiceUrl || (PalyAudio.voiceUrl = {}));
-            function playSound(url, number, func) {
+        let Audio;
+        (function (Audio) {
+            let _voiceUrl;
+            (function (_voiceUrl) {
+                _voiceUrl["btn"] = "Lwg/Voice/btn.wav";
+                _voiceUrl["bgm"] = "Lwg/Voice/bgm.mp3";
+                _voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
+                _voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
+                _voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
+            })(_voiceUrl = Audio._voiceUrl || (Audio._voiceUrl = {}));
+            function _playSound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.btn;
+                    url = _voiceUrl.btn;
                 }
                 if (!number) {
                     number = 1;
@@ -3270,10 +3252,10 @@
                     }));
                 }
             }
-            PalyAudio.playSound = playSound;
-            function playDefeatedSound(url, number, func) {
+            Audio._playSound = _playSound;
+            function _playDefeatedSound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.defeated;
+                    url = _voiceUrl.defeated;
                 }
                 if (!number) {
                     number = 1;
@@ -3286,10 +3268,10 @@
                     }));
                 }
             }
-            PalyAudio.playDefeatedSound = playDefeatedSound;
-            function playVictorySound(url, number, func) {
+            Audio._playDefeatedSound = _playDefeatedSound;
+            function _playVictorySound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.victory;
+                    url = _voiceUrl.victory;
                 }
                 if (!number) {
                     number = 1;
@@ -3302,10 +3284,10 @@
                     }));
                 }
             }
-            PalyAudio.playVictorySound = playVictorySound;
-            function playMusic(url, number, delayed) {
+            Audio._playVictorySound = _playVictorySound;
+            function _playMusic(url, number, delayed) {
                 if (!url) {
-                    url = voiceUrl.bgm;
+                    url = _voiceUrl.bgm;
                 }
                 if (!number) {
                     number = 0;
@@ -3317,20 +3299,20 @@
                     Laya.SoundManager.playMusic(url, number, Laya.Handler.create(this, function () { }), delayed);
                 }
             }
-            PalyAudio.playMusic = playMusic;
-            function stopMusic() {
+            Audio._playMusic = _playMusic;
+            function _stopMusic() {
                 Laya.SoundManager.stopMusic();
             }
-            PalyAudio.stopMusic = stopMusic;
-        })(PalyAudio = lwg.PalyAudio || (lwg.PalyAudio = {}));
+            Audio._stopMusic = _stopMusic;
+        })(Audio = lwg.Audio || (lwg.Audio = {}));
         let Tools;
         (function (Tools) {
             function color_RGBtoHexString(r, g, b) {
                 return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
             }
             Tools.color_RGBtoHexString = color_RGBtoHexString;
-            let Format;
-            (function (Format) {
+            let _Format;
+            (function (_Format) {
                 function formatNumber(crc, fixNum = 0) {
                     let textTemp;
                     if (crc >= 1e27) {
@@ -3365,18 +3347,18 @@
                     }
                     return textTemp;
                 }
-                Format.formatNumber = formatNumber;
+                _Format.formatNumber = formatNumber;
                 function strAddNum(str, num) {
                     return (Number(str) + num).toString();
                 }
-                Format.strAddNum = strAddNum;
+                _Format.strAddNum = strAddNum;
                 function NumAddStr(num, str) {
                     return Number(str) + num;
                 }
-                Format.NumAddStr = NumAddStr;
-            })(Format = Tools.Format || (Tools.Format = {}));
-            let Node;
-            (function (Node) {
+                _Format.NumAddStr = NumAddStr;
+            })(_Format = Tools._Format || (Tools._Format = {}));
+            let _Node;
+            (function (_Node) {
                 function leaveStage(_Sprite, func) {
                     let Parent = _Sprite.parent;
                     let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
@@ -3392,7 +3374,7 @@
                     }
                     return new Laya.Point(gPoint.x, gPoint.y);
                 }
-                Node.leaveStage = leaveStage;
+                _Node.leaveStage = leaveStage;
                 function checkTwoDistance(_Sprite1, _Sprite2, distance, func) {
                     let Parent1 = _Sprite1.parent;
                     let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
@@ -3405,7 +3387,7 @@
                     }
                     return gPoint1.distance(gPoint2.x, gPoint2.y);
                 }
-                Node.checkTwoDistance = checkTwoDistance;
+                _Node.checkTwoDistance = checkTwoDistance;
                 function zOrderByY(sp, zOrder, along) {
                     let arr = [];
                     if (sp.numChildren == 0) {
@@ -3416,7 +3398,7 @@
                         const element = sp.getChildAt(index);
                         arr.push(element);
                     }
-                    ObjArray.onPropertySort(arr, 'y');
+                    _ObjArray.onPropertySort(arr, 'y');
                     if (zOrder) {
                         for (let index = 0; index < arr.length; index++) {
                             const element = arr[index];
@@ -3437,7 +3419,7 @@
                         return arr;
                     }
                 }
-                Node.zOrderByY = zOrderByY;
+                _Node.zOrderByY = zOrderByY;
                 function changePovit(sp, _pivotX, _pivotY, int) {
                     let originalPovitX = sp.pivotX;
                     let originalPovitY = sp.pivotY;
@@ -3451,7 +3433,7 @@
                         sp.y += (sp.pivotY - originalPovitY);
                     }
                 }
-                Node.changePovit = changePovit;
+                _Node.changePovit = changePovit;
                 function getChildArrByProperty(node, property, value) {
                     let childArr = [];
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3462,7 +3444,7 @@
                     }
                     return childArr;
                 }
-                Node.getChildArrByProperty = getChildArrByProperty;
+                _Node.getChildArrByProperty = getChildArrByProperty;
                 function randomChildren(node, num) {
                     let childArr = [];
                     let indexArr = [];
@@ -3475,13 +3457,13 @@
                     }
                     return childArr;
                 }
-                Node.randomChildren = randomChildren;
+                _Node.randomChildren = randomChildren;
                 function removeAllChildren(node) {
                     if (node.numChildren > 0) {
                         node.removeChildren(0, node.numChildren - 1);
                     }
                 }
-                Node.removeAllChildren = removeAllChildren;
+                _Node.removeAllChildren = removeAllChildren;
                 function removeOneChildren(node, nodeName) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3490,7 +3472,7 @@
                         }
                     }
                 }
-                Node.removeOneChildren = removeOneChildren;
+                _Node.removeOneChildren = removeOneChildren;
                 function checkChildren(node, nodeName) {
                     let bool = false;
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3501,7 +3483,7 @@
                     }
                     return bool;
                 }
-                Node.checkChildren = checkChildren;
+                _Node.checkChildren = checkChildren;
                 function showExcludedChild2D(node, childNameArr, bool) {
                     for (let i = 0; i < node.numChildren; i++) {
                         let Child = node.getChildAt(i);
@@ -3525,7 +3507,7 @@
                         }
                     }
                 }
-                Node.showExcludedChild2D = showExcludedChild2D;
+                _Node.showExcludedChild2D = showExcludedChild2D;
                 function showExcludedChild3D(node, childNameArr, bool) {
                     for (let i = 0; i < node.numChildren; i++) {
                         let Child = node.getChildAt(i);
@@ -3549,12 +3531,12 @@
                         }
                     }
                 }
-                Node.showExcludedChild3D = showExcludedChild3D;
+                _Node.showExcludedChild3D = showExcludedChild3D;
                 function createPrefab(prefab, name) {
                     let sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                     return sp;
                 }
-                Node.createPrefab = createPrefab;
+                _Node.createPrefab = createPrefab;
                 function childrenVisible2D(node, bool) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3566,7 +3548,7 @@
                         }
                     }
                 }
-                Node.childrenVisible2D = childrenVisible2D;
+                _Node.childrenVisible2D = childrenVisible2D;
                 function childrenVisible3D(node, bool) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3578,7 +3560,7 @@
                         }
                     }
                 }
-                Node.childrenVisible3D = childrenVisible3D;
+                _Node.childrenVisible3D = childrenVisible3D;
                 function findChild3D(parent, name) {
                     var item = null;
                     item = parent.getChildByName(name);
@@ -3592,7 +3574,7 @@
                     }
                     return null;
                 }
-                Node.findChild3D = findChild3D;
+                _Node.findChild3D = findChild3D;
                 function findChild2D(parent, name) {
                     var item = null;
                     item = parent.getChildByName(name);
@@ -3606,21 +3588,21 @@
                     }
                     return null;
                 }
-                Node.findChild2D = findChild2D;
+                _Node.findChild2D = findChild2D;
                 function findChildByName2D(parent, name) {
                     let arr = [];
                     return arr;
                 }
-                Node.findChildByName2D = findChildByName2D;
-            })(Node = Tools.Node || (Tools.Node = {}));
-            let Num;
-            (function (Num) {
+                _Node.findChildByName2D = findChildByName2D;
+            })(_Node = Tools._Node || (Tools._Node = {}));
+            let _Number;
+            (function (_Number) {
                 function randomOneHalf() {
                     let number;
                     number = Math.floor(Math.random() * 2);
                     return number;
                 }
-                Num.randomOneHalf = randomOneHalf;
+                _Number.randomOneHalf = randomOneHalf;
                 function randomOneInt(section1, section2) {
                     if (section2) {
                         return Math.floor(Math.random() * (section2 - section1)) + section1;
@@ -3629,7 +3611,7 @@
                         return Math.floor(Math.random() * section1);
                     }
                 }
-                Num.randomOneInt = randomOneInt;
+                _Number.randomOneInt = randomOneInt;
                 function randomCountBySection(section1, section2, count, intSet) {
                     let arr = [];
                     if (!count) {
@@ -3665,7 +3647,7 @@
                         return arr;
                     }
                 }
-                Num.randomCountBySection = randomCountBySection;
+                _Number.randomCountBySection = randomCountBySection;
                 function randomOneBySection(section1, section2, intSet) {
                     let chage;
                     if (section1 > section2) {
@@ -3694,20 +3676,20 @@
                         return num;
                     }
                 }
-                Num.randomOneBySection = randomOneBySection;
-            })(Num = Tools.Num || (Tools.Num = {}));
-            let Point;
-            (function (Point) {
+                _Number.randomOneBySection = randomOneBySection;
+            })(_Number = Tools._Number || (Tools._Number = {}));
+            let _Point;
+            (function (_Point) {
                 function angleByRad(angle) {
                     return angle / 180 * Math.PI;
                 }
-                Point.angleByRad = angleByRad;
+                _Point.angleByRad = angleByRad;
                 function twoNodeDistance(obj1, obj2) {
                     let point = new Laya.Point(obj1.x, obj1.y);
                     let len = point.distance(obj2.x, obj2.y);
                     return len;
                 }
-                Point.twoNodeDistance = twoNodeDistance;
+                _Point.twoNodeDistance = twoNodeDistance;
                 function pointByAngle(x, y) {
                     let radian = Math.atan2(x, y);
                     let angle = 90 - radian * (180 / Math.PI);
@@ -3716,7 +3698,7 @@
                     }
                     return angle - 90;
                 }
-                Point.pointByAngle = pointByAngle;
+                _Point.pointByAngle = pointByAngle;
                 ;
                 function angleByPoint(angle) {
                     let radian = (90 - angle) / (180 / Math.PI);
@@ -3724,14 +3706,14 @@
                     p.normalize();
                     return p;
                 }
-                Point.angleByPoint = angleByPoint;
+                _Point.angleByPoint = angleByPoint;
                 ;
                 function dotRotatePoint(x0, y0, x1, y1, angle) {
                     let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
                     let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
                     return new Laya.Point(x2, y2);
                 }
-                Point.dotRotatePoint = dotRotatePoint;
+                _Point.dotRotatePoint = dotRotatePoint;
                 function angleAndLenByPoint(angle, len) {
                     if (angle % 90 === 0 || !angle) {
                     }
@@ -3740,7 +3722,7 @@
                     speedXY.y = len * Math.sin(angle * Math.PI / 180);
                     return new Laya.Point(speedXY.x, speedXY.y);
                 }
-                Point.angleAndLenByPoint = angleAndLenByPoint;
+                _Point.angleAndLenByPoint = angleAndLenByPoint;
                 function getRoundPos(angle, radius, centerPos) {
                     var center = centerPos;
                     var radius = radius;
@@ -3749,23 +3731,23 @@
                     var Y = center.y - Math.cos(hudu) * radius;
                     return new Laya.Point(X, Y);
                 }
-                Point.getRoundPos = getRoundPos;
+                _Point.getRoundPos = getRoundPos;
                 function randomPointByCenter(centerPos, radiusX, radiusY, count) {
                     if (!count) {
                         count = 1;
                     }
                     let arr = [];
                     for (let index = 0; index < count; index++) {
-                        let x0 = Tools.Num.randomCountBySection(0, radiusX, 1, false);
-                        let y0 = Tools.Num.randomCountBySection(0, radiusY, 1, false);
-                        let diffX = Tools.Num.randomOneHalf() == 0 ? x0[0] : -x0[0];
-                        let diffY = Tools.Num.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                        let x0 = Tools._Number.randomCountBySection(0, radiusX, 1, false);
+                        let y0 = Tools._Number.randomCountBySection(0, radiusY, 1, false);
+                        let diffX = Tools._Number.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                        let diffY = Tools._Number.randomOneHalf() == 0 ? y0[0] : -y0[0];
                         let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
                         arr.push(p);
                     }
                     return arr;
                 }
-                Point.randomPointByCenter = randomPointByCenter;
+                _Point.randomPointByCenter = randomPointByCenter;
                 function getPArrBetweenTwoP(p1, p2, num) {
                     let arr = [];
                     let x0 = p2.x - p1.x;
@@ -3781,7 +3763,7 @@
                     }
                     return arr;
                 }
-                Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
+                _Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
                 function reverseVector(Vecoter1, Vecoter2, normalizing) {
                     let p;
                     p = new Laya.Point(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y);
@@ -3790,8 +3772,8 @@
                     }
                     return p;
                 }
-                Point.reverseVector = reverseVector;
-            })(Point = Tools.Point || (Tools.Point = {}));
+                _Point.reverseVector = reverseVector;
+            })(_Point = Tools._Point || (Tools._Point = {}));
             let _3D;
             (function (_3D) {
                 function twoNodeDistance(obj1, obj2) {
@@ -3894,13 +3876,16 @@
                 }
                 _3D.animatorPlay = animatorPlay;
             })(_3D = Tools._3D || (Tools._3D = {}));
-            function sk_indexControl(sk, name) {
-                sk.play(name, true);
-                sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
-            }
-            Tools.sk_indexControl = sk_indexControl;
-            let Draw;
-            (function (Draw) {
+            let _Skeleton;
+            (function (_Skeleton) {
+                function sk_indexControl(sk, name) {
+                    sk.play(name, true);
+                    sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
+                }
+                _Skeleton.sk_indexControl = sk_indexControl;
+            })(_Skeleton = Tools._Skeleton || (Tools._Skeleton = {}));
+            let _Draw;
+            (function (_Draw) {
                 function drawPieMask(parent, startAngle, endAngle) {
                     parent.cacheAs = "bitmap";
                     let drawPieSpt = new Laya.Sprite();
@@ -3909,10 +3894,10 @@
                     let drawPie = drawPieSpt.graphics.drawPie(parent.width / 2, parent.height / 2, parent.width / 2 + 10, startAngle, endAngle, "#000000");
                     return drawPie;
                 }
-                Draw.drawPieMask = drawPieMask;
+                _Draw.drawPieMask = drawPieMask;
                 function reverseRoundMask(node, x, y, radius, eliminate) {
                     if (eliminate == undefined || eliminate == true) {
-                        Node.removeAllChildren(node);
+                        _Node.removeAllChildren(node);
                     }
                     let interactionArea = new Laya.Sprite();
                     interactionArea.name = 'reverseRoundMask';
@@ -3923,10 +3908,10 @@
                     interactionArea.pos(x, y);
                     return interactionArea;
                 }
-                Draw.reverseRoundMask = reverseRoundMask;
+                _Draw.reverseRoundMask = reverseRoundMask;
                 function reverseRoundrectMask(node, x, y, width, height, round, eliminate) {
                     if (eliminate == undefined || eliminate == true) {
-                        Node.removeAllChildren(node);
+                        _Node.removeAllChildren(node);
                     }
                     let interactionArea = new Laya.Sprite();
                     interactionArea.name = 'reverseRoundrectMask';
@@ -3940,10 +3925,10 @@
                     interactionArea.pivotY = height / 2;
                     interactionArea.pos(x, y);
                 }
-                Draw.reverseRoundrectMask = reverseRoundrectMask;
-            })(Draw = Tools.Draw || (Tools.Draw = {}));
-            let ObjArray;
-            (function (ObjArray_1) {
+                _Draw.reverseRoundrectMask = reverseRoundrectMask;
+            })(_Draw = Tools._Draw || (Tools._Draw = {}));
+            let _ObjArray;
+            (function (_ObjArray) {
                 function onPropertySort(array, property) {
                     var compare = function (obj1, obj2) {
                         var val1 = obj1[property];
@@ -3965,7 +3950,7 @@
                     array.sort(compare);
                     return array;
                 }
-                ObjArray_1.onPropertySort = onPropertySort;
+                _ObjArray.onPropertySort = onPropertySort;
                 function differentPropertyTwo(objArr1, objArr2, property) {
                     var result = [];
                     for (var i = 0; i < objArr1.length; i++) {
@@ -3986,7 +3971,7 @@
                     }
                     return result;
                 }
-                ObjArray_1.differentPropertyTwo = differentPropertyTwo;
+                _ObjArray.differentPropertyTwo = differentPropertyTwo;
                 function objArr1IdenticalPropertyObjArr2(data1, data2, property) {
                     var result = [];
                     for (var i = 0; i < data1.length; i++) {
@@ -4007,7 +3992,7 @@
                     }
                     return result;
                 }
-                ObjArray_1.objArr1IdenticalPropertyObjArr2 = objArr1IdenticalPropertyObjArr2;
+                _ObjArray.objArr1IdenticalPropertyObjArr2 = objArr1IdenticalPropertyObjArr2;
                 function objArrUnique(arr, property) {
                     for (var i = 0, len = arr.length; i < len; i++) {
                         for (var j = i + 1, len = arr.length; j < len; j++) {
@@ -4020,7 +4005,7 @@
                     }
                     return arr;
                 }
-                ObjArray_1.objArrUnique = objArrUnique;
+                _ObjArray.objArrUnique = objArrUnique;
                 function objArrGetValue(objArr, property) {
                     let arr = [];
                     for (let i = 0; i < objArr.length; i++) {
@@ -4030,7 +4015,7 @@
                     }
                     return arr;
                 }
-                ObjArray_1.objArrGetValue = objArrGetValue;
+                _ObjArray.objArrGetValue = objArrGetValue;
                 function objArray_Copy(ObjArray) {
                     var sourceCopy = ObjArray instanceof Array ? [] : {};
                     for (var item in ObjArray) {
@@ -4038,7 +4023,7 @@
                     }
                     return sourceCopy;
                 }
-                ObjArray_1.objArray_Copy = objArray_Copy;
+                _ObjArray.objArray_Copy = objArray_Copy;
                 function obj_Copy(obj) {
                     var objCopy = {};
                     for (const item in obj) {
@@ -4060,8 +4045,8 @@
                     }
                     return objCopy;
                 }
-                ObjArray_1.obj_Copy = obj_Copy;
-            })(ObjArray = Tools.ObjArray || (Tools.ObjArray = {}));
+                _ObjArray.obj_Copy = obj_Copy;
+            })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
             let _Array;
             (function (_Array) {
                 function oneAddToarray(array1, array2) {
@@ -4207,7 +4192,7 @@
                     try {
                         let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
                         if (dataArr_0.length >= dataArr.length) {
-                            let diffArray = ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                            let diffArray = _ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
                             console.log('两个数据的差值为：', diffArray);
                             _Array.oneAddToarray(dataArr, diffArray);
                         }
@@ -4410,9 +4395,9 @@
                                         }
                                     }
                                 }
-                                PalyAudio.playMusic();
-                                this._openScene(_SceneName.Guide, true, () => {
-                                    LwgPreLoad._loadType = Admin._SceneName.PreLoadStep;
+                                Audio._playMusic();
+                                this._openScene(_SceneName.Guide, true, false, () => {
+                                    LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
                                 });
                             }
                         });
@@ -4510,13 +4495,13 @@
                             }));
                             break;
                         case _texture2D:
-                            Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, (tex) => {
+                            Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, function (tex) {
                                 if (tex == null) {
                                     console.log('XXXXXXXXXXX2D纹理' + _texture2D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
                                     _texture2D[index]['texture2D'] = tex;
-                                    console.log('2D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                    console.log('3D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
                             }));
@@ -4648,8 +4633,7 @@
             class _LwgInitScene extends Admin._SceneBase {
                 moduleOnStart() {
                     _init();
-                    this._openScene(_SceneName.PreLoad, null, () => {
-                    });
+                    this._openScene(_SceneName.PreLoad);
                 }
                 ;
             }
@@ -4770,7 +4754,7 @@
                     this.countNum = 59;
                     this.timeSwitch = true;
                 }
-                lwgInit() {
+                lwgOnAwake() {
                     this.Num = this._Owner.getChildByName('Num');
                     this.CountDown = this._Owner.getChildByName('CountDown');
                     this.CountDown_board = this._Owner.getChildByName('CountDown_board');
@@ -4844,8 +4828,8 @@
     let Admin = lwg.Admin;
     let _SceneBase = Admin._SceneBase;
     let _ObjectBase = Admin._ObjectBase;
-    let DataAdmin = lwg.DataAdmin;
     let _SceneName = Admin._SceneName;
+    let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
     let TimerAdmin = lwg.TimerAdmin;
@@ -4853,7 +4837,7 @@
     let Execution = lwg.Execution;
     let Gold = lwg.Gold;
     let Setting = lwg.Setting;
-    let PalyAudio = lwg.PalyAudio;
+    let Audio = lwg.Audio;
     let Click = lwg.Click;
     let Color = lwg.Color;
     let Effects = lwg.Effects;
@@ -4971,10 +4955,24 @@
                     prefab: new Laya.Prefab,
                 },
             },
+            texture2D: {
+                Figure1: {
+                    url: 'Game/UI/MakeClothes/figure_01.png',
+                    texture2d: null,
+                },
+                Figure2: {
+                    url: 'Game/UI/MakeClothes/figure_02.png',
+                    texture2d: null,
+                },
+                Figure3: {
+                    url: 'Game/UI/MakeClothes/figure_03.png',
+                    texture2d: null,
+                },
+            },
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
-                PreLoadStep: `Scene/${_SceneName.PreLoadStep}.json`,
+                PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
             },
         };
     })(_Res || (_Res = {}));
@@ -5088,7 +5086,7 @@
             }
             lwgOnAwake() {
                 this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
-                this.DottedLineControl.BtnCompelet = Tools.Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
+                this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
                 this._Owner.addChild(this.DottedLineControl.BtnCompelet);
                 this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
                 this.DottedLineControl.BtnCompelet.visible = false;
@@ -5114,7 +5112,7 @@
                     this._openScene(_SceneName.Start);
                 });
                 this._btnUp(this.DottedLineControl.BtnCompelet, () => {
-                    this._openScene('MakeClothes');
+                    this._openScene('MakeClothes', true, true);
                 });
             }
             onStageMouseDown(e) {
@@ -5136,27 +5134,49 @@
         _Tailor.Tailor = Tailor;
     })(_Tailor || (_Tailor = {}));
 
-    var _PreLoadStepUrl;
-    (function (_PreLoadStepUrl) {
-        _PreLoadStepUrl._game = {};
-    })(_PreLoadStepUrl || (_PreLoadStepUrl = {}));
-    var _PreLoadStep;
-    (function (_PreLoadStep) {
-        class PreLoadStep extends _LwgPreLoad._PreLoadScene {
+    var _CutInRes;
+    (function (_CutInRes) {
+        _CutInRes._MakeClothes = {};
+    })(_CutInRes || (_CutInRes = {}));
+    var _PreLoadCutIn;
+    (function (_PreLoadCutIn) {
+        let _Event;
+        (function (_Event) {
+            _Event["animation1"] = "_PreLoadCutIn_animation1";
+            _Event["preLoad"] = "_PreLoadCutIn_preLoad";
+            _Event["animation2"] = "_PreLoadCutIn_animation2";
+        })(_Event = _PreLoadCutIn._Event || (_PreLoadCutIn._Event = {}));
+        class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                switch (Admin._preLoadOpenSceneLater.openName) {
-                    case _SceneName.Game:
-                        EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
-                        break;
-                    default:
-                        break;
-                }
+                EventAdmin._notify(_Event.animation1);
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.animation1, this, () => {
+                    let time = 0;
+                    TimerAdmin._frameNumLoop(2, 50, this, () => {
+                        time++;
+                        this._LabelVar('Schedule').text = `${time}`;
+                    }, () => {
+                        Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
+                        this._Owner.zOrder = 1;
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes[`_${Admin._preLoadOpenSceneLater.openName}`]]));
+                    });
+                });
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                this._LabelVar('Schedule').text = `100`;
+                return 1000;
             }
         }
-        _PreLoadStep.PreLoadStep = PreLoadStep;
-    })(_PreLoadStep || (_PreLoadStep = {}));
+        _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
+    })(_PreLoadCutIn || (_PreLoadCutIn = {}));
     ;
-    var _PreLoadStep$1 = _PreLoadStep.PreLoadStep;
+    var _PreLoadCutIn$1 = _PreLoadCutIn.PreLoadCutIn;
 
     var _Start;
     (function (_Start) {
@@ -5166,7 +5186,8 @@
         class Start extends Admin._SceneBase {
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
-                    this._openScene('Tailor');
+                    Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
+                    this._openScene('MakeClothes');
                 });
             }
         }
@@ -5174,14 +5195,267 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
+    var lwg3D;
+    (function (lwg3D) {
+        class _Script3DBase extends Laya.Script3D {
+            get _cameraPos() {
+                if (!this['__cameraPos']) {
+                    return this['__cameraPos'] = new Laya.Vector3(this._MainCamera.transform.localPositionX, this._MainCamera.transform.localPositionY, this._MainCamera.transform.localPositionZ);
+                }
+                else {
+                    return this['__cameraPos'];
+                }
+            }
+            get _MainCamera() {
+                if (this['__MainCamera']) {
+                    if (this.owner.getChildByName('Main Camera')) {
+                        return this['__MainCamera'] = this.owner.getChildByName('Main Camera');
+                    }
+                    for (let index = 0; index < this.owner.numChildren; index++) {
+                        const element = this.owner.getChildAt(index);
+                        if (typeof element == typeof (Laya.Camera)) {
+                            return this['__MainCamera'] = element;
+                        }
+                    }
+                }
+                else {
+                    return this['__MainCamera'];
+                }
+            }
+            _child(name) {
+                if (!this[`_child${name}`]) {
+                    if (this.owner.getChildByName(name)) {
+                        return this[`_child${name}`] = this.owner.getChildByName(name);
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}`];
+                }
+            }
+            _childTransform(name) {
+                if (!this[`_child${name}Transform`]) {
+                    if (this.owner.getChildByName(name)) {
+                        let _MeshSprite3D = this.owner.getChildByName(name);
+                        this[`_child${name}Transform`] = _MeshSprite3D.transform;
+                        return this[`_child${name}Transform`];
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}Transform`];
+                }
+            }
+            _childPosition(name) {
+                if (!this[`_child${name}TransformPosition`]) {
+                    if (this.owner.getChildByName(name)) {
+                        let _MeshSprite3D = this.owner.getChildByName(name);
+                        this[`_child${name}TransformPosition`] = _MeshSprite3D.transform.position;
+                        return this[`_child${name}TransformPosition`];
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}TransformPosition`];
+                }
+            }
+            _childLocalPosition(name) {
+                if (!this[`_child${name}TransformLocalPosition`]) {
+                    if (this.owner.getChildByName(name)) {
+                        let _MeshSprite3D = this.owner.getChildByName(name);
+                        this[`_child${name}TransformLocalPosition`] = _MeshSprite3D.transform.localPosition;
+                        return this[`_child${name}TransformLocalPosition`];
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}TransformLocalPosition`];
+                }
+            }
+            _childLocalEuler(name) {
+                if (!this[`_child${name}TransformLocalEuler`]) {
+                    if (this.owner.getChildByName(name)) {
+                        let _MeshSprite3D = this.owner.getChildByName(name);
+                        this[`_child${name}TransformLocalEuler`] = _MeshSprite3D.transform.localRotationEuler;
+                        return this[`_child${name}TransformLocalEuler`];
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}TransformLocalEuler`];
+                }
+            }
+            _childLocalScale(name) {
+                if (!this[`_child${name}TransformLocalScale`]) {
+                    if (this.owner.getChildByName(name)) {
+                        let _MeshSprite3D = this.owner.getChildByName(name);
+                        this[`_child${name}TransformLocalScale`] = _MeshSprite3D.transform.localScale;
+                        return this[`_child${name}TransformLocalScale`];
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}TransformLocalScale`];
+                }
+            }
+            lwgOnAwake() {
+            }
+            lwgEventRegister() { }
+            ;
+            lwgOnEnable() { }
+            lwgOnStart() { }
+            lwgOnUpdate() {
+            }
+            lwgOnDisable() {
+            }
+        }
+        class _Scene3DBase extends _Script3DBase {
+            constructor() {
+                super();
+            }
+            get _Owner() {
+                return this.owner;
+            }
+            onAwake() {
+                this._calssName = this['__proto__']['constructor'].name;
+                if (this._MainCamera) {
+                    this._cameraFp.x = this._MainCamera.transform.localPositionX;
+                    this._cameraFp.y = this._MainCamera.transform.localPositionY;
+                    this._cameraFp.z = this._MainCamera.transform.localPositionZ;
+                }
+                this.lwgOnAwake();
+            }
+            onEnable() {
+                this._Owner[this._calssName] = this;
+                this.lwgEventRegister();
+                this.lwgOnEnable();
+                this.lwgOpenAni();
+            }
+            onStart() {
+                this.lwgOnStart();
+            }
+            lwgOpenAni() {
+            }
+            lwgVanishAni() {
+            }
+            onUpdate() {
+                this.lwgOnUpdate();
+            }
+            onDisable() {
+                this.lwgOnDisable();
+                Laya.timer.clearAll(this);
+                Laya.Tween.clearAll(this);
+                EventAdmin._offCaller(this);
+            }
+        }
+        lwg3D._Scene3DBase = _Scene3DBase;
+        class _Object3D extends _Script3DBase {
+            constructor() {
+                super();
+            }
+            get _Owner() {
+                return this.owner;
+            }
+            _localScale() {
+                return this._Owner.transform.localScale;
+            }
+            _localPosition() {
+                return this._Owner.transform.localPosition;
+            }
+            _position() {
+                return this._Owner.transform.position;
+            }
+            _localRotationEuler() {
+                return this._Owner.transform.localRotationEuler;
+            }
+            get _Parent() {
+                return this.owner.parent;
+            }
+            get _transform() {
+                return this._Owner.transform;
+            }
+            get _Scene3D() {
+                return this.owner.scene;
+            }
+            get _Rigidbody3D() {
+                if (!this._Owner['__Rigidbody3D']) {
+                    this._Owner['__Rigidbody3D'] = this._Owner.getComponent(Laya.Rigidbody3D);
+                }
+                return this._Owner['__Rigidbody3D'];
+            }
+            onAwake() {
+                this.lwgOnAwake();
+            }
+            onEnable() {
+                this.lwgEventRegister();
+                this.lwgOnEnable();
+            }
+            onUpdate() {
+                this.lwgOnUpdate();
+            }
+            onDisable() {
+                this.lwgOnDisable();
+                Laya.Tween.clearAll(this);
+                Laya.timer.clearAll(this);
+                EventAdmin._offCaller(this);
+            }
+        }
+        lwg3D._Object3D = _Object3D;
+    })(lwg3D || (lwg3D = {}));
+
     var _MakeClothes;
     (function (_MakeClothes) {
+        let _Event;
+        (function (_Event) {
+            _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
+        })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             lwgOnAwake() {
-                Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, this._Owner.zOrder - 1);
+                _MakeClothes._Scene3D = _Res._list.scene3D.MakeScene.Scene;
+                if (!_MakeClothes._Scene3D.getComponent(MakeClothes3D)) {
+                    _MakeClothes._Scene3D.addComponent(MakeClothes3D);
+                }
+            }
+            lwgOnStart() {
+            }
+            lwgBtnRegister() {
+                for (let index = 0; index < this._ImgVar('FigureParent').numChildren; index++) {
+                    const element = this._ImgVar('FigureParent').getChildAt(index);
+                    this._btnUp(element, () => {
+                        let tex = this._ImgVar(`Figure${index + 1}`).texture;
+                        let pix = tex.getPixels(100, 100, 128, 128);
+                        let tex2d = new Laya.Texture2D();
+                        tex2d.setPixels(pix);
+                        EventAdmin._notify(_Event.addTexture2D, [index + 1]);
+                    });
+                }
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
+        class MakeClothes3D extends lwg3D._Scene3DBase {
+            lwgOnAwake() {
+                let mt = new Laya.BlinnPhongMaterial;
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.addTexture2D, this, (index) => {
+                    let bMaterial = this._child('Hanger').meshRenderer.material;
+                    bMaterial.albedoTexture = _Res._list.texture2D[`Figure${index}`];
+                });
+            }
+        }
+        _MakeClothes.MakeClothes3D = MakeClothes3D;
     })(_MakeClothes || (_MakeClothes = {}));
     var _MakeClothes$1 = _MakeClothes.MakeClothes;
 
@@ -5193,10 +5467,10 @@
             Click._Effect.use = Click._Effect.type.largen;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
+                _PreLoadCutIn: _PreLoadCutIn,
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
-                _PreLoadStep: _PreLoadStep,
                 _Tailor: _Tailor,
                 _MakeClothes: _MakeClothes,
             };
@@ -5250,10 +5524,6 @@
             planeStaticCollider.restitution = 0.3;
             this.mat1 = new Laya.BlinnPhongMaterial();
             Laya.Texture2D.load("res/wood.jpg", Laya.Handler.create(this, function (tex) {
-                this.mat1.albedoTexture = tex;
-                Laya.timer.once(100, this, function () {
-                    this.addBox();
-                });
             }));
         }
         addBox() {

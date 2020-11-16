@@ -74,17 +74,25 @@ export module _Res {
         //         texture: new Laya.Texture,
         //     },
         // },
-        // texture2D: {
-        //     star1: {
-        //         url: 'Frame/Effects/hua4.png',
-        //         texture: Laya.Texture2D,
-        //     },
-        // },
+        texture2D: {
+            Figure1: {
+                url: 'Game/UI/MakeClothes/figure_01.png',
+                texture2d: null as Laya.Texture2D,
+            },
+            Figure2: {
+                url: 'Game/UI/MakeClothes/figure_02.png',
+                texture2d: null as Laya.Texture2D,
+            },
+            Figure3: {
+                url: 'Game/UI/MakeClothes/figure_03.png',
+                texture2d: null as Laya.Texture2D,
+            },
+        },
         /**通过直接获取场景的显示和打开，和scene关联，实现，先加载，然后直接切换*/
         scene2D: {
             Start: `Scene/${_SceneName.Start}.json`,
             Guide: `Scene/${_SceneName.Guide}.json`,
-            PreLoadStep: `Scene/${_SceneName.PreLoadStep}.json`,
+            PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
             // AdsHint: `Scene/${_SceneName.AdsHint}.json`,
             // Special: `Scene/${_SceneName.Special}.json`,
             // Victory: `Scene/${_SceneName.Victory}.json`,

@@ -251,7 +251,7 @@ export module _Task {
     }
 
     /**列表脚本*/
-    export class TaskItem extends Admin._Object {
+    export class TaskItem extends Admin._ObjectBase {
 
     }
 }
