@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":10,
+    "selecteID":15,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#555555","height":720},
     "nodeParent":-1,
-    "maxID":11,
+    "maxID":16,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -59,7 +59,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Figure1,Figure1",
-                    "props":{"y":53,"x":25,"width":128,"var":"Figure1","texture":"Game/UI/MakeClothes/figure_02.png","name":"Figure1","height":128},
+                    "props":{"y":53,"x":25,"var":"Figure1","texture":"Game/UI/MakeClothes/figure_02.png","name":"Figure1"},
                     "nodeParent":10,
                     "label":"Figure1",
                     "isDirectory":false,
@@ -73,7 +73,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Figure2,Figure2",
-                    "props":{"y":213,"x":25,"width":128,"var":"Figure2","texture":"Game/UI/MakeClothes/figure_01.png","name":"Figure2","height":128},
+                    "props":{"y":213,"x":25,"var":"Figure2","texture":"Game/UI/MakeClothes/figure_01.png","name":"Figure2"},
                     "nodeParent":10,
                     "label":"Figure2",
                     "isDirectory":false,
@@ -87,7 +87,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Figure3,Figure3",
-                    "props":{"y":372,"x":25,"width":128,"var":"Figure3","texture":"Game/UI/MakeClothes/figure_03.png","name":"Figure3","height":128},
+                    "props":{"y":372,"x":25,"var":"Figure3","texture":"Game/UI/MakeClothes/figure_03.png","name":"Figure3"},
                     "nodeParent":10,
                     "label":"Figure3",
                     "isDirectory":false,
@@ -97,6 +97,20 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,Ultimately,Ultimately",
+            "props":{"y":243,"x":374,"width":401,"var":"Ultimately","texture":"Game/UI/MakeClothes/figure_01.png","name":"Ultimately","height":296},
+            "nodeParent":2,
+            "label":"Ultimately",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":15,
+            "child":[
+                ]
         }],
     "animations":[
         {

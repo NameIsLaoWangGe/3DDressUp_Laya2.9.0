@@ -4958,15 +4958,15 @@
             texture2D: {
                 Figure1: {
                     url: 'Game/UI/MakeClothes/figure_01.png',
-                    texture2d: null,
+                    texture2D: null,
                 },
                 Figure2: {
                     url: 'Game/UI/MakeClothes/figure_02.png',
-                    texture2d: null,
+                    texture2D: null,
                 },
                 Figure3: {
                     url: 'Game/UI/MakeClothes/figure_03.png',
-                    texture2d: null,
+                    texture2D: null,
                 },
             },
             scene2D: {
@@ -5434,11 +5434,7 @@
                 for (let index = 0; index < this._ImgVar('FigureParent').numChildren; index++) {
                     const element = this._ImgVar('FigureParent').getChildAt(index);
                     this._btnUp(element, () => {
-                        let tex = this._ImgVar(`Figure${index + 1}`).texture;
-                        let pix = tex.getPixels(100, 100, 128, 128);
-                        let tex2d = new Laya.Texture2D();
-                        tex2d.setPixels(pix);
-                        EventAdmin._notify(_Event.addTexture2D, [index + 1]);
+                        EventAdmin._notify(_Event.addTexture2D, [this._ImgVar('Ultimately').texture.bitmap]);
                     });
                 }
             }
@@ -5446,12 +5442,11 @@
         _MakeClothes.MakeClothes = MakeClothes;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
-                let mt = new Laya.BlinnPhongMaterial;
             }
             lwgEventRegister() {
-                EventAdmin._register(_Event.addTexture2D, this, (index) => {
+                EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
                     let bMaterial = this._child('Hanger').meshRenderer.material;
-                    bMaterial.albedoTexture = _Res._list.texture2D[`Figure${index}`];
+                    bMaterial.albedoTexture = Text2D;
                 });
             }
         }
@@ -5524,6 +5519,10 @@
             planeStaticCollider.restitution = 0.3;
             this.mat1 = new Laya.BlinnPhongMaterial();
             Laya.Texture2D.load("res/wood.jpg", Laya.Handler.create(this, function (tex) {
+                this.mat1.albedoTexture = tex;
+                Laya.timer.once(100, this, function () {
+                    this.addBox();
+                });
             }));
         }
         addBox() {

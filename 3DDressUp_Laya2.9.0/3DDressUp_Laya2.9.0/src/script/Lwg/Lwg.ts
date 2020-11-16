@@ -6041,7 +6041,6 @@ export module lwg {
                         break;
 
                     case _texture2D:
-
                         //加载纹理资源
                         Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, function (tex: Laya.Texture2D): void {
                             if (tex == null) {
@@ -6055,7 +6054,7 @@ export module lwg {
                         break;
 
                     case _material:
-                        Laya.Material.load(_material[index]['url'], Laya.Handler.create(this, (any) => {
+                        Laya.Material.load(_material[index]['url'], Laya.Handler.create(this, (any: any) => {
                             if (any == null) {
                                 console.log('XXXXXXXXXXX材质' + _material[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {

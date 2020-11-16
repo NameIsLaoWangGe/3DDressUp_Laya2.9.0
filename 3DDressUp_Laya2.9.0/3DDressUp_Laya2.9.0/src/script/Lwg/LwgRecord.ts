@@ -36,6 +36,8 @@ export module record {
         'mask遮罩问题2' = '有遮罩的图片的坐标必须是整数，不能有小数，否则可能导致遮罩有一根细线的存在，可能是遮罩只会遮罩整数坐标，导致计算错误',
 
         '截屏对应源码修改' = '截屏  var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);htmlCanvas.toBase64("image/png"),对应core中的源码修改，才可以上传平台，被平台识别，搜索‘ImageData’，如下:// var imgdata=/*__JS__ */new ImageData(canvasWidth,canvasHeight); //注释这一句，这句是报错的地方;   var canvx = new HTMLCanvas(true); //创建一个canvas,canvx.size(canvasWidth, canvasHeight); //设置宽高;这个和ImageData保持一致;  var ctx2dx = canvx.getContext(`2d`); //获取上下文;var imgdata = ctx2dx.getImageData(0,0,canvasWidth,canvasHeight); //获取imageData，来替代ImageData;',
+
+        '2Dtexture'='2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包'
     }
     /**
      * 关于2d物理引擎
