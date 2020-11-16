@@ -3,8 +3,9 @@ import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _Tailor } from "./_Tailor";
 import { _PreLoad } from "./_PreLoad";
-import { _PreLoadStep } from "./_PreLoadStep";
+import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
+import { _MakeClothes } from "./_MakeClothes";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -17,12 +18,12 @@ export default class LwgInit extends _LwgInitScene {
         Click._Effect.use = Click._Effect.type.largen;
         Admin._moudel = {
             _PreLoad: _PreLoad,
+            _PreLoadCutIn: _PreLoadCutIn,
             _Guide: _Guide,
             _Start: _Start,
             _Game: _Game,
-            _PreLoadStep: _PreLoadStep,
             _Tailor: _Tailor,
-            // _SelectLevel: _SelectLevel,
+            _MakeClothes: _MakeClothes,
             // _Settle: _Settle,
             // _Victory: _Victory,
             // _Share: _Share,

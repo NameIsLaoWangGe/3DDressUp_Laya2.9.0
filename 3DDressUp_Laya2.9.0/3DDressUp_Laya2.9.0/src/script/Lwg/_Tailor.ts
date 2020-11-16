@@ -54,7 +54,6 @@ export module _Tailor {
     /**剪刀*/
     export class Scissor extends Admin._ObjectBase {
         onTriggerEnter(other: Laya.CircleCollider, self: Laya.CircleCollider): void {
-            console.log('你好！')
             if (!other['cut']) {
                 other['cut'] = true;
                 EventAdmin._notify(_Event.trigger, [other.owner.name]);
@@ -75,15 +74,14 @@ export module _Tailor {
             this._ImgVar('Scissor').addComponent(Scissor);
             this._ImgVar('LineParent').cacheAs = "bitmap";
 
-            Laya.Physics.I.worldRoot = this._Owner;
-
-            Laya.timer.frameLoop(1, this, () => {
-                Laya.Physics.I.worldRoot.x++;
-            })
+            // Laya.Physics.I.worldRoot = this._Owner;
+            // Laya.timer.frameLoop(1, this, () => {
+            //     Laya.Physics.I.worldRoot.x++;
+            // })
         }
 
         lwgAdaptive(): void {
-            this._Owner.x += 100;
+            // this._Owner.x += 100;
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.trigger, this, (name: string) => {
@@ -96,11 +94,9 @@ export module _Tailor {
                     }
                 }
             })
-
             // EventAdmin._register(_Event.playAni, this, (index: string) => {
             //     this._AniVar(`ani${index}`).play(0, false);
             // })
-
         }
 
         lwgBtnRegister(): void {
@@ -108,7 +104,7 @@ export module _Tailor {
                 this._openScene(_SceneName.Start);
             })
             this._btnUp(this.DottedLineControl.BtnCompelet, () => {
-                this._openScene(_SceneName.Start);
+                this._openScene('MakeClothes');
             })
         }
 

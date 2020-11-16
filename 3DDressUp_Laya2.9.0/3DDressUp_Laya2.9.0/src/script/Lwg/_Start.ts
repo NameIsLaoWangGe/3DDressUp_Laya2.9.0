@@ -1,5 +1,5 @@
 import ADManager, { TaT } from "../TJ/Admanager";
-import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, _Gold, _SceneName } from "./Lwg";
+import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, Gold, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 import { _SelectLevel } from "./_SelectLevel";
 

@@ -1,6 +1,6 @@
 import { Admin, EventAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
-export module _PreLoadStepUrl {
-    export let _game = {
+export module _CutInRes {
+    export let _MakeClothesList = {
         //     scene3D: {
         //         // "_Lwg3D/_Scene/LayaScene_GameMain/Conventional/GameMain.ls"
         //     },
@@ -28,13 +28,13 @@ export module _PreLoadStepUrl {
         //     texture2D: {},
     }
 }
-export module _PreLoadStep {
+export module _PreLoadCutIn {
     /**可以手动挂在脚本中的类，全脚本唯一的默认导出，也可动态添加，动态添加写在模块内更方便*/
-    export class PreLoadStep extends _LwgPreLoad._PreLoadScene {
+    export class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
             switch (Admin._preLoadOpenSceneLater.openName) {
                 case _SceneName.Game:
-                    EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
+                    EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes._MakeClothesList]));
                     break;
                 default:
                     break;
@@ -42,7 +42,7 @@ export module _PreLoadStep {
         }
     }
 };
-export default _PreLoadStep.PreLoadStep;
+export default _PreLoadCutIn.PreLoadCutIn;
 
 
 

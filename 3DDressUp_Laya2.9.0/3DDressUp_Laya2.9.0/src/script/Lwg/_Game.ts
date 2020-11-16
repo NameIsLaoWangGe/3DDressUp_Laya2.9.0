@@ -1,6 +1,6 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import RecordManager from "../TJ/RecordManager";
-import { Admin, Animation2D, Click, Color, EventAdmin, TimerAdmin, Tools, _Gold, _SceneName } from "./Lwg";
+import { Admin, Animation2D, Click, Color, EventAdmin, TimerAdmin, Tools, Gold, _SceneName } from "./Lwg";
 import _GameBlinkItem from "./_GameBlinkItem";
 import { _GameItem } from "./_GameItem";
 import { _Res } from "./_PreLoad";

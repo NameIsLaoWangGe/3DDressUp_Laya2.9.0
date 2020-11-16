@@ -4,7 +4,9 @@ import { EventAdmin } from "./Lwg";
 
 /**管理3D的模块*/
 export module lwg3D {
-    
+    class Script3DBase extends Laya.Script3D {
+
+    }
     /**3D场景通用父类*/
     export class _Scene3DBase extends Laya.Script3D {
         /**类名*/
