@@ -1,4 +1,3 @@
-import GameConfig from "../../GameConfig";
 /**综合模板*/
 export module lwg {
     /**暂停模块，控制游戏的暂停和开启*/
@@ -265,8 +264,6 @@ export module lwg {
             }))
         }
     }
-
-
 
     /**金币模块*/
     export module Gold {
@@ -847,6 +844,61 @@ export module lwg {
             }, args, coverBefore)
         }
     }
+
+    /**适配设置*/
+    export module Adaptive {
+        export let _designWidth: number = 720;
+        export let _desigheight: number = 1280;
+        /**
+         * @export 根据舞台按场景内节点位置比例适配X轴
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         */
+        export function _stageWidth(arr: Array<Laya.Sprite>): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.pivotX == 0 && element.width) {
+                    element.x = element.x / _designWidth * Laya.stage.width + element.width / 2;
+                } else {
+                    element.x = element.x / _designWidth * Laya.stage.width;
+                }
+            }
+        }
+        /**
+         * @export 根据舞台按场景内节点位置比例适配Y轴
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         */
+        export function _stageHeight(arr: Array<Laya.Sprite>): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.pivotY == 0 && element.height) {
+                    element.y = element.y / _desigheight * element.scaleX * Laya.stage.height + element.height / 2;
+                } else {
+                    element.y = element.y / _desigheight * element.scaleX * Laya.stage.height;
+                }
+            }
+        }
+        /**
+         * @export 根据宽高居中
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         * @param {Laya.Sprite} target 依据什么居中舞台或者父节点
+         */
+        export function _center(arr: Array<Laya.Sprite>, target: Laya.Sprite): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.width > 0) {
+                    element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                } else {
+                    element.x = target.width / 2;
+                }
+                if (element.height > 0) {
+                    element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                } else {
+                    element.y = target.height / 2;
+                }
+            }
+        }
+    }
+
     /**游戏整体控制*/
     export module Admin {
         /**渠道，控制一些节点的变化,默认为null*/
@@ -887,7 +939,6 @@ export module lwg {
                 }
             }
         };
-
         /**等级*/
         export let _game = {
             /**游戏控制开关*/
@@ -1366,46 +1417,46 @@ export module lwg {
              * @param target 节点
              * @param caller 执行域
              * @param down 按下回调
-             * @param effect 效果类型 1.'largen'
+             * @param effect 效果类型输入null则没有效果
              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
             */
             _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, null, null, null);
             }
             /**
               * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
               * @param target 节点
               * @param move 移动回调
-              * @param effect 效果类型 1.'largen',默认为点击放大
+              * @param effect 效果类型输入null则没有效果
                * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnMove(target: Laya.Node, move: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Effect.use, target, this, null, move, null, null);
+                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, move, null, null);
             }
 
             /**
              * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
              * @param target 节点
              * @param up 抬起回调
-             * @param effect 效果类型 1.'largen',默认为点击放大
+             * @param effect 效果类型输入null则没有效果
            * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
            */
             _btnUp(target: Laya.Node, up: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, up, null);
             }
             /**
               * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
               * @param target 节点
               * @param out 移出回调
-              * @param effect 效果类型 1.'largen',默认为点击放大
+              * @param effect 效果类型输入null则没有效果
                * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnOut(target: Laya.Node, out: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Effect.use, target, this, null, null, null, out);
+                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, null, out);
             }
             /**
               * 通用事件注册,可以用(e)=>{}简写传递的函数参数
-              * @param effect 效果类型 1.'largen'
+              * @param effect 效果类型输入null则没有效果
               * @param target 节点
               * @param down 按下
               * @param move 移动
@@ -1414,7 +1465,7 @@ export module lwg {
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
-                Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, move, up, out);
             }
             ownerSceneName: string = '';
             /**
@@ -1567,19 +1618,17 @@ export module lwg {
             lwgOpenAni(): number { return null };
             /**开场动画之后执行*/
             lwgOpenAniAfter(): void { };
-            /**按照当前Y轴坐标的高度的比例适配*/
+            /**按照当前Y轴坐标的高度的比例适配，适配整个舞台*/
             _adaptiveHeight(arr: Array<Laya.Sprite>): void {
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index] as Laya.Sprite;
-                    element.y / GameConfig.height * Laya.stage.height;
-                }
+                Adaptive._stageHeight(arr);
             };
             /**按照当前X轴的高度的比例适配*/
             _adaptiveWidth(arr: Array<Laya.Sprite>): void {
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index] as Laya.Sprite;
-                    element.x / GameConfig.width * Laya.stage.width;
-                }
+                Adaptive._stageWidth(arr);
+            };
+            /**按照当前X轴的高度的比例适配*/
+            _adaptiveCenter(arr: Array<Laya.Sprite>): void {
+                Adaptive._center(arr, Laya.stage);
             };
             onUpdate(): void { this.lwgOnUpdate() };
             /**离场动画前执行*/
@@ -1694,7 +1743,7 @@ export module lwg {
             /**自定义碰撞组件*/
             get _PolygonCollier(): Laya.BoxCollider {
                 if (!this._Owner['_OwnerPolygonCollier']) {
-                    return  this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    return this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
                 }
                 return this._Owner['_OwnerPolygonCollier'];
             }
@@ -1735,7 +1784,6 @@ export module lwg {
                     return this[`_LableChild${str}`]
                 }
             }
-
             _ListChild(str: string): Laya.List {
                 if (!this[`_ListChild${str}`]) {
                     if (this._Owner.getChildByName(str)) {
@@ -3043,7 +3091,7 @@ export module lwg {
                     btnEffect = new _Beetle();
                     break;
                 default:
-                    btnEffect = new _Largen();
+                    btnEffect = new _NoEffect();
                     break;
             }
             target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -4628,6 +4676,26 @@ export module lwg {
         }
         /**节点相关*/
         export module _Node {
+
+            /**
+             * @export 简单拷贝一张img，只拷贝通用属性，深度拷贝可以借鉴通过对象的深度copy
+             * @param {Laya.Image} Target 拷贝目标
+             * @return {*}  {Laya.Image}
+             */
+            export function simpleCopyImg(Target: Laya.Image): Laya.Image {
+                let Img = new Laya.Image;
+                Img.skin = Target.skin;
+                Img.width = Target.width;
+                Img.height = Target.height;
+                Img.pivotX = Target.pivotX;
+                Img.pivotY = Target.pivotY;
+                Img.scaleX = Target.scaleX;
+                Img.scaleY = Target.scaleY;
+                Img.skewX = Target.skewX;
+                Img.skewY = Target.skewY;
+                Img.rotation = Target.rotation;
+                return Img;
+            }
             /**
               * 检测节点是否超出舞台
               * @param _Sprite 节点
@@ -5040,6 +5108,16 @@ export module lwg {
         }
         /**坐标相关*/
         export module _Point {
+            /**
+             * @export 获取当前节点在另一个节点坐标系中的局部坐标
+             * @param {Laya.Sprite} element 坐标节点
+             * @param {Laya.Sprite} Other 另一个节点
+             */
+            export function getOtherLocal(element: Laya.Sprite, Other: Laya.Sprite): Laya.Point {
+                let Parent = element.parent as Laya.Image;
+                let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                return Other.globalToLocal(gPoint);
+            }
             /**
              * 根据角度计算弧度
              * @param angle 角度
@@ -6464,6 +6542,7 @@ export let Admin = lwg.Admin;
 export let _SceneBase = Admin._SceneBase;
 export let _ObjectBase = Admin._ObjectBase;
 export let _SceneName = Admin._SceneName;
+export let Adaptive = lwg.Adaptive;
 export let DataAdmin = lwg.DataAdmin;
 export let EventAdmin = lwg.EventAdmin;
 export let DateAdmin = lwg.DateAdmin;

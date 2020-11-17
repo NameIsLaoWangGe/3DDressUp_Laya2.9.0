@@ -624,6 +624,53 @@
             }
             TimerAdmin._once = _once;
         })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
+        let Adaptive;
+        (function (Adaptive) {
+            Adaptive._designWidth = 720;
+            Adaptive._desigheight = 1280;
+            function _stageWidth(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotX == 0 && element.width) {
+                        element.x = element.x / Adaptive._designWidth * Laya.stage.width + element.width / 2;
+                    }
+                    else {
+                        element.x = element.x / Adaptive._designWidth * Laya.stage.width;
+                    }
+                }
+            }
+            Adaptive._stageWidth = _stageWidth;
+            function _stageHeight(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotY == 0 && element.height) {
+                        element.y = element.y / Adaptive._desigheight * element.scaleX * Laya.stage.height + element.height / 2;
+                    }
+                    else {
+                        element.y = element.y / Adaptive._desigheight * element.scaleX * Laya.stage.height;
+                    }
+                }
+            }
+            Adaptive._stageHeight = _stageHeight;
+            function _center(arr, target) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.width > 0) {
+                        element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                    }
+                    else {
+                        element.x = target.width / 2;
+                    }
+                    if (element.height > 0) {
+                        element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                    }
+                    else {
+                        element.y = target.height / 2;
+                    }
+                }
+            }
+            Adaptive._center = _center;
+        })(Adaptive = lwg.Adaptive || (lwg.Adaptive = {}));
         let Admin;
         (function (Admin) {
             Admin._platform = {
@@ -1220,17 +1267,15 @@
                 lwgOpenAniAfter() { }
                 ;
                 _adaptiveHeight(arr) {
-                    for (let index = 0; index < arr.length; index++) {
-                        const element = arr[index];
-                        element.y / GameConfig.height * Laya.stage.height;
-                    }
+                    Adaptive._stageHeight(arr);
                 }
                 ;
                 _adaptiveWidth(arr) {
-                    for (let index = 0; index < arr.length; index++) {
-                        const element = arr[index];
-                        element.x / GameConfig.width * Laya.stage.width;
-                    }
+                    Adaptive._stageWidth(arr);
+                }
+                ;
+                _adaptiveCenter(arr) {
+                    Adaptive._center(arr, Laya.stage);
                 }
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
@@ -3435,6 +3480,21 @@
             })(_Format = Tools._Format || (Tools._Format = {}));
             let _Node;
             (function (_Node) {
+                function simpleCopyImg(Target) {
+                    let Img = new Laya.Image;
+                    Img.skin = Target.skin;
+                    Img.width = Target.width;
+                    Img.height = Target.height;
+                    Img.pivotX = Target.pivotX;
+                    Img.pivotY = Target.pivotY;
+                    Img.scaleX = Target.scaleX;
+                    Img.scaleY = Target.scaleY;
+                    Img.skewX = Target.skewX;
+                    Img.skewY = Target.skewY;
+                    Img.rotation = Target.rotation;
+                    return Img;
+                }
+                _Node.simpleCopyImg = simpleCopyImg;
                 function leaveStage(_Sprite, func) {
                     let Parent = _Sprite.parent;
                     let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
@@ -3756,6 +3816,12 @@
             })(_Number = Tools._Number || (Tools._Number = {}));
             let _Point;
             (function (_Point) {
+                function getOtherLocal(element, Other) {
+                    let Parent = element.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                    return Other.globalToLocal(gPoint);
+                }
+                _Point.getOtherLocal = getOtherLocal;
                 function angleByRad(angle) {
                     return angle / 180 * Math.PI;
                 }
@@ -4905,6 +4971,7 @@
     let _SceneBase = Admin._SceneBase;
     let _ObjectBase = Admin._ObjectBase;
     let _SceneName = Admin._SceneName;
+    let Adaptive = lwg.Adaptive;
     let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
@@ -5488,18 +5555,48 @@
                 super(...arguments);
                 this.Move = {
                     Img: null,
+                    DisplayImg: null,
                     touchP: null,
                     diffP: null,
                     createImg: (element) => {
-                        this.Move.Img = new Laya.Image;
+                        this.Move.Img = Tools._Node.simpleCopyImg(element);
                         this.Move.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this.Move.Img.width = 128;
-                        this.Move.Img.height = 128;
                         this._SpriteVar('Ultimately').addChild(this.Move.Img);
-                        let Parent = element.parent;
-                        let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
-                        let lPoint = this._ImgVar('Ultimately').globalToLocal(gPoint);
+                        let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
                         this.Move.Img.pos(lPoint.x, lPoint.y);
+                        this.Move.DisplayImg = Tools._Node.simpleCopyImg(element);
+                        this.Move.DisplayImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.Move.DisplayImg.pos(lPoint.x, lPoint.y);
+                        this._SpriteVar('Dispaly').addChild(this.Move.DisplayImg);
+                        this.Move.Img.width = this.Move.DisplayImg.width = 128;
+                        this.Move.Img.height = this.Move.DisplayImg.height = 128;
+                    },
+                    getTex: () => {
+                        return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
+                    },
+                    move: (e) => {
+                        if (this.Move.touchP && this.Move.Img) {
+                            this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
+                            this.Move.Img.x += this.Move.diffP.x;
+                            this.Move.Img.y += this.Move.diffP.y;
+                            this.Move.DisplayImg.x += this.Move.diffP.x;
+                            this.Move.DisplayImg.y += this.Move.diffP.y;
+                            this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                            EventAdmin._notify(_Event.addTexture2D, [this.Move.getTex().bitmap]);
+                        }
+                    },
+                    checkDisplay: () => {
+                        if (this.Move.DisplayImg.x > -this.Move.DisplayImg.width && this.Move.DisplayImg.x < this._SpriteVar('Dispaly').width) {
+                            this.Move.DisplayImg.visible = false;
+                        }
+                        else {
+                            this.Move.DisplayImg.visible = true;
+                        }
+                        this._ImgVar('Wireframe').visible = !this.Move.DisplayImg.visible;
+                        if (this._ImgVar('Wireframe').visible) {
+                            let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Move.DisplayImg.x, this.Move.DisplayImg.y));
+                            this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        }
                     }
                 };
             }
@@ -5511,6 +5608,9 @@
             }
             lwgOnStart() {
             }
+            lwgAdaptive() {
+                this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
+            }
             lwgBtnRegister() {
                 for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
                     const element = this._ImgVar('Figure').getChildAt(index);
@@ -5519,7 +5619,6 @@
                             this[`FigureParentelement${index}`] = true;
                         }
                         this.Move.createImg(element);
-                        this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
                     });
                 }
             }
@@ -5527,14 +5626,8 @@
                 this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
             }
             onStageMouseMove(e) {
-                if (this.Move.touchP && this.Move.Img) {
-                    this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
-                    this.Move.Img.x += this.Move.diffP.x;
-                    this.Move.Img.y += this.Move.diffP.y;
-                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
-                    let tex = this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y);
-                    EventAdmin._notify(_Event.addTexture2D, [tex.bitmap]);
-                }
+                this.Move.move(e);
+                this.Move.checkDisplay();
             }
             onStageMouseUp() {
                 this.Move.touchP = null;
@@ -5562,6 +5655,8 @@
             Admin._platform.ues = Admin._platform.tpye.Research;
             Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
             Click._Effect.use = Click._Effect.type.largen;
+            Adaptive._desigheight = 720;
+            Adaptive._designWidth = 1280;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
                 _PreLoadCutIn: _PreLoadCutIn,

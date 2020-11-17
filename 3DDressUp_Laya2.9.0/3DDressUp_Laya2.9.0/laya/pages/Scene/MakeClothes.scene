@@ -2,11 +2,17 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":7,
+    "selecteID":13,
     "searchKey":"View",
-    "props":{"width":1280,"sceneColor":"#000000","height":720},
+    "referenceLines":[
+        {
+            "value":49,
+            "type":1,
+            "id":1
+        }],
+    "props":{"width":1280,"sceneColor":"#a4a4a4","height":720},
     "nodeParent":-1,
-    "maxID":10,
+    "maxID":20,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -31,7 +37,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":100,"x":4,"width":200,"skin":"Game/UI/MakeClothes/figure_01Btn.png","name":"","height":146},
+                    "props":{"y":173,"x":104,"width":200,"skin":"Game/UI/MakeClothes/figure_01Btn.png","pivotY":73,"pivotX":100,"name":"","height":146},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -45,7 +51,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":246,"x":4,"width":200,"skin":"Game/UI/MakeClothes/figure_02Btn.png","name":"","height":146},
+                    "props":{"y":319,"x":104,"width":200,"skin":"Game/UI/MakeClothes/figure_02Btn.png","pivotY":73,"pivotX":100,"name":"","height":146},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -59,7 +65,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":404,"x":4,"width":200,"skin":"Game/UI/MakeClothes/figure_03Btn.png","name":"","height":146},
+                    "props":{"y":477,"x":104,"width":200,"skin":"Game/UI/MakeClothes/figure_03Btn.png","pivotY":73,"pivotX":100,"name":"","height":146},
                     "nodeParent":3,
                     "label":"Image",
                     "isDirectory":false,
@@ -69,20 +75,6 @@
                     "child":[
                         ]
                 }]
-        },
-        {
-            "x":15,
-            "type":"Sprite",
-            "searchKey":"Sprite,Ultimately,Ultimately",
-            "props":{"y":94,"x":292,"width":620,"visible":false,"var":"Ultimately","texture":"Game/UI/MakeClothes/figure_01.png","name":"Ultimately","height":534},
-            "nodeParent":2,
-            "label":"Ultimately",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":7,
-            "child":[
-                ]
         },
         {
             "x":15,
@@ -110,6 +102,119 @@
                     "compId":9,
                     "child":[
                         ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,UltimatelyParent,UltimatelyParent",
+            "props":{"y":93,"x":296,"width":620,"visible":false,"var":"UltimatelyParent","scaleY":1,"scaleX":1,"name":"UltimatelyParent","height":534},
+            "nodeParent":2,
+            "label":"UltimatelyParent",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":10,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Sprite",
+                    "searchKey":"Sprite,Ultimately,Ultimately",
+                    "props":{"y":534,"x":0,"width":620,"visible":true,"var":"Ultimately","texture":"Game/UI/MakeClothes/figure_01.png","scaleY":-1,"name":"Ultimately","height":534},
+                    "nodeParent":10,
+                    "label":"Ultimately",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":7,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,Dispaly,Dispaly",
+            "props":{"y":93,"x":296,"width":620,"visible":true,"var":"Dispaly","scaleY":1,"scaleX":1,"name":"Dispaly","height":534},
+            "nodeParent":2,
+            "label":"Dispaly",
+            "isOpen":true,
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":11,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,Wireframe,Wireframe",
+            "props":{"y":618,"x":1004,"width":123,"visible":false,"var":"Wireframe","skin":"Lwg/UI/wireframeBlack2.png","sizeGrid":"13,20,21,25","pivotY":79,"pivotX":62,"name":"Wireframe","height":157},
+            "nodeParent":2,
+            "label":"Wireframe",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":13,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,WClose,WClose",
+                    "props":{"y":0,"x":0,"width":40,"var":"WClose","skin":"Lwg/UI/icon_close.png","pivotY":20,"pivotX":20,"name":"WClose","height":40},
+                    "nodeParent":13,
+                    "label":"WClose",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":15,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,WConversion,WConversion",
+                    "props":{"y":153,"x":123,"width":40,"var":"WConversion","skin":"Lwg/UI/ui_circle_c_001.png","pivotY":20,"pivotX":20,"name":"WConversion","height":40},
+                    "nodeParent":13,
+                    "label":"WConversion",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":17,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image",
+                            "props":{"y":28,"x":23,"width":15,"skin":"Lwg/UI/icon_cusp.png","rotation":68,"pivotY":8,"pivotX":8,"height":15},
+                            "nodeParent":17,
+                            "label":"Image",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":18,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image",
+                            "props":{"y":12,"x":17,"width":15,"skin":"Lwg/UI/icon_cusp.png","rotation":605,"pivotY":8,"pivotX":8,"height":15},
+                            "nodeParent":17,
+                            "label":"Image",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":19,
+                            "child":[
+                                ]
+                        }]
                 }]
         }],
     "animations":[

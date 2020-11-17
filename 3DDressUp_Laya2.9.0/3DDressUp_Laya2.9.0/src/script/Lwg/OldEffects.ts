@@ -1,7 +1,7 @@
 import { TimerAdmin, Tools } from "./Lwg";
 
- /**特效模块*/
- export module OldEffects {
+/**特效模块*/
+export module OldEffects {
     /**特效元素的图片地址，所有项目都可用*/
     export enum SkinUrl {
         'Frame/Effects/cir_white.png',
@@ -116,9 +116,9 @@ import { TimerAdmin, Tools } from "./Lwg";
           * @param angle 角度
           * @param basedSpeed 基础速度
           */
-        commonSpeedXYByAngle(angle, speed) {
-            this.self.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
-            this.self.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
+        commonSpeedXYByAngle(angle: number, speed: number) {
+            this.self.x += Tools._Point.angleAndLenByPoint(angle, speed + this.accelerated).x;
+            this.self.y += Tools._Point.angleAndLenByPoint(angle, speed + this.accelerated).y;
         }
         /**移动规则*/
         moveRules(): void {

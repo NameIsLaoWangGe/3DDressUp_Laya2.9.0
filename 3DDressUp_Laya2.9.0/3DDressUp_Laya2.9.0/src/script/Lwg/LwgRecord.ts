@@ -39,7 +39,9 @@ export module record {
 
         '2Dtexture' = '2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包',
 
-        'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可'
+        'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可',
+
+        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉'='destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图'
     }
     /**
      * 关于2d物理引擎

@@ -104,7 +104,8 @@ P 4A512E89 yezi1.png
 P CAAFC187 yuan1.png
 P B63DD538 yuanfaguang.png
 D Lwg/UI
-P 5FCECF63 icon_cusp.png
+P ED5B88D4 icon_close.png
+P 8B8EAE2F icon_cusp.png
 P C36AA67B icon_execution.png
 P A5763191 icon_gold.png
 P 7A9D5B20 icon_hand.png
@@ -175,6 +176,8 @@ P 06EEE25E ui_square_c_008.png
 P D6262B24 ui_square_c_009.png
 P 7331617A ui_square_c_010.png
 P 87918B79 ui_square_c_011.png
+P 3D581962 wireframeBlack1.png
+P 4BA0E599 wireframeBlack2.png
 D Lwg/Voice
 R EB9067B0 bgm.mp3
 R 626CADAF btn.wav

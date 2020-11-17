@@ -6,7 +6,7 @@ import { _Game } from "./_Game";
 import { _GameItem } from "./_GameItem";
 import { _PropTry } from "./_PropTry";
 /**画笔脚本*/
-export default class _GamePencilItem extends Admin._Object {
+export default class _GamePencilItem extends Admin._ObjectBase {
     // lwgOnAwake(): void {
     //     // this.Compound.Pic = this.Owner.getChildByName('Pic') as Laya.Image;
     // }

@@ -1,4 +1,4 @@
-import { Admin, Click, _LwgInit, _LwgInitScene } from "./Lwg";
+import { Adaptive, Admin, Click, _LwgInit, _LwgInitScene } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _Tailor } from "./_Tailor";
@@ -16,6 +16,8 @@ export default class LwgInit extends _LwgInitScene {
         Admin._platform.ues = Admin._platform.tpye.Research;
         Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
         Click._Effect.use = Click._Effect.type.largen;
+        Adaptive._desigheight = 720;
+        Adaptive._designWidth = 1280;
         Admin._moudel = {
             _PreLoad: _PreLoad,
             _PreLoadCutIn: _PreLoadCutIn,
