@@ -74,20 +74,20 @@ export module _Res {
         //         texture: new Laya.Texture,
         //     },
         // },
-        texture2D: {
-            Figure1: {
-                url: 'Game/UI/MakeClothes/figure_01.png',
-                texture2D: null as Laya.Texture2D,
-            },
-            Figure2: {
-                url: 'Game/UI/MakeClothes/figure_02.png',
-                texture2D: null as Laya.Texture2D,
-            },
-            Figure3: {
-                url: 'Game/UI/MakeClothes/figure_03.png',
-                texture2D: null as Laya.Texture2D,
-            },
-        },
+        // texture2D: {
+        //     Figure1: {
+        //         url: 'Game/UI/MakeClothes/figure_01.png',
+        //         texture2D: null as Laya.Texture2D,
+        //     },
+        //     Figure2: {
+        //         url: 'Game/UI/MakeClothes/figure_02.png',
+        //         texture2D: null as Laya.Texture2D,
+        //     },
+        //     Figure3: {
+        //         url: 'Game/UI/MakeClothes/figure_03.png',
+        //         texture2D: null as Laya.Texture2D,
+        //     },
+        // },
         /**通过直接获取场景的显示和打开，和scene关联，实现，先加载，然后直接切换*/
         scene2D: {
             Start: `Scene/${_SceneName.Start}.json`,

@@ -37,7 +37,9 @@ export module record {
 
         '截屏对应源码修改' = '截屏  var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);htmlCanvas.toBase64("image/png"),对应core中的源码修改，才可以上传平台，被平台识别，搜索‘ImageData’，如下:// var imgdata=/*__JS__ */new ImageData(canvasWidth,canvasHeight); //注释这一句，这句是报错的地方;   var canvx = new HTMLCanvas(true); //创建一个canvas,canvx.size(canvasWidth, canvasHeight); //设置宽高;这个和ImageData保持一致;  var ctx2dx = canvx.getContext(`2d`); //获取上下文;var imgdata = ctx2dx.getImageData(0,0,canvasWidth,canvasHeight); //获取imageData，来替代ImageData;',
 
-        '2Dtexture'='2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包'
+        '2Dtexture' = '2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包',
+
+        'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可'
     }
     /**
      * 关于2d物理引擎

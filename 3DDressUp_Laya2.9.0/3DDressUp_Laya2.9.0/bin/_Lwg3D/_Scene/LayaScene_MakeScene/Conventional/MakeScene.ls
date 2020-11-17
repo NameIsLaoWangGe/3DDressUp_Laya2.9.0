@@ -111,30 +111,51 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0,
-						0,
-						0
+						0.01611522,
+						1.021,
+						0.196
 					],
 					"rotation":[
 						0,
-						1,
 						0,
-						0
+						0,
+						-1
 					],
 					"scale":[
-						1,
-						1,
-						1
+						0.3,
+						0.3,
+						0.3
 					],
-					"meshPath":"Assets/Reference/Mesh/hanger_001_01-hanger_001_01_0.lm",
+					"meshPath":"Library/unity default resources-Cylinder.lm",
 					"enableRender":true,
 					"materials":[
 						{
-							"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_004.lmat"
+							"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_005.lmat"
 						}
 					]
 				},
-				"components":[],
+				"components":[
+					{
+						"type":"PhysicsCollider",
+						"restitution":0,
+						"friction":0.5,
+						"rollingFriction":0,
+						"shapes":[
+							{
+								"type":"CapsuleColliderShape",
+								"center":[
+									5.960464E-08,
+									0,
+									-8.940697E-08
+								],
+								"radius":0.5000001,
+								"height":2,
+								"orientation":1
+							}
+						],
+						"isTrigger":false
+					}
+				],
 				"child":[]
 			}
 		]

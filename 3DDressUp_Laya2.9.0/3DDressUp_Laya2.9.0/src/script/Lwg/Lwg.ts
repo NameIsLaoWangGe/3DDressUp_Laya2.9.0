@@ -1407,14 +1407,13 @@ export module lwg {
               * 通用事件注册,可以用(e)=>{}简写传递的函数参数
               * @param effect 效果类型 1.'largen'
               * @param target 节点
-              * @param caller 执行域
               * @param down 按下
               * @param move 移动
               * @param up 抬起
               * @param out 按下
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
-            _btnAll(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
+            _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
                 Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
             }
             ownerSceneName: string = '';
@@ -1445,9 +1444,9 @@ export module lwg {
             _closeScene(sceneName?: string, func?: Function): void {
                 Admin._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
             }
-            /**每帧执行*/
+            /**每帧执行，不要执行onUpdate，只执行lwgOnUpdate*/
             lwgOnUpdate(): void { };
-            /**离开时执行，子类不执行onDisable，只执行lwgDisable*/
+            /**离开时执行不要执行onDisable，只执行lwgDisable*/
             lwgOnDisable(): void { };
         }
 
@@ -1616,32 +1615,59 @@ export module lwg {
                     return this.owner.parent as Laya.Image | Laya.Sprite;
                 }
             }
-            _SceneImg(name: string): Laya.Image {
-                if (this._Scene[name]) {
-                    return this._Scene[name];
+            _SceneSprite(name: string): Laya.Sprite {
+                if (!this[`_SceneSprite${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_SceneSprite${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
                 } else {
-                    console.log(`场景内不存在var节点${name}`);
+                    return this[`_SceneSprite${name}`];
+                }
+            }
+            _SceneImg(name: string): Laya.Image {
+                if (!this[`_SceneImg${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_SceneImg${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
+                } else {
+                    return this[`_SceneImg${name}`];
                 }
             }
             _SceneLabel(name: string): Laya.Label {
-                if (this._Scene[name]) {
-                    return this._Scene[name];
+                if (!this[`_SceneLabel${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_SceneLabel${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
                 } else {
-                    console.log(`场景内不存在var节点${name}`);
+                    return this[`_SceneLabel${name}`];
                 }
             }
             _SceneList(name: string): Laya.List {
-                if (this._Scene[name]) {
-                    return this._Scene[name];
+                if (!this[`_SceneList${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_SceneList${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
                 } else {
-                    console.log(`场景内不存在var节点${name}`);
+                    return this[`_SceneList${name}`];
                 }
             }
             _SceneTap(name: string): Laya.Tab {
-                if (this._Scene[name]) {
-                    return this._Scene[name];
+                if (!this[`_SceneTap${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_SceneTap${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
                 } else {
-                    console.log(`场景内不存在var节点${name}`);
+                    return this[`_SceneTap${name}`];
                 }
             }
             /**物理组件*/
@@ -1661,47 +1687,86 @@ export module lwg {
             /**圆形碰撞组件*/
             get _CilrcleCollier(): Laya.BoxCollider {
                 if (!this._Owner['_OwnerCilrcleCollier']) {
-                    this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    return this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
                 }
                 return this._Owner['_OwnerCilrcleCollier'];
             }
             /**自定义碰撞组件*/
             get _PolygonCollier(): Laya.BoxCollider {
                 if (!this._Owner['_OwnerPolygonCollier']) {
-                    this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    return  this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
                 }
                 return this._Owner['_OwnerPolygonCollier'];
             }
+
+            _ImgChild(str: string): Laya.Image {
+                if (!this[`_ImgChild${str}`]) {
+                    if (this._Owner.getChildByName(str)) {
+                        return this[`_ImgChild${str}`] = this._Owner.getChildByName(str) as Laya.Image;
+                    } else {
+                        console.log('场景内不存在子节点：', str);
+                        return null;
+                    }
+                } else {
+                    return this[`_ImgChild${str}`]
+                }
+            }
+            _SpriteChild(str: string): Laya.Sprite {
+                if (!this[`_SpriteChild${str}`]) {
+                    if (this._Owner.getChildByName(str)) {
+                        return this[`_SpriteChild${str}`] = this._Owner.getChildByName(str) as Laya.Sprite;
+                    } else {
+                        console.log('场景内不存在子节点：', str);
+                        return null;
+                    }
+                } else {
+                    return this[`_SpriteChild${str}`]
+                }
+            }
+            _LableChild(str: string): Laya.Label {
+                if (!this[`_LableChild${str}`]) {
+                    if (this._Owner.getChildByName(str)) {
+                        return this[`_LableChild${str}`] = this._Owner.getChildByName(str) as Laya.Label;
+                    } else {
+                        console.log('场景内不存在子节点：', str);
+                        return null;
+                    }
+                } else {
+                    return this[`_LableChild${str}`]
+                }
+            }
+
+            _ListChild(str: string): Laya.List {
+                if (!this[`_ListChild${str}`]) {
+                    if (this._Owner.getChildByName(str)) {
+                        return this[`_ListChild${str}`] = this._Owner.getChildByName(str) as Laya.List;
+                    } else {
+                        console.log('场景内不存在子节点：', str);
+                        return null;
+                    }
+                } else {
+                    return this[`_ListChild${str}`]
+                }
+            }
+            _TapChild(str: string): Laya.Tab {
+                if (!this[`_TapChild${str}`]) {
+                    if (this._Owner.getChildByName(str)) {
+                        return this[`_TapChild${str}`] = this._Owner.getChildByName(str) as Laya.Tab;
+                    } else {
+                        console.log('场景内不存在子节点：', str);
+                        return null;
+                    }
+                } else {
+                    return this[`_TapChild${str}`]
+                }
+            }
+
             onAwake(): void {
                 // 组件变为的self属性
                 this._Owner[this['__proto__']['constructor'].name] = this;
                 this.ownerSceneName = this._Scene.name;
                 this.lwgOnAwake();
                 this.lwgAdaptive();
-            }
-            _ImgChild(str: string): Laya.Image {
-                if (this._Owner.getChildByName(str)) {
-                    return this._Owner.getChildByName(str) as Laya.Image;
-                } else {
-                    console.log('场景内不存在子节点：', str);
-                    return null;
-                }
-            }
-            _ListChild(str: string): Laya.List {
-                if (this._Owner.getChildByName(str)) {
-                    return this._Owner.getChildByName(str) as Laya.List;
-                } else {
-                    console.log('场景内不存在子节点：', str);
-                    return null;
-                }
-            }
-            _TapChild(str: string): Laya.Tab {
-                if (this._Owner.getChildByName(str)) {
-                    return this._Owner.getChildByName(str) as Laya.Tab;
-                } else {
-                    console.log('场景内不存在子节点：', str);
-                    return null;
-                }
             }
             onEnable(): void {
                 this.lwgBtnRegister();

@@ -2,7 +2,7 @@
 	"version":"LAYAMATERIAL:02",
 	"props":{
 		"type":"Laya.BlinnPhongMaterial",
-		"name":"clubbing_dress_004",
+		"name":"clubbing_dress_005",
 		"renderStates":[
 			{
 				"cull":2,

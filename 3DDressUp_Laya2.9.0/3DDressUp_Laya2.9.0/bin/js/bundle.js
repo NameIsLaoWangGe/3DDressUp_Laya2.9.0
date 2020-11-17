@@ -1080,7 +1080,7 @@
                 _btnOut(target, out, effect) {
                     Click._on(effect ? effect : Click._Effect.use, target, this, null, null, null, out);
                 }
-                _btnAll(target, down, move, up, out, effect) {
+                _btnFour(target, down, move, up, out, effect) {
                     Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
@@ -1262,36 +1262,69 @@
                         return this.owner.parent;
                     }
                 }
-                _SceneImg(name) {
-                    if (this._Scene[name]) {
-                        return this._Scene[name];
+                _SceneSprite(name) {
+                    if (!this[`_SceneSprite${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_SceneSprite${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
                     }
                     else {
-                        console.log(`场景内不存在var节点${name}`);
+                        return this[`_SceneSprite${name}`];
+                    }
+                }
+                _SceneImg(name) {
+                    if (!this[`_SceneImg${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_SceneImg${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
+                    }
+                    else {
+                        return this[`_SceneImg${name}`];
                     }
                 }
                 _SceneLabel(name) {
-                    if (this._Scene[name]) {
-                        return this._Scene[name];
+                    if (!this[`_SceneLabel${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_SceneLabel${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
                     }
                     else {
-                        console.log(`场景内不存在var节点${name}`);
+                        return this[`_SceneLabel${name}`];
                     }
                 }
                 _SceneList(name) {
-                    if (this._Scene[name]) {
-                        return this._Scene[name];
+                    if (!this[`_SceneList${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_SceneList${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
                     }
                     else {
-                        console.log(`场景内不存在var节点${name}`);
+                        return this[`_SceneList${name}`];
                     }
                 }
                 _SceneTap(name) {
-                    if (this._Scene[name]) {
-                        return this._Scene[name];
+                    if (!this[`_SceneTap${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_SceneTap${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
                     }
                     else {
-                        console.log(`场景内不存在var节点${name}`);
+                        return this[`_SceneTap${name}`];
                     }
                 }
                 get _RigidBody() {
@@ -1308,48 +1341,91 @@
                 }
                 get _CilrcleCollier() {
                     if (!this._Owner['_OwnerCilrcleCollier']) {
-                        this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                        return this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
                     }
                     return this._Owner['_OwnerCilrcleCollier'];
                 }
                 get _PolygonCollier() {
                     if (!this._Owner['_OwnerPolygonCollier']) {
-                        this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                        return this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
                     }
                     return this._Owner['_OwnerPolygonCollier'];
+                }
+                _ImgChild(str) {
+                    if (!this[`_ImgChild${str}`]) {
+                        if (this._Owner.getChildByName(str)) {
+                            return this[`_ImgChild${str}`] = this._Owner.getChildByName(str);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', str);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`_ImgChild${str}`];
+                    }
+                }
+                _SpriteChild(str) {
+                    if (!this[`_SpriteChild${str}`]) {
+                        if (this._Owner.getChildByName(str)) {
+                            return this[`_SpriteChild${str}`] = this._Owner.getChildByName(str);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', str);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`_SpriteChild${str}`];
+                    }
+                }
+                _LableChild(str) {
+                    if (!this[`_LableChild${str}`]) {
+                        if (this._Owner.getChildByName(str)) {
+                            return this[`_LableChild${str}`] = this._Owner.getChildByName(str);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', str);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`_LableChild${str}`];
+                    }
+                }
+                _ListChild(str) {
+                    if (!this[`_ListChild${str}`]) {
+                        if (this._Owner.getChildByName(str)) {
+                            return this[`_ListChild${str}`] = this._Owner.getChildByName(str);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', str);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`_ListChild${str}`];
+                    }
+                }
+                _TapChild(str) {
+                    if (!this[`_TapChild${str}`]) {
+                        if (this._Owner.getChildByName(str)) {
+                            return this[`_TapChild${str}`] = this._Owner.getChildByName(str);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', str);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`_TapChild${str}`];
+                    }
                 }
                 onAwake() {
                     this._Owner[this['__proto__']['constructor'].name] = this;
                     this.ownerSceneName = this._Scene.name;
                     this.lwgOnAwake();
                     this.lwgAdaptive();
-                }
-                _ImgChild(str) {
-                    if (this._Owner.getChildByName(str)) {
-                        return this._Owner.getChildByName(str);
-                    }
-                    else {
-                        console.log('场景内不存在子节点：', str);
-                        return null;
-                    }
-                }
-                _ListChild(str) {
-                    if (this._Owner.getChildByName(str)) {
-                        return this._Owner.getChildByName(str);
-                    }
-                    else {
-                        console.log('场景内不存在子节点：', str);
-                        return null;
-                    }
-                }
-                _TapChild(str) {
-                    if (this._Owner.getChildByName(str)) {
-                        return this._Owner.getChildByName(str);
-                    }
-                    else {
-                        console.log('场景内不存在子节点：', str);
-                        return null;
-                    }
                 }
                 onEnable() {
                     this.lwgBtnRegister();
@@ -4955,20 +5031,6 @@
                     prefab: new Laya.Prefab,
                 },
             },
-            texture2D: {
-                Figure1: {
-                    url: 'Game/UI/MakeClothes/figure_01.png',
-                    texture2D: null,
-                },
-                Figure2: {
-                    url: 'Game/UI/MakeClothes/figure_02.png',
-                    texture2D: null,
-                },
-                Figure3: {
-                    url: 'Game/UI/MakeClothes/figure_03.png',
-                    texture2D: null,
-                },
-            },
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
@@ -5422,6 +5484,25 @@
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
+            constructor() {
+                super(...arguments);
+                this.Move = {
+                    Img: null,
+                    touchP: null,
+                    diffP: null,
+                    createImg: (element) => {
+                        this.Move.Img = new Laya.Image;
+                        this.Move.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.Move.Img.width = 128;
+                        this.Move.Img.height = 128;
+                        this._SpriteVar('Ultimately').addChild(this.Move.Img);
+                        let Parent = element.parent;
+                        let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                        let lPoint = this._ImgVar('Ultimately').globalToLocal(gPoint);
+                        this.Move.Img.pos(lPoint.x, lPoint.y);
+                    }
+                };
+            }
             lwgOnAwake() {
                 _MakeClothes._Scene3D = _Res._list.scene3D.MakeScene.Scene;
                 if (!_MakeClothes._Scene3D.getComponent(MakeClothes3D)) {
@@ -5431,12 +5512,32 @@
             lwgOnStart() {
             }
             lwgBtnRegister() {
-                for (let index = 0; index < this._ImgVar('FigureParent').numChildren; index++) {
-                    const element = this._ImgVar('FigureParent').getChildAt(index);
-                    this._btnUp(element, () => {
-                        EventAdmin._notify(_Event.addTexture2D, [this._ImgVar('Ultimately').texture.bitmap]);
+                for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
+                    const element = this._ImgVar('Figure').getChildAt(index);
+                    this._btnDown(element, (e) => {
+                        if (!this[`FigureParentelement${index}`]) {
+                            this[`FigureParentelement${index}`] = true;
+                        }
+                        this.Move.createImg(element);
+                        this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
                     });
                 }
+            }
+            onStageMouseDown(e) {
+                this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+            }
+            onStageMouseMove(e) {
+                if (this.Move.touchP && this.Move.Img) {
+                    this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
+                    this.Move.Img.x += this.Move.diffP.x;
+                    this.Move.Img.y += this.Move.diffP.y;
+                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                    let tex = this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y);
+                    EventAdmin._notify(_Event.addTexture2D, [tex.bitmap]);
+                }
+            }
+            onStageMouseUp() {
+                this.Move.touchP = null;
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
@@ -5446,6 +5547,7 @@
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
                     let bMaterial = this._child('Hanger').meshRenderer.material;
+                    bMaterial.albedoTexture.destroy();
                     bMaterial.albedoTexture = Text2D;
                 });
             }
