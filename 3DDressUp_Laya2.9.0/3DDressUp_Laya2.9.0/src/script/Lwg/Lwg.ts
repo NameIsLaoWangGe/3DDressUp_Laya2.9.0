@@ -1599,7 +1599,6 @@ export module lwg {
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
-
             moduleOnStart(): void { }
             /**通过openni返回的时间来延时开启点击事件*/
             private btnAndlwgOpenAni(): void {
@@ -1641,7 +1640,6 @@ export module lwg {
                 Laya.timer.clearAll(this);
                 Laya.Tween.clearAll(this);
                 EventAdmin._offCaller(this);
-                // Tomato.scenePrintPoint(this._calssName, Tomato.scenePointType.close);
             }
         }
 

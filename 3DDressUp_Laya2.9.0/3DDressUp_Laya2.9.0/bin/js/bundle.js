@@ -1116,19 +1116,19 @@
                 lwgBtnRegister() { }
                 ;
                 _btnDown(target, down, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, null, null, null);
                 }
                 _btnMove(target, move, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, move, null, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, move, null, null);
                 }
                 _btnUp(target, up, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, up, null);
                 }
                 _btnOut(target, out, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, null, out);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, null, out);
                 }
                 _btnFour(target, down, move, up, out, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, move, up, out);
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
                     let closeName;
@@ -2475,7 +2475,7 @@
                         btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new _Largen();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -5549,54 +5549,103 @@
         let _Event;
         (function (_Event) {
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
+            _Event["changeTex"] = "_MakeClothes_changeTex";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.Move = {
+                this.TexControl = {
                     Img: null,
                     DisplayImg: null,
                     touchP: null,
                     diffP: null,
+                    state: 'none',
+                    stateType: {
+                        move: 'move',
+                        scale: 'scale',
+                        none: 'none',
+                    },
                     createImg: (element) => {
-                        this.Move.Img = Tools._Node.simpleCopyImg(element);
-                        this.Move.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this._SpriteVar('Ultimately').addChild(this.Move.Img);
+                        this.TexControl.Img = Tools._Node.simpleCopyImg(element);
+                        this.TexControl.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this._SpriteVar('Ultimately').addChild(this.TexControl.Img);
                         let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
-                        this.Move.Img.pos(lPoint.x, lPoint.y);
-                        this.Move.DisplayImg = Tools._Node.simpleCopyImg(element);
-                        this.Move.DisplayImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this.Move.DisplayImg.pos(lPoint.x, lPoint.y);
-                        this._SpriteVar('Dispaly').addChild(this.Move.DisplayImg);
-                        this.Move.Img.width = this.Move.DisplayImg.width = 128;
-                        this.Move.Img.height = this.Move.DisplayImg.height = 128;
+                        this.TexControl.Img.pos(lPoint.x, lPoint.y);
+                        this.TexControl.DisplayImg = Tools._Node.simpleCopyImg(element);
+                        this.TexControl.DisplayImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.TexControl.DisplayImg.pos(lPoint.x, lPoint.y);
+                        this._SpriteVar('Dispaly').addChild(this.TexControl.DisplayImg);
+                        this.TexControl.Img.width = this.TexControl.DisplayImg.width = 128;
+                        this.TexControl.Img.height = this.TexControl.DisplayImg.height = 128;
+                        this.TexControl.restore();
                     },
                     getTex: () => {
                         return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
                     },
                     move: (e) => {
-                        if (this.Move.touchP && this.Move.Img) {
-                            this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
-                            this.Move.Img.x += this.Move.diffP.x;
-                            this.Move.Img.y += this.Move.diffP.y;
-                            this.Move.DisplayImg.x += this.Move.diffP.x;
-                            this.Move.DisplayImg.y += this.Move.diffP.y;
-                            this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
-                            EventAdmin._notify(_Event.addTexture2D, [this.Move.getTex().bitmap]);
+                        if (this.TexControl.touchP && this.TexControl.Img) {
+                            this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
+                            this.TexControl.Img.x += this.TexControl.diffP.x;
+                            this.TexControl.Img.y += this.TexControl.diffP.y;
+                            this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
+                            this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
+                            this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
                         }
                     },
                     checkDisplay: () => {
-                        if (this.Move.DisplayImg.x > -this.Move.DisplayImg.width && this.Move.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                            this.Move.DisplayImg.visible = false;
+                        if (this.TexControl.DisplayImg.x > -this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
+                            this.TexControl.DisplayImg.visible = false;
                         }
                         else {
-                            this.Move.DisplayImg.visible = true;
+                            this.TexControl.DisplayImg.visible = true;
                         }
-                        this._ImgVar('Wireframe').visible = !this.Move.DisplayImg.visible;
+                        this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
                         if (this._ImgVar('Wireframe').visible) {
-                            let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Move.DisplayImg.x, this.Move.DisplayImg.y));
+                            let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y));
                             this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                         }
+                        Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
+                    },
+                    scale: (e) => {
+                        let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
+                        let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                        this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
+                        this._ImgVar('Frame').width = Math.abs(lPoint.x);
+                        this._ImgVar('Frame').height = Math.abs(lPoint.y);
+                        this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
+                        let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
+                        let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
+                        this.TexControl.DisplayImg.width = this.TexControl.Img.width = 128 + scaleWidth;
+                        this.TexControl.DisplayImg.height = this.TexControl.Img.height = 128 + scaleheight;
+                        Tools._Node.changePovit(this.TexControl.Img, this.TexControl.Img.width / 2, this.TexControl.Img.height / 2);
+                    },
+                    operation: (e) => {
+                        if (this.TexControl.state == this.TexControl.stateType.none) {
+                            return;
+                        }
+                        else if (this.TexControl.state == this.TexControl.stateType.scale) {
+                            this.TexControl.scale(e);
+                        }
+                        else {
+                            this.TexControl.move(e);
+                        }
+                        this.TexControl.checkDisplay();
+                        EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                    },
+                    restore: () => {
+                        this._ImgVar('Wireframe').rotation = 0;
+                        this._ImgVar('Wireframe').pivotX = this._ImgVar('Wireframe').width / 2;
+                        this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
+                        this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
+                        this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
+                        this._ImgVar('Wireframe').visible = false;
+                    },
+                    close: () => {
+                        this.TexControl.DisplayImg.destroy();
+                        this.TexControl.Img.destroy();
+                        this.TexControl.restore();
+                        this.TexControl.state = this.TexControl.stateType.none;
+                        EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
                     }
                 };
             }
@@ -5611,6 +5660,11 @@
             lwgAdaptive() {
                 this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
             }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.changeTex, this, (rotaton, width, height) => {
+                    this._ImgVar('Wireframe').rotation = rotaton;
+                });
+            }
             lwgBtnRegister() {
                 for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
                     const element = this._ImgVar('Figure').getChildAt(index);
@@ -5618,19 +5672,27 @@
                         if (!this[`FigureParentelement${index}`]) {
                             this[`FigureParentelement${index}`] = true;
                         }
-                        this.Move.createImg(element);
+                        this.TexControl.state = this.TexControl.stateType.move;
+                        this.TexControl.createImg(element);
                     });
                 }
+                this._btnFour(this._ImgVar('WConversion'), (e) => {
+                    this.TexControl.state = this.TexControl.stateType.scale;
+                }, null, (e) => {
+                    this.TexControl.state = this.TexControl.stateType.move;
+                });
+                this._btnUp(this._ImgVar('WClose'), (e) => {
+                    this.TexControl.close();
+                });
             }
             onStageMouseDown(e) {
-                this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
             }
             onStageMouseMove(e) {
-                this.Move.move(e);
-                this.Move.checkDisplay();
+                this.TexControl.operation(e);
             }
             onStageMouseUp() {
-                this.Move.touchP = null;
+                this.TexControl.touchP = null;
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
