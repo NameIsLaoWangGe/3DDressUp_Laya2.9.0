@@ -1158,66 +1158,49 @@
                 get _Owner() {
                     return this.owner;
                 }
-                _SpriteVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
+                getVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Owner[name]) {
+                            return this[`_Scene${type}${name}`] = this._Owner[name];
+                        }
+                        else {
+                            console.log('场景内不存在var节点：', name);
+                            return undefined;
+                        }
                     }
                     else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                _AniVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var动画：', str);
-                        return undefined;
-                    }
+                _SpriteVar(name) {
+                    return this.getVar(name, '_SpriteVar');
                 }
-                _btnVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var按钮：', str);
-                        return undefined;
-                    }
+                _AniVar(name) {
+                    return this.getVar(name, '_AniVar');
                 }
-                _ImgVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
-                    }
+                _BtnVar(name) {
+                    return this.getVar(name, '_BtnVar');
                 }
-                _LabelVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
-                    }
+                _ImgVar(name) {
+                    return this.getVar(name, '_ImgVar');
                 }
-                _ListVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                    }
+                _LabelVar(name) {
+                    return this.getVar(name, '_LabelVar');
                 }
-                _TapVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                    }
+                _ListVar(name) {
+                    return this.getVar(name, '_ListVar');
+                }
+                _TapVar(name) {
+                    return this.getVar(name, '_TapVar');
+                }
+                _TextVar(name) {
+                    return this.getVar(name, '_TextVar');
+                }
+                _FontClipVar(name) {
+                    return this.getVar(name, '_FontClipVar');
+                }
+                _FontBox(name) {
+                    return this.getVar(name, '_FontBox');
                 }
                 onAwake() {
                     if (this._Owner.name == null) {
@@ -1307,71 +1290,6 @@
                         return this.owner.parent;
                     }
                 }
-                _SceneSprite(name) {
-                    if (!this[`_SceneSprite${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneSprite${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneSprite${name}`];
-                    }
-                }
-                _SceneImg(name) {
-                    if (!this[`_SceneImg${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneImg${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneImg${name}`];
-                    }
-                }
-                _SceneLabel(name) {
-                    if (!this[`_SceneLabel${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneLabel${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneLabel${name}`];
-                    }
-                }
-                _SceneList(name) {
-                    if (!this[`_SceneList${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneList${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneList${name}`];
-                    }
-                }
-                _SceneTap(name) {
-                    if (!this[`_SceneTap${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneTap${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneTap${name}`];
-                    }
-                }
                 get _RigidBody() {
                     if (!this._Owner['_OwnerRigidBody']) {
                         this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
@@ -1396,75 +1314,77 @@
                     }
                     return this._Owner['_OwnerPolygonCollier'];
                 }
-                _ImgChild(str) {
-                    if (!this[`_ImgChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_ImgChild${str}`] = this._Owner.getChildByName(str);
+                getSceneVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_Scene${type}${name}`] = this._Scene[name];
                         }
                         else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
+                            console.log(`场景内不存在var节点${name}`);
                         }
                     }
                     else {
-                        return this[`_ImgChild${str}`];
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                _SpriteChild(str) {
-                    if (!this[`_SpriteChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_SpriteChild${str}`] = this._Owner.getChildByName(str);
+                _SceneSprite(name) {
+                    return this.getSceneVar(name, '_SceneSprite');
+                }
+                _SceneImg(name) {
+                    return this.getSceneVar(name, '_SceneImg');
+                }
+                _SceneLabel(name) {
+                    return this.getSceneVar(name, '_SceneLabel');
+                }
+                _SceneList(name) {
+                    return this.getSceneVar(name, '_SceneList');
+                }
+                _SceneTap(name) {
+                    return this.getSceneVar(name, '_SceneTap');
+                }
+                _SceneText(name) {
+                    return this.getSceneVar(name, '_SceneText');
+                }
+                _SceneFontClip(name) {
+                    return this.getSceneVar(name, '_SceneFontClip');
+                }
+                _SceneBox(name) {
+                    return this.getSceneVar(name, '_SceneBox');
+                }
+                getChild(name, type) {
+                    if (!this[`${type}${name}`]) {
+                        if (this._Owner.getChildByName(name)) {
+                            return this[`${type}${name}`] = this._Owner.getChildByName(name);
                         }
                         else {
-                            console.log('场景内不存在子节点：', str);
+                            console.log('场景内不存在子节点：', name);
                             return null;
                         }
                     }
                     else {
-                        return this[`_SpriteChild${str}`];
+                        return this[`${type}${name}`];
                     }
                 }
-                _LableChild(str) {
-                    if (!this[`_LableChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_LableChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_LableChild${str}`];
-                    }
+                _ImgChild(name) {
+                    return this.getChild(name, '_ImgChild');
                 }
-                _ListChild(str) {
-                    if (!this[`_ListChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_ListChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_ListChild${str}`];
-                    }
+                _SpriteChild(name) {
+                    return this.getChild(name, '_SpriteChild');
                 }
-                _TapChild(str) {
-                    if (!this[`_TapChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_TapChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_TapChild${str}`];
-                    }
+                _LableChild(name) {
+                    return this.getChild(name, '_LableChild');
+                }
+                _ListChild(name) {
+                    return this.getChild(name, '_ListChild');
+                }
+                _TapChild(name) {
+                    return this.getChild(name, '_TapChild');
+                }
+                _TapBox(name) {
+                    return this.getChild(name, '_TapBox');
+                }
+                _TapFontClip(name) {
+                    return this.getChild(name, '_TapFontClip');
                 }
                 onAwake() {
                     this._Owner[this['__proto__']['constructor'].name] = this;
@@ -5364,7 +5284,7 @@
                     return this[`_child${name}`];
                 }
             }
-            _childTransform(name) {
+            _childTrans(name) {
                 if (!this[`_child${name}Transform`]) {
                     if (this.owner.getChildByName(name)) {
                         let _MeshSprite3D = this.owner.getChildByName(name);
@@ -5379,65 +5299,32 @@
                     return this[`_child${name}Transform`];
                 }
             }
-            _childPosition(name) {
-                if (!this[`_child${name}TransformPosition`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformPosition`] = _MeshSprite3D.transform.position;
-                        return this[`_child${name}TransformPosition`];
+            getChildTransPro(childName, transformProperty) {
+                if (!this[`_child${childName}Transform${transformProperty}`]) {
+                    if (this.owner.getChildByName(childName)) {
+                        let _MeshSprite3D = this.owner.getChildByName(childName);
+                        this[`_child${childName}Transform${transformProperty}`] = _MeshSprite3D.transform[transformProperty];
+                        return this[`_child${childName}Transform${transformProperty}`];
                     }
                     else {
                         console.log(`不存在子节点${name}`);
                     }
                 }
                 else {
-                    return this[`_child${name}TransformPosition`];
+                    return this[`_child${childName}Transform${transformProperty}`];
                 }
             }
-            _childLocalPosition(name) {
-                if (!this[`_child${name}TransformLocalPosition`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalPosition`] = _MeshSprite3D.transform.localPosition;
-                        return this[`_child${name}TransformLocalPosition`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalPosition`];
-                }
+            _childPos(name) {
+                return this.getChildTransPro(name, 'position');
             }
-            _childLocalEuler(name) {
-                if (!this[`_child${name}TransformLocalEuler`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalEuler`] = _MeshSprite3D.transform.localRotationEuler;
-                        return this[`_child${name}TransformLocalEuler`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalEuler`];
-                }
+            _childLocPos(name) {
+                return this.getChildTransPro(name, 'localPosition');
             }
-            _childLocalScale(name) {
-                if (!this[`_child${name}TransformLocalScale`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalScale`] = _MeshSprite3D.transform.localScale;
-                        return this[`_child${name}TransformLocalScale`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalScale`];
-                }
+            _childLocEuler(name) {
+                return this.getChildTransPro(name, 'localRotationEuler');
+            }
+            _childLocScale(name) {
+                return this.getChildTransPro(name, 'localScale');
             }
             lwgOnAwake() {
             }
@@ -5497,16 +5384,16 @@
             get _Owner() {
                 return this.owner;
             }
-            _localScale() {
+            _locScale() {
                 return this._Owner.transform.localScale;
             }
-            _localPosition() {
+            _locPos() {
                 return this._Owner.transform.localPosition;
             }
-            _position() {
+            _pos() {
                 return this._Owner.transform.position;
             }
-            _localRotationEuler() {
+            _locEuler() {
                 return this._Owner.transform.localRotationEuler;
             }
             get _Parent() {
@@ -5518,7 +5405,7 @@
             get _Scene3D() {
                 return this.owner.scene;
             }
-            get _Rigidbody3D() {
+            get _Rig3D() {
                 if (!this._Owner['__Rigidbody3D']) {
                     this._Owner['__Rigidbody3D'] = this._Owner.getComponent(Laya.Rigidbody3D);
                 }
@@ -5549,7 +5436,7 @@
         let _Event;
         (function (_Event) {
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
-            _Event["changeTex"] = "_MakeClothes_changeTex";
+            _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
@@ -5563,6 +5450,7 @@
                     stateType: {
                         move: 'move',
                         scale: 'scale',
+                        rotate: 'rotate',
                         none: 'none',
                     },
                     createImg: (element) => {
@@ -5584,52 +5472,62 @@
                     },
                     move: (e) => {
                         if (this.TexControl.touchP && this.TexControl.Img) {
-                            this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
                             this.TexControl.Img.x += this.TexControl.diffP.x;
                             this.TexControl.Img.y += this.TexControl.diffP.y;
                             this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
                             this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
                             this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
-                        }
-                    },
-                    checkDisplay: () => {
-                        if (this.TexControl.DisplayImg.x > -this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                            this.TexControl.DisplayImg.visible = false;
-                        }
-                        else {
-                            this.TexControl.DisplayImg.visible = true;
-                        }
-                        this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
-                        if (this._ImgVar('Wireframe').visible) {
                             let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y));
                             this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                         }
-                        Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
                     },
                     scale: (e) => {
-                        let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
                         let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
                         this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
                         this._ImgVar('Frame').width = Math.abs(lPoint.x);
                         this._ImgVar('Frame').height = Math.abs(lPoint.y);
+                        let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
                         this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
                         let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                         let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
                         this.TexControl.DisplayImg.width = this.TexControl.Img.width = 128 + scaleWidth;
                         this.TexControl.DisplayImg.height = this.TexControl.Img.height = 128 + scaleheight;
                         Tools._Node.changePovit(this.TexControl.Img, this.TexControl.Img.width / 2, this.TexControl.Img.height / 2);
+                        Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
                     },
-                    operation: (e) => {
-                        if (this.TexControl.state == this.TexControl.stateType.none) {
-                            return;
-                        }
-                        else if (this.TexControl.state == this.TexControl.stateType.scale) {
-                            this.TexControl.scale(e);
+                    rotate: (e) => {
+                        console.log(this.TexControl.diffP.x);
+                        if (this.TexControl.diffP.x > 0) {
+                            EventAdmin._notify(_Event.rotateHanger, [1]);
                         }
                         else {
-                            this.TexControl.move(e);
+                            EventAdmin._notify(_Event.rotateHanger, [0]);
                         }
-                        this.TexControl.checkDisplay();
+                    },
+                    none: () => {
+                        return;
+                    },
+                    checkDisplay: (e) => {
+                        if (this.TexControl.state != this.TexControl.stateType.move) {
+                            return;
+                        }
+                        if (this.TexControl.DisplayImg.x > -this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
+                            this.TexControl.DisplayImg.visible = false;
+                        }
+                        else {
+                            if (this.TexControl.DisplayImg.y > -this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
+                                this.TexControl.DisplayImg.visible = true;
+                            }
+                            else {
+                                this.TexControl.DisplayImg.visible = true;
+                            }
+                        }
+                        this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
+                    },
+                    operation: (e) => {
+                        this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
+                        this.TexControl[this.TexControl.state](e);
+                        this.TexControl.checkDisplay(e);
                         EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
                     },
                     restore: () => {
@@ -5646,6 +5544,32 @@
                         this.TexControl.restore();
                         this.TexControl.state = this.TexControl.stateType.none;
                         EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                    },
+                    btn: () => {
+                        for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
+                            const element = this._ImgVar('Figure').getChildAt(index);
+                            this._btnDown(element, (e) => {
+                                if (!this[`FigureParentelement${index}`]) {
+                                    this[`FigureParentelement${index}`] = true;
+                                }
+                                this.TexControl.state = this.TexControl.stateType.move;
+                                this.TexControl.createImg(element);
+                            });
+                        }
+                        this._btnFour(this._ImgVar('WConversion'), (e) => {
+                            this.TexControl.state = this.TexControl.stateType.scale;
+                        }, null, (e) => {
+                            this.TexControl.state = this.TexControl.stateType.move;
+                        });
+                        this._btnUp(this._ImgVar('WClose'), (e) => {
+                            this.TexControl.close();
+                        });
+                        this._btnDown(this._ImgVar('BtnLRotate'), (e) => {
+                            this.TexControl.state = this.TexControl.stateType.rotate;
+                        });
+                        this._btnDown(this._ImgVar('BtnRRotate'), (e) => {
+                            this.TexControl.state = this.TexControl.stateType.rotate;
+                        });
                     }
                 };
             }
@@ -5655,35 +5579,12 @@
                     _MakeClothes._Scene3D.addComponent(MakeClothes3D);
                 }
             }
-            lwgOnStart() {
-            }
             lwgAdaptive() {
                 this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
-            }
-            lwgEventRegister() {
-                EventAdmin._register(_Event.changeTex, this, (rotaton, width, height) => {
-                    this._ImgVar('Wireframe').rotation = rotaton;
-                });
+                this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
             }
             lwgBtnRegister() {
-                for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                    const element = this._ImgVar('Figure').getChildAt(index);
-                    this._btnDown(element, (e) => {
-                        if (!this[`FigureParentelement${index}`]) {
-                            this[`FigureParentelement${index}`] = true;
-                        }
-                        this.TexControl.state = this.TexControl.stateType.move;
-                        this.TexControl.createImg(element);
-                    });
-                }
-                this._btnFour(this._ImgVar('WConversion'), (e) => {
-                    this.TexControl.state = this.TexControl.stateType.scale;
-                }, null, (e) => {
-                    this.TexControl.state = this.TexControl.stateType.move;
-                });
-                this._btnUp(this._ImgVar('WClose'), (e) => {
-                    this.TexControl.close();
-                });
+                this.TexControl.btn();
             }
             onStageMouseDown(e) {
                 this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -5704,6 +5605,16 @@
                     let bMaterial = this._child('Hanger').meshRenderer.material;
                     bMaterial.albedoTexture.destroy();
                     bMaterial.albedoTexture = Text2D;
+                });
+                EventAdmin._register(_Event.rotateHanger, this, (num) => {
+                    let e = this._childLocEuler('Hanger');
+                    if (num == 1) {
+                        e = new Laya.Vector3(e.x, e.y--, e.z);
+                    }
+                    else {
+                        e = new Laya.Vector3(e.x, e.y++, e.z);
+                    }
+                    console.log(num, this._childLocEuler('Hanger').y);
                 });
             }
         }

@@ -4,7 +4,7 @@ import { _Res } from "./_PreLoad";
 export module _MakeClothes {
     export enum _Event {
         addTexture2D = '_MakeClothes_addTexture2D',
-        changeTex = '_MakeClothes_changeTex',
+        rotateHanger = '_MakeClothes_rotateHanger',
     }
     export class MakeClothes extends Admin._SceneBase {
         lwgOnAwake(): void {
@@ -13,18 +13,10 @@ export module _MakeClothes {
                 _Scene3D.addComponent(MakeClothes3D);
             }
         }
-        lwgOnStart(): void {
-
-        }
         lwgAdaptive(): void {
             this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
+            this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
         }
-        lwgEventRegister(): void {
-            EventAdmin._register(_Event.changeTex, this, (rotaton: number, width: number, height: number) => {
-                this._ImgVar('Wireframe').rotation = rotaton;
-            })
-        }
-
         /**图片移动控制*/
         TexControl = {
             Img: null as Laya.Image,
@@ -35,6 +27,7 @@ export module _MakeClothes {
             stateType: {
                 move: 'move',
                 scale: 'scale',
+                rotate: 'rotate',
                 none: 'none',
             },
             createImg: (element: Laya.Image) => {
@@ -58,38 +51,22 @@ export module _MakeClothes {
             },
             move: (e: Laya.Event) => {
                 if (this.TexControl.touchP && this.TexControl.Img) {
-                    this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
                     this.TexControl.Img.x += this.TexControl.diffP.x;
                     this.TexControl.Img.y += this.TexControl.diffP.y;
                     this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
                     this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
                     this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
-                }
-            },
-            checkDisplay: (): void => {
-                if (this.TexControl.DisplayImg.x > - this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                    this.TexControl.DisplayImg.visible = false;
-                } else {
-                    this.TexControl.DisplayImg.visible = true;
-                }
-                this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
-                if (this._ImgVar('Wireframe').visible) {
                     let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y))
                     this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                 }
-                // if ( this.TexControl.DisplayImg.y > - this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
-                //     this.TexControl.DisplayImg.visible = false;
-                // } else {
-                //     this.TexControl.DisplayImg.visible = true;
-                // }
             },
             scale: (e: Laya.Event): void => {
-                let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
                 let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
                 this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
                 this._ImgVar('Frame').width = Math.abs(lPoint.x);
                 this._ImgVar('Frame').height = Math.abs(lPoint.y);
 
+                let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
                 this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
 
                 let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
@@ -99,18 +76,38 @@ export module _MakeClothes {
                 this.TexControl.DisplayImg.height = this.TexControl.Img.height = 128 + scaleheight;
 
                 Tools._Node.changePovit(this.TexControl.Img, this.TexControl.Img.width / 2, this.TexControl.Img.height / 2);
-                // Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
+                Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
             },
-            operation: (e: Laya.Event): void => {
-                if (this.TexControl.state == this.TexControl.stateType.none) {
+            rotate: (e: Laya.Event) => {
+                console.log(this.TexControl.diffP.x);
+                if (this.TexControl.diffP.x > 0) {
+                    EventAdmin._notify(_Event.rotateHanger, [1]);
+                } else {
+                    EventAdmin._notify(_Event.rotateHanger, [0]);
+                }
+            },
+            none: () => {
+                return;
+            },
+            checkDisplay: (e: Laya.Event): void => {
+                if (this.TexControl.state != this.TexControl.stateType.move) {
                     return;
                 }
-                else if (this.TexControl.state == this.TexControl.stateType.scale) {
-                    this.TexControl.scale(e);
+                if (this.TexControl.DisplayImg.x > - this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
+                    this.TexControl.DisplayImg.visible = false;
                 } else {
-                    this.TexControl.move(e)
+                    if (this.TexControl.DisplayImg.y > - this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
+                        this.TexControl.DisplayImg.visible = true;
+                    } else {
+                        this.TexControl.DisplayImg.visible = true;
+                    }
                 }
-                this.TexControl.checkDisplay();
+                this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
+            },
+            operation: (e: Laya.Event): void => {
+                this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
+                this.TexControl[this.TexControl.state](e);
+                this.TexControl.checkDisplay(e);
                 EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
             },
             restore: () => {
@@ -127,29 +124,36 @@ export module _MakeClothes {
                 this.TexControl.restore();
                 this.TexControl.state = this.TexControl.stateType.none;
                 EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
-            }
-        }
-
-        lwgBtnRegister(): void {
-            for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
-                this._btnDown(element, (e: Laya.Event) => {
-                    if (!this[`FigureParentelement${index}`]) {
-                        this[`FigureParentelement${index}`] = true;
-                    }
+            },
+            btn: () => {
+                for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
+                    const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
+                    this._btnDown(element, (e: Laya.Event) => {
+                        if (!this[`FigureParentelement${index}`]) {
+                            this[`FigureParentelement${index}`] = true;
+                        }
+                        this.TexControl.state = this.TexControl.stateType.move;
+                        this.TexControl.createImg(element);
+                    })
+                }
+                this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
+                    this.TexControl.state = this.TexControl.stateType.scale;
+                }, null, (e: Laya.Event) => {
                     this.TexControl.state = this.TexControl.stateType.move;
-                    this.TexControl.createImg(element);
+                })
+                this._btnUp(this._ImgVar('WClose'), (e: Laya.Event) => {
+                    this.TexControl.close();
+                })
+                this._btnDown(this._ImgVar('BtnLRotate'), (e: Laya.Event) => {
+                    this.TexControl.state = this.TexControl.stateType.rotate;
+                })
+                this._btnDown(this._ImgVar('BtnRRotate'), (e: Laya.Event) => {
+                    this.TexControl.state = this.TexControl.stateType.rotate;
                 })
             }
-            this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
-                this.TexControl.state = this.TexControl.stateType.scale;
-            }, null, (e: Laya.Event) => {
-                this.TexControl.state = this.TexControl.stateType.move;
-            })
-            this._btnUp(this._ImgVar('WClose'), (e: Laya.Event) => {
-                this.TexControl.close();
-            })
-
+        }
+        lwgBtnRegister(): void {
+            this.TexControl.btn();
         }
         onStageMouseDown(e: Laya.Event): void {
             this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -162,7 +166,6 @@ export module _MakeClothes {
         }
     }
     export let _Scene3D: Laya.Scene3D;
-    export let mt: Laya.UnlitMaterial;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
         }
@@ -173,6 +176,15 @@ export module _MakeClothes {
                 bMaterial.albedoTexture = Text2D;
             })
 
+            EventAdmin._register(_Event.rotateHanger, this, (num: number) => {
+                let e = this._childLocEuler('Hanger')
+                if (num == 1) {
+                    e = new Laya.Vector3(e.x, e.y--, e.z);
+                } else {
+                    e = new Laya.Vector3(e.x, e.y++, e.z);
+                }
+                console.log(num, this._childLocEuler('Hanger').y);
+            })
         }
     }
 }

@@ -42,7 +42,7 @@ export module lwg3D {
             }
         }
         /**子节点*/
-        _childTransform(name: string): Laya.Transform {
+        _childTrans(name: string): Laya.Transform {
             if (!this[`_child${name}Transform`]) {
                 if (this.owner.getChildByName(name)) {
                     let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
@@ -55,61 +55,34 @@ export module lwg3D {
                 return this[`_child${name}Transform`];
             }
         }
-        /**子节点*/
-        _childPosition(name: string): Laya.Vector3 {
-            if (!this[`_child${name}TransformPosition`]) {
-                if (this.owner.getChildByName(name)) {
-                    let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
-                    this[`_child${name}TransformPosition`] = _MeshSprite3D.transform.position;
-                    return this[`_child${name}TransformPosition`];
+        private getChildTransPro(childName: string, transformProperty: any): any {
+            if (!this[`_child${childName}Transform${transformProperty}`]) {
+                if (this.owner.getChildByName(childName)) {
+                    let _MeshSprite3D = this.owner.getChildByName(childName) as Laya.MeshSprite3D;
+                    this[`_child${childName}Transform${transformProperty}`] = _MeshSprite3D.transform[transformProperty];
+                    return this[`_child${childName}Transform${transformProperty}`];
                 } else {
                     console.log(`不存在子节点${name}`);
                 }
             } else {
-                return this[`_child${name}TransformPosition`];
+                return this[`_child${childName}Transform${transformProperty}`];
             }
         }
         /**子节点*/
-        _childLocalPosition(name: string): Laya.Vector3 {
-            if (!this[`_child${name}TransformLocalPosition`]) {
-                if (this.owner.getChildByName(name)) {
-                    let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
-                    this[`_child${name}TransformLocalPosition`] = _MeshSprite3D.transform.localPosition;
-                    return this[`_child${name}TransformLocalPosition`];
-                } else {
-                    console.log(`不存在子节点${name}`);
-                }
-            } else {
-                return this[`_child${name}TransformLocalPosition`];
-            }
+        _childPos(name: string): Laya.Vector3 {
+            return this.getChildTransPro(name, 'position');
         }
         /**子节点*/
-        _childLocalEuler(name: string): Laya.Vector3 {
-            if (!this[`_child${name}TransformLocalEuler`]) {
-                if (this.owner.getChildByName(name)) {
-                    let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
-                    this[`_child${name}TransformLocalEuler`] = _MeshSprite3D.transform.localRotationEuler;
-                    return this[`_child${name}TransformLocalEuler`];
-                } else {
-                    console.log(`不存在子节点${name}`);
-                }
-            } else {
-                return this[`_child${name}TransformLocalEuler`];
-            }
+        _childLocPos(name: string): Laya.Vector3 {
+            return this.getChildTransPro(name, 'localPosition');
         }
         /**子节点*/
-        _childLocalScale(name: string): Laya.Vector3 {
-            if (!this[`_child${name}TransformLocalScale`]) {
-                if (this.owner.getChildByName(name)) {
-                    let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
-                    this[`_child${name}TransformLocalScale`] = _MeshSprite3D.transform.localScale;
-                    return this[`_child${name}TransformLocalScale`];
-                } else {
-                    console.log(`不存在子节点${name}`);
-                }
-            } else {
-                return this[`_child${name}TransformLocalScale`];
-            }
+        _childLocEuler(name: string): Laya.Vector3 {
+            return this.getChildTransPro(name, 'localRotationEuler');
+        }
+        /**子节点*/
+        _childLocScale(name: string): Laya.Vector3 {
+            return this.getChildTransPro(name, 'localScale');
         }
         lwgOnAwake(): void {
         }
@@ -181,16 +154,16 @@ export module lwg3D {
         get _Owner(): Laya.MeshSprite3D {
             return this.owner as Laya.MeshSprite3D;
         }
-        _localScale(): Laya.Vector3 {
+        _locScale(): Laya.Vector3 {
             return this._Owner.transform.localScale;
         }
-        _localPosition(): Laya.Vector3 {
+        _locPos(): Laya.Vector3 {
             return this._Owner.transform.localPosition;
         }
-        _position(): Laya.Vector3 {
+        _pos(): Laya.Vector3 {
             return this._Owner.transform.position;
         }
-        _localRotationEuler(): Laya.Vector3 {
+        _locEuler(): Laya.Vector3 {
             return this._Owner.transform.localRotationEuler;
         }
         get _Parent(): Laya.MeshSprite3D {
@@ -203,7 +176,7 @@ export module lwg3D {
             return this.owner.scene as Laya.Scene3D;
         }
         /**物理组件*/
-        get _Rigidbody3D(): Laya.RigidBody {
+        get _Rig3D(): Laya.RigidBody {
             if (!this._Owner['__Rigidbody3D']) {
                 this._Owner['__Rigidbody3D'] = this._Owner.getComponent(Laya.Rigidbody3D);
             }
