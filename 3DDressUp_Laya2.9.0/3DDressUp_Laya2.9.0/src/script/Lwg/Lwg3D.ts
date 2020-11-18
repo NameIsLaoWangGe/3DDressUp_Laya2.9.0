@@ -15,7 +15,7 @@ export module lwg3D {
             }
         }
         get _MainCamera(): Laya.Camera {
-            if (this['__MainCamera']) {
+            if (!this['__MainCamera']) {
                 if (this.owner.getChildByName('Main Camera')) {
                     return this['__MainCamera'] = this.owner.getChildByName('Main Camera') as Laya.Camera;
                 }
@@ -29,6 +29,10 @@ export module lwg3D {
                 return this['__MainCamera'];
             }
         }
+        set _MainCamera(Camera: Laya.Camera) {
+            this['__MainCamera'] = Camera;
+        }
+
         /**子节点*/
         _child(name: string): Laya.MeshSprite3D {
             if (!this[`_child${name}`]) {
@@ -42,7 +46,7 @@ export module lwg3D {
             }
         }
         /**子节点*/
-        _childTrans(name: string): Laya.Transform {
+        _childTrans(name: string): Laya.Transform3D {
             if (!this[`_child${name}Transform`]) {
                 if (this.owner.getChildByName(name)) {
                     let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
@@ -68,30 +72,35 @@ export module lwg3D {
                 return this[`_child${childName}Transform${transformProperty}`];
             }
         }
-        /**子节点*/
-        _childPos(name: string): Laya.Vector3 {
-            return this.getChildTransPro(name, 'position');
-        }
-        /**子节点*/
-        _childLocPos(name: string): Laya.Vector3 {
-            return this.getChildTransPro(name, 'localPosition');
-        }
-        /**子节点*/
-        _childLocEuler(name: string): Laya.Vector3 {
-            return this.getChildTransPro(name, 'localRotationEuler');
-        }
-        /**子节点*/
-        _childLocScale(name: string): Laya.Vector3 {
-            return this.getChildTransPro(name, 'localScale');
-        }
+        // /**子节点*/
+        // _childPos(name: string): Laya.Vector3 {
+        //     return this.getChildTransPro(name, 'position');
+        // }
+        // /**子节点*/
+        // _childLocPos(name: string): Laya.Vector3 {
+        //     return this.getChildTransPro(name, 'localPosition');
+        // }
+        // /**子节点*/
+        // _childLocEuler(name: string): Laya.Vector3 {
+        //     return this.getChildTransPro(name, 'localRotationEuler');
+        // }
+        // /**子节点*/
+        // _childLocScale(name: string): Laya.Vector3 {
+        //     return this.getChildTransPro(name, 'localScale');
+        // }
         lwgOnAwake(): void {
         }
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
         lwgEventRegister(): void { };
+        _EvReg(name: string, func: Function): void {
+            EventAdmin._register(name, this, func);
+        }
+        _EvNotify(name: string, args?: Array<any>): void {
+            EventAdmin._notify(name, args);
+        }
         /**初始化，在onEnable中执行，重写即可覆盖*/
         lwgOnEnable(): void { }
         lwgOnStart(): void { }
-
         /**每帧更新时执行，尽量不要在这里写大循环逻辑或者使用*/
         lwgOnUpdate(): void {
         }
@@ -109,7 +118,7 @@ export module lwg3D {
             return this.owner as Laya.Scene3D;
         }
         /**摄像机的初始位置*/
-        _cameraFp: Laya.Vector3;
+        _cameraFp: Laya.Vector3 = new Laya.Vector3;
         onAwake(): void {
             // 类名
             this._calssName = this['__proto__']['constructor'].name;

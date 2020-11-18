@@ -3,10 +3,14 @@ import { Admin, EventAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
 export module _Res {
     export let _list = {
         scene3D: {
-            MakeScene: {
-                url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
+            MakeClothes: {
+                url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/MakeClothes.ls`,
                 Scene: null as Laya.Scene3D,
             },
+            MakeUp: {
+                url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
+                Scene: null as Laya.Scene3D,
+            }
         },
         // prefab3D: {
         //     Level1: {
@@ -29,51 +33,15 @@ export module _Res {
             // },
             BtnCompelet: {
                 url: 'Prefab/BtnCompelet.json',
-                prefab: new Laya.Prefab,
+                prefab: null as Laya.Prefab,
             },
         },
-        // texture: {
-        //     bishua1: {
-        //         url: 'Game/UI/GameScene/bishua1.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     bishua2: {
-        //         url: 'Game/UI/GameScene/bishua2.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     bishua3: {
-        //         url: 'Game/UI/GameScene/bishua3.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     bishua4: {
-        //         url: 'Game/UI/GameScene/bishua4.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     bishua5: {
-        //         url: 'Game/UI/GameScene/bishua5.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     bishua6: {
-        //         url: 'Game/UI/GameScene/bishua6.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     blink1: {
-        //         url: 'Game/UI/GameScene/blink1.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     blink2: {
-        //         url: 'Game/UI/GameScene/blink2.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     blink3: {
-        //         url: 'Game/UI/GameScene/blink3.png',
-        //         texture: new Laya.Texture,
-        //     },
-        //     blink4: {
-        //         url: 'Game/UI/GameScene/blink4.png',
-        //         texture: new Laya.Texture,
-        //     },
-        // },
+        texture: {
+            // glasses: {
+            //     url: `/_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Texture2D/common_s.png`,
+            //     texture: null as Laya.Texture,
+            // },
+        },
         // texture2D: {
         //     Figure1: {
         //         url: 'Game/UI/MakeClothes/figure_01.png',

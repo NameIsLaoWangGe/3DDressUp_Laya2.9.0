@@ -80,9 +80,11 @@ export module _Tailor {
             //     Laya.Physics.I.worldRoot.x++;
             // })
         }
-
         lwgAdaptive(): void {
             // this._Owner.x += 100;
+        }
+        lwgOpenAni(): number {
+            return 100;
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.trigger, this, (name: string) => {
@@ -101,8 +103,8 @@ export module _Tailor {
         }
 
         lwgBtnRegister(): void {
-            this._btnUp(this._ImgVar('BtnBack'), () => {
-                this._openScene(_SceneName.Start);
+            this._btnUp(this._ImgVar('BtnNext'), () => {
+                this._openScene('MakeClothes', true, true);
             })
             this._btnUp(this.DottedLineControl.BtnCompelet, () => {
                 this._openScene('MakeClothes', true, true);

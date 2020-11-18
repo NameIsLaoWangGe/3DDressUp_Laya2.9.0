@@ -1151,7 +1151,7 @@ export module lwg {
                         }
                     }
                 } else {
-                    console.log(`${openName}场景没有同名脚本！`);
+                    console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                 }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
@@ -1406,6 +1406,12 @@ export module lwg {
             lwgAdaptive(): void { };
             /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
             lwgEventRegister(): void { };
+            _EvReg(name: string, func: Function): void {
+                EventAdmin._register(name, this, func);
+            }
+            _EvNotify(name: string, args?: []): void {
+                EventAdmin._notify(name, args);
+            }
             /**初始化，在onEnable中执行，重写即可覆盖*/
             lwgOnEnable(): void { }
             /**初始化完毕后，onUpdate前执行一次，重写覆盖*/
@@ -1650,7 +1656,6 @@ export module lwg {
                     return this.owner.parent as Laya.Image | Laya.Sprite;
                 }
             }
-
             /**物理组件*/
             get _RigidBody(): Laya.RigidBody {
                 if (!this._Owner['_OwnerRigidBody']) {
@@ -4292,7 +4297,7 @@ export module lwg {
         }
 
         /**
-         * 旋转放大回弹动画，旋转放大角度增加=》原始大小和角度=，旋转放大角度增加=》原始大小和角度，有一个回来效果
+         * 旋转放大回弹动画，旋转放大角度增加=》原始大小和角度=，旋转放大角��增加=》原始大小和角度，有一个回来效果
          * @param target 目标
          * @param eAngle 延伸角度，就是回收前的多出的角度
          * @param eScale 延伸大小，就是回收前的放大的大小
@@ -5283,7 +5288,7 @@ export module lwg {
               * @param v3 3D世界的坐标
               * @param camera 摄像机
              */
-            export function positionToScreen(v3: Laya.Vector3, camera: Laya.Camera): Laya.Vector2 {
+            export function posToScreen(v3: Laya.Vector3, camera: Laya.Camera): Laya.Vector2 {
                 let ScreenV4 = new Laya.Vector4();
                 camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
                 let point: Laya.Vector2 = new Laya.Vector2();
@@ -5316,7 +5321,7 @@ export module lwg {
              * @param vector2 触摸点
              * @param filtrateName 找出指定触摸的模型的信息，如果不传则返回全部信息数组；
              */
-            export function d3_rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: string): any {
+            export function rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: string): any {
                 /**射线*/
                 let _ray: Laya.Ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
                 /**射线扫描结果*/

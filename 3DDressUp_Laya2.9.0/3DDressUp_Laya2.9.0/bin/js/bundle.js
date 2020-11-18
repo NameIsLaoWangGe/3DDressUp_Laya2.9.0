@@ -885,7 +885,7 @@
                         }
                     }
                     else {
-                        console.log(`${openName}场景没有同名脚本！`);
+                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                     }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
@@ -1111,6 +1111,12 @@
                 ;
                 lwgEventRegister() { }
                 ;
+                _EvReg(name, func) {
+                    EventAdmin._register(name, this, func);
+                }
+                _EvNotify(name, args) {
+                    EventAdmin._notify(name, args);
+                }
                 lwgOnEnable() { }
                 lwgOnStart() { }
                 lwgBtnRegister() { }
@@ -3883,7 +3889,7 @@
                     }
                 }
                 _3D.maximumDistanceLimi = maximumDistanceLimi;
-                function positionToScreen(v3, camera) {
+                function posToScreen(v3, camera) {
                     let ScreenV4 = new Laya.Vector4();
                     camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
                     let point = new Laya.Vector2();
@@ -3891,7 +3897,7 @@
                     point.y = ScreenV4.y;
                     return point;
                 }
-                _3D.positionToScreen = positionToScreen;
+                _3D.posToScreen = posToScreen;
                 function reverseVector(Vecoter1, Vecoter2, normalizing) {
                     let p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
                     if (normalizing) {
@@ -3904,7 +3910,7 @@
                     }
                 }
                 _3D.reverseVector = reverseVector;
-                function d3_rayScanning(camera, scene3D, vector2, filtrateName) {
+                function rayScanning(camera, scene3D, vector2, filtrateName) {
                     let _ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
                     let outs = new Array();
                     camera.viewportPointToRay(vector2, _ray);
@@ -3923,7 +3929,7 @@
                         return outs;
                     }
                 }
-                _3D.d3_rayScanning = d3_rayScanning;
+                _3D.rayScanning = rayScanning;
                 function animatorPlay(Sp3D, aniName, normalizedTime, layerIndex) {
                     let sp3DAni = Sp3D.getComponent(Laya.Animator);
                     if (!sp3DAni) {
@@ -5007,17 +5013,22 @@
     (function (_Res) {
         _Res._list = {
             scene3D: {
-                MakeScene: {
-                    url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
+                MakeClothes: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/MakeClothes.ls`,
                     Scene: null,
                 },
+                MakeUp: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
+                    Scene: null,
+                }
             },
             prefab2D: {
                 BtnCompelet: {
                     url: 'Prefab/BtnCompelet.json',
-                    prefab: new Laya.Prefab,
+                    prefab: null,
                 },
             },
+            texture: {},
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
@@ -5144,6 +5155,9 @@
             }
             lwgAdaptive() {
             }
+            lwgOpenAni() {
+                return 100;
+            }
             lwgEventRegister() {
                 EventAdmin._register(_Event.trigger, this, (name) => {
                     let value = this.DottedLineControl._checkCondition(name);
@@ -5157,8 +5171,8 @@
                 });
             }
             lwgBtnRegister() {
-                this._btnUp(this._ImgVar('BtnBack'), () => {
-                    this._openScene(_SceneName.Start);
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('MakeClothes', true, true);
                 });
                 this._btnUp(this.DottedLineControl.BtnCompelet, () => {
                     this._openScene('MakeClothes', true, true);
@@ -5202,12 +5216,23 @@
             lwgEventRegister() {
                 EventAdmin._register(_Event.animation1, this, () => {
                     let time = 0;
-                    TimerAdmin._frameNumLoop(2, 50, this, () => {
+                    TimerAdmin._frameNumLoop(1, 30, this, () => {
                         time++;
                         this._LabelVar('Schedule').text = `${time}`;
                     }, () => {
-                        Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                        this._Owner.zOrder = 1;
+                        switch (Admin._preLoadOpenSceneLater.openName) {
+                            case 'MakeClothes':
+                                Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+                                this._Owner.zOrder = 1;
+                                break;
+                            case 'MakeUp':
+                                _Res._list.scene3D.MakeClothes.Scene.active = false;
+                                Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
+                                this._Owner.zOrder = 1;
+                                break;
+                            default:
+                                break;
+                        }
                         EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes[`_${Admin._preLoadOpenSceneLater.openName}`]]));
                     });
                 });
@@ -5219,7 +5244,7 @@
             }
             lwgAllComplete() {
                 this._LabelVar('Schedule').text = `100`;
-                return 1000;
+                return 500;
             }
         }
         _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
@@ -5235,8 +5260,7 @@
         class Start extends Admin._SceneBase {
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
-                    Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                    this._openScene('MakeClothes');
+                    this._openScene('Tailor');
                 });
             }
         }
@@ -5256,7 +5280,7 @@
                 }
             }
             get _MainCamera() {
-                if (this['__MainCamera']) {
+                if (!this['__MainCamera']) {
                     if (this.owner.getChildByName('Main Camera')) {
                         return this['__MainCamera'] = this.owner.getChildByName('Main Camera');
                     }
@@ -5270,6 +5294,9 @@
                 else {
                     return this['__MainCamera'];
                 }
+            }
+            set _MainCamera(Camera) {
+                this['__MainCamera'] = Camera;
             }
             _child(name) {
                 if (!this[`_child${name}`]) {
@@ -5314,22 +5341,16 @@
                     return this[`_child${childName}Transform${transformProperty}`];
                 }
             }
-            _childPos(name) {
-                return this.getChildTransPro(name, 'position');
-            }
-            _childLocPos(name) {
-                return this.getChildTransPro(name, 'localPosition');
-            }
-            _childLocEuler(name) {
-                return this.getChildTransPro(name, 'localRotationEuler');
-            }
-            _childLocScale(name) {
-                return this.getChildTransPro(name, 'localScale');
-            }
             lwgOnAwake() {
             }
             lwgEventRegister() { }
             ;
+            _EvReg(name, func) {
+                EventAdmin._register(name, this, func);
+            }
+            _EvNotify(name, args) {
+                EventAdmin._notify(name, args);
+            }
             lwgOnEnable() { }
             lwgOnStart() { }
             lwgOnUpdate() {
@@ -5340,6 +5361,7 @@
         class _Scene3DBase extends _Script3DBase {
             constructor() {
                 super();
+                this._cameraFp = new Laya.Vector3;
             }
             get _Owner() {
                 return this.owner;
@@ -5437,6 +5459,7 @@
         (function (_Event) {
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
             _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
+            _Event["moveUltimately"] = "_MakeClothes_moveUltimately";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
@@ -5448,10 +5471,10 @@
                     diffP: null,
                     state: 'none',
                     stateType: {
+                        none: 'none',
                         move: 'move',
                         scale: 'scale',
                         rotate: 'rotate',
-                        none: 'none',
                     },
                     createImg: (element) => {
                         this.TexControl.Img = Tools._Node.simpleCopyImg(element);
@@ -5484,9 +5507,10 @@
                     scale: (e) => {
                         let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
                         this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
-                        this._ImgVar('Frame').width = Math.abs(lPoint.x);
+                        this._ImgVar('Frame').width = lPoint.x;
                         this._ImgVar('Frame').height = Math.abs(lPoint.y);
-                        let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
+                        let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
+                        let diffP = new Laya.Point(e.stageX - gPoint.x, e.stageY - gPoint.y);
                         this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
                         let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                         let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
@@ -5496,7 +5520,7 @@
                         Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
                     },
                     rotate: (e) => {
-                        console.log(this.TexControl.diffP.x);
+                        this._ImgVar('Wireframe').visible = false;
                         if (this.TexControl.diffP.x > 0) {
                             EventAdmin._notify(_Event.rotateHanger, [1]);
                         }
@@ -5574,7 +5598,7 @@
                 };
             }
             lwgOnAwake() {
-                _MakeClothes._Scene3D = _Res._list.scene3D.MakeScene.Scene;
+                _MakeClothes._Scene3D = _Res._list.scene3D.MakeClothes.Scene;
                 if (!_MakeClothes._Scene3D.getComponent(MakeClothes3D)) {
                     _MakeClothes._Scene3D.addComponent(MakeClothes3D);
                 }
@@ -5583,8 +5607,24 @@
                 this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
                 this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
             }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgEventRegister() {
+                let ultimatelyParentOriX = this._SpriteVar('UltimatelyParent').x;
+                let figureOriX = this._ImgVar('Figure').x;
+                EventAdmin._register(_Event.moveUltimately, this, (angle) => {
+                    this._SpriteVar('Dispaly').x = this._SpriteVar('UltimatelyParent').x = ultimatelyParentOriX - angle % 360;
+                    this._Owner.x = 0 + angle % 360;
+                    this._Owner.width = Laya.stage.width - angle % 360;
+                    this._ImgVar('Figure').x = figureOriX - angle % 360;
+                });
+            }
             lwgBtnRegister() {
                 this.TexControl.btn();
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('MakeUp', true, true);
+                });
             }
             onStageMouseDown(e) {
                 this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -5599,6 +5639,7 @@
         _MakeClothes.MakeClothes = MakeClothes;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
+                _MakeClothes._HangerTrans = this._childTrans('Hanger');
             }
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
@@ -5607,20 +5648,78 @@
                     bMaterial.albedoTexture = Text2D;
                 });
                 EventAdmin._register(_Event.rotateHanger, this, (num) => {
-                    let e = this._childLocEuler('Hanger');
                     if (num == 1) {
-                        e = new Laya.Vector3(e.x, e.y--, e.z);
+                        this._childTrans('Hanger').localRotationEulerY++;
                     }
                     else {
-                        e = new Laya.Vector3(e.x, e.y++, e.z);
+                        this._childTrans('Hanger').localRotationEulerY--;
                     }
-                    console.log(num, this._childLocEuler('Hanger').y);
+                    EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY);
                 });
             }
         }
         _MakeClothes.MakeClothes3D = MakeClothes3D;
     })(_MakeClothes || (_MakeClothes = {}));
     var _MakeClothes$1 = _MakeClothes.MakeClothes;
+
+    var _MakeUp;
+    (function (_MakeUp) {
+        let _Event;
+        (function (_Event) {
+            _Event["posCalibration"] = "posCalibration";
+        })(_Event = _MakeUp._Event || (_MakeUp._Event = {}));
+        class MakeUp extends Admin._SceneBase {
+            constructor() {
+                super(...arguments);
+                this.MakeControl = {};
+            }
+            lwgOnAwake() {
+                _MakeUp._Scene3D = _Res._list.scene3D.MakeUp.Scene;
+                if (!_MakeUp._Scene3D.getComponent(MakeUp3D)) {
+                    _MakeUp._Scene3D.addComponent(MakeUp3D);
+                }
+            }
+            lwgOnStart() {
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgAdaptive() {
+            }
+            lwgEventRegister() {
+                this._EvReg(_Event.posCalibration, (p1, p2) => {
+                    console.log(p1, p2);
+                    this._ImgVar('Glasses1').pos(p1.x, p1.y);
+                    this._ImgVar('Glasses2').pos(p2.x, p2.y);
+                });
+            }
+            lwgBtnRegister() {
+                for (let index = 0; index < this._ImgVar('Case').numChildren; index++) {
+                    const element = this._ImgVar('Case').getChildAt(index);
+                    this._btnUp(element, (e) => {
+                    });
+                }
+            }
+            onStageMouseDown(e) {
+            }
+            onStageMouseMove(e) {
+            }
+            onStageMouseUp() {
+            }
+        }
+        _MakeUp.MakeUp = MakeUp;
+        class MakeUp3D extends lwg3D._Scene3DBase {
+            lwgOnAwake() {
+            }
+            lwgOnStart() {
+                let p1 = Tools._3D.posToScreen(this._child('Glasses1').transform.position, this._MainCamera);
+                let p2 = Tools._3D.posToScreen(this._child('Glasses2').transform.position, this._MainCamera);
+                this._EvNotify(_Event.posCalibration, [p1, p2]);
+            }
+        }
+        _MakeUp.MakeUp3D = MakeUp3D;
+    })(_MakeUp || (_MakeUp = {}));
+    var _MakeUp$1 = _MakeUp.MakeUp3D;
 
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
@@ -5638,6 +5737,7 @@
                 _Game: _Game,
                 _Tailor: _Tailor,
                 _MakeClothes: _MakeClothes,
+                _MakeUp: _MakeUp,
             };
         }
     }

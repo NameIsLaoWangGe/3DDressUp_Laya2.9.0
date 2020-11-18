@@ -1,18 +1,14 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":17,
-    "selecteID":19,
+    "selectedBox":2,
+    "selecteID":30,
     "searchKey":"View",
     "referenceLines":[
-        {
-            "value":49,
-            "type":1,
-            "id":1
-        }],
+        ],
     "props":{"width":1280,"sceneColor":"#a4a4a4","height":720},
     "nodeParent":-1,
-    "maxID":29,
+    "maxID":32,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -20,6 +16,34 @@
     "hasChild":true,
     "compId":2,
     "child":[
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,BtnNext,BtnNext",
+            "props":{"y":51,"width":109,"var":"BtnNext","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"17,11,12,12","right":212,"pivotY":42,"pivotX":55,"name":"BtnNext","height":84},
+            "nodeParent":2,
+            "label":"BtnNext",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":30,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Label",
+                    "searchKey":"Label",
+                    "props":{"y":12,"x":-8,"width":125,"valign":"middle","text":"下一步","height":60,"fontSize":25,"align":"center"},
+                    "nodeParent":30,
+                    "label":"Label",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":31,
+                    "child":[
+                        ]
+                }]
+        },
         {
             "x":15,
             "type":"Image",
@@ -78,34 +102,6 @@
         },
         {
             "x":15,
-            "type":"Image",
-            "searchKey":"Image,BtnBack,BtnBack",
-            "props":{"y":596.5,"x":44,"width":181,"var":"BtnBack","skin":"Lwg/UI/ui_l_orthogon_orange.png","sizeGrid":"11,17,16,10","name":"BtnBack","height":91},
-            "nodeParent":2,
-            "label":"BtnBack",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":8,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Label",
-                    "searchKey":"Label",
-                    "props":{"text":"返回","fontSize":40,"centerY":0,"centerX":0},
-                    "nodeParent":8,
-                    "label":"Label",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":9,
-                    "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,UltimatelyParent,UltimatelyParent",
             "props":{"y":93,"x":296,"width":620,"visible":false,"var":"UltimatelyParent","scaleY":1,"scaleX":1,"name":"UltimatelyParent","height":534},
@@ -154,14 +150,13 @@
             "props":{"y":618,"x":1004,"width":123,"visible":false,"var":"Wireframe","sizeGrid":"13,20,21,25","rotation":0,"pivotY":79,"pivotX":62,"name":"Wireframe","height":157},
             "nodeParent":2,
             "label":"Wireframe",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":13,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Frame,Frame",
                     "props":{"y":0,"x":0,"width":123,"visible":true,"var":"Frame","skin":"Lwg/UI/wireframeBlack2.png","sizeGrid":"13,20,21,25","rotation":0,"name":"Frame","height":157},
@@ -176,7 +171,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WClose,WClose",
                     "props":{"y":0,"x":0,"width":40,"var":"WClose","skin":"Lwg/UI/icon_close.png","pivotY":20,"pivotX":20,"name":"WClose","height":40},
@@ -190,7 +184,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WConversion,WConversion",
                     "props":{"y":153,"x":123,"width":40,"var":"WConversion","skin":"Lwg/UI/ui_circle_c_001.png","pivotY":20,"pivotX":20,"name":"WConversion","height":40},
@@ -203,7 +196,6 @@
                     "compId":17,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":28,"x":23,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":68,"pivotY":8,"pivotX":8,"height":15},
@@ -217,7 +209,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":12,"x":17,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":605,"pivotY":8,"pivotX":8,"height":15},

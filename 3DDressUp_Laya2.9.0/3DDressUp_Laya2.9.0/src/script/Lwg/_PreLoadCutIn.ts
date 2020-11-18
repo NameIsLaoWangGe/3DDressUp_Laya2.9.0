@@ -133,12 +133,26 @@ export module _PreLoadCutIn {
         lwgEventRegister(): void {
             EventAdmin._register(_Event.animation1, this, () => {
                 let time = 0;
-                TimerAdmin._frameNumLoop(2, 50, this, () => {
+                TimerAdmin._frameNumLoop(1, 30, this, () => {
                     time++;
                     this._LabelVar('Schedule').text = `${time}`;
                 }, () => {
-                    Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                    this._Owner.zOrder = 1;
+                    switch (Admin._preLoadOpenSceneLater.openName) {
+                        case 'MakeClothes':
+                            Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+                            this._Owner.zOrder = 1;
+                            break;
+                        case 'MakeUp':
+                            _Res._list.scene3D.MakeClothes.Scene.active = false;
+                            Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
+                            this._Owner.zOrder = 1;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+
                     EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes[`_${Admin._preLoadOpenSceneLater.openName}`]]));
                 })
             })
@@ -150,7 +164,7 @@ export module _PreLoadCutIn {
         }
         lwgAllComplete(): number {
             this._LabelVar('Schedule').text = `100`;
-            return 1000;
+            return 500;
         }
     }
 };

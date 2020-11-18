@@ -13,8 +13,7 @@ export module _Start {
     export class Start extends Admin._SceneBase {
         lwgBtnRegister(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
-                Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                this._openScene('MakeClothes');
+                this._openScene('Tailor');
             })
         }
     }

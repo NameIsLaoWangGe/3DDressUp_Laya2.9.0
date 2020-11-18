@@ -213,6 +213,8 @@ P 5BE85F42 tailor5.png
 P E4AD4E79 tailor6.png
 P 9A13CF9E tailor7.png
 R 3B312ECD ultimately.png
+D Game/UI/MakeUp
+P BE0A7AAD detailnormal_003_n.png
 D Game/UI/PreLoad
 D Game/UI/Start
 D Game/UI/01_Repertory/AdsHint

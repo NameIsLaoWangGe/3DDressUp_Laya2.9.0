@@ -6,6 +6,7 @@ import { _PreLoad } from "./_PreLoad";
 import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
 import { _MakeClothes } from "./_MakeClothes";
+import { _MakeUp } from "./_MakeUp";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -26,6 +27,7 @@ export default class LwgInit extends _LwgInitScene {
             _Game: _Game,
             _Tailor: _Tailor,
             _MakeClothes: _MakeClothes,
+            _MakeUp: _MakeUp,
             // _Settle: _Settle,
             // _Victory: _Victory,
             // _Share: _Share,

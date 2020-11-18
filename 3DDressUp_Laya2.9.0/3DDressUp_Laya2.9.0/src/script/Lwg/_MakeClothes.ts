@@ -5,10 +5,11 @@ export module _MakeClothes {
     export enum _Event {
         addTexture2D = '_MakeClothes_addTexture2D',
         rotateHanger = '_MakeClothes_rotateHanger',
+        moveUltimately = '_MakeClothes_moveUltimately',
     }
     export class MakeClothes extends Admin._SceneBase {
         lwgOnAwake(): void {
-            _Scene3D = _Res._list.scene3D.MakeScene.Scene;
+            _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
             if (!_Scene3D.getComponent(MakeClothes3D)) {
                 _Scene3D.addComponent(MakeClothes3D);
             }
@@ -16,6 +17,19 @@ export module _MakeClothes {
         lwgAdaptive(): void {
             this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
             this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
+        }
+        lwgOpenAni(): number {
+            return 100;
+        }
+        lwgEventRegister(): void {
+            let ultimatelyParentOriX = this._SpriteVar('UltimatelyParent').x;
+            let figureOriX = this._ImgVar('Figure').x;
+            EventAdmin._register(_Event.moveUltimately, this, (angle: number) => {
+                this._SpriteVar('Dispaly').x = this._SpriteVar('UltimatelyParent').x = ultimatelyParentOriX - angle % 360;
+                this._Owner.x = 0 + angle % 360;
+                this._Owner.width = Laya.stage.width - angle % 360;
+                this._ImgVar('Figure').x = figureOriX - angle % 360;
+            })
         }
         /**图片移动控制*/
         TexControl = {
@@ -25,10 +39,10 @@ export module _MakeClothes {
             diffP: null as Laya.Point,
             state: 'none',
             stateType: {
+                none: 'none',
                 move: 'move',
                 scale: 'scale',
                 rotate: 'rotate',
-                none: 'none',
             },
             createImg: (element: Laya.Image) => {
                 this.TexControl.Img = Tools._Node.simpleCopyImg(element);
@@ -56,6 +70,7 @@ export module _MakeClothes {
                     this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
                     this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
                     this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
+
                     let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y))
                     this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                 }
@@ -63,10 +78,11 @@ export module _MakeClothes {
             scale: (e: Laya.Event): void => {
                 let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
                 this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
-                this._ImgVar('Frame').width = Math.abs(lPoint.x);
+                this._ImgVar('Frame').width = lPoint.x;
                 this._ImgVar('Frame').height = Math.abs(lPoint.y);
 
-                let diffP = new Laya.Point(e.stageX - this._ImgVar('Wireframe').x, e.stageY - this._ImgVar('Wireframe').y);
+                let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
+                let diffP = new Laya.Point(e.stageX - gPoint.x, e.stageY - gPoint.y);
                 this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
 
                 let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
@@ -79,7 +95,7 @@ export module _MakeClothes {
                 Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
             },
             rotate: (e: Laya.Event) => {
-                console.log(this.TexControl.diffP.x);
+                this._ImgVar('Wireframe').visible = false;
                 if (this.TexControl.diffP.x > 0) {
                     EventAdmin._notify(_Event.rotateHanger, [1]);
                 } else {
@@ -154,6 +170,9 @@ export module _MakeClothes {
         }
         lwgBtnRegister(): void {
             this.TexControl.btn();
+            this._btnUp(this._ImgVar('BtnNext'), () => {
+                this._openScene('MakeUp', true, true);
+            })
         }
         onStageMouseDown(e: Laya.Event): void {
             this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -166,8 +185,10 @@ export module _MakeClothes {
         }
     }
     export let _Scene3D: Laya.Scene3D;
+    export let _HangerTrans: Laya.Transform3D;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
+            _HangerTrans = this._childTrans('Hanger');
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.addTexture2D, this, (Text2D: Laya.Texture2D) => {
@@ -177,13 +198,15 @@ export module _MakeClothes {
             })
 
             EventAdmin._register(_Event.rotateHanger, this, (num: number) => {
-                let e = this._childLocEuler('Hanger')
                 if (num == 1) {
-                    e = new Laya.Vector3(e.x, e.y--, e.z);
+                    this._childTrans('Hanger').localRotationEulerY++;
                 } else {
-                    e = new Laya.Vector3(e.x, e.y++, e.z);
+                    this._childTrans('Hanger').localRotationEulerY--;
                 }
-                console.log(num, this._childLocEuler('Hanger').y);
+                EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY)
+
+                // let out = Tools._3D.d3_rayScanning(this._MainCamera, this._Owner, new Laya.Vector2(Laya.stage.width / 2, Laya.stage.height / 2), 'Hanger');
+                // console.log(out);
             })
         }
     }
