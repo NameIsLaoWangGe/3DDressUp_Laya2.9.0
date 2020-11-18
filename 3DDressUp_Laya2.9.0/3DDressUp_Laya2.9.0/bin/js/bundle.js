@@ -1134,7 +1134,7 @@
                     Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, null, out);
                 }
                 _btnFour(target, down, move, up, out, effect) {
-                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, move, up, out);
+                    Click._on(effect == null ? effect : Click._Effect.use, target, this, down, move, up, out);
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
                     let closeName;
@@ -5667,11 +5667,25 @@
         let _Event;
         (function (_Event) {
             _Event["posCalibration"] = "posCalibration";
+            _Event["addTexture2D"] = "addTexture2D";
         })(_Event = _MakeUp._Event || (_MakeUp._Event = {}));
         class MakeUp extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.MakeControl = {};
+                this.Make = {
+                    switch: true,
+                    frontPos: null,
+                    endPos: null,
+                    DrawSp: null,
+                    present: null,
+                    color: null,
+                    size: 20,
+                    draw: (Sp, x, y, tex, color) => {
+                    },
+                    getTex: (element) => {
+                        return element.drawToTexture(element.width, element.height, element.x, element.y);
+                    },
+                };
             }
             lwgOnAwake() {
                 _MakeUp._Scene3D = _Res._list.scene3D.MakeUp.Scene;
@@ -5688,19 +5702,43 @@
             }
             lwgEventRegister() {
                 this._EvReg(_Event.posCalibration, (p1, p2) => {
-                    console.log(p1, p2);
-                    this._ImgVar('Glasses1').pos(p1.x, p1.y);
-                    this._ImgVar('Glasses2').pos(p2.x, p2.y);
                 });
             }
             lwgBtnRegister() {
                 for (let index = 0; index < this._ImgVar('Case').numChildren; index++) {
                     const element = this._ImgVar('Case').getChildAt(index);
                     this._btnUp(element, (e) => {
+                        this.Make.color = element.getChildAt(0).text;
+                        this.Make.switch = true;
                     });
+                }
+                for (let index = 0; index < this._ImgVar('Glasses').numChildren; index++) {
+                    const element = this._ImgVar('Glasses').getChildAt(index);
+                    this._btnFour(element, (e) => {
+                        if (this.Make.switch) {
+                            this.Make.frontPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                            this.Make.present = element;
+                            this.Make.DrawSp = new Laya.Sprite;
+                            element.addChild(this.Make.DrawSp);
+                        }
+                    }, (e) => {
+                        console.log('正在画画！');
+                        if (this.Make.DrawSp && this.Make.present == element) {
+                            this.Make.endPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                            this.Make.DrawSp.graphics.drawCircle(this.Make.endPos.x, this.Make.endPos.y, this.Make.size / 2, this.Make.color);
+                            this.Make.DrawSp.graphics.drawLine(this.Make.frontPos.x, this.Make.frontPos.y, this.Make.endPos.x, this.Make.endPos.y, this.Make.color, this.Make.size);
+                            this.Make.frontPos = this.Make.endPos;
+                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
+                        }
+                    }, (e) => {
+                    }, (e) => {
+                    }, null);
                 }
             }
             onStageMouseDown(e) {
+                this.Make.switch = true;
+                if (this.Make.color) {
+                }
             }
             onStageMouseMove(e) {
             }
@@ -5715,6 +5753,13 @@
                 let p1 = Tools._3D.posToScreen(this._child('Glasses1').transform.position, this._MainCamera);
                 let p2 = Tools._3D.posToScreen(this._child('Glasses2').transform.position, this._MainCamera);
                 this._EvNotify(_Event.posCalibration, [p1, p2]);
+            }
+            lwgEventRegister() {
+                this._EvReg(_Event.addTexture2D, (name, Text2D) => {
+                    let bMaterial = this._child(name).meshRenderer.material;
+                    bMaterial.albedoTexture.destroy();
+                    bMaterial.albedoTexture = Text2D;
+                });
             }
         }
         _MakeUp.MakeUp3D = MakeUp3D;

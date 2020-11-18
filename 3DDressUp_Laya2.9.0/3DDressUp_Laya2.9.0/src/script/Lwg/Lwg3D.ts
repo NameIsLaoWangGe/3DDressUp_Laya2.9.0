@@ -147,6 +147,7 @@ export module lwg3D {
         }
         onUpdate(): void {
             this.lwgOnUpdate();
+           
         }
         onDisable(): void {
             this.lwgOnDisable();

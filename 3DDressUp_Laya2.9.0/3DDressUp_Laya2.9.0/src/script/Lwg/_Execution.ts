@@ -123,7 +123,7 @@ export module _Execution {
         });
     }
 }
-export default class Execution extends Admin._ObjectBase {
+export  class Execution extends Admin._ObjectBase {
     Num: Laya.FontClip;
     CountDown: Laya.Label;
     CountDown_board: Laya.Label;
@@ -155,6 +155,7 @@ export default class Execution extends Admin._ObjectBase {
         _Execution._addExDate.value = d.getDate();
         _Execution._addExHours.value = d.getHours();
         _Execution._addMinutes.value = d.getMinutes();
+
     }
 
     /**计时器*/
@@ -196,10 +197,10 @@ export default class Execution extends Admin._ObjectBase {
                 this.countNum = 60;
                 this.timeSwitch = false;
             }
-
         } else {
             this.timeSwitch = true;
             this.countDownAddEx();
         }
     }
+    
 }

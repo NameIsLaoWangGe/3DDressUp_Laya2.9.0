@@ -1409,7 +1409,7 @@ export module lwg {
             _EvReg(name: string, func: Function): void {
                 EventAdmin._register(name, this, func);
             }
-            _EvNotify(name: string, args?: []): void {
+            _EvNotify(name: string, args?: Array<any>): void {
                 EventAdmin._notify(name, args);
             }
             /**初始化，在onEnable中执行，重写即可覆盖*/
@@ -1471,7 +1471,7 @@ export module lwg {
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
-                Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, move, up, out);
+                Click._on(effect == null ? effect : Click._Effect.use, target, this, down, move, up, out);
             }
             ownerSceneName: string = '';
             /**

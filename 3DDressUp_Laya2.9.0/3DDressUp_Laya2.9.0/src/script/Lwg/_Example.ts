@@ -179,7 +179,7 @@ export module _Example {
         lwgOnUpdate(): void { }
         lwgOnDisable(): void { }
     }
-    export class UIExampleItem extends Admin._Object {
+    export class UIExampleItem extends Admin._ObjectBase {
 
     }
 }

@@ -212,27 +212,26 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0.258,
-						1.172,
-						1.125
+						0.217,
+						1.191795,
+						1.319
 					],
 					"rotation":[
-						0.7763509,
+						0.7393343,
 						0,
 						0,
-						-0.630301
+						-0.6733385
 					],
 					"scale":[
-						1,
-						1,
-						1
+						0.5,
+						0.5,
+						0.5
 					],
-					"meshPath":"Assets/Reference/Mesh/hanger_002-hanger_002_0.lm",
+					"meshPath":"Library/unity default resources-Sphere.lm",
 					"enableRender":true,
 					"materials":[
 						{
-							"type":"Laya.BlinnPhongMaterial",
-							"path":"Assets/Reference/Texture2D/Materials/cutting_particle_01.lmat"
+							"path":"Assets/Reference/Texture2D/Materials/detailnormal_004_n.lmat"
 						}
 					]
 				},
@@ -244,17 +243,13 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"BoxColliderShape",
+								"type":"SphereColliderShape",
 								"center":[
 									0,
-									0.01974967,
-									0.024372
+									0,
+									0
 								],
-								"size":[
-									0.3717256,
-									0.03083648,
-									0.3717256
-								]
+								"radius":0.5
 							}
 						],
 						"isTrigger":false
@@ -271,27 +266,26 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.298,
-						1.172,
-						1.123
+						-0.291,
+						1.191795,
+						1.319
 					],
 					"rotation":[
-						0.7763509,
+						0.6930328,
 						0,
 						0,
-						-0.630301
+						-0.7209061
 					],
 					"scale":[
-						1,
-						1,
-						1
+						0.5,
+						0.5,
+						0.5
 					],
-					"meshPath":"Assets/Reference/Mesh/hanger_002-hanger_002_0.lm",
+					"meshPath":"Library/unity default resources-Sphere.lm",
 					"enableRender":true,
 					"materials":[
 						{
-							"type":"Laya.BlinnPhongMaterial",
-							"path":"Assets/Reference/Texture2D/Materials/cutting_particle_01.lmat"
+							"path":"Assets/Reference/Texture2D/Materials/detailnormal_004_n.lmat"
 						}
 					]
 				},
@@ -303,17 +297,13 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"BoxColliderShape",
+								"type":"SphereColliderShape",
 								"center":[
 									0,
-									0.01974967,
-									0.024372
+									0,
+									0
 								],
-								"size":[
-									0.3717256,
-									0.03083648,
-									0.3717256
-								]
+								"radius":0.5
 							}
 						],
 						"isTrigger":false
