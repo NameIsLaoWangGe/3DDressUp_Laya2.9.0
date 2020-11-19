@@ -11,11 +11,17 @@ export module _Start {
 
     }
     export class Start extends Admin._SceneBase {
+
+        lwgOpenAni(): number {
+            return 100;
+        }
+
         lwgBtnRegister(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
                 this._openScene('Tailor');
             })
         }
+
     }
 }
 export default _Start.Start;

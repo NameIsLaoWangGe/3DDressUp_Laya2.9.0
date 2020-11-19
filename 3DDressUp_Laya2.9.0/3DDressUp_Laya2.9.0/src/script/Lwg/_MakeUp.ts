@@ -38,7 +38,8 @@ export module _MakeUp {
 
             },
             getTex: (element: Laya.Image): Laya.Texture => {
-                return element.drawToTexture(element.width, element.height, element.x, element.y) as Laya.Texture;
+                element.texture = element.drawToTexture(element.width, element.height, element.x, element.y + element.height) as Laya.Texture;
+                return element.texture;
             },
         }
         lwgBtnRegister(): void {
@@ -51,17 +52,22 @@ export module _MakeUp {
             }
             for (let index = 0; index < this._ImgVar('Glasses').numChildren; index++) {
                 const element = this._ImgVar('Glasses').getChildAt(index) as Laya.Image;
+                let DrawBoard1 = new Laya.Sprite;
+                DrawBoard1.width = element.width;
+                DrawBoard1.height = element.height;
+                DrawBoard1.name = 'DrawBoard';
+                element.addChild(DrawBoard1);
                 this._btnFour(element,
                     (e: Laya.Event) => {
                         if (this.Make.switch) {
                             this.Make.frontPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY))
                             this.Make.present = element;
                             this.Make.DrawSp = new Laya.Sprite;
-                            element.addChild(this.Make.DrawSp);
+                            let _DrawBoard = element.getChildByName('DrawBoard') as Laya.Sprite;
+                            _DrawBoard.addChild(this.Make.DrawSp);
                         }
                     },
                     (e: Laya.Event) => {
-                        console.log('正在画画！')
                         if (this.Make.DrawSp && this.Make.present == element) {
                             this.Make.endPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
                             this.Make.DrawSp.graphics.drawCircle(this.Make.endPos.x, this.Make.endPos.y, this.Make.size / 2, this.Make.color);
@@ -70,15 +76,31 @@ export module _MakeUp {
 
                             this.Make.frontPos = this.Make.endPos;
 
-                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
+                            // this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
                         }
                     },
                     (e: Laya.Event) => {
+                        let _DrawBoard = element.getChildByName('DrawBoard') as Laya.Sprite;
+                        console.log(_DrawBoard.numChildren);
+                        if (_DrawBoard.numChildren > 2) {
+                            console.log('合并！');
+                            let NewBoard = element.addChild((new Laya.Sprite()).pos(0, 0)) as Laya.Sprite;
+                            NewBoard.width = _DrawBoard.width;
+                            NewBoard.height = _DrawBoard.height;
+                            NewBoard.name = 'DrawBoard';
+                            NewBoard.texture = _DrawBoard.drawToTexture(_DrawBoard.width, _DrawBoard.height, _DrawBoard.x, _DrawBoard.y) as Laya.Texture;
+                            _DrawBoard.removeSelf();
+                        }
 
                     },
                     (e: Laya.Event) => {
+
                     }, null);
             }
+
+            this._btnUp(this._ImgVar('BtnNext'), () => {
+                this._openScene('Start', true, true);
+            })
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Make.switch = true;

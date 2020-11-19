@@ -139,7 +139,7 @@ export module _Tailor {
                     return this._ImgVar('LineParent').getChildByName('EraserSp') as Laya.Sprite;
                 }
             },
-            EraserSize: 32,
+            EraserSize: 50,
             erasureLine: () => {
                 let gPos = (this.Cutting.Scissor().parent as Laya.Sprite).localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
                 let localPos = this.Cutting.EraserSp().globalToLocal(gPos);

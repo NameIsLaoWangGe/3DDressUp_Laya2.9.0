@@ -77,8 +77,8 @@
 					"layer":0,
 					"position":[
 						-0.029,
-						0.331,
-						1.84
+						0.1342054,
+						1.027
 					],
 					"rotation":[
 						0,
@@ -212,22 +212,22 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0.217,
-						1.191795,
-						1.319
+						0.245,
+						0.995,
+						0.374
 					],
 					"rotation":[
-						0.7393343,
+						0.7071068,
 						0,
 						0,
-						-0.6733385
+						-0.7071068
 					],
 					"scale":[
-						0.5,
-						0.5,
-						0.5
+						0.04,
+						1,
+						0.03
 					],
-					"meshPath":"Library/unity default resources-Sphere.lm",
+					"meshPath":"Library/unity default resources-Plane.lm",
 					"enableRender":true,
 					"materials":[
 						{
@@ -243,13 +243,8 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"SphereColliderShape",
-								"center":[
-									0,
-									0,
-									0
-								],
-								"radius":0.5
+								"type":"MeshColliderShape",
+								"mesh":"Library/unity default resources-Plane.lm"
 							}
 						],
 						"isTrigger":false
@@ -266,22 +261,22 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.291,
-						1.191795,
-						1.319
+						-0.285,
+						0.995,
+						0.374
 					],
 					"rotation":[
-						0.6930328,
+						0.7071068,
 						0,
 						0,
-						-0.7209061
+						-0.7071068
 					],
 					"scale":[
-						0.5,
-						0.5,
-						0.5
+						0.04,
+						1,
+						0.03
 					],
-					"meshPath":"Library/unity default resources-Sphere.lm",
+					"meshPath":"Library/unity default resources-Plane.lm",
 					"enableRender":true,
 					"materials":[
 						{
@@ -297,13 +292,8 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"SphereColliderShape",
-								"center":[
-									0,
-									0,
-									0
-								],
-								"radius":0.5
+								"type":"MeshColliderShape",
+								"mesh":"Library/unity default resources-Plane.lm"
 							}
 						],
 						"isTrigger":false

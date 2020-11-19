@@ -1046,15 +1046,15 @@
                         switch (type) {
                             case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools._Node.changePovit(element, 0, 0);
+                                Tools._Node.changePivot(element, 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools._Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
+                                Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.random:
                                 element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
-                                Tools._Node.changePovit(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                                Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
                                 break;
                             default:
                                 break;
@@ -1065,7 +1065,7 @@
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
                         Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                            Tools._Node.changePovit(element, originalPovitX, originalPovitY);
+                            Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                         });
                     }
                 }
@@ -3482,7 +3482,7 @@
                     }
                 }
                 _Node.zOrderByY = zOrderByY;
-                function changePovit(sp, _pivotX, _pivotY, int) {
+                function changePivot(sp, _pivotX, _pivotY, int) {
                     let originalPovitX = sp.pivotX;
                     let originalPovitY = sp.pivotY;
                     if (int) {
@@ -3495,7 +3495,23 @@
                         sp.y += (sp.pivotY - originalPovitY);
                     }
                 }
-                _Node.changePovit = changePovit;
+                _Node.changePivot = changePivot;
+                function changePivotCenter(sp, int) {
+                    let originalPovitX = sp.pivotX;
+                    let originalPovitY = sp.pivotY;
+                    let _pivotX;
+                    let _pivotY;
+                    if (int) {
+                        _pivotX = Math.round(sp.width / 2);
+                        _pivotY = Math.round(sp.height / 2);
+                    }
+                    if (sp.width) {
+                        sp.pivot(sp.width / 2, sp.height / 2);
+                        sp.x += (sp.pivotX - originalPovitX);
+                        sp.y += (sp.pivotY - originalPovitY);
+                    }
+                }
+                _Node.changePivotCenter = changePivotCenter;
                 function getChildArrByProperty(node, property, value) {
                     let childArr = [];
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3915,11 +3931,11 @@
                     let outs = new Array();
                     camera.viewportPointToRay(vector2, _ray);
                     scene3D.physicsSimulation.rayCastAll(_ray, outs);
-                    if (outs.length != 0 && filtrateName) {
+                    if (filtrateName) {
                         let outsChaild = null;
                         for (var i = 0; i < outs.length; i++) {
                             let hitResult = outs[i].collider.owner;
-                            if (hitResult.name === filtrateName) {
+                            if (hitResult.name == filtrateName) {
                                 outsChaild = outs[i];
                             }
                         }
@@ -5136,7 +5152,7 @@
                             return this._ImgVar('LineParent').getChildByName('EraserSp');
                         }
                     },
-                    EraserSize: 32,
+                    EraserSize: 50,
                     erasureLine: () => {
                         let gPos = this.Cutting.Scissor().parent.localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
                         let localPos = this.Cutting.EraserSp().globalToLocal(gPos);
@@ -5226,8 +5242,12 @@
                                 this._Owner.zOrder = 1;
                                 break;
                             case 'MakeUp':
-                                _Res._list.scene3D.MakeClothes.Scene.active = false;
+                                _Res._list.scene3D.MakeClothes.Scene.removeSelf();
                                 Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
+                                this._Owner.zOrder = 1;
+                                break;
+                            case 'Start':
+                                _Res._list.scene3D.MakeUp.Scene.removeSelf();
                                 this._Owner.zOrder = 1;
                                 break;
                             default:
@@ -5258,6 +5278,9 @@
         }
         _Start._init = _init;
         class Start extends Admin._SceneBase {
+            lwgOpenAni() {
+                return 100;
+            }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
                     this._openScene('Tailor');
@@ -5464,9 +5487,9 @@
         class MakeClothes extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.TexControl = {
+                this.Tex = {
                     Img: null,
-                    DisplayImg: null,
+                    DisImg: null,
                     touchP: null,
                     diffP: null,
                     state: 'none',
@@ -5475,29 +5498,35 @@
                         move: 'move',
                         scale: 'scale',
                         rotate: 'rotate',
+                        addTex: 'addTex',
                     },
                     createImg: (element) => {
-                        this.TexControl.Img = Tools._Node.simpleCopyImg(element);
-                        this.TexControl.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this._SpriteVar('Ultimately').addChild(this.TexControl.Img);
+                        if (this.Tex.DisImg) {
+                            this.Tex.DisImg.destroy();
+                        }
+                        this.Tex.Img = Tools._Node.simpleCopyImg(element);
+                        this.Tex.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this._SpriteVar('Ultimately').addChild(this.Tex.Img);
                         let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
-                        this.TexControl.Img.pos(lPoint.x, lPoint.y);
-                        this.TexControl.DisplayImg = Tools._Node.simpleCopyImg(element);
-                        this.TexControl.DisplayImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this.TexControl.DisplayImg.pos(lPoint.x, lPoint.y);
-                        this._SpriteVar('Dispaly').addChild(this.TexControl.DisplayImg);
-                        this.TexControl.Img.width = this.TexControl.DisplayImg.width = 128;
-                        this.TexControl.Img.height = this.TexControl.DisplayImg.height = 128;
-                        this.TexControl.restore();
+                        this.Tex.Img.pos(lPoint.x, lPoint.y);
+                        this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
+                        this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.Tex.DisImg.pos(lPoint.x, lPoint.y);
+                        this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                        this.Tex.Img.width = this.Tex.DisImg.width = 128;
+                        this.Tex.Img.height = this.Tex.DisImg.height = 128;
+                        this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
+                        this._SpriteVar('Dispaly').visible = true;
+                        this.Tex.restore();
                     },
                     getTex: () => {
                         return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
                     },
                     setImgPos: () => {
-                        if (!_MakeClothes._HangerTrans.localRotationY) {
+                        if (!_MakeClothes._HangerTrans) {
                             return;
                         }
-                        let anlgeY = _MakeClothes._HangerTrans.localRotationY;
+                        let anlgeY = _MakeClothes._HangerTrans.localRotationEulerY;
                         let x;
                         let _width = this._SpriteVar('UltimatelyParent').width;
                         if (anlgeY >= 0) {
@@ -5510,25 +5539,77 @@
                         }
                         if (anlgeY < 0) {
                             if (anlgeY % 360 >= -90) {
-                                x = (-(anlgeY + 90) % 360 * 0.25 / 90 + 0.5) * _width;
+                                x = (1 - (anlgeY + 90) % 360 * 0.25 / 90) * _width;
                             }
                             else {
                                 x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
                             }
                         }
-                        this.TexControl.Img.x = x;
+                        if (this._SpriteVar('Wireframe').x < Laya.stage.width / 2) {
+                            this.Tex.Img.x = x - this._SpriteVar('UltimatelyParent').width / 2;
+                        }
+                        else {
+                            this.Tex.Img.x = x;
+                        }
                         return x;
                     },
-                    move: (e) => {
-                        if (this.TexControl.touchP && this.TexControl.Img) {
-                            this.TexControl.Img.x += this.TexControl.diffP.x;
-                            this.TexControl.Img.y += this.TexControl.diffP.y;
-                            this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
-                            this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
-                            this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
-                            let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y));
-                            this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                    getOut: () => {
+                        let x = this._ImgVar('Frame').x;
+                        let y = this._ImgVar('Frame').y;
+                        let _width = this._ImgVar('Frame').width;
+                        let _height = this._ImgVar('Frame').height;
+                        let p1 = [_width * 1 / 4, _height * 1 / 4];
+                        let p2 = [_width * 1 / 4, _height * 3 / 4];
+                        let p3 = [_width * 3 / 4, _height * 1 / 4];
+                        let p4 = [_width * 3 / 4, _height * 3 / 4];
+                        let p5 = [0, 0];
+                        let p6 = [x + _width, y];
+                        let p7 = [x, y + _height];
+                        let p8 = [x + _width / 2, y + _height / 2];
+                        let p9 = [x + _width, y + _height];
+                        let posArr = [p1, p2, p3, p4, p5, p6, p7, p8, p9];
+                        let bool;
+                        for (let index = 0; index < posArr.length; index++) {
+                            const element = posArr[index];
+                            let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
+                            let out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), 'Hanger');
+                            if (out) {
+                                bool = true;
+                                return bool;
+                            }
                         }
+                        return bool;
+                    },
+                    move: (e) => {
+                        this.Tex.Img.y += this.Tex.diffP.y;
+                        this.Tex.DisImg.x += this.Tex.diffP.x;
+                        this.Tex.DisImg.y += this.Tex.diffP.y;
+                        let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
+                        this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        if (this.Tex.touchP && this.Tex.Img) {
+                            if (this.Tex.getOut()) {
+                                this.Tex.setImgPos();
+                                this._ImgVar('Wireframe').visible = true;
+                                this.Tex.state = this.Tex.stateType.addTex;
+                                this._SpriteVar('Dispaly').visible = false;
+                                return;
+                            }
+                        }
+                    },
+                    addTex: (e) => {
+                        this.Tex.Img.x += this.Tex.diffP.x;
+                        this.Tex.Img.y += this.Tex.diffP.y;
+                        this.Tex.DisImg.x += this.Tex.diffP.x;
+                        this.Tex.DisImg.y += this.Tex.diffP.y;
+                        let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
+                        this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        if (!this.Tex.getOut()) {
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.move;
+                            this.Tex.Img.x = Laya.stage.width;
+                            this._SpriteVar('Dispaly').visible = true;
+                        }
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
                     },
                     scale: (e) => {
                         let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
@@ -5536,18 +5617,18 @@
                         this._ImgVar('Frame').width = lPoint.x;
                         this._ImgVar('Frame').height = Math.abs(lPoint.y);
                         let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
-                        let diffP = new Laya.Point(e.stageX - gPoint.x, e.stageY - gPoint.y);
-                        this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
+                        this.Tex.Img.rotation = this.Tex.DisImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(e.stageX - gPoint.x, e.stageY - gPoint.y) + 45;
                         let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                         let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
-                        this.TexControl.DisplayImg.width = this.TexControl.Img.width = 128 + scaleWidth;
-                        this.TexControl.DisplayImg.height = this.TexControl.Img.height = 128 + scaleheight;
-                        Tools._Node.changePovit(this.TexControl.Img, this.TexControl.Img.width / 2, this.TexControl.Img.height / 2);
-                        Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
+                        this.Tex.DisImg.width = this.Tex.Img.width = 128 + scaleWidth;
+                        this.Tex.DisImg.height = this.Tex.Img.height = 128 + scaleheight;
+                        Tools._Node.changePivot(this._ImgVar('Wireframe'), this._ImgVar('Frame').width / 2, this._ImgVar('Frame').height / 2);
+                        Tools._Node.changePivotCenter(this.Tex.Img);
+                        Tools._Node.changePivotCenter(this.Tex.DisImg);
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
                     },
                     rotate: (e) => {
-                        this._ImgVar('Wireframe').visible = false;
-                        if (this.TexControl.diffP.x > 0) {
+                        if (this.Tex.diffP.x > 0) {
                             EventAdmin._notify(_Event.rotateHanger, [1]);
                         }
                         else {
@@ -5557,21 +5638,10 @@
                     none: () => {
                         return;
                     },
-                    checkDisplay: (e) => {
-                        if (this.TexControl.state != this.TexControl.stateType.move) {
-                            return;
-                        }
-                        let gPoint = this._ImgVar('Wireframe').localToGlobal(new Laya.Point(this._ImgVar('WClose').x, this._ImgVar('WClose').y));
-                        let out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), 'Hanger');
-                        if (out.length > 0) {
-                            this.TexControl.setImgPos();
-                        }
-                    },
                     operation: (e) => {
-                        this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
-                        this.TexControl[this.TexControl.state](e);
-                        this.TexControl.checkDisplay(e);
-                        EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                        this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
+                        this.Tex[this.Tex.state](e);
+                        this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
                     },
                     restore: () => {
                         this._ImgVar('Wireframe').rotation = 0;
@@ -5579,38 +5649,43 @@
                         this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
                         this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
                         this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
+                        this._ImgVar('Wireframe').visible = false;
                     },
                     close: () => {
-                        this.TexControl.DisplayImg.destroy();
-                        this.TexControl.Img.destroy();
-                        this.TexControl.restore();
-                        this.TexControl.state = this.TexControl.stateType.none;
-                        EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                        this.Tex.restore();
+                        if (this.Tex.DisImg) {
+                            this.Tex.DisImg.destroy();
+                        }
+                        if (this.Tex.Img) {
+                            this.Tex.Img.destroy();
+                        }
+                        this.Tex.state = this.Tex.stateType.none;
+                        this.Tex.touchP = null;
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
                     },
                     btn: () => {
                         for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
                             const element = this._ImgVar('Figure').getChildAt(index);
                             this._btnDown(element, (e) => {
-                                if (!this[`FigureParentelement${index}`]) {
-                                    this[`FigureParentelement${index}`] = true;
-                                }
-                                this.TexControl.state = this.TexControl.stateType.move;
-                                this.TexControl.createImg(element);
+                                this.Tex.state = this.Tex.stateType.move;
+                                this.Tex.createImg(element);
                             });
                         }
                         this._btnFour(this._ImgVar('WConversion'), (e) => {
-                            this.TexControl.state = this.TexControl.stateType.scale;
+                            this.Tex.state = this.Tex.stateType.scale;
                         }, null, (e) => {
-                            this.TexControl.state = this.TexControl.stateType.move;
+                            this.Tex.state = this.Tex.stateType.addTex;
                         });
                         this._btnUp(this._ImgVar('WClose'), (e) => {
-                            this.TexControl.close();
+                            this.Tex.close();
                         });
                         this._btnDown(this._ImgVar('BtnLRotate'), (e) => {
-                            this.TexControl.state = this.TexControl.stateType.rotate;
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.rotate;
                         });
                         this._btnDown(this._ImgVar('BtnRRotate'), (e) => {
-                            this.TexControl.state = this.TexControl.stateType.rotate;
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.rotate;
                         });
                     }
                 };
@@ -5628,29 +5703,23 @@
                 return 100;
             }
             lwgEventRegister() {
-                let ultimatelyParentOriX = this._SpriteVar('UltimatelyParent').x;
-                let figureOriX = this._ImgVar('Figure').x;
-                EventAdmin._register(_Event.moveUltimately, this, (angle) => {
-                    this._SpriteVar('Dispaly').x = this._SpriteVar('UltimatelyParent').x = ultimatelyParentOriX - angle % 360;
-                    this._Owner.x = 0 + angle % 360;
-                    this._Owner.width = Laya.stage.width - angle % 360;
-                    this._ImgVar('Figure').x = figureOriX - angle % 360;
-                });
             }
             lwgBtnRegister() {
-                this.TexControl.btn();
+                this.Tex.btn();
                 this._btnUp(this._ImgVar('BtnNext'), () => {
                     this._openScene('MakeUp', true, true);
                 });
             }
             onStageMouseDown(e) {
-                this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
+                this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             }
             onStageMouseMove(e) {
-                this.TexControl.operation(e);
+                this.Tex.operation(e);
             }
             onStageMouseUp() {
-                this.TexControl.touchP = null;
+                if (!this.Tex.getOut()) {
+                    this.Tex.close();
+                }
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
@@ -5672,6 +5741,8 @@
                     else {
                         this._childTrans('Hanger').localRotationEulerY--;
                     }
+                    this._childTrans('Hanger').localRotationEulerY %= 360;
+                    console.log(this._childTrans('Hanger').localRotationEulerY);
                 });
             }
         }
@@ -5700,7 +5771,8 @@
                     draw: (Sp, x, y, tex, color) => {
                     },
                     getTex: (element) => {
-                        return element.drawToTexture(element.width, element.height, element.x, element.y);
+                        element.texture = element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
+                        return element.texture;
                     },
                 };
             }
@@ -5731,26 +5803,44 @@
                 }
                 for (let index = 0; index < this._ImgVar('Glasses').numChildren; index++) {
                     const element = this._ImgVar('Glasses').getChildAt(index);
+                    let DrawBoard1 = new Laya.Sprite;
+                    DrawBoard1.width = element.width;
+                    DrawBoard1.height = element.height;
+                    DrawBoard1.name = 'DrawBoard';
+                    element.addChild(DrawBoard1);
                     this._btnFour(element, (e) => {
                         if (this.Make.switch) {
                             this.Make.frontPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
                             this.Make.present = element;
                             this.Make.DrawSp = new Laya.Sprite;
-                            element.addChild(this.Make.DrawSp);
+                            let _DrawBoard = element.getChildByName('DrawBoard');
+                            _DrawBoard.addChild(this.Make.DrawSp);
                         }
                     }, (e) => {
-                        console.log('正在画画！');
                         if (this.Make.DrawSp && this.Make.present == element) {
                             this.Make.endPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
                             this.Make.DrawSp.graphics.drawCircle(this.Make.endPos.x, this.Make.endPos.y, this.Make.size / 2, this.Make.color);
                             this.Make.DrawSp.graphics.drawLine(this.Make.frontPos.x, this.Make.frontPos.y, this.Make.endPos.x, this.Make.endPos.y, this.Make.color, this.Make.size);
                             this.Make.frontPos = this.Make.endPos;
-                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
                         }
                     }, (e) => {
+                        let _DrawBoard = element.getChildByName('DrawBoard');
+                        console.log(_DrawBoard.numChildren);
+                        if (_DrawBoard.numChildren > 2) {
+                            console.log('合并！');
+                            let NewBoard = element.addChild((new Laya.Sprite()).pos(0, 0));
+                            NewBoard.width = _DrawBoard.width;
+                            NewBoard.height = _DrawBoard.height;
+                            NewBoard.name = 'DrawBoard';
+                            NewBoard.texture = _DrawBoard.drawToTexture(_DrawBoard.width, _DrawBoard.height, _DrawBoard.x, _DrawBoard.y);
+                            _DrawBoard.removeSelf();
+                        }
                     }, (e) => {
                     }, null);
                 }
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('Start', true, true);
+                });
             }
             onStageMouseDown(e) {
                 this.Make.switch = true;
@@ -5890,7 +5980,7 @@
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;
-    GameConfig.physicsDebug = true;
+    GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 

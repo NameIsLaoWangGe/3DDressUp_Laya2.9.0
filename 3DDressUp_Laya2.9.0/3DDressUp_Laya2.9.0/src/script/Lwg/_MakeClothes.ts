@@ -1,3 +1,4 @@
+import { TaT } from "../TJ/Admanager";
 import { Admin, EventAdmin, TimerAdmin, Tools } from "./Lwg";
 import { lwg3D } from "./Lwg3D";
 import { _MakeUp } from "./_MakeUp";
@@ -23,19 +24,11 @@ export module _MakeClothes {
             return 100;
         }
         lwgEventRegister(): void {
-            let ultimatelyParentOriX = this._SpriteVar('UltimatelyParent').x;
-            let figureOriX = this._ImgVar('Figure').x;
-            EventAdmin._register(_Event.moveUltimately, this, (angle: number) => {
-                this._SpriteVar('Dispaly').x = this._SpriteVar('UltimatelyParent').x = ultimatelyParentOriX - angle % 360;
-                this._Owner.x = 0 + angle % 360;
-                this._Owner.width = Laya.stage.width - angle % 360;
-                this._ImgVar('Figure').x = figureOriX - angle % 360;
-            })
         }
         /**图片移动控制*/
-        TexControl = {
+        Tex = {
             Img: null as Laya.Image,
-            DisplayImg: null as Laya.Image,
+            DisImg: null as Laya.Image,
             touchP: null as Laya.Point,
             diffP: null as Laya.Point,
             state: 'none',
@@ -44,32 +37,40 @@ export module _MakeClothes {
                 move: 'move',
                 scale: 'scale',
                 rotate: 'rotate',
+                addTex: 'addTex',
             },
             createImg: (element: Laya.Image) => {
-                this.TexControl.Img = Tools._Node.simpleCopyImg(element);
-                this.TexControl.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                this._SpriteVar('Ultimately').addChild(this.TexControl.Img);
+                if (this.Tex.DisImg) {
+                    this.Tex.DisImg.destroy();
+                }
+                this.Tex.Img = Tools._Node.simpleCopyImg(element);
+                this.Tex.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                this._SpriteVar('Ultimately').addChild(this.Tex.Img);
                 let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
-                this.TexControl.Img.pos(lPoint.x, lPoint.y);
+                this.Tex.Img.pos(lPoint.x, lPoint.y);
 
-                this.TexControl.DisplayImg = Tools._Node.simpleCopyImg(element);
-                this.TexControl.DisplayImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                this.TexControl.DisplayImg.pos(lPoint.x, lPoint.y);
-                this._SpriteVar('Dispaly').addChild(this.TexControl.DisplayImg);
+                this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
+                this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                this.Tex.DisImg.pos(lPoint.x, lPoint.y);
+                this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
 
-                this.TexControl.Img.width = this.TexControl.DisplayImg.width = 128;
-                this.TexControl.Img.height = this.TexControl.DisplayImg.height = 128;
-                this.TexControl.restore();
+                this.Tex.Img.width = this.Tex.DisImg.width = 128;
+                this.Tex.Img.height = this.Tex.DisImg.height = 128;
+                this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
+
+                this._SpriteVar('Dispaly').visible = true;
+                this.Tex.restore();
             },
             getTex: (): Laya.Texture => {
                 return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height) as Laya.Texture;
             },
             setImgPos: (): number => {
-                if (!_HangerTrans.localRotationY) {
+                if (!_HangerTrans) {
                     return;
                 }
-                //正向 
-                let anlgeY: number = _HangerTrans.localRotationY;
+                // 从右侧进入
+                // 正向角度 
+                let anlgeY: number = _HangerTrans.localRotationEulerY;
                 let x: number;
                 let _width = this._SpriteVar('UltimatelyParent').width;
                 if (anlgeY >= 0) {
@@ -79,28 +80,80 @@ export module _MakeClothes {
                         x = (0.75 - anlgeY % 360 * 0.25 / 90) * _width;
                     }
                 }
-                // 反向
+                // 反向角度 
                 if (anlgeY < 0) {
                     if (anlgeY % 360 >= -90) {
-                        x = (-(anlgeY + 90) % 360 * 0.25 / 90 + 0.5) * _width;
+                        x = (1 - (anlgeY + 90) % 360 * 0.25 / 90) * _width;
                     } else {
                         x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
                     }
                 }
-                this.TexControl.Img.x = x;
+                // 从左侧进入
+                if (this._SpriteVar('Wireframe').x < Laya.stage.width / 2) {
+                    this.Tex.Img.x = x - this._SpriteVar('UltimatelyParent').width / 2;
+                } else {
+                    this.Tex.Img.x = x;
+                }
+                // console.log(anlgeY, this.Tex.Img.x);
                 return x;
             },
-            move: (e: Laya.Event) => {
-                if (this.TexControl.touchP && this.TexControl.Img) {
-                    this.TexControl.Img.x += this.TexControl.diffP.x;
-                    this.TexControl.Img.y += this.TexControl.diffP.y;
-                    this.TexControl.DisplayImg.x += this.TexControl.diffP.x;
-                    this.TexControl.DisplayImg.y += this.TexControl.diffP.y;
-                    this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
-
-                    let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.TexControl.DisplayImg.x, this.TexControl.DisplayImg.y))
-                    this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+            getOut: (): any => {
+                let x = this._ImgVar('Frame').x;
+                let y = this._ImgVar('Frame').y;
+                let _width = this._ImgVar('Frame').width;
+                let _height = this._ImgVar('Frame').height;
+                let p1 = [_width * 1 / 4, _height * 1 / 4];
+                let p2 = [_width * 1 / 4, _height * 3 / 4];
+                let p3 = [_width * 3 / 4, _height * 1 / 4];
+                let p4 = [_width * 3 / 4, _height * 3 / 4];
+                let p5 = [0, 0];
+                let p6 = [x + _width, y];
+                let p7 = [x, y + _height];
+                let p8 = [x + _width / 2, y + _height / 2];
+                let p9 = [x + _width, y + _height];
+                let posArr = [p1, p2, p3, p4, p5, p6, p7, p8, p9];
+                let bool: boolean;
+                for (let index = 0; index < posArr.length; index++) {
+                    const element = posArr[index];
+                    let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
+                    let out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), 'Hanger');
+                    if (out) {
+                        bool = true;
+                        return bool;
+                    }
                 }
+                return bool;
+            },
+            move: (e: Laya.Event) => {
+                this.Tex.Img.y += this.Tex.diffP.y;
+                this.Tex.DisImg.x += this.Tex.diffP.x;
+                this.Tex.DisImg.y += this.Tex.diffP.y;
+                let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
+                this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                if (this.Tex.touchP && this.Tex.Img) {
+                    if (this.Tex.getOut()) {
+                        this.Tex.setImgPos();
+                        this._ImgVar('Wireframe').visible = true;
+                        this.Tex.state = this.Tex.stateType.addTex;
+                        this._SpriteVar('Dispaly').visible = false;
+                        return;
+                    }
+                }
+            },
+            addTex: (e: Laya.Event) => {
+                this.Tex.Img.x += this.Tex.diffP.x;
+                this.Tex.Img.y += this.Tex.diffP.y;
+                this.Tex.DisImg.x += this.Tex.diffP.x;
+                this.Tex.DisImg.y += this.Tex.diffP.y;
+                let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
+                this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                if (!this.Tex.getOut()) {
+                    this._ImgVar('Wireframe').visible = false;
+                    this.Tex.state = this.Tex.stateType.move;
+                    this.Tex.Img.x = Laya.stage.width;
+                    this._SpriteVar('Dispaly').visible = true;
+                }
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
             },
             scale: (e: Laya.Event): void => {
                 let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
@@ -109,21 +162,23 @@ export module _MakeClothes {
                 this._ImgVar('Frame').height = Math.abs(lPoint.y);
 
                 let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
-                let diffP = new Laya.Point(e.stageX - gPoint.x, e.stageY - gPoint.y);
-                this.TexControl.Img.rotation = this.TexControl.DisplayImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(diffP.x, diffP.y) + 45;
+
+                this.Tex.Img.rotation = this.Tex.DisImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(e.stageX - gPoint.x, e.stageY - gPoint.y) + 45;
 
                 let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                 let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
 
-                this.TexControl.DisplayImg.width = this.TexControl.Img.width = 128 + scaleWidth;
-                this.TexControl.DisplayImg.height = this.TexControl.Img.height = 128 + scaleheight;
+                this.Tex.DisImg.width = this.Tex.Img.width = 128 + scaleWidth;
+                this.Tex.DisImg.height = this.Tex.Img.height = 128 + scaleheight;
 
-                Tools._Node.changePovit(this.TexControl.Img, this.TexControl.Img.width / 2, this.TexControl.Img.height / 2);
-                Tools._Node.changePovit(this.TexControl.DisplayImg, this.TexControl.DisplayImg.width / 2, this.TexControl.DisplayImg.height / 2);
+                Tools._Node.changePivot(this._ImgVar('Wireframe'), this._ImgVar('Frame').width / 2, this._ImgVar('Frame').height / 2);
+                Tools._Node.changePivotCenter(this.Tex.Img);
+                Tools._Node.changePivotCenter(this.Tex.DisImg);
+
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
             },
             rotate: (e: Laya.Event) => {
-                this._ImgVar('Wireframe').visible = false;
-                if (this.TexControl.diffP.x > 0) {
+                if (this.Tex.diffP.x > 0) {
                     EventAdmin._notify(_Event.rotateHanger, [1]);
                 } else {
                     EventAdmin._notify(_Event.rotateHanger, [0]);
@@ -132,89 +187,75 @@ export module _MakeClothes {
             none: () => {
                 return;
             },
-            /**检查触摸和显示元素*/
-            checkDisplay: (e: Laya.Event): void => {
-                if (this.TexControl.state != this.TexControl.stateType.move) {
-                    return;
-                }
-                let gPoint = this._ImgVar('Wireframe').localToGlobal(new Laya.Point(this._ImgVar('WClose').x, this._ImgVar('WClose').y))
-                let out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), 'Hanger')
-                if (out.length > 0) {
-                    this.TexControl.setImgPos();
-                }
-                // if (this.TexControl.DisplayImg.x > - this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                //     this.TexControl.DisplayImg.visible = false;
-                // } else {
-                //     if (this.TexControl.DisplayImg.y > - this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
-                //         this.TexControl.DisplayImg.visible = true;
-                //     } else {
-                //         this.TexControl.DisplayImg.visible = true;
-                //     }
-                // }
-                // this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
-            },
             operation: (e: Laya.Event): void => {
-                this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
-                this.TexControl[this.TexControl.state](e);
-                this.TexControl.checkDisplay(e);
-                EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
+                this.Tex[this.Tex.state](e);
+                this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             },
+            /**重制方框*/
             restore: () => {
                 this._ImgVar('Wireframe').rotation = 0;
                 this._ImgVar('Wireframe').pivotX = this._ImgVar('Wireframe').width / 2;
                 this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
                 this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
                 this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
-                // this._ImgVar('Wireframe').visible = false;
+                this._ImgVar('Wireframe').visible = false;
             },
+            /**关闭方框去掉图片*/
             close: (): void => {
-                this.TexControl.DisplayImg.destroy();
-                this.TexControl.Img.destroy();
-                this.TexControl.restore();
-                this.TexControl.state = this.TexControl.stateType.none;
-                EventAdmin._notify(_Event.addTexture2D, [this.TexControl.getTex().bitmap]);
+                this.Tex.restore();
+                if (this.Tex.DisImg) {
+                    this.Tex.DisImg.destroy();
+                }
+                if (this.Tex.Img) {
+                    this.Tex.Img.destroy();
+                }
+                this.Tex.state = this.Tex.stateType.none;
+                this.Tex.touchP = null;
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
             },
             btn: () => {
                 for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
                     const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
                     this._btnDown(element, (e: Laya.Event) => {
-                        if (!this[`FigureParentelement${index}`]) {
-                            this[`FigureParentelement${index}`] = true;
-                        }
-                        this.TexControl.state = this.TexControl.stateType.move;
-                        this.TexControl.createImg(element);
+                        this.Tex.state = this.Tex.stateType.move;
+                        this.Tex.createImg(element);
                     })
                 }
                 this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
-                    this.TexControl.state = this.TexControl.stateType.scale;
+                    this.Tex.state = this.Tex.stateType.scale;
                 }, null, (e: Laya.Event) => {
-                    this.TexControl.state = this.TexControl.stateType.move;
+                    this.Tex.state = this.Tex.stateType.addTex;
                 })
                 this._btnUp(this._ImgVar('WClose'), (e: Laya.Event) => {
-                    this.TexControl.close();
+                    this.Tex.close();
                 })
                 this._btnDown(this._ImgVar('BtnLRotate'), (e: Laya.Event) => {
-                    this.TexControl.state = this.TexControl.stateType.rotate;
+                    this._ImgVar('Wireframe').visible = false;
+                    this.Tex.state = this.Tex.stateType.rotate;
                 })
                 this._btnDown(this._ImgVar('BtnRRotate'), (e: Laya.Event) => {
-                    this.TexControl.state = this.TexControl.stateType.rotate;
+                    this._ImgVar('Wireframe').visible = false;
+                    this.Tex.state = this.Tex.stateType.rotate;
                 })
             }
         }
         lwgBtnRegister(): void {
-            this.TexControl.btn();
+            this.Tex.btn();
             this._btnUp(this._ImgVar('BtnNext'), () => {
                 this._openScene('MakeUp', true, true);
             })
         }
         onStageMouseDown(e: Laya.Event): void {
-            this.TexControl.touchP = new Laya.Point(e.stageX, e.stageY);
+            this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
         }
         onStageMouseMove(e: Laya.Event) {
-            this.TexControl.operation(e);
+            this.Tex.operation(e);
         }
         onStageMouseUp() {
-            this.TexControl.touchP = null;
+            if (!this.Tex.getOut()) {
+                this.Tex.close();
+            }
         }
     }
     export let _Scene3D: Laya.Scene3D;
@@ -239,10 +280,8 @@ export module _MakeClothes {
                 } else {
                     this._childTrans('Hanger').localRotationEulerY--;
                 }
-                // EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY)
-
-                // let out = Tools._3D.d3_rayScanning(this._MainCamera, this._Owner, new Laya.Vector2(Laya.stage.width / 2, Laya.stage.height / 2), 'Hanger');
-                // console.log(out);
+                this._childTrans('Hanger').localRotationEulerY %= 360;
+                console.log(this._childTrans('Hanger').localRotationEulerY);
             })
         }
     }

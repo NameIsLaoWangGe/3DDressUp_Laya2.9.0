@@ -1331,17 +1331,17 @@ export module lwg {
                     switch (type) {
                         case _sceneAnimation.type.stickIn.upLeftDownLeft:
                             element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                            Tools._Node.changePovit(element, 0, 0);
+                            Tools._Node.changePivot(element, 0, 0);
 
                             break;
                         case _sceneAnimation.type.stickIn.upRightDownLeft:
                             element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                            Tools._Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
+                            Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
 
                             break;
                         case _sceneAnimation.type.stickIn.random:
                             element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
-                            Tools._Node.changePovit(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                            Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
                             break;
                         default:
                             break;
@@ -1352,7 +1352,7 @@ export module lwg {
                     element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                     Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
                     Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                        Tools._Node.changePovit(element, originalPovitX, originalPovitY);
+                        Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                     });
                 }
             }
@@ -4721,7 +4721,7 @@ export module lwg {
              * @param {number} _pivotY 
              * @param {number} int 是转换为整数，如果内部有遮罩必须要整数,默认为false
              */
-            export function changePovit(sp: Laya.Sprite, _pivotX: number, _pivotY: number, int?: boolean): void {
+            export function changePivot(sp: Laya.Sprite, _pivotX: number, _pivotY: number, int?: boolean): void {
                 let originalPovitX = sp.pivotX;
                 let originalPovitY = sp.pivotY;
                 if (int) {
@@ -4730,6 +4730,28 @@ export module lwg {
                 }
                 if (sp.width) {
                     sp.pivot(_pivotX, _pivotY);
+                    sp.x += (sp.pivotX - originalPovitX);
+                    sp.y += (sp.pivotY - originalPovitY);
+                }
+            }
+            /**
+               * @export  Povit居中并且不改变位置
+               * @param {Laya.Sprite} sp 节点
+               * @param {number} _pivotX 
+               * @param {number} _pivotY 
+               * @param {number} int 是转换为整数，如果内部有遮罩必须要整数,默认为false
+               */
+            export function changePivotCenter(sp: Laya.Sprite, int?: boolean): void {
+                let originalPovitX = sp.pivotX;
+                let originalPovitY = sp.pivotY;
+                let _pivotX: number;
+                let _pivotY: number;
+                if (int) {
+                    _pivotX = Math.round(sp.width / 2);
+                    _pivotY = Math.round(sp.height / 2);
+                }
+                if (sp.width) {
+                    sp.pivot(sp.width / 2, sp.height / 2);
                     sp.x += (sp.pivotX - originalPovitX);
                     sp.y += (sp.pivotY - originalPovitY);
                 }
@@ -5329,12 +5351,12 @@ export module lwg {
                 //射线碰撞到碰撞框，碰撞框的isTrigger属性要勾上，这样只检测碰撞，不产生碰撞反应
                 camera.viewportPointToRay(vector2, _ray);
                 scene3D.physicsSimulation.rayCastAll(_ray, outs);
-                if (outs.length != 0 && filtrateName) {
+                if (filtrateName) {
                     let outsChaild = null;
                     for (var i = 0; i < outs.length; i++) {
                         //找到挡屏
                         let hitResult = outs[i].collider.owner;
-                        if (hitResult.name === filtrateName) {
+                        if (hitResult.name == filtrateName) {
                             // 开启移动
                             outsChaild = outs[i];
                         }

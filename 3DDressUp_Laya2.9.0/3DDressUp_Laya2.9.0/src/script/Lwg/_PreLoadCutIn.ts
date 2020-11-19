@@ -143,11 +143,15 @@ export module _PreLoadCutIn {
                             this._Owner.zOrder = 1;
                             break;
                         case 'MakeUp':
-                            _Res._list.scene3D.MakeClothes.Scene.active = false;
+                            _Res._list.scene3D.MakeClothes.Scene.removeSelf();
                             Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
                             this._Owner.zOrder = 1;
                             break;
-
+                        case 'Start':
+                            _Res._list.scene3D.MakeUp.Scene.removeSelf();
+                            this._Owner.zOrder = 1;
+                            break;
+                            
                         default:
                             break;
                     }
