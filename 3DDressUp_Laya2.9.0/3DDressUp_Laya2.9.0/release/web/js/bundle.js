@@ -624,6 +624,53 @@
             }
             TimerAdmin._once = _once;
         })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
+        let Adaptive;
+        (function (Adaptive) {
+            Adaptive._designWidth = 720;
+            Adaptive._desigheight = 1280;
+            function _stageWidth(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotX == 0 && element.width) {
+                        element.x = element.x / Adaptive._designWidth * Laya.stage.width + element.width / 2;
+                    }
+                    else {
+                        element.x = element.x / Adaptive._designWidth * Laya.stage.width;
+                    }
+                }
+            }
+            Adaptive._stageWidth = _stageWidth;
+            function _stageHeight(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotY == 0 && element.height) {
+                        element.y = element.y / Adaptive._desigheight * element.scaleX * Laya.stage.height + element.height / 2;
+                    }
+                    else {
+                        element.y = element.y / Adaptive._desigheight * element.scaleX * Laya.stage.height;
+                    }
+                }
+            }
+            Adaptive._stageHeight = _stageHeight;
+            function _center(arr, target) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.width > 0) {
+                        element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                    }
+                    else {
+                        element.x = target.width / 2;
+                    }
+                    if (element.height > 0) {
+                        element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                    }
+                    else {
+                        element.y = target.height / 2;
+                    }
+                }
+            }
+            Adaptive._center = _center;
+        })(Adaptive = lwg.Adaptive || (lwg.Adaptive = {}));
         let Admin;
         (function (Admin) {
             Admin._platform = {
@@ -838,7 +885,7 @@
                         }
                     }
                     else {
-                        console.log(`${openName}场景没有同名脚本！`);
+                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                     }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
@@ -999,15 +1046,15 @@
                         switch (type) {
                             case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools._Node.changePovit(element, 0, 0);
+                                Tools._Node.changePivot(element, 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools._Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
+                                Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.random:
                                 element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
-                                Tools._Node.changePovit(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                                Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
                                 break;
                             default:
                                 break;
@@ -1018,7 +1065,7 @@
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
                         Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                            Tools._Node.changePovit(element, originalPovitX, originalPovitY);
+                            Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                         });
                     }
                 }
@@ -1064,24 +1111,30 @@
                 ;
                 lwgEventRegister() { }
                 ;
+                _EvReg(name, func) {
+                    EventAdmin._register(name, this, func);
+                }
+                _EvNotify(name, args) {
+                    EventAdmin._notify(name, args);
+                }
                 lwgOnEnable() { }
                 lwgOnStart() { }
                 lwgBtnRegister() { }
                 ;
                 _btnDown(target, down, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, down, null, null, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, down, null, null, null);
                 }
                 _btnMove(target, move, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, move, null, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, move, null, null);
                 }
                 _btnUp(target, up, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, up, null);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, up, null);
                 }
                 _btnOut(target, out, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, null, null, null, out);
+                    Click._on(effect == undefined ? Click._Effect.use : effect, target, this, null, null, null, out);
                 }
                 _btnFour(target, down, move, up, out, effect) {
-                    Click._on(effect ? effect : Click._Effect.use, target, this, down, move, up, out);
+                    Click._on(effect == null ? effect : Click._Effect.use, target, this, down, move, up, out);
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
                     let closeName;
@@ -1111,66 +1164,49 @@
                 get _Owner() {
                     return this.owner;
                 }
-                _SpriteVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
+                getVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Owner[name]) {
+                            return this[`_Scene${type}${name}`] = this._Owner[name];
+                        }
+                        else {
+                            console.log('场景内不存在var节点：', name);
+                            return undefined;
+                        }
                     }
                     else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                _AniVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var动画：', str);
-                        return undefined;
-                    }
+                _SpriteVar(name) {
+                    return this.getVar(name, '_SpriteVar');
                 }
-                _btnVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var按钮：', str);
-                        return undefined;
-                    }
+                _AniVar(name) {
+                    return this.getVar(name, '_AniVar');
                 }
-                _ImgVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
-                    }
+                _BtnVar(name) {
+                    return this.getVar(name, '_BtnVar');
                 }
-                _LabelVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                        return undefined;
-                    }
+                _ImgVar(name) {
+                    return this.getVar(name, '_ImgVar');
                 }
-                _ListVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                    }
+                _LabelVar(name) {
+                    return this.getVar(name, '_LabelVar');
                 }
-                _TapVar(str) {
-                    if (this._Owner[str]) {
-                        return this._Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在var节点：', str);
-                    }
+                _ListVar(name) {
+                    return this.getVar(name, '_ListVar');
+                }
+                _TapVar(name) {
+                    return this.getVar(name, '_TapVar');
+                }
+                _TextVar(name) {
+                    return this.getVar(name, '_TextVar');
+                }
+                _FontClipVar(name) {
+                    return this.getVar(name, '_FontClipVar');
+                }
+                _FontBox(name) {
+                    return this.getVar(name, '_FontBox');
                 }
                 onAwake() {
                     if (this._Owner.name == null) {
@@ -1220,17 +1256,15 @@
                 lwgOpenAniAfter() { }
                 ;
                 _adaptiveHeight(arr) {
-                    for (let index = 0; index < arr.length; index++) {
-                        const element = arr[index];
-                        element.y / GameConfig.height * Laya.stage.height;
-                    }
+                    Adaptive._stageHeight(arr);
                 }
                 ;
                 _adaptiveWidth(arr) {
-                    for (let index = 0; index < arr.length; index++) {
-                        const element = arr[index];
-                        element.x / GameConfig.width * Laya.stage.width;
-                    }
+                    Adaptive._stageWidth(arr);
+                }
+                ;
+                _adaptiveCenter(arr) {
+                    Adaptive._center(arr, Laya.stage);
                 }
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
@@ -1262,71 +1296,6 @@
                         return this.owner.parent;
                     }
                 }
-                _SceneSprite(name) {
-                    if (!this[`_SceneSprite${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneSprite${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneSprite${name}`];
-                    }
-                }
-                _SceneImg(name) {
-                    if (!this[`_SceneImg${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneImg${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneImg${name}`];
-                    }
-                }
-                _SceneLabel(name) {
-                    if (!this[`_SceneLabel${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneLabel${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneLabel${name}`];
-                    }
-                }
-                _SceneList(name) {
-                    if (!this[`_SceneList${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneList${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneList${name}`];
-                    }
-                }
-                _SceneTap(name) {
-                    if (!this[`_SceneTap${name}`]) {
-                        if (this._Scene[name]) {
-                            return this[`_SceneTap${name}`] = this._Scene[name];
-                        }
-                        else {
-                            console.log(`场景内不存在var节点${name}`);
-                        }
-                    }
-                    else {
-                        return this[`_SceneTap${name}`];
-                    }
-                }
                 get _RigidBody() {
                     if (!this._Owner['_OwnerRigidBody']) {
                         this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
@@ -1351,75 +1320,77 @@
                     }
                     return this._Owner['_OwnerPolygonCollier'];
                 }
-                _ImgChild(str) {
-                    if (!this[`_ImgChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_ImgChild${str}`] = this._Owner.getChildByName(str);
+                getSceneVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_Scene${type}${name}`] = this._Scene[name];
                         }
                         else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
+                            console.log(`场景内不存在var节点${name}`);
                         }
                     }
                     else {
-                        return this[`_ImgChild${str}`];
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                _SpriteChild(str) {
-                    if (!this[`_SpriteChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_SpriteChild${str}`] = this._Owner.getChildByName(str);
+                _SceneSprite(name) {
+                    return this.getSceneVar(name, '_SceneSprite');
+                }
+                _SceneImg(name) {
+                    return this.getSceneVar(name, '_SceneImg');
+                }
+                _SceneLabel(name) {
+                    return this.getSceneVar(name, '_SceneLabel');
+                }
+                _SceneList(name) {
+                    return this.getSceneVar(name, '_SceneList');
+                }
+                _SceneTap(name) {
+                    return this.getSceneVar(name, '_SceneTap');
+                }
+                _SceneText(name) {
+                    return this.getSceneVar(name, '_SceneText');
+                }
+                _SceneFontClip(name) {
+                    return this.getSceneVar(name, '_SceneFontClip');
+                }
+                _SceneBox(name) {
+                    return this.getSceneVar(name, '_SceneBox');
+                }
+                getChild(name, type) {
+                    if (!this[`${type}${name}`]) {
+                        if (this._Owner.getChildByName(name)) {
+                            return this[`${type}${name}`] = this._Owner.getChildByName(name);
                         }
                         else {
-                            console.log('场景内不存在子节点：', str);
+                            console.log('场景内不存在子节点：', name);
                             return null;
                         }
                     }
                     else {
-                        return this[`_SpriteChild${str}`];
+                        return this[`${type}${name}`];
                     }
                 }
-                _LableChild(str) {
-                    if (!this[`_LableChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_LableChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_LableChild${str}`];
-                    }
+                _ImgChild(name) {
+                    return this.getChild(name, '_ImgChild');
                 }
-                _ListChild(str) {
-                    if (!this[`_ListChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_ListChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_ListChild${str}`];
-                    }
+                _SpriteChild(name) {
+                    return this.getChild(name, '_SpriteChild');
                 }
-                _TapChild(str) {
-                    if (!this[`_TapChild${str}`]) {
-                        if (this._Owner.getChildByName(str)) {
-                            return this[`_TapChild${str}`] = this._Owner.getChildByName(str);
-                        }
-                        else {
-                            console.log('场景内不存在子节点：', str);
-                            return null;
-                        }
-                    }
-                    else {
-                        return this[`_TapChild${str}`];
-                    }
+                _LableChild(name) {
+                    return this.getChild(name, '_LableChild');
+                }
+                _ListChild(name) {
+                    return this.getChild(name, '_ListChild');
+                }
+                _TapChild(name) {
+                    return this.getChild(name, '_TapChild');
+                }
+                _TapBox(name) {
+                    return this.getChild(name, '_TapBox');
+                }
+                _TapFontClip(name) {
+                    return this.getChild(name, '_TapFontClip');
                 }
                 onAwake() {
                     this._Owner[this['__proto__']['constructor'].name] = this;
@@ -2430,7 +2401,7 @@
                         btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new _Largen();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -3435,6 +3406,21 @@
             })(_Format = Tools._Format || (Tools._Format = {}));
             let _Node;
             (function (_Node) {
+                function simpleCopyImg(Target) {
+                    let Img = new Laya.Image;
+                    Img.skin = Target.skin;
+                    Img.width = Target.width;
+                    Img.height = Target.height;
+                    Img.pivotX = Target.pivotX;
+                    Img.pivotY = Target.pivotY;
+                    Img.scaleX = Target.scaleX;
+                    Img.scaleY = Target.scaleY;
+                    Img.skewX = Target.skewX;
+                    Img.skewY = Target.skewY;
+                    Img.rotation = Target.rotation;
+                    return Img;
+                }
+                _Node.simpleCopyImg = simpleCopyImg;
                 function leaveStage(_Sprite, func) {
                     let Parent = _Sprite.parent;
                     let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
@@ -3496,7 +3482,7 @@
                     }
                 }
                 _Node.zOrderByY = zOrderByY;
-                function changePovit(sp, _pivotX, _pivotY, int) {
+                function changePivot(sp, _pivotX, _pivotY, int) {
                     let originalPovitX = sp.pivotX;
                     let originalPovitY = sp.pivotY;
                     if (int) {
@@ -3509,7 +3495,23 @@
                         sp.y += (sp.pivotY - originalPovitY);
                     }
                 }
-                _Node.changePovit = changePovit;
+                _Node.changePivot = changePivot;
+                function changePivotCenter(sp, int) {
+                    let originalPovitX = sp.pivotX;
+                    let originalPovitY = sp.pivotY;
+                    let _pivotX;
+                    let _pivotY;
+                    if (int) {
+                        _pivotX = Math.round(sp.width / 2);
+                        _pivotY = Math.round(sp.height / 2);
+                    }
+                    if (sp.width) {
+                        sp.pivot(sp.width / 2, sp.height / 2);
+                        sp.x += (sp.pivotX - originalPovitX);
+                        sp.y += (sp.pivotY - originalPovitY);
+                    }
+                }
+                _Node.changePivotCenter = changePivotCenter;
                 function getChildArrByProperty(node, property, value) {
                     let childArr = [];
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3756,6 +3758,12 @@
             })(_Number = Tools._Number || (Tools._Number = {}));
             let _Point;
             (function (_Point) {
+                function getOtherLocal(element, Other) {
+                    let Parent = element.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                    return Other.globalToLocal(gPoint);
+                }
+                _Point.getOtherLocal = getOtherLocal;
                 function angleByRad(angle) {
                     return angle / 180 * Math.PI;
                 }
@@ -3897,7 +3905,7 @@
                     }
                 }
                 _3D.maximumDistanceLimi = maximumDistanceLimi;
-                function positionToScreen(v3, camera) {
+                function posToScreen(v3, camera) {
                     let ScreenV4 = new Laya.Vector4();
                     camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
                     let point = new Laya.Vector2();
@@ -3905,7 +3913,7 @@
                     point.y = ScreenV4.y;
                     return point;
                 }
-                _3D.positionToScreen = positionToScreen;
+                _3D.posToScreen = posToScreen;
                 function reverseVector(Vecoter1, Vecoter2, normalizing) {
                     let p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
                     if (normalizing) {
@@ -3918,16 +3926,16 @@
                     }
                 }
                 _3D.reverseVector = reverseVector;
-                function d3_rayScanning(camera, scene3D, vector2, filtrateName) {
+                function rayScanning(camera, scene3D, vector2, filtrateName) {
                     let _ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
                     let outs = new Array();
                     camera.viewportPointToRay(vector2, _ray);
                     scene3D.physicsSimulation.rayCastAll(_ray, outs);
-                    if (outs.length != 0 && filtrateName) {
+                    if (filtrateName) {
                         let outsChaild = null;
                         for (var i = 0; i < outs.length; i++) {
                             let hitResult = outs[i].collider.owner;
-                            if (hitResult.name === filtrateName) {
+                            if (hitResult.name == filtrateName) {
                                 outsChaild = outs[i];
                             }
                         }
@@ -3937,7 +3945,7 @@
                         return outs;
                     }
                 }
-                _3D.d3_rayScanning = d3_rayScanning;
+                _3D.rayScanning = rayScanning;
                 function animatorPlay(Sp3D, aniName, normalizedTime, layerIndex) {
                     let sp3DAni = Sp3D.getComponent(Laya.Animator);
                     if (!sp3DAni) {
@@ -4905,6 +4913,7 @@
     let _SceneBase = Admin._SceneBase;
     let _ObjectBase = Admin._ObjectBase;
     let _SceneName = Admin._SceneName;
+    let Adaptive = lwg.Adaptive;
     let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
@@ -5020,17 +5029,22 @@
     (function (_Res) {
         _Res._list = {
             scene3D: {
-                MakeScene: {
-                    url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeScene.ls`,
+                MakeClothes: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/MakeClothes.ls`,
                     Scene: null,
                 },
+                MakeUp: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
+                    Scene: null,
+                }
             },
             prefab2D: {
                 BtnCompelet: {
                     url: 'Prefab/BtnCompelet.json',
-                    prefab: new Laya.Prefab,
+                    prefab: null,
                 },
             },
+            texture: {},
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
@@ -5138,7 +5152,7 @@
                             return this._ImgVar('LineParent').getChildByName('EraserSp');
                         }
                     },
-                    EraserSize: 32,
+                    EraserSize: 50,
                     erasureLine: () => {
                         let gPos = this.Cutting.Scissor().parent.localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
                         let localPos = this.Cutting.EraserSp().globalToLocal(gPos);
@@ -5157,6 +5171,9 @@
             }
             lwgAdaptive() {
             }
+            lwgOpenAni() {
+                return 100;
+            }
             lwgEventRegister() {
                 EventAdmin._register(_Event.trigger, this, (name) => {
                     let value = this.DottedLineControl._checkCondition(name);
@@ -5170,8 +5187,8 @@
                 });
             }
             lwgBtnRegister() {
-                this._btnUp(this._ImgVar('BtnBack'), () => {
-                    this._openScene(_SceneName.Start);
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('MakeClothes', true, true);
                 });
                 this._btnUp(this.DottedLineControl.BtnCompelet, () => {
                     this._openScene('MakeClothes', true, true);
@@ -5215,12 +5232,27 @@
             lwgEventRegister() {
                 EventAdmin._register(_Event.animation1, this, () => {
                     let time = 0;
-                    TimerAdmin._frameNumLoop(2, 50, this, () => {
+                    TimerAdmin._frameNumLoop(1, 30, this, () => {
                         time++;
                         this._LabelVar('Schedule').text = `${time}`;
                     }, () => {
-                        Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                        this._Owner.zOrder = 1;
+                        switch (Admin._preLoadOpenSceneLater.openName) {
+                            case 'MakeClothes':
+                                Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+                                this._Owner.zOrder = 1;
+                                break;
+                            case 'MakeUp':
+                                _Res._list.scene3D.MakeClothes.Scene.removeSelf();
+                                Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
+                                this._Owner.zOrder = 1;
+                                break;
+                            case 'Start':
+                                _Res._list.scene3D.MakeUp.Scene.removeSelf();
+                                this._Owner.zOrder = 1;
+                                break;
+                            default:
+                                break;
+                        }
                         EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes[`_${Admin._preLoadOpenSceneLater.openName}`]]));
                     });
                 });
@@ -5232,7 +5264,7 @@
             }
             lwgAllComplete() {
                 this._LabelVar('Schedule').text = `100`;
-                return 1000;
+                return 500;
             }
         }
         _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
@@ -5246,10 +5278,12 @@
         }
         _Start._init = _init;
         class Start extends Admin._SceneBase {
+            lwgOpenAni() {
+                return 100;
+            }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
-                    Laya.stage.addChildAt(_Res._list.scene3D.MakeScene.Scene, 0);
-                    this._openScene('MakeClothes');
+                    this._openScene('Tailor');
                 });
             }
         }
@@ -5269,7 +5303,7 @@
                 }
             }
             get _MainCamera() {
-                if (this['__MainCamera']) {
+                if (!this['__MainCamera']) {
                     if (this.owner.getChildByName('Main Camera')) {
                         return this['__MainCamera'] = this.owner.getChildByName('Main Camera');
                     }
@@ -5284,6 +5318,9 @@
                     return this['__MainCamera'];
                 }
             }
+            set _MainCamera(Camera) {
+                this['__MainCamera'] = Camera;
+            }
             _child(name) {
                 if (!this[`_child${name}`]) {
                     if (this.owner.getChildByName(name)) {
@@ -5297,7 +5334,7 @@
                     return this[`_child${name}`];
                 }
             }
-            _childTransform(name) {
+            _childTrans(name) {
                 if (!this[`_child${name}Transform`]) {
                     if (this.owner.getChildByName(name)) {
                         let _MeshSprite3D = this.owner.getChildByName(name);
@@ -5312,70 +5349,31 @@
                     return this[`_child${name}Transform`];
                 }
             }
-            _childPosition(name) {
-                if (!this[`_child${name}TransformPosition`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformPosition`] = _MeshSprite3D.transform.position;
-                        return this[`_child${name}TransformPosition`];
+            getChildTransPro(childName, transformProperty) {
+                if (!this[`_child${childName}Transform${transformProperty}`]) {
+                    if (this.owner.getChildByName(childName)) {
+                        let _MeshSprite3D = this.owner.getChildByName(childName);
+                        this[`_child${childName}Transform${transformProperty}`] = _MeshSprite3D.transform[transformProperty];
+                        return this[`_child${childName}Transform${transformProperty}`];
                     }
                     else {
                         console.log(`不存在子节点${name}`);
                     }
                 }
                 else {
-                    return this[`_child${name}TransformPosition`];
-                }
-            }
-            _childLocalPosition(name) {
-                if (!this[`_child${name}TransformLocalPosition`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalPosition`] = _MeshSprite3D.transform.localPosition;
-                        return this[`_child${name}TransformLocalPosition`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalPosition`];
-                }
-            }
-            _childLocalEuler(name) {
-                if (!this[`_child${name}TransformLocalEuler`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalEuler`] = _MeshSprite3D.transform.localRotationEuler;
-                        return this[`_child${name}TransformLocalEuler`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalEuler`];
-                }
-            }
-            _childLocalScale(name) {
-                if (!this[`_child${name}TransformLocalScale`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}TransformLocalScale`] = _MeshSprite3D.transform.localScale;
-                        return this[`_child${name}TransformLocalScale`];
-                    }
-                    else {
-                        console.log(`不存在子节点${name}`);
-                    }
-                }
-                else {
-                    return this[`_child${name}TransformLocalScale`];
+                    return this[`_child${childName}Transform${transformProperty}`];
                 }
             }
             lwgOnAwake() {
             }
             lwgEventRegister() { }
             ;
+            _EvReg(name, func) {
+                EventAdmin._register(name, this, func);
+            }
+            _EvNotify(name, args) {
+                EventAdmin._notify(name, args);
+            }
             lwgOnEnable() { }
             lwgOnStart() { }
             lwgOnUpdate() {
@@ -5386,6 +5384,7 @@
         class _Scene3DBase extends _Script3DBase {
             constructor() {
                 super();
+                this._cameraFp = new Laya.Vector3;
             }
             get _Owner() {
                 return this.owner;
@@ -5430,16 +5429,16 @@
             get _Owner() {
                 return this.owner;
             }
-            _localScale() {
+            _locScale() {
                 return this._Owner.transform.localScale;
             }
-            _localPosition() {
+            _locPos() {
                 return this._Owner.transform.localPosition;
             }
-            _position() {
+            _pos() {
                 return this._Owner.transform.position;
             }
-            _localRotationEuler() {
+            _locEuler() {
                 return this._Owner.transform.localRotationEuler;
             }
             get _Parent() {
@@ -5451,7 +5450,7 @@
             get _Scene3D() {
                 return this.owner.scene;
             }
-            get _Rigidbody3D() {
+            get _Rig3D() {
                 if (!this._Owner['__Rigidbody3D']) {
                     this._Owner['__Rigidbody3D'] = this._Owner.getComponent(Laya.Rigidbody3D);
                 }
@@ -5482,71 +5481,252 @@
         let _Event;
         (function (_Event) {
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
+            _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
+            _Event["moveUltimately"] = "_MakeClothes_moveUltimately";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.Move = {
+                this.Tex = {
                     Img: null,
+                    DisImg: null,
                     touchP: null,
                     diffP: null,
+                    state: 'none',
+                    stateType: {
+                        none: 'none',
+                        move: 'move',
+                        scale: 'scale',
+                        rotate: 'rotate',
+                        addTex: 'addTex',
+                    },
                     createImg: (element) => {
-                        this.Move.Img = new Laya.Image;
-                        this.Move.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this.Move.Img.width = 128;
-                        this.Move.Img.height = 128;
-                        this._SpriteVar('Ultimately').addChild(this.Move.Img);
-                        let Parent = element.parent;
-                        let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
-                        let lPoint = this._ImgVar('Ultimately').globalToLocal(gPoint);
-                        this.Move.Img.pos(lPoint.x, lPoint.y);
+                        if (this.Tex.DisImg) {
+                            this.Tex.DisImg.destroy();
+                        }
+                        this.Tex.Img = Tools._Node.simpleCopyImg(element);
+                        this.Tex.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this._SpriteVar('Ultimately').addChild(this.Tex.Img);
+                        let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
+                        this.Tex.Img.pos(lPoint.x, lPoint.y);
+                        this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
+                        this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.Tex.DisImg.pos(lPoint.x, lPoint.y);
+                        this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                        this.Tex.Img.width = this.Tex.DisImg.width = 128;
+                        this.Tex.Img.height = this.Tex.DisImg.height = 128;
+                        this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
+                        this._SpriteVar('Dispaly').visible = true;
+                        this.Tex.restore();
+                    },
+                    getTex: () => {
+                        return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
+                    },
+                    setImgPos: () => {
+                        if (!_MakeClothes._HangerTrans) {
+                            return;
+                        }
+                        let anlgeY = _MakeClothes._HangerTrans.localRotationEulerY;
+                        let x;
+                        let _width = this._SpriteVar('UltimatelyParent').width;
+                        if (anlgeY >= 0) {
+                            if (anlgeY % 360 >= 270) {
+                                x = (1 - ((anlgeY - 270) % 360) * 0.25 / 90) * _width;
+                            }
+                            else {
+                                x = (0.75 - anlgeY % 360 * 0.25 / 90) * _width;
+                            }
+                        }
+                        if (anlgeY < 0) {
+                            if (anlgeY % 360 >= -90) {
+                                x = (1 - (anlgeY + 90) % 360 * 0.25 / 90) * _width;
+                            }
+                            else {
+                                x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
+                            }
+                        }
+                        if (this._SpriteVar('Wireframe').x < Laya.stage.width / 2) {
+                            this.Tex.Img.x = x - this._SpriteVar('UltimatelyParent').width / 2;
+                        }
+                        else {
+                            this.Tex.Img.x = x;
+                        }
+                        return x;
+                    },
+                    getOut: () => {
+                        let x = this._ImgVar('Frame').x;
+                        let y = this._ImgVar('Frame').y;
+                        let _width = this._ImgVar('Frame').width;
+                        let _height = this._ImgVar('Frame').height;
+                        let p1 = [_width * 1 / 4, _height * 1 / 4];
+                        let p2 = [_width * 1 / 4, _height * 3 / 4];
+                        let p3 = [_width * 3 / 4, _height * 1 / 4];
+                        let p4 = [_width * 3 / 4, _height * 3 / 4];
+                        let p5 = [0, 0];
+                        let p6 = [x + _width, y];
+                        let p7 = [x, y + _height];
+                        let p8 = [x + _width / 2, y + _height / 2];
+                        let p9 = [x + _width, y + _height];
+                        let posArr = [p1, p2, p3, p4, p5, p6, p7, p8, p9];
+                        let bool;
+                        for (let index = 0; index < posArr.length; index++) {
+                            const element = posArr[index];
+                            let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
+                            let out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), 'Hanger');
+                            if (out) {
+                                bool = true;
+                                return bool;
+                            }
+                        }
+                        return bool;
+                    },
+                    move: (e) => {
+                        this.Tex.Img.y += this.Tex.diffP.y;
+                        this.Tex.DisImg.x += this.Tex.diffP.x;
+                        this.Tex.DisImg.y += this.Tex.diffP.y;
+                        let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
+                        this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        if (this.Tex.touchP && this.Tex.Img) {
+                            if (this.Tex.getOut()) {
+                                this.Tex.setImgPos();
+                                this._ImgVar('Wireframe').visible = true;
+                                this.Tex.state = this.Tex.stateType.addTex;
+                                this._SpriteVar('Dispaly').visible = false;
+                                return;
+                            }
+                        }
+                    },
+                    addTex: (e) => {
+                        this.Tex.Img.x += this.Tex.diffP.x;
+                        this.Tex.Img.y += this.Tex.diffP.y;
+                        this.Tex.DisImg.x += this.Tex.diffP.x;
+                        this.Tex.DisImg.y += this.Tex.diffP.y;
+                        let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
+                        this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        if (!this.Tex.getOut()) {
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.move;
+                            this.Tex.Img.x = Laya.stage.width;
+                            this._SpriteVar('Dispaly').visible = true;
+                        }
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                    },
+                    scale: (e) => {
+                        let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                        this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
+                        this._ImgVar('Frame').width = lPoint.x;
+                        this._ImgVar('Frame').height = Math.abs(lPoint.y);
+                        let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
+                        this.Tex.Img.rotation = this.Tex.DisImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(e.stageX - gPoint.x, e.stageY - gPoint.y) + 45;
+                        let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
+                        let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
+                        this.Tex.DisImg.width = this.Tex.Img.width = 128 + scaleWidth;
+                        this.Tex.DisImg.height = this.Tex.Img.height = 128 + scaleheight;
+                        Tools._Node.changePivot(this._ImgVar('Wireframe'), this._ImgVar('Frame').width / 2, this._ImgVar('Frame').height / 2);
+                        Tools._Node.changePivotCenter(this.Tex.Img);
+                        Tools._Node.changePivotCenter(this.Tex.DisImg);
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                    },
+                    rotate: (e) => {
+                        if (this.Tex.diffP.x > 0) {
+                            EventAdmin._notify(_Event.rotateHanger, [1]);
+                        }
+                        else {
+                            EventAdmin._notify(_Event.rotateHanger, [0]);
+                        }
+                    },
+                    none: () => {
+                        return;
+                    },
+                    operation: (e) => {
+                        this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
+                        this.Tex[this.Tex.state](e);
+                        this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
+                    },
+                    restore: () => {
+                        this._ImgVar('Wireframe').rotation = 0;
+                        this._ImgVar('Wireframe').pivotX = this._ImgVar('Wireframe').width / 2;
+                        this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
+                        this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
+                        this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
+                        this._ImgVar('Wireframe').visible = false;
+                    },
+                    close: () => {
+                        this.Tex.restore();
+                        if (this.Tex.DisImg) {
+                            this.Tex.DisImg.destroy();
+                        }
+                        if (this.Tex.Img) {
+                            this.Tex.Img.destroy();
+                        }
+                        this.Tex.state = this.Tex.stateType.none;
+                        this.Tex.touchP = null;
+                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                    },
+                    btn: () => {
+                        for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
+                            const element = this._ImgVar('Figure').getChildAt(index);
+                            this._btnDown(element, (e) => {
+                                this.Tex.state = this.Tex.stateType.move;
+                                this.Tex.createImg(element);
+                            });
+                        }
+                        this._btnFour(this._ImgVar('WConversion'), (e) => {
+                            this.Tex.state = this.Tex.stateType.scale;
+                        }, null, (e) => {
+                            this.Tex.state = this.Tex.stateType.addTex;
+                        });
+                        this._btnUp(this._ImgVar('WClose'), (e) => {
+                            this.Tex.close();
+                        });
+                        this._btnDown(this._ImgVar('BtnLRotate'), (e) => {
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.rotate;
+                        });
+                        this._btnDown(this._ImgVar('BtnRRotate'), (e) => {
+                            this._ImgVar('Wireframe').visible = false;
+                            this.Tex.state = this.Tex.stateType.rotate;
+                        });
                     }
                 };
             }
             lwgOnAwake() {
-                _MakeClothes._Scene3D = _Res._list.scene3D.MakeScene.Scene;
+                _MakeClothes._Scene3D = _Res._list.scene3D.MakeClothes.Scene;
                 if (!_MakeClothes._Scene3D.getComponent(MakeClothes3D)) {
                     _MakeClothes._Scene3D.addComponent(MakeClothes3D);
                 }
             }
-            lwgOnStart() {
-            }
             lwgAdaptive() {
-                this._SpriteVar('Ultimately').x = Laya.stage.width / 2 - this._SpriteVar('Ultimately').width / 2;
-                this._SpriteVar('Ultimately').y = Laya.stage.height / 2 - this._SpriteVar('Ultimately').height / 2;
+                this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgEventRegister() {
             }
             lwgBtnRegister() {
-                for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                    const element = this._ImgVar('Figure').getChildAt(index);
-                    this._btnDown(element, (e) => {
-                        if (!this[`FigureParentelement${index}`]) {
-                            this[`FigureParentelement${index}`] = true;
-                        }
-                        this.Move.createImg(element);
-                        this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
-                    });
-                }
+                this.Tex.btn();
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('MakeUp', true, true);
+                });
             }
             onStageMouseDown(e) {
-                this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             }
             onStageMouseMove(e) {
-                if (this.Move.touchP && this.Move.Img) {
-                    this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
-                    this.Move.Img.x += this.Move.diffP.x;
-                    this.Move.Img.y += this.Move.diffP.y;
-                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
-                    let tex = this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y);
-                    EventAdmin._notify(_Event.addTexture2D, [tex.bitmap]);
-                }
+                this.Tex.operation(e);
             }
             onStageMouseUp() {
-                this.Move.touchP = null;
+                if (!this.Tex.getOut()) {
+                    this.Tex.close();
+                }
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
+                _MakeClothes._HangerTrans = this._childTrans('Hanger');
+                _MakeClothes._MainCamara = this._MainCamera;
             }
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
@@ -5554,11 +5734,151 @@
                     bMaterial.albedoTexture.destroy();
                     bMaterial.albedoTexture = Text2D;
                 });
+                EventAdmin._register(_Event.rotateHanger, this, (num) => {
+                    if (num == 1) {
+                        this._childTrans('Hanger').localRotationEulerY++;
+                    }
+                    else {
+                        this._childTrans('Hanger').localRotationEulerY--;
+                    }
+                    this._childTrans('Hanger').localRotationEulerY %= 360;
+                    console.log(this._childTrans('Hanger').localRotationEulerY);
+                });
             }
         }
         _MakeClothes.MakeClothes3D = MakeClothes3D;
     })(_MakeClothes || (_MakeClothes = {}));
     var _MakeClothes$1 = _MakeClothes.MakeClothes;
+
+    var _MakeUp;
+    (function (_MakeUp) {
+        let _Event;
+        (function (_Event) {
+            _Event["posCalibration"] = "posCalibration";
+            _Event["addTexture2D"] = "addTexture2D";
+        })(_Event = _MakeUp._Event || (_MakeUp._Event = {}));
+        class MakeUp extends Admin._SceneBase {
+            constructor() {
+                super(...arguments);
+                this.Make = {
+                    switch: true,
+                    frontPos: null,
+                    endPos: null,
+                    DrawSp: null,
+                    present: null,
+                    color: null,
+                    size: 20,
+                    draw: (Sp, x, y, tex, color) => {
+                    },
+                    getTex: (element) => {
+                        if (element == this._ImgVar('Glasses1')) {
+                            let tex = element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
+                            return tex;
+                        }
+                        else {
+                            return element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
+                        }
+                    },
+                };
+            }
+            lwgOnAwake() {
+                _MakeUp._Scene3D = _Res._list.scene3D.MakeUp.Scene;
+                if (!_MakeUp._Scene3D.getComponent(MakeUp3D)) {
+                    _MakeUp._Scene3D.addComponent(MakeUp3D);
+                }
+            }
+            lwgOnStart() {
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgAdaptive() {
+            }
+            lwgEventRegister() {
+                this._EvReg(_Event.posCalibration, (p1, p2) => {
+                    this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y + this._ImgVar('Glasses1').height / 2);
+                    this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y + this._ImgVar('Glasses1').height / 2);
+                });
+            }
+            lwgBtnRegister() {
+                for (let index = 0; index < this._ImgVar('Case').numChildren; index++) {
+                    const element = this._ImgVar('Case').getChildAt(index);
+                    this._btnUp(element, (e) => {
+                        this.Make.color = element.getChildAt(0).text;
+                        this.Make.switch = true;
+                    });
+                }
+                for (let index = 0; index < this._ImgVar('Glasses').numChildren; index++) {
+                    const element = this._ImgVar('Glasses').getChildAt(index);
+                    let DrawBoard1 = new Laya.Sprite;
+                    DrawBoard1.width = element.width;
+                    DrawBoard1.height = element.height;
+                    DrawBoard1.name = 'DrawBoard';
+                    element.addChild(DrawBoard1);
+                    this._btnFour(element, (e) => {
+                        if (this.Make.switch) {
+                            this.Make.frontPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                            this.Make.present = element;
+                            this.Make.DrawSp = new Laya.Sprite;
+                            let _DrawBoard = element.getChildByName('DrawBoard');
+                            _DrawBoard.addChild(this.Make.DrawSp);
+                        }
+                    }, (e) => {
+                        if (this.Make.DrawSp && this.Make.present == element) {
+                            this.Make.endPos = element.globalToLocal(new Laya.Point(e.stageX, e.stageY));
+                            this.Make.DrawSp.graphics.drawCircle(this.Make.endPos.x, this.Make.endPos.y, this.Make.size / 2, this.Make.color);
+                            this.Make.DrawSp.graphics.drawLine(this.Make.frontPos.x, this.Make.frontPos.y, this.Make.endPos.x, this.Make.endPos.y, this.Make.color, this.Make.size);
+                            this.Make.frontPos = this.Make.endPos;
+                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
+                        }
+                    }, (e) => {
+                        let _DrawBoard = element.getChildByName('DrawBoard');
+                        console.log(_DrawBoard.numChildren);
+                        if (_DrawBoard) {
+                            let NewBoard = element.addChild((new Laya.Sprite()).pos(0, 0));
+                            NewBoard.width = _DrawBoard.width;
+                            NewBoard.height = _DrawBoard.height;
+                            NewBoard.name = 'DrawBoard';
+                            NewBoard.texture = _DrawBoard.drawToTexture(_DrawBoard.width, _DrawBoard.height, _DrawBoard.x, _DrawBoard.y);
+                            _DrawBoard.removeSelf();
+                        }
+                    }, (e) => {
+                    }, null);
+                }
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('Start', true, true);
+                });
+            }
+            onStageMouseDown(e) {
+                this.Make.switch = true;
+                if (this.Make.color) {
+                }
+            }
+            onStageMouseMove(e) {
+            }
+            onStageMouseUp() {
+            }
+        }
+        _MakeUp.MakeUp = MakeUp;
+        class MakeUp3D extends lwg3D._Scene3DBase {
+            lwgOnAwake() {
+            }
+            lwgOnStart() {
+                let p1 = Tools._3D.posToScreen(this._child('Glasses1').transform.position, this._MainCamera);
+                let p2 = Tools._3D.posToScreen(this._child('Glasses2').transform.position, this._MainCamera);
+                this._EvNotify(_Event.posCalibration, [p1, p2]);
+            }
+            lwgEventRegister() {
+                this._EvReg(_Event.addTexture2D, (name, Text2D) => {
+                    let bMaterial = this._child(name).meshRenderer.material;
+                    bMaterial.albedoTexture.destroy();
+                    bMaterial.albedoTexture = Text2D;
+                });
+            }
+        }
+        _MakeUp.MakeUp3D = MakeUp3D;
+    })(_MakeUp || (_MakeUp = {}));
+    var _MakeUp$1 = _MakeUp.MakeUp3D;
 
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
@@ -5566,6 +5886,8 @@
             Admin._platform.ues = Admin._platform.tpye.Research;
             Admin._sceneAnimation.use = Admin._sceneAnimation.type.stickIn.random;
             Click._Effect.use = Click._Effect.type.largen;
+            Adaptive._desigheight = 720;
+            Adaptive._designWidth = 1280;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
                 _PreLoadCutIn: _PreLoadCutIn,
@@ -5574,6 +5896,7 @@
                 _Game: _Game,
                 _Tailor: _Tailor,
                 _MakeClothes: _MakeClothes,
+                _MakeUp: _MakeUp,
             };
         }
     }
@@ -5664,7 +5987,7 @@
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;
-    GameConfig.physicsDebug = true;
+    GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 

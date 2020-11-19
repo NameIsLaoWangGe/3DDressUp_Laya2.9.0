@@ -68,8 +68,58 @@
 				"child":[]
 			},
 			{
-				"type":"DirectionLight",
+				"type":"MeshSprite3D",
 				"instanceID":1,
+				"props":{
+					"name":"Hanger",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.023,
+						0.78,
+						0.22
+					],
+					"rotation":[
+						0,
+						0.7071068,
+						0.7071068,
+						0
+					],
+					"scale":[
+						2,
+						2,
+						2
+					],
+					"meshPath":"Assets/New Folder/qunzi-Box001.lm",
+					"enableRender":true,
+					"materials":[
+						{
+							"type":"Laya.BlinnPhongMaterial",
+							"path":"Assets/13213/Materials/qunzi1.lmat"
+						}
+					]
+				},
+				"components":[
+					{
+						"type":"PhysicsCollider",
+						"restitution":0,
+						"friction":0.5,
+						"rollingFriction":0,
+						"shapes":[
+							{
+								"type":"MeshColliderShape",
+								"mesh":"Assets/New Folder/qunzi-Box001.lm"
+							}
+						],
+						"isTrigger":false
+					}
+				],
+				"child":[]
+			},
+			{
+				"type":"DirectionLight",
+				"instanceID":2,
 				"props":{
 					"name":"Directional Light",
 					"active":true,
@@ -100,62 +150,6 @@
 					]
 				},
 				"components":[],
-				"child":[]
-			},
-			{
-				"type":"MeshSprite3D",
-				"instanceID":2,
-				"props":{
-					"name":"Hanger",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0.01611522,
-						1.021,
-						0.196
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						0.6,
-						0.3,
-						0.3
-					],
-					"meshPath":"Library/unity default resources-Cylinder.lm",
-					"enableRender":true,
-					"materials":[
-						{
-							"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_005.lmat"
-						}
-					]
-				},
-				"components":[
-					{
-						"type":"PhysicsCollider",
-						"restitution":0,
-						"friction":0.5,
-						"rollingFriction":0,
-						"shapes":[
-							{
-								"type":"CapsuleColliderShape",
-								"center":[
-									5.960464E-08,
-									0,
-									-8.940697E-08
-								],
-								"radius":0.5000001,
-								"height":2,
-								"orientation":1
-							}
-						],
-						"isTrigger":false
-					}
-				],
 				"child":[]
 			}
 		]

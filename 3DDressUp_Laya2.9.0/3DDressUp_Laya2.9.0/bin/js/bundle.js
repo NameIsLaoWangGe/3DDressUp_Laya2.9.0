@@ -5520,7 +5520,7 @@
                         this.Tex.restore();
                     },
                     getTex: () => {
-                        return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
+                        return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y);
                     },
                     setImgPos: () => {
                         if (!_MakeClothes._HangerTrans) {
@@ -5771,8 +5771,13 @@
                     draw: (Sp, x, y, tex, color) => {
                     },
                     getTex: (element) => {
-                        element.texture = element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
-                        return element.texture;
+                        if (element == this._ImgVar('Glasses1')) {
+                            let tex = element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
+                            return tex;
+                        }
+                        else {
+                            return element.drawToTexture(element.width, element.height, element.x, element.y + element.height);
+                        }
                     },
                 };
             }
@@ -5791,6 +5796,8 @@
             }
             lwgEventRegister() {
                 this._EvReg(_Event.posCalibration, (p1, p2) => {
+                    this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y + this._ImgVar('Glasses1').height / 2);
+                    this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y + this._ImgVar('Glasses1').height / 2);
                 });
             }
             lwgBtnRegister() {
@@ -5822,12 +5829,12 @@
                             this.Make.DrawSp.graphics.drawCircle(this.Make.endPos.x, this.Make.endPos.y, this.Make.size / 2, this.Make.color);
                             this.Make.DrawSp.graphics.drawLine(this.Make.frontPos.x, this.Make.frontPos.y, this.Make.endPos.x, this.Make.endPos.y, this.Make.color, this.Make.size);
                             this.Make.frontPos = this.Make.endPos;
+                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
                         }
                     }, (e) => {
                         let _DrawBoard = element.getChildByName('DrawBoard');
                         console.log(_DrawBoard.numChildren);
-                        if (_DrawBoard.numChildren > 2) {
-                            console.log('合并！');
+                        if (_DrawBoard) {
                             let NewBoard = element.addChild((new Laya.Sprite()).pos(0, 0));
                             NewBoard.width = _DrawBoard.width;
                             NewBoard.height = _DrawBoard.height;

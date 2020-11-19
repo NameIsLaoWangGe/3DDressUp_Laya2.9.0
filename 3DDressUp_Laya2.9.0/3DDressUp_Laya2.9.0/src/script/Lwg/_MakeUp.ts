@@ -22,8 +22,8 @@ export module _MakeUp {
         }
         lwgEventRegister(): void {
             this._EvReg(_Event.posCalibration, (p1: Laya.Point, p2: Laya.Point,) => {
-                // this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
-                // this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y - this._ImgVar('Glasses2').height / 2);
+                this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y + this._ImgVar('Glasses1').height / 2);
+                this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y + this._ImgVar('Glasses1').height / 2);
             })
         }
         Make = {
@@ -38,8 +38,12 @@ export module _MakeUp {
 
             },
             getTex: (element: Laya.Image): Laya.Texture => {
-                element.texture = element.drawToTexture(element.width, element.height, element.x, element.y + element.height) as Laya.Texture;
-                return element.texture;
+                if (element == this._ImgVar('Glasses1')) {
+                    let tex = element.drawToTexture(element.width, element.height, element.x, element.y + element.height) as Laya.Texture
+                    return tex;
+                } else {
+                    return element.drawToTexture(element.width, element.height, element.x, element.y + element.height) as Laya.Texture;
+                }
             },
         }
         lwgBtnRegister(): void {
@@ -76,14 +80,13 @@ export module _MakeUp {
 
                             this.Make.frontPos = this.Make.endPos;
 
-                            // this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
+                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
                         }
                     },
                     (e: Laya.Event) => {
                         let _DrawBoard = element.getChildByName('DrawBoard') as Laya.Sprite;
                         console.log(_DrawBoard.numChildren);
-                        if (_DrawBoard.numChildren > 2) {
-                            console.log('合并！');
+                        if (_DrawBoard) {
                             let NewBoard = element.addChild((new Laya.Sprite()).pos(0, 0)) as Laya.Sprite;
                             NewBoard.width = _DrawBoard.width;
                             NewBoard.height = _DrawBoard.height;
@@ -91,7 +94,6 @@ export module _MakeUp {
                             NewBoard.texture = _DrawBoard.drawToTexture(_DrawBoard.width, _DrawBoard.height, _DrawBoard.x, _DrawBoard.y) as Laya.Texture;
                             _DrawBoard.removeSelf();
                         }
-
                     },
                     (e: Laya.Event) => {
 

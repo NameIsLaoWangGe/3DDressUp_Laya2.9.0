@@ -123,7 +123,7 @@
 							"materials":[
 								{
 									"type":"Laya.BlinnPhongMaterial",
-									"path":"Assets/Reference/Mesh/hairmodle_001.lmat"
+									"path":"Assets/Reference/Texture2D/Materials/clubbing_dress_4.lmat"
 								}
 							]
 						},
@@ -212,26 +212,27 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0.245,
-						0.995,
-						0.374
+						0.276,
+						1.021,
+						0.38
 					],
 					"rotation":[
-						0.7071068,
 						0,
 						0,
-						-0.7071068
+						0,
+						-1
 					],
 					"scale":[
-						0.04,
-						1,
-						0.03
+						0.5,
+						0.2,
+						0.1
 					],
-					"meshPath":"Library/unity default resources-Plane.lm",
+					"meshPath":"Library/unity default resources-Cylinder.lm",
 					"enableRender":true,
 					"materials":[
 						{
-							"path":"Assets/Reference/Texture2D/Materials/detailnormal_004_n.lmat"
+							"type":"Laya.BlinnPhongMaterial",
+							"path":"Assets/Reference/Texture2D/Materials/detailnormal_003_n.lmat"
 						}
 					]
 				},
@@ -243,8 +244,15 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"MeshColliderShape",
-								"mesh":"Library/unity default resources-Plane.lm"
+								"type":"CapsuleColliderShape",
+								"center":[
+									5.960464E-08,
+									0,
+									-8.940697E-08
+								],
+								"radius":0.5000001,
+								"height":2,
+								"orientation":1
 							}
 						],
 						"isTrigger":false
@@ -261,26 +269,27 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.285,
-						0.995,
-						0.374
+						-0.323,
+						1.021,
+						0.38
 					],
 					"rotation":[
-						0.7071068,
 						0,
 						0,
-						-0.7071068
+						1,
+						0
 					],
 					"scale":[
-						0.04,
-						1,
-						0.03
+						0.5,
+						0.2,
+						0.1
 					],
-					"meshPath":"Library/unity default resources-Plane.lm",
+					"meshPath":"Library/unity default resources-Cylinder.lm",
 					"enableRender":true,
 					"materials":[
 						{
-							"path":"Assets/Reference/Texture2D/Materials/detailnormal_004_n.lmat"
+							"type":"Laya.BlinnPhongMaterial",
+							"path":"Assets/Reference/Texture2D/Materials/detailnormal_003_n.lmat"
 						}
 					]
 				},
@@ -292,8 +301,15 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"MeshColliderShape",
-								"mesh":"Library/unity default resources-Plane.lm"
+								"type":"CapsuleColliderShape",
+								"center":[
+									5.960464E-08,
+									0,
+									-8.940697E-08
+								],
+								"radius":0.5000001,
+								"height":2,
+								"orientation":1
 							}
 						],
 						"isTrigger":false

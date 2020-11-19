@@ -2,8 +2,13 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":7,
     "searchKey":"View",
+    "referenceLines":[
+        {
+            "value":167,
+            "type":1,
+            "id":1
+        }],
     "props":{"width":1280,"sceneColor":"#909090","height":720},
     "nodeParent":-1,
     "maxID":9,

@@ -62,7 +62,7 @@ export module _MakeClothes {
                 this.Tex.restore();
             },
             getTex: (): Laya.Texture => {
-                return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height) as Laya.Texture;
+                return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y) as Laya.Texture;
             },
             setImgPos: (): number => {
                 if (!_HangerTrans) {
