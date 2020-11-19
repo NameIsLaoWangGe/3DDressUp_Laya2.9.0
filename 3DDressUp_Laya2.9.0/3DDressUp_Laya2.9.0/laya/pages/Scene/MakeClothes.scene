@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":30,
+    "selectedBox":3,
+    "selecteID":3,
     "searchKey":"View",
     "referenceLines":[
         ],
@@ -104,7 +104,7 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,UltimatelyParent,UltimatelyParent",
-            "props":{"y":93,"x":296,"width":620,"visible":false,"var":"UltimatelyParent","scaleY":1,"scaleX":1,"name":"UltimatelyParent","height":534},
+            "props":{"y":-57,"x":-250,"width":620,"visible":true,"var":"UltimatelyParent","scaleY":1,"scaleX":1,"name":"UltimatelyParent","height":534},
             "nodeParent":2,
             "label":"UltimatelyParent",
             "isOpen":true,
@@ -132,7 +132,7 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,Dispaly,Dispaly",
-            "props":{"y":93,"x":296,"width":620,"visible":true,"var":"Dispaly","scaleY":1,"scaleX":1,"name":"Dispaly","height":534},
+            "props":{"y":-58,"x":-250,"width":620,"visible":true,"var":"Dispaly","scaleY":1,"scaleX":1,"name":"Dispaly","height":534},
             "nodeParent":2,
             "label":"Dispaly",
             "isOpen":true,
@@ -147,16 +147,17 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Wireframe,Wireframe",
-            "props":{"y":618,"x":1004,"width":123,"visible":false,"var":"Wireframe","sizeGrid":"13,20,21,25","rotation":0,"pivotY":79,"pivotX":62,"name":"Wireframe","height":157},
+            "props":{"y":618,"x":1004,"width":123,"visible":true,"var":"Wireframe","sizeGrid":"13,20,21,25","rotation":0,"pivotY":79,"pivotX":62,"name":"Wireframe","height":157},
             "nodeParent":2,
             "label":"Wireframe",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":13,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Frame,Frame",
                     "props":{"y":0,"x":0,"width":123,"visible":true,"var":"Frame","skin":"Lwg/UI/wireframeBlack2.png","sizeGrid":"13,20,21,25","rotation":0,"name":"Frame","height":157},
@@ -171,6 +172,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WClose,WClose",
                     "props":{"y":0,"x":0,"width":40,"var":"WClose","skin":"Lwg/UI/icon_close.png","pivotY":20,"pivotX":20,"name":"WClose","height":40},
@@ -184,6 +186,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WConversion,WConversion",
                     "props":{"y":153,"x":123,"width":40,"var":"WConversion","skin":"Lwg/UI/ui_circle_c_001.png","pivotY":20,"pivotX":20,"name":"WConversion","height":40},
@@ -196,6 +199,7 @@
                     "compId":17,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":28,"x":23,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":68,"pivotY":8,"pivotX":8,"height":15},
@@ -209,6 +213,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":12,"x":17,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":605,"pivotY":8,"pivotX":8,"height":15},

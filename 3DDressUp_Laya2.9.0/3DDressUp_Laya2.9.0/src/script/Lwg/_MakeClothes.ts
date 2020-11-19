@@ -1,5 +1,6 @@
 import { Admin, EventAdmin, TimerAdmin, Tools } from "./Lwg";
 import { lwg3D } from "./Lwg3D";
+import { _MakeUp } from "./_MakeUp";
 import { _Res } from "./_PreLoad";
 export module _MakeClothes {
     export enum _Event {
@@ -15,7 +16,7 @@ export module _MakeClothes {
             }
         }
         lwgAdaptive(): void {
-            this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
+            // this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
             this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
         }
         lwgOpenAni(): number {
@@ -63,6 +64,32 @@ export module _MakeClothes {
             getTex: (): Laya.Texture => {
                 return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height) as Laya.Texture;
             },
+            setImgPos: (): number => {
+                if (!_HangerTrans.localRotationY) {
+                    return;
+                }
+                //正向 
+                let anlgeY: number = _HangerTrans.localRotationY;
+                let x: number;
+                let _width = this._SpriteVar('UltimatelyParent').width;
+                if (anlgeY >= 0) {
+                    if (anlgeY % 360 >= 270) {
+                        x = (1 - ((anlgeY - 270) % 360) * 0.25 / 90) * _width;
+                    } else {
+                        x = (0.75 - anlgeY % 360 * 0.25 / 90) * _width;
+                    }
+                }
+                // 反向
+                if (anlgeY < 0) {
+                    if (anlgeY % 360 >= -90) {
+                        x = (-(anlgeY + 90) % 360 * 0.25 / 90 + 0.5) * _width;
+                    } else {
+                        x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
+                    }
+                }
+                this.TexControl.Img.x = x;
+                return x;
+            },
             move: (e: Laya.Event) => {
                 if (this.TexControl.touchP && this.TexControl.Img) {
                     this.TexControl.Img.x += this.TexControl.diffP.x;
@@ -105,20 +132,26 @@ export module _MakeClothes {
             none: () => {
                 return;
             },
+            /**检查触摸和显示元素*/
             checkDisplay: (e: Laya.Event): void => {
                 if (this.TexControl.state != this.TexControl.stateType.move) {
                     return;
                 }
-                if (this.TexControl.DisplayImg.x > - this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                    this.TexControl.DisplayImg.visible = false;
-                } else {
-                    if (this.TexControl.DisplayImg.y > - this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
-                        this.TexControl.DisplayImg.visible = true;
-                    } else {
-                        this.TexControl.DisplayImg.visible = true;
-                    }
+                let gPoint = this._ImgVar('Wireframe').localToGlobal(new Laya.Point(this._ImgVar('WClose').x, this._ImgVar('WClose').y))
+                let out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), 'Hanger')
+                if (out.length > 0) {
+                    this.TexControl.setImgPos();
                 }
-                this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
+                // if (this.TexControl.DisplayImg.x > - this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
+                //     this.TexControl.DisplayImg.visible = false;
+                // } else {
+                //     if (this.TexControl.DisplayImg.y > - this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
+                //         this.TexControl.DisplayImg.visible = true;
+                //     } else {
+                //         this.TexControl.DisplayImg.visible = true;
+                //     }
+                // }
+                // this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
             },
             operation: (e: Laya.Event): void => {
                 this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
@@ -132,7 +165,7 @@ export module _MakeClothes {
                 this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
                 this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
                 this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
-                this._ImgVar('Wireframe').visible = false;
+                // this._ImgVar('Wireframe').visible = false;
             },
             close: (): void => {
                 this.TexControl.DisplayImg.destroy();
@@ -185,10 +218,13 @@ export module _MakeClothes {
         }
     }
     export let _Scene3D: Laya.Scene3D;
+    export let _MainCamara: Laya.Camera;
+    /**模型的角度*/
     export let _HangerTrans: Laya.Transform3D;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
             _HangerTrans = this._childTrans('Hanger');
+            _MainCamara = this._MainCamera;
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.addTexture2D, this, (Text2D: Laya.Texture2D) => {
@@ -203,7 +239,7 @@ export module _MakeClothes {
                 } else {
                     this._childTrans('Hanger').localRotationEulerY--;
                 }
-                EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY)
+                // EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY)
 
                 // let out = Tools._3D.d3_rayScanning(this._MainCamera, this._Owner, new Laya.Vector2(Laya.stage.width / 2, Laya.stage.height / 2), 'Hanger');
                 // console.log(out);

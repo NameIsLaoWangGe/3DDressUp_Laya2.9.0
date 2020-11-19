@@ -5493,6 +5493,32 @@
                     getTex: () => {
                         return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y + this._ImgVar('Ultimately').height);
                     },
+                    setImgPos: () => {
+                        if (!_MakeClothes._HangerTrans.localRotationY) {
+                            return;
+                        }
+                        let anlgeY = _MakeClothes._HangerTrans.localRotationY;
+                        let x;
+                        let _width = this._SpriteVar('UltimatelyParent').width;
+                        if (anlgeY >= 0) {
+                            if (anlgeY % 360 >= 270) {
+                                x = (1 - ((anlgeY - 270) % 360) * 0.25 / 90) * _width;
+                            }
+                            else {
+                                x = (0.75 - anlgeY % 360 * 0.25 / 90) * _width;
+                            }
+                        }
+                        if (anlgeY < 0) {
+                            if (anlgeY % 360 >= -90) {
+                                x = (-(anlgeY + 90) % 360 * 0.25 / 90 + 0.5) * _width;
+                            }
+                            else {
+                                x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
+                            }
+                        }
+                        this.TexControl.Img.x = x;
+                        return x;
+                    },
                     move: (e) => {
                         if (this.TexControl.touchP && this.TexControl.Img) {
                             this.TexControl.Img.x += this.TexControl.diffP.x;
@@ -5535,18 +5561,11 @@
                         if (this.TexControl.state != this.TexControl.stateType.move) {
                             return;
                         }
-                        if (this.TexControl.DisplayImg.x > -this.TexControl.DisplayImg.width && this.TexControl.DisplayImg.x < this._SpriteVar('Dispaly').width) {
-                            this.TexControl.DisplayImg.visible = false;
+                        let gPoint = this._ImgVar('Wireframe').localToGlobal(new Laya.Point(this._ImgVar('WClose').x, this._ImgVar('WClose').y));
+                        let out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), 'Hanger');
+                        if (out.length > 0) {
+                            this.TexControl.setImgPos();
                         }
-                        else {
-                            if (this.TexControl.DisplayImg.y > -this.TexControl.DisplayImg.height && this.TexControl.DisplayImg.y < this._SpriteVar('Dispaly').height) {
-                                this.TexControl.DisplayImg.visible = true;
-                            }
-                            else {
-                                this.TexControl.DisplayImg.visible = true;
-                            }
-                        }
-                        this._ImgVar('Wireframe').visible = !this.TexControl.DisplayImg.visible;
                     },
                     operation: (e) => {
                         this.TexControl.diffP = new Laya.Point(e.stageX - this.TexControl.touchP.x, e.stageY - this.TexControl.touchP.y);
@@ -5560,7 +5579,6 @@
                         this._ImgVar('Wireframe').pivotY = this._ImgVar('Wireframe').height / 2;
                         this._ImgVar('WConversion').x = this._ImgVar('Frame').width = this._ImgVar('Wireframe').width;
                         this._ImgVar('WConversion').y = this._ImgVar('Frame').height = this._ImgVar('Wireframe').height;
-                        this._ImgVar('Wireframe').visible = false;
                     },
                     close: () => {
                         this.TexControl.DisplayImg.destroy();
@@ -5604,7 +5622,6 @@
                 }
             }
             lwgAdaptive() {
-                this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
                 this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
             }
             lwgOpenAni() {
@@ -5640,6 +5657,7 @@
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
                 _MakeClothes._HangerTrans = this._childTrans('Hanger');
+                _MakeClothes._MainCamara = this._MainCamera;
             }
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
@@ -5654,7 +5672,6 @@
                     else {
                         this._childTrans('Hanger').localRotationEulerY--;
                     }
-                    EventAdmin._notify(_Event.moveUltimately, this._childTrans('Hanger').localRotationEulerY);
                 });
             }
         }
