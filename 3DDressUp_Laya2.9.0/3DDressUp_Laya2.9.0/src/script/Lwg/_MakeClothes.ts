@@ -8,6 +8,7 @@ export module _MakeClothes {
         addTexture2D = '_MakeClothes_addTexture2D',
         rotateHanger = '_MakeClothes_rotateHanger',
         moveUltimately = '_MakeClothes_moveUltimately',
+        resetTex = '_MakeClothes_resetTex',
     }
     export class MakeClothes extends Admin._SceneBase {
         lwgOnAwake(): void {
@@ -22,6 +23,10 @@ export module _MakeClothes {
         }
         lwgOpenAni(): number {
             return 100;
+        }
+
+        lwgOnStart():void{
+            EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
         }
         lwgEventRegister(): void {
         }
@@ -267,9 +272,14 @@ export module _MakeClothes {
             _HangerTrans = this._childTrans('Hanger');
             _MainCamara = this._MainCamera;
         }
+        lwgReset(): void {
+
+        }
+        lwgOnStart(): void {
+        }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.addTexture2D, this, (Text2D: Laya.Texture2D) => {
-                let bMaterial = this._child('Hanger').meshRenderer.material as Laya.BlinnPhongMaterial;
+                let bMaterial = this._childMRenderer('Hanger').material as Laya.BlinnPhongMaterial;
                 bMaterial.albedoTexture.destroy();
                 bMaterial.albedoTexture = Text2D;
             })

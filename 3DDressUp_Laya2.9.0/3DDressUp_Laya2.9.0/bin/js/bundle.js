@@ -4437,7 +4437,7 @@
                                 }
                             }
                         }
-                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
+                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton, _scene3D];
                         for (let index = 0; index < LwgPreLoad._loadOrder.length; index++) {
                             LwgPreLoad._sumProgress += LwgPreLoad._loadOrder[index].length;
                             if (LwgPreLoad._loadOrder[index].length <= 0) {
@@ -5045,6 +5045,16 @@
                 },
             },
             texture: {},
+            texture2D: {
+                Figure1: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/Assets/13213/qunzi1.jpg`,
+                    texture2D: null,
+                },
+                Figure2: {
+                    url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Sprite/repeat_pattern_04 _9681.jpg`,
+                    texture2D: null,
+                },
+            },
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
@@ -5213,10 +5223,6 @@
         _Tailor.Tailor = Tailor;
     })(_Tailor || (_Tailor = {}));
 
-    var _CutInRes;
-    (function (_CutInRes) {
-        _CutInRes._MakeClothes = {};
-    })(_CutInRes || (_CutInRes = {}));
     var _PreLoadCutIn;
     (function (_PreLoadCutIn) {
         let _Event;
@@ -5236,24 +5242,7 @@
                         time++;
                         this._LabelVar('Schedule').text = `${time}`;
                     }, () => {
-                        switch (Admin._preLoadOpenSceneLater.openName) {
-                            case 'MakeClothes':
-                                Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
-                                this._Owner.zOrder = 1;
-                                break;
-                            case 'MakeUp':
-                                _Res._list.scene3D.MakeClothes.Scene.removeSelf();
-                                Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
-                                this._Owner.zOrder = 1;
-                                break;
-                            case 'Start':
-                                _Res._list.scene3D.MakeUp.Scene.removeSelf();
-                                this._Owner.zOrder = 1;
-                                break;
-                            default:
-                                break;
-                        }
-                        EventAdmin._notify(_LwgPreLoad._Event.importList, ([_CutInRes[`_${Admin._preLoadOpenSceneLater.openName}`]]));
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, ({}));
                     });
                 });
             }
@@ -5263,8 +5252,23 @@
             lwgStepComplete() {
             }
             lwgAllComplete() {
+                switch (Admin._preLoadOpenSceneLater.openName) {
+                    case 'MakeClothes':
+                        Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+                        break;
+                    case 'MakeUp':
+                        _Res._list.scene3D.MakeClothes.Scene.removeSelf();
+                        Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
+                        break;
+                    case 'Start':
+                        _Res._list.scene3D.MakeUp.Scene.removeSelf();
+                        break;
+                    default:
+                        break;
+                }
+                this._Owner.zOrder = 1;
                 this._LabelVar('Schedule').text = `100`;
-                return 500;
+                return 1000;
             }
         }
         _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
@@ -5334,36 +5338,60 @@
                     return this[`_child${name}`];
                 }
             }
+            getChildComponent(name, Component) {
+                if (!this[`_child${name}${Component}`]) {
+                    let Child = this.owner.getChildByName(name);
+                    if (Child) {
+                        if (Child[Component]) {
+                            return this[`_child${name}${Component}`] = Child[Component];
+                        }
+                        else {
+                            console.log(`${name}节点没有${Component}组件`);
+                        }
+                    }
+                    else {
+                        console.log(`不存在子节点${name}`);
+                    }
+                }
+                else {
+                    return this[`_child${name}${Component}`];
+                }
+            }
             _childTrans(name) {
-                if (!this[`_child${name}Transform`]) {
-                    if (this.owner.getChildByName(name)) {
-                        let _MeshSprite3D = this.owner.getChildByName(name);
-                        this[`_child${name}Transform`] = _MeshSprite3D.transform;
-                        return this[`_child${name}Transform`];
+                return this.getChildComponent(name, 'transform');
+            }
+            _childMRenderer(name) {
+                return this.getChildComponent(name, 'meshRenderer');
+            }
+            _find(name) {
+                if (!this[`_FindNode${name}`]) {
+                    let Node = Tools._Node.findChild3D(this.owner, name);
+                    if (Node) {
+                        return this[`_FindNode${name}`] = Node;
                     }
                     else {
-                        console.log(`不存在子节点${name}`);
+                        console.log(`不存在节点${name}`);
                     }
                 }
                 else {
-                    return this[`_child${name}Transform`];
+                    return this[`_FindNode${name}`];
                 }
             }
-            getChildTransPro(childName, transformProperty) {
-                if (!this[`_child${childName}Transform${transformProperty}`]) {
-                    if (this.owner.getChildByName(childName)) {
-                        let _MeshSprite3D = this.owner.getChildByName(childName);
-                        this[`_child${childName}Transform${transformProperty}`] = _MeshSprite3D.transform[transformProperty];
-                        return this[`_child${childName}Transform${transformProperty}`];
+            _findTrans(name) {
+                if (!this[`_FindNodetransform${name}`]) {
+                    let Node = Tools._Node.findChild3D(this.owner, name);
+                    if (Node) {
+                        return this[`_FindNodetransform${name}`] = Node.transform;
                     }
                     else {
-                        console.log(`不存在子节点${name}`);
+                        console.log(`不存在节点${name}`);
                     }
                 }
                 else {
-                    return this[`_child${childName}Transform${transformProperty}`];
+                    return this[`_FindNodetransform${name}`];
                 }
             }
+            lwgReset() { }
             lwgOnAwake() {
             }
             lwgEventRegister() { }
@@ -5467,6 +5495,7 @@
                 this.lwgOnUpdate();
             }
             onDisable() {
+                this.lwgReset();
                 this.lwgOnDisable();
                 Laya.Tween.clearAll(this);
                 Laya.timer.clearAll(this);
@@ -5483,6 +5512,7 @@
             _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
             _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
             _Event["moveUltimately"] = "_MakeClothes_moveUltimately";
+            _Event["resetTex"] = "_MakeClothes_resetTex";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
@@ -5702,6 +5732,9 @@
             lwgOpenAni() {
                 return 100;
             }
+            lwgOnStart() {
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+            }
             lwgEventRegister() {
             }
             lwgBtnRegister() {
@@ -5728,9 +5761,13 @@
                 _MakeClothes._HangerTrans = this._childTrans('Hanger');
                 _MakeClothes._MainCamara = this._MainCamera;
             }
+            lwgReset() {
+            }
+            lwgOnStart() {
+            }
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2D) => {
-                    let bMaterial = this._child('Hanger').meshRenderer.material;
+                    let bMaterial = this._childMRenderer('Hanger').material;
                     bMaterial.albedoTexture.destroy();
                     bMaterial.albedoTexture = Text2D;
                 });

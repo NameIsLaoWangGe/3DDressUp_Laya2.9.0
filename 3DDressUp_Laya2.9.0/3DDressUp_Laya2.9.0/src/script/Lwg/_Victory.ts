@@ -1,6 +1,6 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import RecordManager from "../TJ/RecordManager";
-import lwg, { Admin, Click, _Gold, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin, PalyAudio, Effects } from "./Lwg";
+import lwg, { Admin, Click, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin, Effects } from "./Lwg";
 import OldEffects from "./OldEffects";
 import { _Game } from "./_Game";
 import { _Share } from "./_Share";
@@ -10,6 +10,7 @@ export module _Victory {
         _Settle_CloseScene = '_Settle_CloseScene',
     }
     export function _init(): void {
+       
     }
     export class Victory extends Admin._SceneBase {
         lwgOnAwake(): void {

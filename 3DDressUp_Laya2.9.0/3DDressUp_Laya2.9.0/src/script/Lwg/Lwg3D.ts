@@ -1,6 +1,6 @@
 // import { EventAdmin } from "./lwg";
 
-import { EventAdmin } from "./Lwg";
+import { EventAdmin, Tools } from "./Lwg";
 
 /**管理3D的模块*/
 export module lwg3D {
@@ -45,49 +45,58 @@ export module lwg3D {
                 return this[`_child${name}`];
             }
         }
+        private getChildComponent(name: string, Component: string): any {
+            if (!this[`_child${name}${Component}`]) {
+                let Child = this.owner.getChildByName(name) as Laya.MeshSprite3D;
+                if (Child) {
+                    if (Child[Component]) {
+                        return this[`_child${name}${Component}`] = Child[Component];
+                    } else {
+                        console.log(`${name}节点没有${Component}组件`);
+                    }
+                } else {
+                    console.log(`不存在子节点${name}`);
+                }
+            } else {
+                return this[`_child${name}${Component}`];
+            }
+        }
         /**子节点*/
         _childTrans(name: string): Laya.Transform3D {
-            if (!this[`_child${name}Transform`]) {
-                if (this.owner.getChildByName(name)) {
-                    let _MeshSprite3D = this.owner.getChildByName(name) as Laya.MeshSprite3D;
-                    this[`_child${name}Transform`] = _MeshSprite3D.transform;
-                    return this[`_child${name}Transform`];
+            return this.getChildComponent(name, 'transform');
+        }
+        /**子节点网格渲染器*/
+        _childMRenderer(name: string): Laya.MeshRenderer {
+            return this.getChildComponent(name, 'meshRenderer');
+        }
+        /**从全局查找当前节点，返回第一个*/
+        _find(name: string): Laya.MeshSprite3D {
+            if (!this[`_FindNode${name}`]) {
+                let Node = Tools._Node.findChild3D(this.owner, name);
+                if (Node) {
+                    return this[`_FindNode${name}`] = Node;
                 } else {
-                    console.log(`不存在子节点${name}`);
+                    console.log(`不存在节点${name}`);
                 }
             } else {
-                return this[`_child${name}Transform`];
+                return this[`_FindNode${name}`];
             }
         }
-        private getChildTransPro(childName: string, transformProperty: any): any {
-            if (!this[`_child${childName}Transform${transformProperty}`]) {
-                if (this.owner.getChildByName(childName)) {
-                    let _MeshSprite3D = this.owner.getChildByName(childName) as Laya.MeshSprite3D;
-                    this[`_child${childName}Transform${transformProperty}`] = _MeshSprite3D.transform[transformProperty];
-                    return this[`_child${childName}Transform${transformProperty}`];
+        /**从全局查找当前节点的的transform*/
+        _findTrans(name: string): Laya.Transform3D {
+            if (!this[`_FindNodetransform${name}`]) {
+                let Node = Tools._Node.findChild3D(this.owner, name);
+                if (Node) {
+                    return this[`_FindNodetransform${name}`] = Node.transform;
                 } else {
-                    console.log(`不存在子节点${name}`);
+                    console.log(`不存在节点${name}`);
                 }
             } else {
-                return this[`_child${childName}Transform${transformProperty}`];
+                return this[`_FindNodetransform${name}`];
             }
         }
-        // /**子节点*/
-        // _childPos(name: string): Laya.Vector3 {
-        //     return this.getChildTransPro(name, 'position');
-        // }
-        // /**子节点*/
-        // _childLocPos(name: string): Laya.Vector3 {
-        //     return this.getChildTransPro(name, 'localPosition');
-        // }
-        // /**子节点*/
-        // _childLocEuler(name: string): Laya.Vector3 {
-        //     return this.getChildTransPro(name, 'localRotationEuler');
-        // }
-        // /**子节点*/
-        // _childLocScale(name: string): Laya.Vector3 {
-        //     return this.getChildTransPro(name, 'localScale');
-        // }
+        /**重置场景内容*/
+        lwgReset(): void { }
         lwgOnAwake(): void {
         }
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
@@ -147,7 +156,6 @@ export module lwg3D {
         }
         onUpdate(): void {
             this.lwgOnUpdate();
-           
         }
         onDisable(): void {
             this.lwgOnDisable();
@@ -204,6 +212,7 @@ export module lwg3D {
             this.lwgOnUpdate();
         }
         onDisable(): void {
+            this.lwgReset();
             this.lwgOnDisable();
             Laya.Tween.clearAll(this);
             Laya.timer.clearAll(this);

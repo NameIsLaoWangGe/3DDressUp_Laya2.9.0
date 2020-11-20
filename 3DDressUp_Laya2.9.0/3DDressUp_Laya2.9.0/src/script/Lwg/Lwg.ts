@@ -8,7 +8,7 @@ export module lwg {
          * 创建通用剩余体力数量prefab
          * @param parent 父节点
          */
-        export function _createBtnPause(parent): void {
+        export function _createBtnPause(parent: Laya.Sprite): void {
             let sp: Laya.Sprite;
             Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
                 let _prefab = new Laya.Prefab();
@@ -34,7 +34,7 @@ export module lwg {
             blackBord = 'Frame/UI/ui_orthogon_black.png'
         }
         /**
-         * 动态创建，第一次创建比较卡，是因为第一次绘制，而不是加载，需要优化
+         * 动态创建，第一次创建比较卡，如果第一次绘制这张合图，可以不合图
          * @param describe 类型，也就是提示文字类型
          */
         export function createHint_Middle(describe: string): void {
@@ -4920,7 +4920,7 @@ export module lwg {
                 }
             }
 
-            /**3D递归向下查找子节点*/
+            /**3D递归向下查找第一个子节点*/
             export function findChild3D(parent: any, name: string): Laya.MeshSprite3D {
                 var item: Laya.MeshSprite3D = null;
                 //寻找自身一级目录下的子物体有没有该名字的子物体
@@ -5998,7 +5998,7 @@ export module lwg {
                             }
                         }
                     }
-                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
+                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton, _scene3D];
                     for (let index = 0; index < _loadOrder.length; index++) {
                         _sumProgress += _loadOrder[index].length;
                         if (_loadOrder[index].length <= 0) {

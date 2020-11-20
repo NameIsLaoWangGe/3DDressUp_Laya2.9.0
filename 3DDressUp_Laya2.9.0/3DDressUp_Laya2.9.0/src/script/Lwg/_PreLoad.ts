@@ -42,20 +42,20 @@ export module _Res {
             //     texture: null as Laya.Texture,
             // },
         },
-        // texture2D: {
-        //     Figure1: {
-        //         url: 'Game/UI/MakeClothes/figure_01.png',
-        //         texture2D: null as Laya.Texture2D,
-        //     },
-        //     Figure2: {
-        //         url: 'Game/UI/MakeClothes/figure_02.png',
-        //         texture2D: null as Laya.Texture2D,
-        //     },
-        //     Figure3: {
-        //         url: 'Game/UI/MakeClothes/figure_03.png',
-        //         texture2D: null as Laya.Texture2D,
-        //     },
-        // },
+        texture2D: {
+            Figure1: {
+                url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/Assets/13213/qunzi1.jpg`,
+                texture2D: null as Laya.Texture2D,
+            },
+            Figure2: {
+                url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Sprite/repeat_pattern_04 _9681.jpg`,
+                texture2D: null as Laya.Texture2D,
+            },
+            // Figure3: {
+            //     url: 'Game/UI/MakeClothes/figure_03.png',
+            //     texture2D: null as Laya.Texture2D,
+            // },
+        },
         /**通过直接获取场景的显示和打开，和scene关联，实现，先加载，然后直接切换*/
         scene2D: {
             Start: `Scene/${_SceneName.Start}.json`,
