@@ -12,21 +12,25 @@ export module _MakeClothes {
     }
     export class MakeClothes extends Admin._SceneBase {
         lwgOnAwake(): void {
-            _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
-            if (!_Scene3D.getComponent(MakeClothes3D)) {
-                _Scene3D.addComponent(MakeClothes3D);
-            }
         }
         lwgAdaptive(): void {
-            // this._adaptiveCenter([this._SpriteVar('UltimatelyParent'), this._SpriteVar('Dispaly')]);
-            this._adaptiveWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
+            // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
+            this._adaWidth([this._ImgVar('BtnRRotate'), this._ImgVar('BtnLRotate')]);
         }
         lwgOpenAni(): number {
             return 100;
         }
-
-        lwgOnStart():void{
-            EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+        lwgOnStart(): void {
+            _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
+            if (!_Scene3D.getComponent(MakeClothes3D)) {
+                _Scene3D.addComponent(MakeClothes3D);
+            } else {
+                _Scene3D.getComponent(MakeClothes3D).lwgOnStart();
+            }
+            this.Tex.dir = this.Tex.dirType.Reverse;
+            EventAdmin._notify(_Event.addTexture2D, [this.Tex.dirType.Reverse, this.Tex.getTex().bitmap]);
+            this.Tex.dir = this.Tex.dirType.Front;
+            EventAdmin._notify(_Event.addTexture2D, [this.Tex.dirType.Front, this.Tex.getTex().bitmap]);
         }
         lwgEventRegister(): void {
         }
@@ -37,6 +41,11 @@ export module _MakeClothes {
             touchP: null as Laya.Point,
             diffP: null as Laya.Point,
             state: 'none',
+            dir: 'Front',
+            dirType: {
+                Front: 'Front',
+                Reverse: 'Reverse',
+            },
             stateType: {
                 none: 'none',
                 move: 'move',
@@ -50,8 +59,8 @@ export module _MakeClothes {
                 }
                 this.Tex.Img = Tools._Node.simpleCopyImg(element);
                 this.Tex.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                this._SpriteVar('Ultimately').addChild(this.Tex.Img);
-                let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('UltimatelyParent'));
+                this._SpriteVar(this.Tex.dir).addChild(this.Tex.Img);
+                let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('Ultimately'));
                 this.Tex.Img.pos(lPoint.x, lPoint.y);
 
                 this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
@@ -67,40 +76,29 @@ export module _MakeClothes {
                 this.Tex.restore();
             },
             getTex: (): Laya.Texture => {
-                return this._ImgVar('Ultimately').drawToTexture(this._ImgVar('Ultimately').width, this._ImgVar('Ultimately').height, this._ImgVar('Ultimately').x, this._ImgVar('Ultimately').y) as Laya.Texture;
+                let Img = this._ImgVar(this.Tex.dir);
+                return Img.drawToTexture(Img.width, Img.height, Img.x, Img.y + Img.height) as Laya.Texture;
             },
-            setImgPos: (): number => {
-                if (!_HangerTrans) {
+            setImgPos: (out: Laya.HitResult) => {
+                if (!_Hanger) {
                     return;
                 }
-                // 从右侧进入
-                // 正向角度 
-                let anlgeY: number = _HangerTrans.localRotationEulerY;
-                let x: number;
-                let _width = this._SpriteVar('UltimatelyParent').width;
-                if (anlgeY >= 0) {
-                    if (anlgeY % 360 >= 270) {
-                        x = (1 - ((anlgeY - 270) % 360) * 0.25 / 90) * _width;
-                    } else {
-                        x = (0.75 - anlgeY % 360 * 0.25 / 90) * _width;
-                    }
-                }
-                // 反向角度 
-                if (anlgeY < 0) {
-                    if (anlgeY % 360 >= -90) {
-                        x = (1 - (anlgeY + 90) % 360 * 0.25 / 90) * _width;
-                    } else {
-                        x = (-anlgeY % 360 * 0.25 / 90 - 0.25) * _width;
-                    }
-                }
-                // 从左侧进入
-                if (this._SpriteVar('Wireframe').x < Laya.stage.width / 2) {
-                    this.Tex.Img.x = x - this._SpriteVar('UltimatelyParent').width / 2;
+                let _width = this._ImgVar(this.Tex.dir).width;
+                let _height = this._ImgVar(this.Tex.dir).height;
+                //通过xz的角度计算x 
+                let angleY = Tools._Point.pointByAngle(_Hanger.transform.position.x - out.point.x, _Hanger.transform.position.z - out.point.z);
+                let _angleY = angleY + 90 + _Hanger.transform.localRotationEulerY;
+                this.Tex.Img.x = _width - _width / 180 * (_angleY);
+
+                // 通过xy计算y
+                let outY = out.point.y;
+                let p1 = _Hanger.transform.position.y;
+                let _HHeight = _Hanger.transform.localScaleY;
+                if (outY > p1) {
+                    this.Tex.Img.y = (outY - p1) / _HHeight / 2 * _height;
                 } else {
-                    this.Tex.Img.x = x;
+                    this.Tex.Img.y = _height / 2 + (p1 - outY) / _HHeight / 2 * _height;
                 }
-                // console.log(anlgeY, this.Tex.Img.x);
-                return x;
             },
             getOut: (): any => {
                 let x = this._ImgVar('Frame').x;
@@ -116,28 +114,27 @@ export module _MakeClothes {
                 let p7 = [x, y + _height];
                 let p8 = [x + _width / 2, y + _height / 2];
                 let p9 = [x + _width, y + _height];
-                let posArr = [p1, p2, p3, p4, p5, p6, p7, p8, p9];
-                let bool: boolean;
+                let posArr = [p5];
+                let bool: boolean = false;
                 for (let index = 0; index < posArr.length; index++) {
                     const element = posArr[index];
                     let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
-                    let out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), 'Hanger');
+                    let out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), [this.Tex.dirType.Front, this.Tex.dirType.Reverse]) as Laya.HitResult;
                     if (out) {
-                        bool = true;
-                        return bool;
+                        return out;
                     }
                 }
                 return bool;
             },
             move: (e: Laya.Event) => {
-                this.Tex.Img.y += this.Tex.diffP.y;
                 this.Tex.DisImg.x += this.Tex.diffP.x;
                 this.Tex.DisImg.y += this.Tex.diffP.y;
                 let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
                 this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                 if (this.Tex.touchP && this.Tex.Img) {
-                    if (this.Tex.getOut()) {
-                        this.Tex.setImgPos();
+                    let out = this.Tex.getOut();
+                    if (out) {
+                        this.Tex.setImgPos(out);
                         this._ImgVar('Wireframe').visible = true;
                         this.Tex.state = this.Tex.stateType.addTex;
                         this._SpriteVar('Dispaly').visible = false;
@@ -158,7 +155,7 @@ export module _MakeClothes {
                     this.Tex.Img.x = Laya.stage.width;
                     this._SpriteVar('Dispaly').visible = true;
                 }
-                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
             },
             scale: (e: Laya.Event): void => {
                 let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
@@ -180,7 +177,7 @@ export module _MakeClothes {
                 Tools._Node.changePivotCenter(this.Tex.Img);
                 Tools._Node.changePivotCenter(this.Tex.DisImg);
 
-                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
             },
             rotate: (e: Laya.Event) => {
                 if (this.Tex.diffP.x > 0) {
@@ -217,7 +214,7 @@ export module _MakeClothes {
                 }
                 this.Tex.state = this.Tex.stateType.none;
                 this.Tex.touchP = null;
-                EventAdmin._notify(_Event.addTexture2D, [this.Tex.getTex().bitmap]);
+                EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
             },
             btn: () => {
                 for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
@@ -262,24 +259,24 @@ export module _MakeClothes {
                 this.Tex.close();
             }
         }
+
     }
     export let _Scene3D: Laya.Scene3D;
     export let _MainCamara: Laya.Camera;
     /**模型的角度*/
-    export let _HangerTrans: Laya.Transform3D;
+    export let _Hanger: Laya.MeshSprite3D;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
-            _HangerTrans = this._childTrans('Hanger');
+            _Hanger = this._child('Hanger');
             _MainCamara = this._MainCamera;
         }
         lwgReset(): void {
-
         }
         lwgOnStart(): void {
         }
         lwgEventRegister(): void {
-            EventAdmin._register(_Event.addTexture2D, this, (Text2D: Laya.Texture2D) => {
-                let bMaterial = this._childMRenderer('Hanger').material as Laya.BlinnPhongMaterial;
+            EventAdmin._register(_Event.addTexture2D, this, (name: string, Text2D: Laya.Texture2D) => {
+                let bMaterial = this._findMRenderer(name).material as Laya.BlinnPhongMaterial;
                 bMaterial.albedoTexture.destroy();
                 bMaterial.albedoTexture = Text2D;
             })
@@ -291,7 +288,7 @@ export module _MakeClothes {
                     this._childTrans('Hanger').localRotationEulerY--;
                 }
                 this._childTrans('Hanger').localRotationEulerY %= 360;
-                console.log(this._childTrans('Hanger').localRotationEulerY);
+
             })
         }
     }

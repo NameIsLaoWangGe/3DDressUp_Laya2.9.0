@@ -68,58 +68,8 @@
 				"child":[]
 			},
 			{
-				"type":"MeshSprite3D",
-				"instanceID":1,
-				"props":{
-					"name":"Hanger",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0.023,
-						0.78,
-						0.22
-					],
-					"rotation":[
-						0,
-						0.7071068,
-						0.7071068,
-						0
-					],
-					"scale":[
-						2,
-						2,
-						2
-					],
-					"meshPath":"Assets/New Folder/qunzi-Box001.lm",
-					"enableRender":true,
-					"materials":[
-						{
-							"type":"Laya.BlinnPhongMaterial",
-							"path":"Assets/13213/Materials/qunzi1.lmat"
-						}
-					]
-				},
-				"components":[
-					{
-						"type":"PhysicsCollider",
-						"restitution":0,
-						"friction":0.5,
-						"rollingFriction":0,
-						"shapes":[
-							{
-								"type":"MeshColliderShape",
-								"mesh":"Assets/New Folder/qunzi-Box001.lm"
-							}
-						],
-						"isTrigger":false
-					}
-				],
-				"child":[]
-			},
-			{
 				"type":"DirectionLight",
-				"instanceID":2,
+				"instanceID":1,
 				"props":{
 					"name":"Directional Light",
 					"active":true,
@@ -127,7 +77,7 @@
 					"layer":0,
 					"position":[
 						0,
-						3,
+						9.48,
 						0
 					],
 					"rotation":[
@@ -141,16 +91,174 @@
 						1,
 						1
 					],
-					"intensity":1,
+					"intensity":1.27,
 					"lightmapBakedType":1,
 					"color":[
 						1,
-						0.9568627,
-						0.8392157
+						1,
+						1
 					]
 				},
 				"components":[],
 				"child":[]
+			},
+			{
+				"type":"MeshSprite3D",
+				"instanceID":2,
+				"props":{
+					"name":"Hanger",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.011,
+						1.028,
+						-0.1529541
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						0.3,
+						0.28,
+						0.3
+					],
+					"meshPath":"Library/unity default resources-Cube.lm",
+					"enableRender":false,
+					"materials":[
+						{
+							"type":"Laya.BlinnPhongMaterial",
+							"path":"Resources/unity_builtin_extra.lmat"
+						}
+					]
+				},
+				"components":[
+					{
+						"type":"PhysicsCollider",
+						"restitution":0,
+						"friction":0.5,
+						"rollingFriction":0,
+						"shapes":[
+							{
+								"type":"BoxColliderShape",
+								"center":[
+									0,
+									0,
+									0
+								],
+								"size":[
+									1,
+									1,
+									1
+								]
+							}
+						],
+						"isTrigger":false
+					}
+				],
+				"child":[
+					{
+						"type":"MeshSprite3D",
+						"instanceID":3,
+						"props":{
+							"name":"Front",
+							"active":true,
+							"isStatic":false,
+							"layer":0,
+							"position":[
+								-0.003333334,
+								-4.353571,
+								0.069847
+							],
+							"rotation":[
+								0,
+								0.7071068,
+								0.7071068,
+								0
+							],
+							"scale":[
+								4,
+								4,
+								4.285717
+							],
+							"meshPath":"Assets/Game/Mesh/test-1.lm",
+							"enableRender":true,
+							"materials":[
+								{
+									"path":"Assets/Game/Tex/Materials/1a.lmat"
+								}
+							]
+						},
+						"components":[
+							{
+								"type":"PhysicsCollider",
+								"restitution":0,
+								"friction":0.5,
+								"rollingFriction":0,
+								"shapes":[
+									{
+										"type":"MeshColliderShape",
+										"mesh":"Assets/Game/Mesh/test-1.lm"
+									}
+								],
+								"isTrigger":false
+							}
+						],
+						"child":[]
+					},
+					{
+						"type":"MeshSprite3D",
+						"instanceID":4,
+						"props":{
+							"name":"Reverse",
+							"active":true,
+							"isStatic":false,
+							"layer":0,
+							"position":[
+								-0.003333334,
+								-4.353571,
+								0.069847
+							],
+							"rotation":[
+								0,
+								0.7071068,
+								0.7071068,
+								0
+							],
+							"scale":[
+								4,
+								4,
+								4.285717
+							],
+							"meshPath":"Assets/Game/Mesh/test-11.lm",
+							"enableRender":true,
+							"materials":[
+								{
+									"path":"Assets/Game/Tex/Materials/11a.lmat"
+								}
+							]
+						},
+						"components":[
+							{
+								"type":"PhysicsCollider",
+								"restitution":0,
+								"friction":0.5,
+								"rollingFriction":0,
+								"shapes":[
+									{
+										"type":"MeshColliderShape",
+										"mesh":"Assets/Game/Mesh/test-11.lm"
+									}
+								],
+								"isTrigger":false
+							}
+						],
+						"child":[]
+					}
+				]
 			}
 		]
 	}

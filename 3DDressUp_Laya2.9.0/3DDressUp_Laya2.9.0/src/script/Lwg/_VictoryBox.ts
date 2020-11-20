@@ -84,7 +84,7 @@ import { Admin, Tools } from "./Lwg";
             /**结构，如果没有则为null*/
             VictoryBox._BoxList = this._Owner['MyList'];
             //注意这里要复制数组，不可以直接赋值
-            _BoxArray = Tools.objArray_Copy(Laya.loader.getRes("GameData/VictoryBox/VictoryBox.json")['RECORDS']);
+            _BoxArray = Tools._ObjArray.arrCopy(Laya.loader.getRes("GameData/VictoryBox/VictoryBox.json")['RECORDS']);
             _selectBox = null;
             _canOpenNum = 3;
             _openVictoryBoxNum++;

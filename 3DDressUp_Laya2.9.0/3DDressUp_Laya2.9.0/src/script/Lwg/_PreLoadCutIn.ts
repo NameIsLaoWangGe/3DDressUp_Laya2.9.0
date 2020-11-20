@@ -1,4 +1,5 @@
 import { Admin, EventAdmin, TimerAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
+import { _MakeClothes } from "./_MakeClothes";
 import { _Res } from "./_PreLoad";
 export module _CutInRes {
     // export let MakeClothes = {

@@ -52,7 +52,7 @@ export module lwg3D {
                     if (Child[Component]) {
                         return this[`_child${name}${Component}`] = Child[Component];
                     } else {
-                        console.log(`${name}节点没有${Component}组件`);
+                        console.log(`${name}子节点没有${Component}组件`);
                     }
                 } else {
                     console.log(`不存在子节点${name}`);
@@ -69,6 +69,23 @@ export module lwg3D {
         _childMRenderer(name: string): Laya.MeshRenderer {
             return this.getChildComponent(name, 'meshRenderer');
         }
+
+        private getFindComponent(name: string, Component: string): any {
+            if (!this[`_child${name}${Component}`]) {
+                let Node = Tools._Node.findChild3D(this.owner, name);
+                if (Node) {
+                    if (Node[Component]) {
+                        return this[`_child${name}${Component}`] = Node[Component];
+                    } else {
+                        console.log(`${name}场景内节点没有${Component}组件`);
+                    }
+                } else {
+                    console.log(`场景内不存在子节点${name}`);
+                }
+            } else {
+                return this[`_child${name}${Component}`];
+            }
+        }
         /**从全局查找当前节点，返回第一个*/
         _find(name: string): Laya.MeshSprite3D {
             if (!this[`_FindNode${name}`]) {
@@ -82,18 +99,14 @@ export module lwg3D {
                 return this[`_FindNode${name}`];
             }
         }
+        /**从全局查找当前节点，返回第一个*/
+        _findMRenderer(name: string): Laya.MeshRenderer {
+            return this.getFindComponent(name, 'meshRenderer');
+        }
+
         /**从全局查找当前节点的的transform*/
         _findTrans(name: string): Laya.Transform3D {
-            if (!this[`_FindNodetransform${name}`]) {
-                let Node = Tools._Node.findChild3D(this.owner, name);
-                if (Node) {
-                    return this[`_FindNodetransform${name}`] = Node.transform;
-                } else {
-                    console.log(`不存在节点${name}`);
-                }
-            } else {
-                return this[`_FindNodetransform${name}`];
-            }
+            return this.getFindComponent(name, 'transform');
         }
         /**重置场景内容*/
         lwgReset(): void { }
