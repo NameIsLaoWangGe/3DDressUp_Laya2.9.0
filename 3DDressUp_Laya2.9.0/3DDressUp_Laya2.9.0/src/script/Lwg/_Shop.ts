@@ -90,8 +90,8 @@ export module _Shop {
                     _useSkinTypeToday.array.push(any);
                 } else {
                     _useSkinTypeToday.array.push(any);
-                    arr = Tools.array_Copy(_useSkinTypeToday.array);
-                    arr = Tools.arrayUnique_03(arr);
+                    arr = Tools._Array.copy(_useSkinTypeToday.array);
+                    arr = Tools._Array.unique03(arr);
                 }
                 Laya.LocalStorage.setJSON('Shop_useSkinType', JSON.stringify({
                     Shop_useSkinType: arr,

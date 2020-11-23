@@ -558,55 +558,49 @@ export module lwg {
         }
         export function _init(): void {
             let d = new Date;
-            _loginDate = StorageAdmin._arrayArr('DateAdmin._loginDat');
-            _loginDate.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()])
+            _loginInfo = StorageAdmin._arrayArr('DateAdmin._loginInfo');
+            _loginInfo.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()])
             let arr: Array<Array<any>> = [];
-            if (_loginDate.value.length > 0) {
-                for (let index = 0; index < _loginDate.value.length; index++) {
-                    arr.push(_loginDate.value[index]);
+            if (_loginInfo.value.length > 0) {
+                for (let index = 0; index < _loginInfo.value.length; index++) {
+                    arr.push(_loginInfo.value[index]);
                 }
             }
             arr.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
-            _loginDate.value = arr;
-            DateAdmin._login.num++;
+            _loginInfo.value = arr;
+            DateAdmin._loginCount = StorageAdmin._mum('DateAdmin._loginCount');
+            DateAdmin._loginCount.value++;
             DateAdmin._loginToday.num++;
         }
         /**玩家登陆游戏的总次数信息,包括其中的年月日,星期几*/
-        export let _loginDate: StorageAdmin._ArrayArrVariable;
+        export let _loginInfo: StorageAdmin._ArrayArrVariable;
         /**玩家登录的总次数*/
-        export let _login = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 0;
-            },
-            set num(val: number) {
-                Laya.LocalStorage.setItem('DateAdmin_loginNumber', val.toString());
-            }
-        }
+        export let _loginCount: StorageAdmin._NumVariable;
         /**今天登陆了几次*/
         export let _loginToday = {
             get num(): number {
-                return Laya.LocalStorage.getItem('DateAdmin_loginTodaynum') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginTodaynum')) : 0;
+                return Laya.LocalStorage.getItem('DateAdmin._loginToday') ? Number(Laya.LocalStorage.getItem('DateAdmin._loginToday')) : 0;
             },
             set num(val: number) {
-                if (_date.date == _loginDate.value[_loginDate.value.length - 1][2]) {
-                    Laya.LocalStorage.setItem('DateAdmin_loginTodaynum', val.toString());
+                if (_date.date == _loginInfo.value[_loginInfo.value.length - 1][2]) {
+                    Laya.LocalStorage.setItem('DateAdmin._loginToday', val.toString());
                 }
             }
         }
         /**前一天登陆是哪一天*/
         export let _last = {
             get date(): number {
-                if (_loginDate.value.length > 1) {
-                    return _loginDate.value[_loginDate.value.length - 2][2];
+                if (_loginInfo.value.length > 1) {
+                    return _loginInfo.value[_loginInfo.value.length - 2][2];
                 } else {
-                    return _loginDate.value[_loginDate.value.length - 1][2];
+                    return _loginInfo.value[_loginInfo.value.length - 1][2];
                 }
             },
         }
         /**前一天登陆是哪一天*/
         export let _front = {
             get date(): number {
-                return _loginDate.value[_loginDate.value.length - 1][2];
+                return _loginInfo.value[_loginInfo.value.length - 1][2];
             },
         }
     }
@@ -1011,7 +1005,7 @@ export module lwg {
             let delay: number;
             let sumDelay: number;//总延迟
             var afterAni = () => {
-                Click._switch = false;
+                Click._switch = true
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
                     Scene[Scene.name].lwgBtnRegister();
@@ -1189,11 +1183,11 @@ export module lwg {
                     if (bool) {
                         _game.switch = false;
                         TimerAdmin._switch = false;
-                        Click._switch = false;
+                        Click._switch = true
                     } else {
                         _game.switch = true;
                         TimerAdmin._switch = true;
-                        Click._switch = true;
+                        Click._switch = false
                     }
                 }
             }
@@ -1208,7 +1202,7 @@ export module lwg {
         /**和场景名称一样的脚本,这个脚本唯一，不可随意调用*/
         export let _sceneScript: any = {};
         /**场景模块*/
-        export let _moudel: any = {};
+        export let _Moudel: any = {};
 
         /**常用场景的名称，和脚本默认导出类名保持一致*/
         export enum _SceneName {
@@ -1278,12 +1272,12 @@ export module lwg {
           * @param zOrder 指定层级
          */
         export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
-            Click._switch = true;
+            Click._switch = false;
             Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
-                if (_moudel['_' + openName]) {
-                    if (_moudel['_' + openName][openName]) {
-                        if (!scene.getComponent(_moudel['_' + openName][openName])) {
-                            scene.addComponent(_moudel['_' + openName][openName]);
+                if (_Moudel['_' + openName]) {
+                    if (_Moudel['_' + openName][openName]) {
+                        if (!scene.getComponent(_Moudel['_' + openName][openName])) {
+                            scene.addComponent(_Moudel['_' + openName][openName]);
                         }
                     }
                 } else {
@@ -1333,7 +1327,7 @@ export module lwg {
             }
             /**传入的回调函数*/
             var closef = () => {
-                Click._switch = false;
+                Click._switch = true
                 _sceneControl[closeName].close();
                 // 先关闭场景在打开场景，否则有些场景可能因为上个场景而初始化失败
                 if (func) {
@@ -1349,13 +1343,13 @@ export module lwg {
             let cloesSceneScript = _sceneControl[closeName][_sceneControl[closeName].name];
             if (cloesSceneScript) {
                 if (cloesSceneScript) {
-                    Click._switch = true;
+                    Click._switch = false
                     cloesSceneScript.lwgBeforeVanishAni();
                     let time0 = cloesSceneScript.lwgVanishAni();
                     if (time0 !== null) {
                         Laya.timer.once(time0, this, () => {
                             closef();
-                            Click._switch = false;
+                            Click._switch = true
                         })
                     } else {
                         SceneAnimation._commonVanishAni(_sceneControl[closeName], closef);
@@ -1403,6 +1397,7 @@ export module lwg {
          * 脚本通用类
          * */
         class _ScriptBase extends Laya.Script {
+
             _storeNum(name: string, initial?: number): StorageAdmin._NumVariable {
                 return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
             }
@@ -1633,7 +1628,7 @@ export module lwg {
                 let time = this.lwgOpenAni();
                 if (time !== null) {
                     Laya.timer.once(time, this, () => {
-                        Click._switch = false;
+                        Click._switch = true
                         this.lwgOpenAniAfter();
                         this.lwgBtnRegister();
                     });
@@ -1689,6 +1684,9 @@ export module lwg {
                 if (this._Owner.parent) {
                     return this.owner.parent as Laya.Image | Laya.Sprite;
                 }
+            }
+            get _gPoint(): Laya.Point {
+                return this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
             }
             /**物理组件*/
             get _RigidBody(): Laya.RigidBody {
@@ -3626,7 +3624,7 @@ export module lwg {
                 delayed = 0;
             }
             if (!click) {
-                Click._switch = true;
+                Click._switch = false
             }
             Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                 // Audio._playSound(Enum.AudioName.commonShake, 1);
@@ -3637,7 +3635,7 @@ export module lwg {
                             func();
                         }
                         if (!click) {
-                            Click._switch = false;
+                            Click._switch = true
                         }
                     }))
                 }))
@@ -3737,14 +3735,14 @@ export module lwg {
         export function fadeOut(node, alpha1, alpha2, time, delayed?: number, func?: Function, stageClick?: boolean): void {
             node.alpha = alpha1;
             if (stageClick) {
-                Click._switch = true;
+                Click._switch = false
             }
             Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
                 if (func) {
                     func();
                 }
                 if (stageClick) {
-                    Click._switch = false;
+                    Click._switch = true
                 }
             }), delayed ? delayed : 0)
         }
@@ -6241,9 +6239,9 @@ export module lwg {
                             }
                         } else {
                             //初始化所有添加过的模块
-                            for (const key in Admin._moudel) {
-                                if (Object.prototype.hasOwnProperty.call(Admin._moudel, key)) {
-                                    const element = Admin._moudel[key];
+                            for (const key in Admin._Moudel) {
+                                if (Object.prototype.hasOwnProperty.call(Admin._Moudel, key)) {
+                                    const element = Admin._Moudel[key];
                                     if (element['_init']) {
                                         element['_init']();
                                     } else {

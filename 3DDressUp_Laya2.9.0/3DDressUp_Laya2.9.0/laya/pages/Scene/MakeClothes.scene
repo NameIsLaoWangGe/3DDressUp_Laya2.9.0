@@ -116,21 +116,6 @@
                 {
                     "x":30,
                     "type":"Sprite",
-                    "searchKey":"Sprite,Reverse,Reverse",
-                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/Front02.png","scaleY":-1,"name":"Reverse"},
-                    "nodeParent":10,
-                    "label":"Reverse",
-                    "isOpen":true,
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":34,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Sprite",
                     "searchKey":"Sprite,Front,Front",
                     "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/Front01.png","scaleY":-1,"name":"Front"},
                     "nodeParent":10,
@@ -140,6 +125,21 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":7,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Sprite",
+                    "searchKey":"Sprite,Reverse,Reverse",
+                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/Front02.png","scaleY":-1,"name":"Reverse"},
+                    "nodeParent":10,
+                    "label":"Reverse",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":34,
                     "child":[
                         ]
                 }]

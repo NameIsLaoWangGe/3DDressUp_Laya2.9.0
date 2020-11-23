@@ -11,7 +11,6 @@ export module _Start {
 
     }
     export class Start extends Admin._SceneBase {
-
         lwgOpenAni(): number {
             return 100;
         }

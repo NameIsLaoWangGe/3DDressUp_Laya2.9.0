@@ -34,7 +34,7 @@ export module lwg3D {
         }
 
         /**子节点*/
-        _child(name: string): Laya.MeshSprite3D {
+        _Child(name: string): Laya.MeshSprite3D {
             if (!this[`_child${name}`]) {
                 if (this.owner.getChildByName(name)) {
                     return this[`_child${name}`] = this.owner.getChildByName(name) as Laya.MeshSprite3D;

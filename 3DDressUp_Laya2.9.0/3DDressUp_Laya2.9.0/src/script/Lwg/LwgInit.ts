@@ -18,7 +18,7 @@ export default class LwgInit extends _LwgInitScene {
         SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
         Click._Use.value = Click._Type.largen;
         Adaptive._Use.value = [1280, 720];
-        Admin._moudel = {
+        Admin._Moudel = {
             _PreLoad: _PreLoad,
             _PreLoadCutIn: _PreLoadCutIn,
             _Guide: _Guide,

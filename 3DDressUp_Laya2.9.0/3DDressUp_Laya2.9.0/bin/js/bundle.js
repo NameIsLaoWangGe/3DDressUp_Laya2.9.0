@@ -423,51 +423,44 @@
             };
             function _init() {
                 let d = new Date;
-                DateAdmin._loginDate = StorageAdmin._arrayArr('DateAdmin._loginDat');
-                DateAdmin._loginDate.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+                DateAdmin._loginInfo = StorageAdmin._arrayArr('DateAdmin._loginInfo');
+                DateAdmin._loginInfo.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
                 let arr = [];
-                if (DateAdmin._loginDate.value.length > 0) {
-                    for (let index = 0; index < DateAdmin._loginDate.value.length; index++) {
-                        arr.push(DateAdmin._loginDate.value[index]);
+                if (DateAdmin._loginInfo.value.length > 0) {
+                    for (let index = 0; index < DateAdmin._loginInfo.value.length; index++) {
+                        arr.push(DateAdmin._loginInfo.value[index]);
                     }
                 }
                 arr.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
-                DateAdmin._loginDate.value = arr;
-                DateAdmin._login.num++;
+                DateAdmin._loginInfo.value = arr;
+                DateAdmin._loginCount = StorageAdmin._mum('DateAdmin._loginCount');
+                DateAdmin._loginCount.value++;
                 DateAdmin._loginToday.num++;
             }
             DateAdmin._init = _init;
-            DateAdmin._login = {
-                get num() {
-                    return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 0;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('DateAdmin_loginNumber', val.toString());
-                }
-            };
             DateAdmin._loginToday = {
                 get num() {
-                    return Laya.LocalStorage.getItem('DateAdmin_loginTodaynum') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginTodaynum')) : 0;
+                    return Laya.LocalStorage.getItem('DateAdmin._loginToday') ? Number(Laya.LocalStorage.getItem('DateAdmin._loginToday')) : 0;
                 },
                 set num(val) {
-                    if (DateAdmin._date.date == DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2]) {
-                        Laya.LocalStorage.setItem('DateAdmin_loginTodaynum', val.toString());
+                    if (DateAdmin._date.date == DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2]) {
+                        Laya.LocalStorage.setItem('DateAdmin._loginToday', val.toString());
                     }
                 }
             };
             DateAdmin._last = {
                 get date() {
-                    if (DateAdmin._loginDate.value.length > 1) {
-                        return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 2][2];
+                    if (DateAdmin._loginInfo.value.length > 1) {
+                        return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 2][2];
                     }
                     else {
-                        return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2];
+                        return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2];
                     }
                 },
             };
             DateAdmin._front = {
                 get date() {
-                    return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2];
+                    return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2];
                 },
             };
         })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
@@ -761,7 +754,7 @@
                 let delay;
                 let sumDelay;
                 var afterAni = () => {
-                    Click._switch = false;
+                    Click._switch = true;
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
                         Scene[Scene.name].lwgBtnRegister();
@@ -924,12 +917,12 @@
                         if (bool) {
                             Admin._game.switch = false;
                             TimerAdmin._switch = false;
-                            Click._switch = false;
+                            Click._switch = true;
                         }
                         else {
                             Admin._game.switch = true;
                             TimerAdmin._switch = true;
-                            Click._switch = true;
+                            Click._switch = false;
                         }
                     }
                 }
@@ -939,7 +932,7 @@
             Admin._Game = _Game;
             Admin._sceneControl = {};
             Admin._sceneScript = {};
-            Admin._moudel = {};
+            Admin._Moudel = {};
             let _SceneName;
             (function (_SceneName) {
                 _SceneName["PreLoad"] = "PreLoad";
@@ -994,12 +987,12 @@
             }
             Admin._preLoadOpenScene = _preLoadOpenScene;
             function _openScene(openName, cloesName, func, zOrder) {
-                Click._switch = true;
+                Click._switch = false;
                 Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
-                    if (Admin._moudel['_' + openName]) {
-                        if (Admin._moudel['_' + openName][openName]) {
-                            if (!scene.getComponent(Admin._moudel['_' + openName][openName])) {
-                                scene.addComponent(Admin._moudel['_' + openName][openName]);
+                    if (Admin._Moudel['_' + openName]) {
+                        if (Admin._Moudel['_' + openName][openName]) {
+                            if (!scene.getComponent(Admin._Moudel['_' + openName][openName])) {
+                                scene.addComponent(Admin._Moudel['_' + openName][openName]);
                             }
                         }
                     }
@@ -1045,7 +1038,7 @@
                     return;
                 }
                 var closef = () => {
-                    Click._switch = false;
+                    Click._switch = true;
                     Admin._sceneControl[closeName].close();
                     if (func) {
                         func();
@@ -1058,13 +1051,13 @@
                 let cloesSceneScript = Admin._sceneControl[closeName][Admin._sceneControl[closeName].name];
                 if (cloesSceneScript) {
                     if (cloesSceneScript) {
-                        Click._switch = true;
+                        Click._switch = false;
                         cloesSceneScript.lwgBeforeVanishAni();
                         let time0 = cloesSceneScript.lwgVanishAni();
                         if (time0 !== null) {
                             Laya.timer.once(time0, this, () => {
                                 closef();
-                                Click._switch = false;
+                                Click._switch = true;
                             });
                         }
                         else {
@@ -1277,7 +1270,7 @@
                     let time = this.lwgOpenAni();
                     if (time !== null) {
                         Laya.timer.once(time, this, () => {
-                            Click._switch = false;
+                            Click._switch = true;
                             this.lwgOpenAniAfter();
                             this.lwgBtnRegister();
                         });
@@ -1330,6 +1323,9 @@
                     if (this._Owner.parent) {
                         return this.owner.parent;
                     }
+                }
+                get _gPoint() {
+                    return this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
                 }
                 get _RigidBody() {
                     if (!this._Owner['_OwnerRigidBody']) {
@@ -2852,7 +2848,7 @@
                     delayed = 0;
                 }
                 if (!click) {
-                    Click._switch = true;
+                    Click._switch = false;
                 }
                 Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
@@ -2861,7 +2857,7 @@
                                 func();
                             }
                             if (!click) {
-                                Click._switch = false;
+                                Click._switch = true;
                             }
                         }));
                     }));
@@ -2923,14 +2919,14 @@
             function fadeOut(node, alpha1, alpha2, time, delayed, func, stageClick) {
                 node.alpha = alpha1;
                 if (stageClick) {
-                    Click._switch = true;
+                    Click._switch = false;
                 }
                 Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
                     }
                     if (stageClick) {
-                        Click._switch = false;
+                        Click._switch = true;
                     }
                 }), delayed ? delayed : 0);
             }
@@ -4659,9 +4655,9 @@
                                 }
                             }
                             else {
-                                for (const key in Admin._moudel) {
-                                    if (Object.prototype.hasOwnProperty.call(Admin._moudel, key)) {
-                                        const element = Admin._moudel[key];
+                                for (const key in Admin._Moudel) {
+                                    if (Object.prototype.hasOwnProperty.call(Admin._Moudel, key)) {
+                                        const element = Admin._Moudel[key];
                                         if (element['_init']) {
                                             element['_init']();
                                         }
@@ -5520,7 +5516,7 @@
             set _MainCamera(Camera) {
                 this['__MainCamera'] = Camera;
             }
-            _child(name) {
+            _Child(name) {
                 if (!this[`_child${name}`]) {
                     if (this.owner.getChildByName(name)) {
                         return this[`_child${name}`] = this.owner.getChildByName(name);
@@ -5719,6 +5715,7 @@
             _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
             _Event["moveUltimately"] = "_MakeClothes_moveUltimately";
             _Event["resetTex"] = "_MakeClothes_resetTex";
+            _Event["changeDir"] = "_MakeClothes_resetTex";
         })(_Event = _MakeClothes._Event || (_MakeClothes._Event = {}));
         class MakeClothes extends Admin._SceneBase {
             constructor() {
@@ -5747,9 +5744,7 @@
                         }
                         this.Tex.Img = Tools._Node.simpleCopyImg(element);
                         this.Tex.Img.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
-                        this._SpriteVar(this.Tex.dir).addChild(this.Tex.Img);
                         let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('Ultimately'));
-                        this.Tex.Img.pos(lPoint.x, lPoint.y);
                         this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
                         this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
                         this.Tex.DisImg.pos(lPoint.x, lPoint.y);
@@ -5768,20 +5763,35 @@
                         if (!_MakeClothes._Hanger) {
                             return;
                         }
+                        if ((0 <= Math.abs(_MakeClothes._Hanger.transform.localRotationEulerY) && Math.abs(_MakeClothes._Hanger.transform.localRotationEulerY) < 90) || (270 < Math.abs(_MakeClothes._Hanger.transform.localRotationEulerY) && Math.abs(_MakeClothes._Hanger.transform.localRotationEulerY) <= 360)) {
+                            this.Tex.dir = this.Tex.dirType.Front;
+                        }
+                        else {
+                            this.Tex.dir = this.Tex.dirType.Reverse;
+                        }
+                        this._SpriteVar(this.Tex.dir).addChild(this.Tex.Img);
+                        console.log(out.collider.owner.name);
                         let _width = this._ImgVar(this.Tex.dir).width;
                         let _height = this._ImgVar(this.Tex.dir).height;
                         let angleY = Tools._Point.pointByAngle(_MakeClothes._Hanger.transform.position.x - out.point.x, _MakeClothes._Hanger.transform.position.z - out.point.z);
                         let _angleY = angleY + 90 + _MakeClothes._Hanger.transform.localRotationEulerY;
-                        this.Tex.Img.x = _width - _width / 180 * (_angleY);
-                        let outY = out.point.y;
-                        let p1 = _MakeClothes._Hanger.transform.position.y;
-                        let _HHeight = _MakeClothes._Hanger.transform.localScaleY;
-                        if (outY > p1) {
-                            this.Tex.Img.y = (outY - p1) / _HHeight / 2 * _height;
+                        if (this.Tex.dir == this.Tex.dirType.Front) {
+                            this.Tex.Img.x = _width - _width / 180 * (_angleY);
                         }
                         else {
-                            this.Tex.Img.y = _height / 2 + (p1 - outY) / _HHeight / 2 * _height;
+                            this.Tex.Img.x = _width / 180 * (_angleY);
                         }
+                        let Dir = _MakeClothes._Hanger.getChildByName(this.Tex.dir);
+                        let outY = out.point.y;
+                        let p1 = _MakeClothes._Hanger.transform.position.y;
+                        let _DirHeight = Dir.transform.localScaleY + _MakeClothes._Hanger.transform.position.y;
+                        if (outY > p1) {
+                            this.Tex.Img.y = (_DirHeight / 2 - outY) / _DirHeight * _height;
+                        }
+                        else {
+                            this.Tex.Img.y = outY / _DirHeight * _height;
+                        }
+                        console.log(this.Tex.Img.x, this.Tex.Img.y);
                     },
                     getOut: () => {
                         let x = this._ImgVar('Frame').x;
@@ -5949,6 +5959,10 @@
                 });
             }
             onStageMouseDown(e) {
+                if (_MakeClothes._Scene3D) {
+                    let out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(e.stageX, e.stageY)['Screen']);
+                    console.log(out);
+                }
                 this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             }
             onStageMouseMove(e) {
@@ -5961,9 +5975,17 @@
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
+        class Frame extends lwg3D._Object3D {
+            onTriggerEnter() {
+                console.log('碰撞检测！');
+            }
+        }
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
-                _MakeClothes._Hanger = this._child('Hanger');
+                _MakeClothes._Hanger = this._Child('Hanger');
+                _MakeClothes._Frame = this._Child('Frame');
+                _MakeClothes._Frame.addComponent(Frame);
+                _MakeClothes._Screen = this._Child('Screen');
                 _MakeClothes._MainCamara = this._MainCamera;
             }
             lwgReset() {
@@ -5984,6 +6006,8 @@
                         this._childTrans('Hanger').localRotationEulerY--;
                     }
                     this._childTrans('Hanger').localRotationEulerY %= 360;
+                    let ChildF = _MakeClothes._Hanger.getChildByName('CubeF');
+                    let ChildR = _MakeClothes._Hanger.getChildByName('CubeR');
                 });
             }
         }
@@ -6122,7 +6146,7 @@
             SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
             Click._Use.value = Click._Type.largen;
             Adaptive._Use.value = [1280, 720];
-            Admin._moudel = {
+            Admin._Moudel = {
                 _PreLoad: _PreLoad,
                 _PreLoadCutIn: _PreLoadCutIn,
                 _Guide: _Guide,
