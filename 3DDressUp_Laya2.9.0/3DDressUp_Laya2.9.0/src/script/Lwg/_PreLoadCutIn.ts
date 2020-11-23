@@ -35,7 +35,7 @@ export module _PreLoadCutIn {
                     time++;
                     this._LabelVar('Schedule').text = `${time}`;
                 }, () => {
-                    EventAdmin._notify(_LwgPreLoad._Event.importList, ({}));
+                    EventAdmin._notify(_LwgPreLoad._Event.importList,[{}]);
                 })
             })
         }
@@ -45,7 +45,7 @@ export module _PreLoadCutIn {
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {
-            switch (Admin._preLoadOpenSceneLater.openName) {
+            switch (Admin._PreLoadCutIn.openName) {
                 case 'MakeClothes':
                     Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                     break;

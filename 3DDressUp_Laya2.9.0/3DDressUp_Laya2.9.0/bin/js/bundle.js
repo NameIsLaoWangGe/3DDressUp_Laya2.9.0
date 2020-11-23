@@ -3,30 +3,6 @@
 
     var lwg;
     (function (lwg) {
-        let Pause;
-        (function (Pause) {
-            function _createBtnPause(parent) {
-                let sp;
-                Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                    parent.addChild(sp);
-                    sp.pos(645, 167);
-                    sp.zOrder = 0;
-                    Pause.BtnPauseNode = sp;
-                    Pause.BtnPauseNode.name = 'BtnPauseNode';
-                    Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
-                }));
-            }
-            Pause._createBtnPause = _createBtnPause;
-            function btnPauseUp(event) {
-                event.stopPropagation();
-                event.currentTarget.scale(1, 1);
-                lwg.Admin._openScene('UIPause', null, null, null);
-            }
-            Pause.btnPauseUp = btnPauseUp;
-        })(Pause = lwg.Pause || (lwg.Pause = {}));
         let Dialogue;
         (function (Dialogue) {
             let Skin;
@@ -445,50 +421,54 @@
                     return (new Date()).toLocaleTimeString();
                 }
             };
-            DateAdmin._loginDate = {
-                get value() {
-                    let data;
-                    let dataArr = [];
-                    let d = new Date();
-                    let date1 = [d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay()];
-                    try {
-                        data = Laya.LocalStorage.getJSON('DateAdmin_loginDate');
-                        let dataArr = [];
-                        dataArr = JSON.parse(data);
-                        let equal = false;
-                        for (let index = 0; index < dataArr.length; index++) {
-                            if (dataArr[index].toString() == date1.toString()) {
-                                equal = true;
-                            }
-                        }
-                        if (!equal) {
-                            dataArr.push(date1);
-                        }
+            function _init() {
+                let d = new Date;
+                DateAdmin._loginDate = StorageAdmin._arrayArr('DateAdmin._loginDat');
+                DateAdmin._loginDate.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+                let arr = [];
+                if (DateAdmin._loginDate.value.length > 0) {
+                    for (let index = 0; index < DateAdmin._loginDate.value.length; index++) {
+                        arr.push(DateAdmin._loginDate.value[index]);
                     }
-                    catch (error) {
-                        if (dataArr.length == 0) {
-                            dataArr.push(date1);
-                        }
-                    }
-                    Laya.LocalStorage.setJSON('DateAdmin_loginDate', JSON.stringify(dataArr));
-                    return dataArr;
+                }
+                arr.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+                DateAdmin._loginDate.value = arr;
+                DateAdmin._login.num++;
+                DateAdmin._loginToday.num++;
+            }
+            DateAdmin._init = _init;
+            DateAdmin._login = {
+                get num() {
+                    return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 0;
                 },
-            };
-            DateAdmin._loginNumber = {
-                get value() {
-                    return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 1;
-                },
-                set value(val) {
+                set num(val) {
                     Laya.LocalStorage.setItem('DateAdmin_loginNumber', val.toString());
+                }
+            };
+            DateAdmin._loginToday = {
+                get num() {
+                    return Laya.LocalStorage.getItem('DateAdmin_loginTodaynum') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginTodaynum')) : 0;
+                },
+                set num(val) {
+                    if (DateAdmin._date.date == DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2]) {
+                        Laya.LocalStorage.setItem('DateAdmin_loginTodaynum', val.toString());
+                    }
                 }
             };
             DateAdmin._last = {
                 get date() {
-                    return Laya.LocalStorage.getItem('DateAdmin_last') ? Number(Laya.LocalStorage.getItem('DateAdmin_last')) : DateAdmin._date.date;
+                    if (DateAdmin._loginDate.value.length > 1) {
+                        return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 2][2];
+                    }
+                    else {
+                        return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2];
+                    }
                 },
-                setLastDate() {
-                    Laya.LocalStorage.setItem('DateAdmin_last', DateAdmin._date.date.toString());
-                }
+            };
+            DateAdmin._front = {
+                get date() {
+                    return DateAdmin._loginDate.value[DateAdmin._loginDate.value.length - 1][2];
+                },
             };
         })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
         let TimerAdmin;
@@ -550,6 +530,58 @@
                 Laya.timer.frameLoop(delay, caller, func, args, coverBefore);
             }
             TimerAdmin._frameNumLoop = _frameNumLoop;
+            function _numRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                let num0 = 0;
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            num0++;
+                            if (num0 >= num) {
+                                method();
+                                compeletMethod();
+                            }
+                            else {
+                                method();
+                                func();
+                            }
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._numRandomLoop = _numRandomLoop;
+            function _frameNumRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                let num0 = 0;
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            num0++;
+                            if (num0 >= num) {
+                                method();
+                                compeletMethod();
+                            }
+                            else {
+                                method();
+                                func();
+                            }
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._frameNumRandomLoop = _frameNumRandomLoop;
             function _frameOnce(delay, caller, afterMethod, beforeMethod, args, coverBefore) {
                 if (beforeMethod) {
                     beforeMethod();
@@ -729,7 +761,7 @@
                 let delay;
                 let sumDelay;
                 var afterAni = () => {
-                    Admin._clickLock.switch = false;
+                    Click._switch = false;
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
                         Scene[Scene.name].lwgBtnRegister();
@@ -891,11 +923,13 @@
                         this.bool = bool;
                         if (bool) {
                             Admin._game.switch = false;
-                            Laya.timer.pause();
+                            TimerAdmin._switch = false;
+                            Click._switch = false;
                         }
                         else {
                             Admin._game.switch = true;
-                            Laya.timer.resume();
+                            TimerAdmin._switch = true;
+                            Click._switch = true;
                         }
                     }
                 }
@@ -903,57 +937,6 @@
             class _Game {
             }
             Admin._Game = _Game;
-            Admin._clickLock = {
-                get switch() {
-                    return Laya.stage.getChildByName('__stageClickLock__') ? true : false;
-                },
-                set switch(bool) {
-                    if (bool) {
-                        if (!Laya.stage.getChildByName('__stageClickLock__')) {
-                            let __stageClickLock__ = new Laya.Sprite();
-                            __stageClickLock__.name = '__stageClickLock__';
-                            Laya.stage.addChild(__stageClickLock__);
-                            __stageClickLock__.zOrder = 3000;
-                            __stageClickLock__.width = Laya.stage.width;
-                            __stageClickLock__.height = Laya.stage.height;
-                            __stageClickLock__.pos(0, 0);
-                            Click._on(Click._Type.no, __stageClickLock__, this, null, null, (e) => {
-                                console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
-                                e.stopPropagation();
-                            });
-                        }
-                        else {
-                        }
-                    }
-                    else {
-                        if (Laya.stage.getChildByName('__stageClickLock__')) {
-                            Laya.stage.getChildByName('__stageClickLock__').removeSelf();
-                        }
-                    }
-                }
-            };
-            function _secneLockClick(scene) {
-                _unlockPreventClick(scene);
-                let __lockClick__ = new Laya.Sprite();
-                scene.addChild(__lockClick__);
-                __lockClick__.zOrder = 1000;
-                __lockClick__.name = '__lockClick__';
-                __lockClick__.width = Laya.stage.width;
-                __lockClick__.height = Laya.stage.height;
-                __lockClick__.pos(0, 0);
-                Click._on(Click._Type.no, __lockClick__, this, null, null, (e) => {
-                    console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
-                    e.stopPropagation();
-                });
-            }
-            Admin._secneLockClick = _secneLockClick;
-            function _unlockPreventClick(scene) {
-                let __lockClick__ = scene.getChildByName('__lockClick__');
-                if (__lockClick__) {
-                    __lockClick__.removeSelf();
-                }
-            }
-            Admin._unlockPreventClick = _unlockPreventClick;
             Admin._sceneControl = {};
             Admin._sceneScript = {};
             Admin._moudel = {};
@@ -996,22 +979,22 @@
                 _SceneName["Special"] = "Special";
                 _SceneName["Compound"] = "Compound";
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
-            function _preLoadOpenScene(openName, cloesName, func, zOrder) {
-                _openScene(_SceneName.PreLoadCutIn);
-                Admin._preLoadOpenSceneLater.openName = openName;
-                Admin._preLoadOpenSceneLater.cloesName = cloesName;
-                Admin._preLoadOpenSceneLater.func = func;
-                Admin._preLoadOpenSceneLater.zOrder = zOrder;
-            }
-            Admin._preLoadOpenScene = _preLoadOpenScene;
-            Admin._preLoadOpenSceneLater = {
+            Admin._PreLoadCutIn = {
                 openName: null,
                 cloesName: null,
                 func: null,
                 zOrder: null,
             };
+            function _preLoadOpenScene(openName, cloesName, func, zOrder) {
+                _openScene(_SceneName.PreLoadCutIn);
+                Admin._PreLoadCutIn.openName = openName;
+                Admin._PreLoadCutIn.cloesName = cloesName;
+                Admin._PreLoadCutIn.func = func;
+                Admin._PreLoadCutIn.zOrder = zOrder;
+            }
+            Admin._preLoadOpenScene = _preLoadOpenScene;
             function _openScene(openName, cloesName, func, zOrder) {
-                Admin._clickLock.switch = true;
+                Click._switch = true;
                 Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
                     if (Admin._moudel['_' + openName]) {
                         if (Admin._moudel['_' + openName][openName]) {
@@ -1062,7 +1045,7 @@
                     return;
                 }
                 var closef = () => {
-                    Admin._clickLock.switch = false;
+                    Click._switch = false;
                     Admin._sceneControl[closeName].close();
                     if (func) {
                         func();
@@ -1075,13 +1058,13 @@
                 let cloesSceneScript = Admin._sceneControl[closeName][Admin._sceneControl[closeName].name];
                 if (cloesSceneScript) {
                     if (cloesSceneScript) {
-                        Admin._clickLock.switch = true;
+                        Click._switch = true;
                         cloesSceneScript.lwgBeforeVanishAni();
                         let time0 = cloesSceneScript.lwgVanishAni();
                         if (time0 !== null) {
                             Laya.timer.once(time0, this, () => {
                                 closef();
-                                Admin._clickLock.switch = false;
+                                Click._switch = false;
                             });
                         }
                         else {
@@ -1124,16 +1107,31 @@
                     super(...arguments);
                     this.ownerSceneName = '';
                 }
+                _storeNum(name, initial) {
+                    return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
+                }
+                _storeStr(name, initial) {
+                    return StorageAdmin._str(`${this.owner.name}/${name}`, initial);
+                }
+                _storeBool(name, initial) {
+                    return StorageAdmin._bool(`${this.owner.name}/${name}`, initial);
+                }
+                _storeArray(name, initial) {
+                    return StorageAdmin._array(`${this.owner.name}/${name}`, initial);
+                }
                 lwgOnAwake() { }
                 ;
                 lwgAdaptive() { }
                 ;
                 lwgEventRegister() { }
                 ;
-                _EvReg(name, func) {
+                _evReg(name, func) {
                     EventAdmin._register(name, this, func);
                 }
-                _EvNotify(name, args) {
+                _evRegOne(name, func) {
+                    EventAdmin._registerOnce(name, this, func);
+                }
+                _evNotify(name, args) {
                     EventAdmin._notify(name, args);
                 }
                 lwgOnEnable() { }
@@ -1141,19 +1139,25 @@
                 lwgBtnRegister() { }
                 ;
                 _btnDown(target, down, effect) {
-                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, down, null, null, null);
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e) => {
+                        Click._switch && down && down(e);
+                    }, null, null, null);
                 }
                 _btnMove(target, move, effect) {
-                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, move, null, null);
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e) => {
+                        Click._switch && move && move(e);
+                    }, null, null);
                 }
                 _btnUp(target, up, effect) {
-                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, up, null);
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e) => {
+                        Click._switch && up && up(e);
+                    }, null);
                 }
                 _btnOut(target, out, effect) {
-                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, out);
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e) => { Click._switch && out && out(e); });
                 }
                 _btnFour(target, down, move, up, out, effect) {
-                    Click._on(effect == null ? effect : Click._Use.value, target, this, down, move, up, out);
+                    Click._on(effect == null ? effect : Click._Use.value, target, this, (e) => { Click._switch && down && down(e); }, (e) => { Click._switch && move && move(e); }, (e) => { Click._switch && up && up(e); }, (e) => { Click._switch && out && out(e); });
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
                     let closeName;
@@ -1173,6 +1177,18 @@
                 lwgOnUpdate() { }
                 ;
                 lwgOnDisable() { }
+                ;
+                onStageMouseDown(e) { Click._switch && this.lwgOnStageDown(e); }
+                ;
+                onStageMouseMove(e) { Click._switch && this.lwgOnStageMove(e); }
+                ;
+                onStageMouseUp(e) { Click._switch && this.lwgOnStageUp(e); }
+                ;
+                lwgOnStageDown(e) { }
+                ;
+                lwgOnStageMove(e) { }
+                ;
+                lwgOnStageUp(e) { }
                 ;
             }
             class _SceneBase extends _ScriptBase {
@@ -1261,7 +1277,7 @@
                     let time = this.lwgOpenAni();
                     if (time !== null) {
                         Laya.timer.once(time, this, () => {
-                            Admin._clickLock.switch = false;
+                            Click._switch = false;
                             this.lwgOpenAniAfter();
                             this.lwgBtnRegister();
                         });
@@ -1436,13 +1452,161 @@
             }
             Admin._ObjectBase = _ObjectBase;
         })(Admin = lwg.Admin || (lwg.Admin = {}));
+        let StorageAdmin;
+        (function (StorageAdmin) {
+            class _NumVariable {
+                get value() { return; }
+                ;
+                set value(val) { this['_numVariable'] = val; }
+            }
+            StorageAdmin._NumVariable = _NumVariable;
+            class _StrVariable {
+                get value() { return; }
+                set value(val) { this['_strVariable'] = val; }
+            }
+            StorageAdmin._StrVariable = _StrVariable;
+            class _BoolVariable {
+                get value() { return; }
+                set value(val) { this['_boolVariable'] = val; }
+            }
+            StorageAdmin._BoolVariable = _BoolVariable;
+            class _ArrayVariable {
+                get value() { return; }
+                set value(val) { this['_arrayVariable'] = val; }
+            }
+            StorageAdmin._ArrayVariable = _ArrayVariable;
+            class _ArrayArrVariable {
+                get value() { return; }
+                set value(val) { this['_arrayArrVariable'] = val; }
+            }
+            StorageAdmin._ArrayArrVariable = _ArrayArrVariable;
+            function _mum(name, initial) {
+                let _variable = new _NumVariable();
+                _variable = this[`_mum${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            return Laya.LocalStorage.getItem(name);
+                        }
+                        else {
+                            initial = initial ? initial : 0;
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    },
+                    set value(data) {
+                        Laya.LocalStorage.setItem(name, data.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._mum = _mum;
+            function _str(name, initial) {
+                let _variable = new _StrVariable();
+                _variable = this[`_str${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            return Laya.LocalStorage.getItem(name);
+                        }
+                        else {
+                            initial = initial ? initial : null;
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    },
+                    set value(data) {
+                        Laya.LocalStorage.setItem(name, data.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._str = _str;
+            function _bool(name, initial) {
+                let _variable = new _BoolVariable();
+                _variable = this[`_bool${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            if (Laya.LocalStorage.getItem(name) == "false") {
+                                return false;
+                            }
+                            else if (Laya.LocalStorage.getItem(name) == "true") {
+                                return true;
+                            }
+                        }
+                        else {
+                            if (initial) {
+                                Laya.LocalStorage.setItem(name, "true");
+                            }
+                            else {
+                                Laya.LocalStorage.setItem(name, "false");
+                            }
+                            return initial;
+                        }
+                    },
+                    set value(bool) {
+                        bool = bool ? "true" : "false";
+                        Laya.LocalStorage.setItem(name, bool.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._bool = _bool;
+            function _array(name, initial) {
+                let _variable = new _ArrayVariable();
+                _variable = this[`_array${name}`] = {
+                    get value() {
+                        try {
+                            let data = Laya.LocalStorage.getJSON(name);
+                            if (data) {
+                                return JSON.parse(data);
+                                ;
+                            }
+                            else {
+                                initial = initial ? initial : [];
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        }
+                        catch (error) {
+                            return [];
+                        }
+                    },
+                    set value(array) {
+                        Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                    },
+                };
+                return _variable;
+            }
+            StorageAdmin._array = _array;
+            function _arrayArr(name, initial) {
+                let _variable = new _ArrayVariable();
+                _variable = this[`_arrayArr${name}`] = {
+                    get value() {
+                        try {
+                            let data = Laya.LocalStorage.getJSON(name);
+                            if (data) {
+                                return JSON.parse(data);
+                                ;
+                            }
+                            else {
+                                initial = initial ? initial : [];
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        }
+                        catch (error) {
+                            return [];
+                        }
+                    },
+                    set value(array) {
+                        Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                    },
+                };
+                return _variable;
+            }
+            StorageAdmin._arrayArr = _arrayArr;
+        })(StorageAdmin = lwg.StorageAdmin || (lwg.StorageAdmin = {}));
         let DataAdmin;
         (function (DataAdmin) {
-            class _Store {
-                getVariables(name) {
-                }
-            }
-            DataAdmin._Store = _Store;
             class _Table {
                 constructor(dataName, arrUrl, localStorage, proName) {
                     this._property = {
@@ -2389,6 +2553,7 @@
         })(Effects = lwg.Effects || (lwg.Effects = {}));
         let Click;
         (function (Click) {
+            Click._switch = true;
             function _createButton() {
                 let Btn = new Laya.Sprite();
                 let img = new Laya.Image();
@@ -2687,7 +2852,7 @@
                     delayed = 0;
                 }
                 if (!click) {
-                    Admin._clickLock.switch = true;
+                    Click._switch = true;
                 }
                 Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
@@ -2696,7 +2861,7 @@
                                 func();
                             }
                             if (!click) {
-                                Admin._clickLock.switch = false;
+                                Click._switch = false;
                             }
                         }));
                     }));
@@ -2758,14 +2923,14 @@
             function fadeOut(node, alpha1, alpha2, time, delayed, func, stageClick) {
                 node.alpha = alpha1;
                 if (stageClick) {
-                    Admin._clickLock.switch = true;
+                    Click._switch = true;
                 }
                 Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
                     }
                     if (stageClick) {
-                        Admin._clickLock.switch = false;
+                        Click._switch = false;
                     }
                 }), delayed ? delayed : 0);
             }
@@ -4486,11 +4651,11 @@
                             this._Owner.name = LwgPreLoad._loadType;
                             Admin._sceneControl[LwgPreLoad._loadType] = this._Owner;
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
-                                if (Admin._preLoadOpenSceneLater.openName) {
-                                    Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
-                                        Admin._preLoadOpenSceneLater.func;
+                                if (Admin._PreLoadCutIn.openName) {
+                                    Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.cloesName, () => {
+                                        Admin._PreLoadCutIn.func;
                                         Admin._closeScene(LwgPreLoad._loadType);
-                                    }, Admin._preLoadOpenSceneLater.zOrder);
+                                    }, Admin._PreLoadCutIn.zOrder);
                                 }
                             }
                             else {
@@ -4743,6 +4908,7 @@
             class _LwgInitScene extends Admin._SceneBase {
                 moduleOnStart() {
                     _init();
+                    DateAdmin._init();
                     this._openScene(_SceneName.PreLoad);
                 }
                 ;
@@ -4942,11 +5108,11 @@
     let Platform = lwg.Platform;
     let SceneAnimation = lwg.SceneAnimation;
     let Adaptive = lwg.Adaptive;
+    let StorageAdmin = lwg.StorageAdmin;
     let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
     let TimerAdmin = lwg.TimerAdmin;
-    let Pause = lwg.Pause;
     let Execution = lwg.Execution;
     let Gold = lwg.Gold;
     let Setting = lwg.Setting;
@@ -5094,7 +5260,7 @@
     (function (_PreLoad) {
         class PreLoad extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+                EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
             }
             lwgOpenAni() { return 1; }
             lwgStepComplete() {
@@ -5107,6 +5273,7 @@
         }
         _PreLoad.PreLoad = PreLoad;
     })(_PreLoad || (_PreLoad = {}));
+    var _PreLoad$1 = _PreLoad.PreLoad;
 
     var _Tailor;
     (function (_Tailor) {
@@ -5270,7 +5437,7 @@
                         time++;
                         this._LabelVar('Schedule').text = `${time}`;
                     }, () => {
-                        EventAdmin._notify(_LwgPreLoad._Event.importList, ({}));
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
                     });
                 });
             }
@@ -5280,7 +5447,7 @@
             lwgStepComplete() {
             }
             lwgAllComplete() {
-                switch (Admin._preLoadOpenSceneLater.openName) {
+                switch (Admin._PreLoadCutIn.openName) {
                     case 'MakeClothes':
                         Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                         break;

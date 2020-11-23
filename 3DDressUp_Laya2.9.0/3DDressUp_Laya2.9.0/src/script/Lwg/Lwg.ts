@@ -1,33 +1,5 @@
 /**综合模板*/
 export module lwg {
-    /**暂停模块，控制游戏的暂停和开启*/
-    export module Pause {
-        /**指代当前暂停游戏节点*/
-        export let BtnPauseNode: Laya.Sprite;
-        /**
-         * 创建通用剩余体力数量prefab
-         * @param parent 父节点
-         */
-        export function _createBtnPause(parent: Laya.Sprite): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                parent.addChild(sp);
-                sp.pos(645, 167);
-                sp.zOrder = 0;
-                BtnPauseNode = sp;
-                BtnPauseNode.name = 'BtnPauseNode';
-                Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
-            }));
-        }
-        export function btnPauseUp(event) {
-            event.stopPropagation();
-            event.currentTarget.scale(1, 1);
-            lwg.Admin._openScene('UIPause', null, null, null);
-        }
-    }
     /**提示模块*/
     export module Dialogue {
         enum Skin {
@@ -511,7 +483,7 @@ export module lwg {
          * @param type 事件类型或者名称
          * @param args 注册事件中的回调函数中的参数
          */
-        export function _notify(type: any, args?: any) {
+        export function _notify(type: any, args?: Array<any>) {
             dispatcher.event(type.toString(), args);
         }
         /**
@@ -584,59 +556,60 @@ export module lwg {
                 return (new Date()).toLocaleTimeString();
             }
         }
-
-        /**玩家登陆游戏的天数,包括其中的年月日,星期几*/
-        export let _loginDate = {
-            get value(): Array<any> {
-                let data;
-                let dataArr: Array<Array<number>> = [];
-                let d = new Date();
-                let date1 = [d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay()];
-                try {
-                    data = Laya.LocalStorage.getJSON('DateAdmin_loginDate');
-                    let dataArr: Array<Array<number>> = [];
-                    dataArr = JSON.parse(data);
-                    // 如果两天一抹一样则不会增加
-                    let equal = false;
-                    for (let index = 0; index < dataArr.length; index++) {
-                        if (dataArr[index].toString() == date1.toString()) {
-                            equal = true;
-                        }
-                    }
-                    if (!equal) {
-                        dataArr.push(date1);
-                    }
-                } catch (error) {
-                    if (dataArr.length == 0) {
-                        dataArr.push(date1);
-                    }
+        export function _init(): void {
+            let d = new Date;
+            _loginDate = StorageAdmin._arrayArr('DateAdmin._loginDat');
+            _loginDate.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()])
+            let arr: Array<Array<any>> = [];
+            if (_loginDate.value.length > 0) {
+                for (let index = 0; index < _loginDate.value.length; index++) {
+                    arr.push(_loginDate.value[index]);
                 }
-                Laya.LocalStorage.setJSON('DateAdmin_loginDate', JSON.stringify(dataArr));
-                return dataArr;
-            },
+            }
+            arr.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+            _loginDate.value = arr;
+            DateAdmin._login.num++;
+            DateAdmin._loginToday.num++;
         }
-
-        /**玩家登录的次数*/
-        export let _loginNumber = {
-            get value(): number {
-                return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 1;
+        /**玩家登陆游戏的总次数信息,包括其中的年月日,星期几*/
+        export let _loginDate: StorageAdmin._ArrayArrVariable;
+        /**玩家登录的总次数*/
+        export let _login = {
+            get num(): number {
+                return Laya.LocalStorage.getItem('DateAdmin_loginNumber') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginNumber')) : 0;
             },
-            set value(val: number) {
+            set num(val: number) {
                 Laya.LocalStorage.setItem('DateAdmin_loginNumber', val.toString());
             }
         }
-
-        /**上次登录是哪一天*/
-        export let _last = {
-            get date(): number {
-                return Laya.LocalStorage.getItem('DateAdmin_last') ? Number(Laya.LocalStorage.getItem('DateAdmin_last')) : _date.date;
+        /**今天登陆了几次*/
+        export let _loginToday = {
+            get num(): number {
+                return Laya.LocalStorage.getItem('DateAdmin_loginTodaynum') ? Number(Laya.LocalStorage.getItem('DateAdmin_loginTodaynum')) : 0;
             },
-            setLastDate(): void {
-                Laya.LocalStorage.setItem('DateAdmin_last', _date.date.toString());
+            set num(val: number) {
+                if (_date.date == _loginDate.value[_loginDate.value.length - 1][2]) {
+                    Laya.LocalStorage.setItem('DateAdmin_loginTodaynum', val.toString());
+                }
             }
         }
+        /**前一天登陆是哪一天*/
+        export let _last = {
+            get date(): number {
+                if (_loginDate.value.length > 1) {
+                    return _loginDate.value[_loginDate.value.length - 2][2];
+                } else {
+                    return _loginDate.value[_loginDate.value.length - 1][2];
+                }
+            },
+        }
+        /**前一天登陆是哪一天*/
+        export let _front = {
+            get date(): number {
+                return _loginDate.value[_loginDate.value.length - 1][2];
+            },
+        }
     }
-
 
     /**
      * 时间管理
@@ -651,8 +624,8 @@ export module lwg {
          * @param caller 执行域
          * @param method 方法回调
          * @param immediately 是否立即执行一次，默认为false
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _frameLoop(delay: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -673,8 +646,8 @@ export module lwg {
          * @param delay2 间隔帧数区间2
          * @param caller 执行域
          * @param method 方法回调
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _frameRandomLoop(delay1: number, delay2: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -701,8 +674,8 @@ export module lwg {
          * @param method 回调函数
          * @param compeletMethod 全部完成后的回调函数 
          * @param immediately 是否立即执行一次，默认为false
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _frameNumLoop(delay: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -729,12 +702,82 @@ export module lwg {
         }
 
         /**
+         * 有一定次数的循环，并且在随机时间区间内，基于帧
+         * @param delay 时间间隔
+         * @param num 次数
+         * @param method 回调函数
+         * @param compeletMethod 全部完成后的回调函数 
+         * @param immediately 是否立即执行一次，默认为false
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
+         */
+        export function _numRandomLoop(delay1: number, delay2: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
+            if (immediately) {
+                if (_switch) {
+                    method();
+                }
+            }
+            let num0 = 0;
+            var func = () => {
+                let delay = Tools._Number.randomOneInt(delay1, delay2);
+                Laya.timer.frameOnce(delay, caller, () => {
+                    if (_switch) {
+                        num0++;
+                        if (num0 >= num) {
+                            method();
+                            compeletMethod();
+                        } else {
+                            method();
+                            func()
+                        }
+                    }
+                }, args, coverBefore)
+            }
+            func();
+        }
+
+        /**
+         * 有一定次数的循环，并且在随机时间区间内，基于帧
+         * @param delay 时间间隔
+         * @param num 次数
+         * @param method 回调函数
+         * @param compeletMethod 全部完成后的回调函数 
+         * @param immediately 是否立即执行一次，默认为false
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
+         */
+        export function _frameNumRandomLoop(delay1: number, delay2: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
+            if (immediately) {
+                if (_switch) {
+                    method();
+                }
+            }
+            let num0 = 0;
+            var func = () => {
+                let delay = Tools._Number.randomOneInt(delay1, delay2);
+                Laya.timer.frameOnce(delay, caller, () => {
+                    if (_switch) {
+                        num0++;
+                        if (num0 >= num) {
+                            method();
+                            compeletMethod();
+                        } else {
+                            method();
+                            func()
+                        }
+                    }
+                }, args, coverBefore)
+            }
+            func();
+        }
+
+        /**
          * 执行一次的计时器，基于帧
          * @param delay 延时
          * @param afterMethod 结束回调函数
          * @param beforeMethod 开始之前的函数
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _frameOnce(delay: number, caller, afterMethod: Function, beforeMethod?: Function, args?: any[], coverBefore?: boolean): void {
             if (beforeMethod) {
@@ -751,8 +794,8 @@ export module lwg {
          * @param caller 执行域
          * @param method 方法回调
          * @param immediately 是否立即执行一次，默认为false
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _loop(delay: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -774,8 +817,8 @@ export module lwg {
          * @param caller 执行域
          * @param method 方法回调
          * @param immediately 是否立即执行一次，默认为false
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _randomLoop(delay1: number, delay2: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -801,8 +844,8 @@ export module lwg {
          * @param num 次数
          * @param method 回调函数
          * @param immediately 是否立即执行一次，默认为false
-         * @param args 
-         * @param coverBefore 
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
          */
         export function _numLoop(delay: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
@@ -831,8 +874,8 @@ export module lwg {
         * @param delay 延时
         * @param afterMethod 结束回调函数
         * @param beforeMethod 开始之前的函数
-        * @param args 
-        * @param coverBefore 
+        * @param args 回调参数[]
+        * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
         */
         export function _once(delay: number, afterMethod: Function, beforeMethod?: Function, args?: any[], coverBefore?: boolean): void {
             if (beforeMethod) {
@@ -968,7 +1011,7 @@ export module lwg {
             let delay: number;
             let sumDelay: number;//总延迟
             var afterAni = () => {
-                Admin._clickLock.switch = false;
+                Click._switch = false;
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
                     Scene[Scene.name].lwgBtnRegister();
@@ -1145,10 +1188,12 @@ export module lwg {
                     this.bool = bool;
                     if (bool) {
                         _game.switch = false;
-                        Laya.timer.pause();
+                        TimerAdmin._switch = false;
+                        Click._switch = false;
                     } else {
                         _game.switch = true;
-                        Laya.timer.resume();
+                        TimerAdmin._switch = true;
+                        Click._switch = true;
                     }
                 }
             }
@@ -1157,64 +1202,7 @@ export module lwg {
         export class _Game {
 
         }
-        /**整个stage内关闭点击事件*/
-        export let _clickLock = {
-            get switch(): boolean {
-                return Laya.stage.getChildByName('__stageClickLock__') ? true : false;
-            },
-            set switch(bool: boolean) {
-                if (bool) {
-                    if (!Laya.stage.getChildByName('__stageClickLock__')) {
-                        // console.log('锁住点击！')
-                        let __stageClickLock__ = new Laya.Sprite();
-                        __stageClickLock__.name = '__stageClickLock__';
-                        Laya.stage.addChild(__stageClickLock__);
-                        __stageClickLock__.zOrder = 3000;
-                        __stageClickLock__.width = Laya.stage.width;
-                        __stageClickLock__.height = Laya.stage.height;
-                        __stageClickLock__.pos(0, 0);
-                        Click._on(Click._Type.no, __stageClickLock__, this, null, null, (e: Laya.Event) => {
-                            console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
-                            e.stopPropagation();
-                        });
-                    } else {
-                        // console.log('场景锁已存在！');
-                    }
-                } else {
-                    if (Laya.stage.getChildByName('__stageClickLock__')) {
-                        Laya.stage.getChildByName('__stageClickLock__').removeSelf();
-                        // console.log('场景点击解锁！');
-                    }
-                }
-            }
-        }
 
-        /**
-         * 设置一个屏蔽场景内点击事件的的节点
-         * @param scene 场景
-        */
-        export function _secneLockClick(scene: Laya.Scene): void {
-            _unlockPreventClick(scene);
-            let __lockClick__ = new Laya.Sprite();
-            scene.addChild(__lockClick__);
-            __lockClick__.zOrder = 1000;
-            __lockClick__.name = '__lockClick__';
-            __lockClick__.width = Laya.stage.width;
-            __lockClick__.height = Laya.stage.height;
-            __lockClick__.pos(0, 0);
-            Click._on(Click._Type.no, __lockClick__, this, null, null, (e: Laya.Event) => {
-                console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
-                e.stopPropagation();
-            });
-        }
-
-        /**解除该场景的不可点击效果*/
-        export function _unlockPreventClick(scene: Laya.Scene): void {
-            let __lockClick__ = scene.getChildByName('__lockClick__') as Laya.Sprite;
-            if (__lockClick__) {
-                __lockClick__.removeSelf();
-            }
-        }
         /**场景控制,访问特定场景用_sceneControl[name]访问*/
         export let _sceneControl: any = {};
         /**和场景名称一样的脚本,这个脚本唯一，不可随意调用*/
@@ -1261,7 +1249,13 @@ export module lwg {
             Special = 'Special',
             Compound = 'Compound',
         }
-
+        /**预加载完毕后，需要打开的场景信息*/
+        export let _PreLoadCutIn = {
+            openName: null,
+            cloesName: null,
+            func: null,
+            zOrder: null,
+        }
         /**
          *预加载后打开场景，预加载内容将在预加载界面按照界面名称执行
          * @param {string} openName 需要打开的场景名称
@@ -1271,17 +1265,10 @@ export module lwg {
          */
         export function _preLoadOpenScene(openName: string, cloesName?: string, func?: Function, zOrder?: number) {
             _openScene(_SceneName.PreLoadCutIn);
-            _preLoadOpenSceneLater.openName = openName;
-            _preLoadOpenSceneLater.cloesName = cloesName;
-            _preLoadOpenSceneLater.func = func;
-            _preLoadOpenSceneLater.zOrder = zOrder;
-        }
-        /**预加载完毕后，需要打开的场景信息*/
-        export let _preLoadOpenSceneLater = {
-            openName: null,
-            cloesName: null,
-            func: null,
-            zOrder: null,
+            _PreLoadCutIn.openName = openName;
+            _PreLoadCutIn.cloesName = cloesName;
+            _PreLoadCutIn.func = func;
+            _PreLoadCutIn.zOrder = zOrder;
         }
         /**
           * 打开场景
@@ -1291,7 +1278,7 @@ export module lwg {
           * @param zOrder 指定层级
          */
         export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
-            Admin._clickLock.switch = true;
+            Click._switch = true;
             Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
                 if (_moudel['_' + openName]) {
                     if (_moudel['_' + openName][openName]) {
@@ -1346,7 +1333,7 @@ export module lwg {
             }
             /**传入的回调函数*/
             var closef = () => {
-                _clickLock.switch = false;
+                Click._switch = false;
                 _sceneControl[closeName].close();
                 // 先关闭场景在打开场景，否则有些场景可能因为上个场景而初始化失败
                 if (func) {
@@ -1362,13 +1349,13 @@ export module lwg {
             let cloesSceneScript = _sceneControl[closeName][_sceneControl[closeName].name];
             if (cloesSceneScript) {
                 if (cloesSceneScript) {
-                    _clickLock.switch = true;
+                    Click._switch = true;
                     cloesSceneScript.lwgBeforeVanishAni();
                     let time0 = cloesSceneScript.lwgVanishAni();
                     if (time0 !== null) {
                         Laya.timer.once(time0, this, () => {
                             closef();
-                            _clickLock.switch = false;
+                            Click._switch = false;
                         })
                     } else {
                         SceneAnimation._commonVanishAni(_sceneControl[closeName], closef);
@@ -1416,16 +1403,31 @@ export module lwg {
          * 脚本通用类
          * */
         class _ScriptBase extends Laya.Script {
+            _storeNum(name: string, initial?: number): StorageAdmin._NumVariable {
+                return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
+            }
+            _storeStr(name: string, initial?: string): StorageAdmin._StrVariable {
+                return StorageAdmin._str(`${this.owner.name}/${name}`, initial);
+            }
+            _storeBool(name: string, initial?: boolean): StorageAdmin._BoolVariable {
+                return StorageAdmin._bool(`${this.owner.name}/${name}`, initial);
+            }
+            _storeArray(name: string, initial?: Array<any>): StorageAdmin._ArrayVariable {
+                return StorageAdmin._array(`${this.owner.name}/${name}`, initial);
+            }
             /**游戏开始前执行一次，重写覆盖*/
             lwgOnAwake(): void { };
             /**适配位置*/
             lwgAdaptive(): void { };
             /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
             lwgEventRegister(): void { };
-            _EvReg(name: string, func: Function): void {
+            _evReg(name: string, func: Function): void {
                 EventAdmin._register(name, this, func);
             }
-            _EvNotify(name: string, args?: Array<any>): void {
+            _evRegOne(name: string, func: Function): void {
+                EventAdmin._registerOnce(name, this, func);
+            }
+            _evNotify(name: string, args?: Array<any>): void {
                 EventAdmin._notify(name, args);
             }
             /**初始化，在onEnable中执行，重写即可覆盖*/
@@ -1443,7 +1445,9 @@ export module lwg {
              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
             */
             _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
-                Click._on(effect == undefined ? Click._Use.value : effect, target, this, down, null, null, null);
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e: Laya.Event) => {
+                    Click._switch && down && down(e)
+                }, null, null, null);
             }
             /**
               * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
@@ -1453,7 +1457,9 @@ export module lwg {
                * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnMove(target: Laya.Node, move: Function, effect?: string): void {
-                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, move, null, null);
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e: Laya.Event) => {
+                    Click._switch && move && move(e)
+                }, null, null);
             }
 
             /**
@@ -1464,7 +1470,9 @@ export module lwg {
            * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
            */
             _btnUp(target: Laya.Node, up: Function, effect?: string): void {
-                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, up, null);
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e: Laya.Event) => {
+                    Click._switch && up && up(e);
+                }, null);
             }
             /**
               * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
@@ -1474,20 +1482,24 @@ export module lwg {
                * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnOut(target: Laya.Node, out: Function, effect?: string): void {
-                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, out);
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e: Laya.Event) => { Click._switch && out && out(e) });
             }
             /**
               * 通用事件注册,可以用(e)=>{}简写传递的函数参数
               * @param effect 效果类型输入null则没有效果
               * @param target 节点
-              * @param down 按下
-              * @param move 移动
-              * @param up 抬起
-              * @param out 按下
+              * @param down 按下回调
+              * @param move 移动回调
+              * @param up 抬起回调
+              * @param out 移出回调
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
-                Click._on(effect == null ? effect : Click._Use.value, target, this, down, move, up, out);
+                Click._on(effect == null ? effect : Click._Use.value, target, this,
+                    (e: Laya.Event) => { Click._switch && down && down(e) },
+                    (e: Laya.Event) => { Click._switch && move && move(e) },
+                    (e: Laya.Event) => { Click._switch && up && up(e) },
+                    (e: Laya.Event) => { Click._switch && out && out(e) });
             }
             ownerSceneName: string = '';
             /**
@@ -1521,6 +1533,12 @@ export module lwg {
             lwgOnUpdate(): void { };
             /**离开时执行不要执行onDisable，只执行lwgDisable*/
             lwgOnDisable(): void { };
+            onStageMouseDown(e: Laya.Event): void { Click._switch && this.lwgOnStageDown(e) };
+            onStageMouseMove(e: Laya.Event): void { Click._switch && this.lwgOnStageMove(e) };
+            onStageMouseUp(e: Laya.Event): void { Click._switch && this.lwgOnStageUp(e) };
+            lwgOnStageDown(e: Laya.Event): void { };
+            lwgOnStageMove(e: Laya.Event): void { };
+            lwgOnStageUp(e: Laya.Event): void { };
         }
 
         /**2D场景通用父类*/
@@ -1615,7 +1633,7 @@ export module lwg {
                 let time = this.lwgOpenAni();
                 if (time !== null) {
                     Laya.timer.once(time, this, () => {
-                        _clickLock.switch = false;
+                        Click._switch = false;
                         this.lwgOpenAniAfter();
                         this.lwgBtnRegister();
                     });
@@ -1794,13 +1812,160 @@ export module lwg {
         }
     }
 
+    export module StorageAdmin {
+        export class _NumVariable {
+            get value(): number { return };
+            set value(val: number) { this['_numVariable'] = val }
+        }
+        export class _StrVariable {
+            get value(): string { return }
+            set value(val: string) { this['_strVariable'] = val }
+        }
+        export class _BoolVariable {
+            get value(): boolean { return }
+            set value(val: boolean) { this['_boolVariable'] = val }
+        }
+        export class _ArrayVariable {
+            get value(): Array<any> { return }
+            set value(val: Array<any>) { this['_arrayVariable'] = val }
+        }
+        export class _ArrayArrVariable {
+            get value(): Array<Array<any>> { return }
+            set value(val: Array<Array<any>>) { this['_arrayArrVariable'] = val }
+        }
+        /**
+        * @param name 名称
+        * @param initial 初始值，如果有值了则无效,默认为0
+        * */
+        export function _mum(name: string, initial?: number): _NumVariable {
+            let _variable = new _NumVariable();
+            _variable = this[`_mum${name}`] = {
+                get value(): any {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        return Laya.LocalStorage.getItem(name);
+                    } else {
+                        initial = initial ? initial : 0;
+                        Laya.LocalStorage.setItem(name, initial.toString());
+                        return initial;
+                    }
+                },
+                set value(data: any) {
+                    Laya.LocalStorage.setItem(name, data.toString());
+                }
+            }
+            return _variable;
+        }
+
+        /**
+         * @param name 名称
+         * @param initial 初始值，如果有值了则无效，默认为null
+         * */
+        export function _str(name: string, initial?: string): _StrVariable {
+            let _variable = new _StrVariable();
+            _variable = this[`_str${name}`] = {
+                get value(): string {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        return Laya.LocalStorage.getItem(name);
+                    } else {
+                        initial = initial ? initial : null;
+                        Laya.LocalStorage.setItem(name, initial.toString());
+                        return initial;
+                    }
+                },
+                set value(data: string) {
+                    Laya.LocalStorage.setItem(name, data.toString());
+                }
+            }
+            return _variable;
+        }
+        /**
+         * @param name 名称
+         * @param initial 初始值，如果有值了则无效，默认为false
+         * */
+        export function _bool(name: string, initial?: boolean): _BoolVariable {
+            let _variable = new _BoolVariable();
+            _variable = this[`_bool${name}`] = {
+                get value(): any {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        if (Laya.LocalStorage.getItem(name) == "false") {
+                            return false;
+                        } else if (Laya.LocalStorage.getItem(name) == "true") {
+                            return true;
+                        }
+                    } else {
+                        if (initial) {
+                            Laya.LocalStorage.setItem(name, "true");
+                        } else {
+                            Laya.LocalStorage.setItem(name, "false");
+                        }
+                        return initial;
+                    }
+                },
+                set value(bool: any) {
+                    bool = bool ? "true" : "false";
+                    Laya.LocalStorage.setItem(name, bool.toString());
+                }
+            }
+            return _variable;
+        }
+        /**
+        * @param name 名称
+        * @param initial 初始值，如果有值了则无效，默认为[]
+        * */
+        export function _array(name: string, initial?: Array<any>): _ArrayVariable {
+            let _variable = new _ArrayVariable();
+            _variable = this[`_array${name}`] = {
+                get value(): Array<any> {
+                    try {
+                        let data = Laya.LocalStorage.getJSON(name)
+                        if (data) {
+                            return JSON.parse(data);;
+                        } else {
+                            initial = initial ? initial : [];
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    } catch (error) {
+                        return [];
+                    }
+                },
+                set value(array: Array<any>) {
+                    Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                },
+            }
+            return _variable;
+        }
+
+        /**
+         * @param name 名称
+         * @param initial 初始值，如果有值了则无效，默认为[]
+         * */
+        export function _arrayArr(name: string, initial?: Array<Array<any>>): _ArrayArrVariable {
+            let _variable = new _ArrayVariable();
+            _variable = this[`_arrayArr${name}`] = {
+                get value(): Array<Array<any>> {
+                    try {
+                        let data = Laya.LocalStorage.getJSON(name)
+                        if (data) {
+                            return JSON.parse(data);;
+                        } else {
+                            initial = initial ? initial : [];
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    } catch (error) {
+                        return [];
+                    }
+                },
+                set value(array: Array<Array<any>>) {
+                    Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                },
+            }
+            return _variable;
+        }
+    }
     /**数据管理*/
     export module DataAdmin {
-        export class _Store {
-            getVariables(name: string): void {
-
-            }
-        }
         /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
         export class _Table {
             /**一些通用的属性名称*/
@@ -2990,6 +3155,17 @@ export module lwg {
 
     /**点击事件模块 */
     export module Click {
+        export let _switch: boolean = true;
+        /**按钮音效*/
+        export let _audioUrl: string;
+        /**
+         * 当前气球被缩放的比例
+         * */
+        export let _balloonScale: number;
+        /**
+        * 当前小甲虫被缩放的比例
+        * */
+        export let _beetleScale: number;
         /**
          * 动态创建一个按钮
          */
@@ -3017,16 +3193,6 @@ export module lwg {
                 this['Click_name'] = val;
             }
         }
-        /**按钮音效*/
-        export let _audioUrl: string;
-        /**
-         * 当前气球被缩放的比例
-         * */
-        export let _balloonScale;
-        /**
-        * 当前小甲虫被缩放的比例
-        * */
-        export let _beetleScale;
         /**b
          * 点击事件注册,可以用(e)=>{}简写传递的函数参数
          * @param effect 效果类型 1.'largen'
@@ -3039,7 +3205,7 @@ export module lwg {
          * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
         export function _on(effect: string, target: Laya.Node, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
-            let btnEffect;
+            let btnEffect: any;
             switch (effect) {
                 case _Type.no:
                     btnEffect = new _NoEffect();
@@ -3079,7 +3245,7 @@ export module lwg {
          * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
         export function _off(effect: string, target: any, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
-            let btnEffect;
+            let btnEffect: any;
             switch (effect) {
                 case _Type.no:
                     btnEffect = new _NoEffect();
@@ -3460,7 +3626,7 @@ export module lwg {
                 delayed = 0;
             }
             if (!click) {
-                Admin._clickLock.switch = true;
+                Click._switch = true;
             }
             Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                 // Audio._playSound(Enum.AudioName.commonShake, 1);
@@ -3471,7 +3637,7 @@ export module lwg {
                             func();
                         }
                         if (!click) {
-                            Admin._clickLock.switch = false;
+                            Click._switch = false;
                         }
                     }))
                 }))
@@ -3571,14 +3737,14 @@ export module lwg {
         export function fadeOut(node, alpha1, alpha2, time, delayed?: number, func?: Function, stageClick?: boolean): void {
             node.alpha = alpha1;
             if (stageClick) {
-                Admin._clickLock.switch = true;
+                Click._switch = true;
             }
             Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
                 if (func) {
                     func();
                 }
                 if (stageClick) {
-                    Admin._clickLock.switch = false;
+                    Click._switch = false;
                 }
             }), delayed ? delayed : 0)
         }
@@ -5884,7 +6050,6 @@ export module lwg {
         }
     }
 
-
     export module LwgPreLoad {
         /**3D场景的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
         let _scene3D: Array<string> = [];
@@ -6068,11 +6233,11 @@ export module lwg {
                         this._Owner.name = _loadType;
                         Admin._sceneControl[_loadType] = this._Owner;
                         if (_loadType !== Admin._SceneName.PreLoad) {
-                            if (Admin._preLoadOpenSceneLater.openName) {
-                                Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
-                                    Admin._preLoadOpenSceneLater.func;
+                            if (Admin._PreLoadCutIn.openName) {
+                                Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.cloesName, () => {
+                                    Admin._PreLoadCutIn.func;
                                     Admin._closeScene(_loadType);
-                                }, Admin._preLoadOpenSceneLater.zOrder);
+                                }, Admin._PreLoadCutIn.zOrder);
                             }
                         } else {
                             //初始化所有添加过的模块
@@ -6339,6 +6504,7 @@ export module lwg {
         export class _LwgInitScene extends Admin._SceneBase {
             moduleOnStart(): void {
                 _init();
+                DateAdmin._init();
                 this._openScene(_SceneName.PreLoad);
             };
         }
@@ -6402,7 +6568,7 @@ export module lwg {
          * 创建通用剩余体力数量prefab
          * @param parent 父节点
          */
-        export function _createExecutionNode(parent): void {
+        export function _createExecutionNode(parent: Laya.Sprite): void {
             let sp: Laya.Sprite;
             Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
                 let _prefab = new Laya.Prefab();
@@ -6556,11 +6722,11 @@ export let _SceneName = Admin._SceneName;
 export let Platform = lwg.Platform;
 export let SceneAnimation = lwg.SceneAnimation;
 export let Adaptive = lwg.Adaptive;
+export let StorageAdmin = lwg.StorageAdmin;
 export let DataAdmin = lwg.DataAdmin;
 export let EventAdmin = lwg.EventAdmin;
 export let DateAdmin = lwg.DateAdmin;
 export let TimerAdmin = lwg.TimerAdmin;
-export let Pause = lwg.Pause;
 export let Execution = lwg.Execution;
 export let Gold = lwg.Gold;
 export let Setting = lwg.Setting;

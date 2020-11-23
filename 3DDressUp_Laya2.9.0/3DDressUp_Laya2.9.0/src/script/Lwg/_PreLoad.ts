@@ -99,7 +99,7 @@ export module _Res {
 export module _PreLoad {
     export class PreLoad extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
-            EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+            EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
             // ADManager.TAPoint(TaT.PageShow, 'loadpage');
             // this._AniVar('ani1').play(0, false);
             // this._AniVar('ani1').on(Laya.Event.LABEL, this, () => {
@@ -118,6 +118,6 @@ export module _PreLoad {
     }
 
 }
-export default PreLoad;
+export default _PreLoad.PreLoad;
 
 
