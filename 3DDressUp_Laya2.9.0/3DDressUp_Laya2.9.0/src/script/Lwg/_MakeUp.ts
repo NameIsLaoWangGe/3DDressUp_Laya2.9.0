@@ -14,14 +14,14 @@ export module _MakeUp {
             } else {
                 _Scene3D.getComponent(MakeUp3D).lwgOnStart();
             }
-            this._EvNotify(_Event.addTexture2D, [this._ImgVar('Glasses1').name, this.Make.getTex(this._ImgVar('Glasses1')).bitmap]);
-            this._EvNotify(_Event.addTexture2D, [this._ImgVar('Glasses2').name, this.Make.getTex(this._ImgVar('Glasses2')).bitmap]);
+            this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses1').name, this.Make.getTex(this._ImgVar('Glasses1')).bitmap]);
+            this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses2').name, this.Make.getTex(this._ImgVar('Glasses2')).bitmap]);
         }
         lwgOpenAni(): number {
             return 100;
         }
         lwgEventRegister(): void {
-            this._EvReg(_Event.posCalibration, (p1: Laya.Point, p2: Laya.Point,) => {
+            this._evReg(_Event.posCalibration, (p1: Laya.Point, p2: Laya.Point,) => {
                 this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
                 this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y - this._ImgVar('Glasses1').height / 2);
             })
@@ -75,7 +75,7 @@ export module _MakeUp {
 
                             this.Make.frontPos = this.Make.endPos;
 
-                            this._EvNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
+                            this._evNotify(_Event.addTexture2D, [element.name, this.Make.getTex(element).bitmap]);
                         }
                     },
                     (e: Laya.Event) => {
@@ -114,13 +114,13 @@ export module _MakeUp {
         lwgOnAwake(): void {
         }
         lwgOnStart(): void {
-            let p1 = Tools._3D.posToScreen(this._child('Glasses1').transform.position, this._MainCamera);
-            let p2 = Tools._3D.posToScreen(this._child('Glasses2').transform.position, this._MainCamera);
-            this._EvNotify(_Event.posCalibration, [p1, p2]);
+            let p1 = Tools._3D.posToScreen(this._Child('Glasses1').transform.position, this._MainCamera);
+            let p2 = Tools._3D.posToScreen(this._Child('Glasses2').transform.position, this._MainCamera);
+            this._evNotify(_Event.posCalibration, [p1, p2]);
         }
         lwgEventRegister(): void {
-            this._EvReg(_Event.addTexture2D, (name: string, Text2D: Laya.Texture2D) => {
-                let bMaterial = this._child(name).meshRenderer.material as Laya.BlinnPhongMaterial;
+            this._evReg(_Event.addTexture2D, (name: string, Text2D: Laya.Texture2D) => {
+                let bMaterial = this._Child(name).meshRenderer.material as Laya.BlinnPhongMaterial;
                 bMaterial.albedoTexture.destroy();
                 bMaterial.albedoTexture = Text2D;
             })

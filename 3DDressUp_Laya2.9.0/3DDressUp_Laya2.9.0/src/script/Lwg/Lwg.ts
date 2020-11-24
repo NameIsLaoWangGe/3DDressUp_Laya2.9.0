@@ -5421,6 +5421,19 @@ export module lwg {
         /**3D相关*/
         export module _3D {
             /**
+             * @export 获取模型的大小
+             * @param {Laya.MeshSprite3D} MSp3D
+             * @return {*}  {Laya.Vector3}
+             */
+            export function getMeshSize(MSp3D: Laya.MeshSprite3D): Laya.Vector3 {
+                if (MSp3D.meshRenderer) {
+                    let v3: Laya.Vector3;
+                    let extent = MSp3D.meshRenderer.bounds.getExtent();
+                    return v3 = new Laya.Vector3(extent.x * 2, extent.y * 2, extent.z * 2)
+                }
+            }
+
+            /**
               * 返回两个三维物体的世界空间的距离
               * @param obj1 物体1
               * @param obj2 物体2

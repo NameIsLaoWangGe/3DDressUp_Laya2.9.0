@@ -111,9 +111,9 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.011,
+						0,
 						1.028,
-						-0.1529541
+						-0.185
 					],
 					"rotation":[
 						0,
@@ -126,7 +126,7 @@
 						1,
 						1
 					],
-					"meshPath":"Assets/Game/Mesh/test-1.lm"
+					"meshPath":"Library/unity default resources-Cube.lm"
 				},
 				"components":[],
 				"child":[
@@ -219,8 +219,15 @@
 								"rollingFriction":0,
 								"shapes":[
 									{
-										"type":"MeshColliderShape",
-										"mesh":"Assets/Game/Mesh/test-11.lm"
+										"type":"CapsuleColliderShape",
+										"center":[
+											0,
+											-0.05,
+											1.013367
+										],
+										"radius":0.12,
+										"height":0.1385531,
+										"orientation":1
 									}
 								],
 								"isTrigger":false
@@ -239,9 +246,9 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.01100001,
+						0,
 						0.879,
-						-0.1529542
+						-0.185
 					],
 					"rotation":[
 						0,

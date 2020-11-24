@@ -32,7 +32,6 @@ export module lwg3D {
         set _MainCamera(Camera: Laya.Camera) {
             this['__MainCamera'] = Camera;
         }
-
         /**子节点*/
         _Child(name: string): Laya.MeshSprite3D {
             if (!this[`_child${name}`]) {
@@ -86,7 +85,7 @@ export module lwg3D {
                 return this[`_child${name}${Component}`];
             }
         }
-        /**从全局查找当前节点，返回第一个*/
+        /**向下查找子节点，返回第一个*/
         _find(name: string): Laya.MeshSprite3D {
             if (!this[`_FindNode${name}`]) {
                 let Node = Tools._Node.findChild3D(this.owner, name);
@@ -103,7 +102,6 @@ export module lwg3D {
         _findMRenderer(name: string): Laya.MeshRenderer {
             return this.getFindComponent(name, 'meshRenderer');
         }
-
         /**从全局查找当前节点的的transform*/
         _findTrans(name: string): Laya.Transform3D {
             return this.getFindComponent(name, 'transform');
@@ -114,10 +112,10 @@ export module lwg3D {
         }
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
         lwgEventRegister(): void { };
-        _EvReg(name: string, func: Function): void {
+        _evReg(name: string, func: Function): void {
             EventAdmin._register(name, this, func);
         }
-        _EvNotify(name: string, args?: Array<any>): void {
+        _evNotify(name: string, args?: Array<any>): void {
             EventAdmin._notify(name, args);
         }
         /**初始化，在onEnable中执行，重写即可覆盖*/
