@@ -5729,14 +5729,15 @@
                 this.Tex = {
                     Img: null,
                     DisImg: null,
+                    imgWH: [128, 128],
                     touchP: null,
                     diffP: null,
-                    state: 'none',
                     dir: 'Front',
                     dirType: {
                         Front: 'Front',
                         Reverse: 'Reverse',
                     },
+                    state: 'none',
                     stateType: {
                         none: 'none',
                         move: 'move',
@@ -5754,8 +5755,8 @@
                         this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
                         this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                         this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
-                        this.Tex.Img.width = this.Tex.DisImg.width = 128;
-                        this.Tex.Img.height = this.Tex.DisImg.height = 128;
+                        this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
+                        this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                         this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
                         this._SpriteVar('Dispaly').visible = true;
                         this.Tex.restore();
@@ -5783,6 +5784,20 @@
                             if (_out) {
                                 indexArr.push(posArr[index]);
                                 outArr.push(_out);
+                                let Img = this._Owner.getChildByName(`Img${index}`);
+                                if (!Img) {
+                                    let Img = new Laya.Image;
+                                    Img.skin = `Lwg/UI/ui_circle_004.png`;
+                                    this._Owner.addChild(Img);
+                                    Img.name = `Img${index}`;
+                                    Img.width = 40;
+                                    Img.height = 40;
+                                    Img.pivotX = Img.width / 2;
+                                    Img.pivotY = Img.height / 2;
+                                }
+                                else {
+                                    Img.pos(gPoint.x, gPoint.y);
+                                }
                             }
                         }
                         if (indexArr.length !== 0) {
@@ -5822,14 +5837,12 @@
                             new Laya.Point(x + _width, y + _height),
                         ];
                     },
-                    possArr: [],
-                    insideP: null,
                     crashType: {
                         setImgPos: 'setImgPos',
                         enter: 'enter',
                         inside: 'inside',
                     },
-                    chekCrash: (type) => {
+                    chekInside: () => {
                         this.Tex.checkDir();
                         let x = this._ImgVar('Frame').x;
                         let y = this._ImgVar('Frame').y;
@@ -5839,24 +5852,16 @@
                         let p2 = [_width * 1 / 4, _height * 3 / 4];
                         let p3 = [_width * 3 / 4, _height * 1 / 4];
                         let p4 = [_width * 3 / 4, _height * 3 / 4];
-                        let p5 = [0, 0];
+                        let p5 = [x, y];
                         let p6 = [x + _width, y];
                         let p7 = [x, y + _height];
                         let p9 = [x + _width, y + _height];
                         let p8 = [x + _width / 2, y + _height / 2];
                         let posArr = [];
-                        if (type == this.Tex.crashType.enter) {
-                            posArr = [
-                                p5, p6, p7, p8
-                            ];
-                        }
-                        else if (type == this.Tex.crashType.inside) {
-                            posArr = [
-                                p1, p2, p3, p4, p5, p6, p7, p8, p9
-                            ];
-                        }
+                        posArr = [
+                            p1, p2, p3, p4, p5, p6, p7, p8, p9
+                        ];
                         let out;
-                        let bool = false;
                         for (let index = 0; index < posArr.length; index++) {
                             let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
                             out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dir);
@@ -5865,12 +5870,15 @@
                             }
                         }
                     },
-                    move: (e) => {
+                    disMove: () => {
+                        this.Tex.DisImg.x += this.Tex.diffP.x;
+                        this.Tex.DisImg.y += this.Tex.diffP.y;
                         let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
                         this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
-                        let out = this.Tex.chekCrash(this.Tex.crashType.enter);
-                        if (out) {
-                            this.Tex.insideP = out;
+                    },
+                    move: (e) => {
+                        this.Tex.disMove();
+                        if (this.Tex.chekInside()) {
                             this.Tex.setImgPos();
                             this._ImgVar('Wireframe').visible = true;
                             this.Tex.state = this.Tex.stateType.addTex;
@@ -5878,8 +5886,7 @@
                         }
                     },
                     addTex: (e) => {
-                        let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
-                        this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                        this.Tex.disMove();
                         let out = this.Tex.setImgPos();
                         if (!out) {
                             this._ImgVar('Wireframe').visible = false;
@@ -5891,18 +5898,18 @@
                     },
                     scale: (e) => {
                         let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
-                        this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
-                        this._ImgVar('Frame').width = lPoint.x;
-                        this._ImgVar('Frame').height = Math.abs(lPoint.y);
+                        this._ImgVar('Frame').width = this._ImgVar('WConversion').x = lPoint.x;
+                        this._ImgVar('Frame').height = this._ImgVar('WConversion').y = lPoint.y;
                         let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
                         this.Tex.Img.rotation = this.Tex.DisImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(e.stageX - gPoint.x, e.stageY - gPoint.y) + 45;
                         let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                         let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
-                        this.Tex.DisImg.width = this.Tex.Img.width = 128 + scaleWidth;
-                        this.Tex.DisImg.height = this.Tex.Img.height = 128 + scaleheight;
+                        this.Tex.DisImg.width = this.Tex.Img.width = this.Tex.imgWH[0] + scaleWidth;
+                        this.Tex.DisImg.height = this.Tex.Img.height = this.Tex.imgWH[1] + scaleheight;
                         Tools._Node.changePivot(this._ImgVar('Wireframe'), this._ImgVar('Frame').width / 2, this._ImgVar('Frame').height / 2);
                         Tools._Node.changePivotCenter(this.Tex.Img);
                         Tools._Node.changePivotCenter(this.Tex.DisImg);
+                        this.Tex.setImgPos();
                         EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
                     },
                     rotate: (e) => {
@@ -5918,8 +5925,6 @@
                     },
                     operation: (e) => {
                         this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
-                        this.Tex.DisImg.x += this.Tex.diffP.x;
-                        this.Tex.DisImg.y += this.Tex.diffP.y;
                         this.Tex[this.Tex.state](e);
                         this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
                     },
@@ -6016,7 +6021,7 @@
                 this.Tex.operation(e);
             }
             onStageMouseUp() {
-                !this.Tex.chekCrash(this.Tex.crashType.inside) && this.Tex.close();
+                !this.Tex.chekInside() && this.Tex.close();
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;

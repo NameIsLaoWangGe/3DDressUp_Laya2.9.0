@@ -40,14 +40,15 @@ export module _MakeClothes {
         Tex = {
             Img: null as Laya.Image,
             DisImg: null as Laya.Image,
+            imgWH: [128, 128],
             touchP: null as Laya.Point,
             diffP: null as Laya.Point,
-            state: 'none',
             dir: 'Front',
             dirType: {
                 Front: 'Front',
                 Reverse: 'Reverse',
             },
+            state: 'none',
             stateType: {
                 none: 'none',
                 move: 'move',
@@ -66,8 +67,8 @@ export module _MakeClothes {
                 this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
                 this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                 this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
-                this.Tex.Img.width = this.Tex.DisImg.width = 128;
-                this.Tex.Img.height = this.Tex.DisImg.height = 128;
+                this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
+                this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                 this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
                 this._SpriteVar('Dispaly').visible = true;
                 this.Tex.restore();
@@ -94,6 +95,21 @@ export module _MakeClothes {
                     if (_out) {
                         indexArr.push(posArr[index]);
                         outArr.push(_out);
+
+
+                        let Img = this._Owner.getChildByName(`Img${index}`) as Laya.Image;
+                        if (!Img) {
+                            let Img = new Laya.Image;
+                            Img.skin = `Lwg/UI/ui_circle_004.png`;
+                            this._Owner.addChild(Img);
+                            Img.name = `Img${index}`;
+                            Img.width = 40;
+                            Img.height = 40;
+                            Img.pivotX = Img.width / 2;
+                            Img.pivotY = Img.height / 2;
+                        } else {
+                            Img.pos(gPoint.x, gPoint.y);
+                        }
                     }
                 }
                 if (indexArr.length !== 0) {
@@ -105,6 +121,7 @@ export module _MakeClothes {
                     let angleXZ = Tools._Point.pointByAngle(_HangerP.transform.position.x - out.point.x, _HangerP.transform.position.z - out.point.z);
                     let _angleY: number;
                     if (this.Tex.dir == this.Tex.dirType.Front) {
+                        
                         _angleY = angleXZ + _HangerSimRY;
                     } else {
                         _angleY = angleXZ + _HangerSimRY - 180;
@@ -116,7 +133,6 @@ export module _MakeClothes {
                     let _DirHeight = Tools._3D.getMeshSize(_Hanger.getChildByName(this.Tex.dir) as Laya.MeshSprite3D).y;
                     let ratio = 1 - pH / _DirHeight;//比例
                     this.Tex.Img.y = ratio * _height;
-
                     return true;
                 } else {
                     return false;
@@ -135,18 +151,15 @@ export module _MakeClothes {
                     new Laya.Point(x + _width, y + _height),
                 ];
             },
-            possArr: [],
-            insideP: null as Laya.Point,
             crashType: {
                 setImgPos: 'setImgPos',
                 enter: 'enter',
                 inside: 'inside',
             },
             /**
-             * 碰撞检测
-             * @param type 是碰撞时还是碰撞中，点位不同
+             * 检测是不是在模型中
              * */
-            chekCrash: (type: string): any => {
+            chekInside: (): any => {
                 this.Tex.checkDir();
                 let x = this._ImgVar('Frame').x;
                 let y = this._ImgVar('Frame').y;
@@ -162,17 +175,10 @@ export module _MakeClothes {
                 let p9 = [x + _width, y + _height];
                 let p8 = [x + _width / 2, y + _height / 2];
                 let posArr = []
-                if (type == this.Tex.crashType.enter) {
-                    posArr = [
-                        p5, p6, p7, p8
-                    ];
-                } else if (type == this.Tex.crashType.inside) {
-                    posArr = [
-                        p1, p2, p3, p4, p5, p6, p7, p8, p9
-                    ];
-                }
+                posArr = [
+                    p1, p2, p3, p4, p5, p6, p7, p8, p9
+                ];
                 let out: any;
-                let bool: boolean = false;
                 for (let index = 0; index < posArr.length; index++) {
                     let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
                     out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dir)
@@ -181,12 +187,15 @@ export module _MakeClothes {
                     }
                 }
             },
-            move: (e: Laya.Event) => {
+            disMove: () => {
+                this.Tex.DisImg.x += this.Tex.diffP.x;
+                this.Tex.DisImg.y += this.Tex.diffP.y;
                 let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
                 this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
-                let out = this.Tex.chekCrash(this.Tex.crashType.enter);
-                if (out) {
-                    this.Tex.insideP = out;
+            },
+            move: (e: Laya.Event) => {
+                this.Tex.disMove();
+                if (this.Tex.chekInside()) {
                     this.Tex.setImgPos();
                     this._ImgVar('Wireframe').visible = true;
                     this.Tex.state = this.Tex.stateType.addTex;
@@ -194,8 +203,7 @@ export module _MakeClothes {
                 }
             },
             addTex: (e: Laya.Event) => {
-                let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
-                this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
+                this.Tex.disMove();
                 let out = this.Tex.setImgPos();
                 if (!out) {
                     this._ImgVar('Wireframe').visible = false;
@@ -207,24 +215,22 @@ export module _MakeClothes {
             },
             scale: (e: Laya.Event): void => {
                 let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
-                this._ImgVar('WConversion').pos(lPoint.x, lPoint.y);
-                this._ImgVar('Frame').width = lPoint.x;
-                this._ImgVar('Frame').height = Math.abs(lPoint.y);
+                this._ImgVar('Frame').width = this._ImgVar('WConversion').x = lPoint.x;
+                this._ImgVar('Frame').height = this._ImgVar('WConversion').y = lPoint.y;
 
                 let gPoint = this._Owner.localToGlobal(new Laya.Point(this._ImgVar('Wireframe').x, this._ImgVar('Wireframe').y));
-
                 this.Tex.Img.rotation = this.Tex.DisImg.rotation = this._ImgVar('Wireframe').rotation = Tools._Point.pointByAngle(e.stageX - gPoint.x, e.stageY - gPoint.y) + 45;
 
                 let scaleWidth = this._ImgVar('Frame').width - this._ImgVar('Wireframe').width;
                 let scaleheight = this._ImgVar('Frame').height - this._ImgVar('Wireframe').height;
 
-                this.Tex.DisImg.width = this.Tex.Img.width = 128 + scaleWidth;
-                this.Tex.DisImg.height = this.Tex.Img.height = 128 + scaleheight;
+                this.Tex.DisImg.width = this.Tex.Img.width = this.Tex.imgWH[0] + scaleWidth;
+                this.Tex.DisImg.height = this.Tex.Img.height = this.Tex.imgWH[1] + scaleheight;
 
                 Tools._Node.changePivot(this._ImgVar('Wireframe'), this._ImgVar('Frame').width / 2, this._ImgVar('Frame').height / 2);
                 Tools._Node.changePivotCenter(this.Tex.Img);
                 Tools._Node.changePivotCenter(this.Tex.DisImg);
-
+                this.Tex.setImgPos();
                 EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
             },
             rotate: (e: Laya.Event) => {
@@ -239,8 +245,6 @@ export module _MakeClothes {
             },
             operation: (e: Laya.Event): void => {
                 this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
-                this.Tex.DisImg.x += this.Tex.diffP.x;
-                this.Tex.DisImg.y += this.Tex.diffP.y;
                 this.Tex[this.Tex.state](e);
                 this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             },
@@ -315,13 +319,11 @@ export module _MakeClothes {
             this.Tex.operation(e);
         }
         onStageMouseUp() {
-            !this.Tex.chekCrash(this.Tex.crashType.inside) && this.Tex.close();
+            !this.Tex.chekInside() && this.Tex.close();
         }
     }
     export let _Scene3D: Laya.Scene3D;
     export let _MainCamara: Laya.Camera;
-    // export let _Frame: Laya.MeshSprite3D;
-    // export let _Screen: Laya.MeshSprite3D;
     /**模型的角度*/
     export let _Hanger: Laya.MeshSprite3D;
     export let _HangerP: Laya.MeshSprite3D;
