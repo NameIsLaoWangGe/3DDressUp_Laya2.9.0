@@ -5815,8 +5815,9 @@
                         let _width = this._ImgVar('Frame').width;
                         let _height = this._ImgVar('Frame').height;
                         return [
-                            new Laya.Point(0, 0),
+                            new Laya.Point(x, y),
                             new Laya.Point(x + _width, y),
+                            new Laya.Point(x + _width / 2, y + _height / 2),
                             new Laya.Point(x, y + _height),
                             new Laya.Point(x + _width, y + _height),
                         ];

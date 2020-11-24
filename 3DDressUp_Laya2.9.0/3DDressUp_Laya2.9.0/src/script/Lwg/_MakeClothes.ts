@@ -128,8 +128,9 @@ export module _MakeClothes {
                 let _width = this._ImgVar('Frame').width;
                 let _height = this._ImgVar('Frame').height;
                 return [
-                    new Laya.Point(0, 0),
+                    new Laya.Point(x, y),
                     new Laya.Point(x + _width, y),
+                    new Laya.Point(x + _width / 2, y + _height / 2),
                     new Laya.Point(x, y + _height),
                     new Laya.Point(x + _width, y + _height),
                 ];
@@ -155,7 +156,7 @@ export module _MakeClothes {
                 let p2 = [_width * 1 / 4, _height * 3 / 4];
                 let p3 = [_width * 3 / 4, _height * 1 / 4];
                 let p4 = [_width * 3 / 4, _height * 3 / 4];
-                let p5 = [0, 0];
+                let p5 = [x, y];
                 let p6 = [x + _width, y];
                 let p7 = [x, y + _height];
                 let p9 = [x + _width, y + _height];
@@ -185,7 +186,7 @@ export module _MakeClothes {
                 this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
                 let out = this.Tex.chekCrash(this.Tex.crashType.enter);
                 if (out) {
-                    this.Tex.insideP = out
+                    this.Tex.insideP = out;
                     this.Tex.setImgPos();
                     this._ImgVar('Wireframe').visible = true;
                     this.Tex.state = this.Tex.stateType.addTex;

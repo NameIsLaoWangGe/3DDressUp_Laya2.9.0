@@ -262,7 +262,7 @@
 						0.01
 					],
 					"meshPath":"Library/unity default resources-Plane.lm",
-					"enableRender":true,
+					"enableRender":false,
 					"materials":[
 						{
 							"type":"Laya.BlinnPhongMaterial",
