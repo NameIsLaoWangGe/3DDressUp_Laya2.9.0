@@ -5551,7 +5551,7 @@ export module lwg {
              * @param vector2 触摸点
              * @param filtrateName 找出指定触摸的模型的信息，如果不传则返回全部信息数组；
              */
-            export function rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: Array<string>): Array<Laya.HitResult> {
+            export function rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: string): any {
                 /**射线*/
                 let _ray: Laya.Ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
                 /**射线扫描结果*/
@@ -5560,18 +5560,16 @@ export module lwg {
                 camera.viewportPointToRay(vector2, _ray);
                 scene3D.physicsSimulation.rayCastAll(_ray, outs);
                 if (filtrateName) {
-                    let outsChaild = [];
-                    for (var i = 0; i < outs.length; i++) {
+                    let chek;
+                    for (let i = 0; i < outs.length; i++) {
                         //找出指定
-                        let hitResult = outs[i].collider.owner;
-                        for (let index = 0; index < filtrateName.length; index++) {
-                            if (hitResult.name == filtrateName[index]) {
-                                // 开启移动
-                                outsChaild.push(outs[i]);
-                            }
+                        let Sp3d = outs[i].collider.owner;
+                        if (Sp3d.name == filtrateName) {
+                            // 开启移动
+                            chek = outs[i];
                         }
                     }
-                    return outsChaild.length > 0 ? outsChaild : null;
+                    return chek;
                 } else {
                     return outs;
                 }

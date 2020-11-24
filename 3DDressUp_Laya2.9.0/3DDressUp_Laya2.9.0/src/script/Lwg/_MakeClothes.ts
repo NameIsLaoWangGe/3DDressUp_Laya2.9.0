@@ -83,30 +83,38 @@ export module _MakeClothes {
                     this.Tex.dir = this.Tex.dirType.Reverse;
                 }
             },
-            setImgPos: (out: Array<Laya.HitResult>) => {
+            setImgPos: (out: Laya.HitResult) => {
                 this.Tex.checkDir();
                 let _width = this._ImgVar(this.Tex.dir).width;
                 let _height = this._ImgVar(this.Tex.dir).height;
-
                 //通过xz的角度计算x 
-                let angleY = Tools._Point.pointByAngle(_Hanger.transform.position.x - out[0].point.x, _Hanger.transform.position.z - out[0].point.z);
-                let _angleY = angleY + 90 + _Hanger.transform.localRotationEulerY;
+                let angleY = Tools._Point.pointByAngle(_Hanger.transform.position.x - out.point.x, _Hanger.transform.position.z - out.point.z);
+                let _angleY: number;
+
                 if (this.Tex.dir == this.Tex.dirType.Front) {
+                    _angleY = angleY + 90 + _HangerSimRY;
                     this.Tex.Img.x = _width - _width / 180 * (_angleY);
+                    console.log(_HangerSimRY, angleY, _angleY);
                 } else {
-                    this.Tex.Img.x = _width / 180 * (_angleY);
+                    _angleY = angleY + 90 + _HangerSimRY - 180;
+                    console.log(_HangerSimRY, angleY, _angleY);
+                    this.Tex.Img.x = _width - _width / 180 * (_angleY);
                 }
                 // 通过xy计算y
                 let Dir = _Hanger.getChildByName(this.Tex.dir) as Laya.MeshSprite3D;
-                let outY = out[0].point.y;
-                let p1 = _Hanger.transform.position.y;
-                let _DirHeight = Dir.transform.localScaleY + _Hanger.transform.position.y;
-                if (outY > p1) {
-                    this.Tex.Img.y = Math.abs((_DirHeight / 2 - outY) / _DirHeight * _height);
-                } else {
-                    this.Tex.Img.y = Math.abs(outY / _DirHeight * _height);
-                }
-                console.log(out[0].collider.owner.name, this.Tex.dir, this.Tex.Img.x, this.Tex.Img.y);
+                let outY = out.point.y;
+                let h = outY - _HangerP.transform.position.y;
+                let _DirHeight = 0.28;
+                let radio = 1 - h / _DirHeight;
+                this.Tex.Img.y = radio * _height;
+                // let p1 = _Hanger.transform.position.y;
+                // let _DirHeight = Dir.transform.localScaleY + _Hanger.transform.position.y;
+                // if (outY > p1) {
+                //     this.Tex.Img.y = Math.abs((_DirHeight / 2 - outY) / _DirHeight * _height);
+                // } else {
+                //     this.Tex.Img.y = Math.abs(outY / _DirHeight * _height);
+                // }
+                // console.log(out, this.Tex.dir, this.Tex.Img.x, this.Tex.Img.y);
             },
             getOut: (): any => {
                 this.Tex.checkDir();
@@ -126,7 +134,7 @@ export module _MakeClothes {
                 let posArr = [p5];
                 let out: any;
                 let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[0][0], posArr[0][1]));
-                out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), [this.Tex.dir])
+                out = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), this.Tex.dir)
                 return out;
             },
             move: (e: Laya.Event) => {
@@ -149,11 +157,14 @@ export module _MakeClothes {
                 this.Tex.DisImg.y += this.Tex.diffP.y;
                 let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
                 this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
-                if (!this.Tex.getOut()) {
+                let out = this.Tex.getOut();
+                if (!out) {
                     this._ImgVar('Wireframe').visible = false;
                     this.Tex.state = this.Tex.stateType.move;
                     this.Tex.Img.x = Laya.stage.width;
                     this._SpriteVar('Dispaly').visible = true;
+                } else {
+                    this.Tex.setImgPos(out);
                 }
                 EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
             },
@@ -280,17 +291,16 @@ export module _MakeClothes {
     // export let _Screen: Laya.MeshSprite3D;
     /**模型的角度*/
     export let _Hanger: Laya.MeshSprite3D;
+    export let _HangerP: Laya.MeshSprite3D;
+    export let _HangerSimRY = 0;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
             _Hanger = this._Child('Hanger');
+            _HangerP = this._Child('HangerP');
             // _Frame = this._Child('Frame');
             // _Frame.addComponent(Frame);
             // _Screen = this._Child('Screen');
             _MainCamara = this._MainCamera;
-        }
-        lwgReset(): void {
-        }
-        lwgOnStart(): void {
         }
         lwgEventRegister(): void {
             EventAdmin._register(_Event.addTexture2D, this, (name: string, Text2D: Laya.Texture2D) => {
@@ -302,10 +312,19 @@ export module _MakeClothes {
             EventAdmin._register(_Event.rotateHanger, this, (num: number) => {
                 if (num == 1) {
                     this._childTrans('Hanger').localRotationEulerY++;
+                    _HangerSimRY++;
+                    if (_HangerSimRY > 360) {
+                        _HangerSimRY = 0;
+                    }
                 } else {
                     this._childTrans('Hanger').localRotationEulerY--;
+                    _HangerSimRY--;
+                    if (_HangerSimRY < 0) {
+                        _HangerSimRY = 359;
+                    }
                 }
-                this._childTrans('Hanger').localRotationEulerY %= 360;
+
+                // this._childTrans('Hanger').localRotationEulerY %= 360;
                 // let ChildF = _Hanger.getChildByName('CubeF') as Laya.MeshSprite3D;
                 // let ChildR = _Hanger.getChildByName('CubeR') as Laya.MeshSprite3D;
                 // if (ChildF.transform.position.z < ChildR.transform.position.z) {

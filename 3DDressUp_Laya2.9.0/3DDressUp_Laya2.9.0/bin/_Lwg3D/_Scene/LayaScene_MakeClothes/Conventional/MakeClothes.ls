@@ -126,7 +126,7 @@
 						1,
 						1
 					],
-					"meshPath":"Library/unity default resources-Cube.lm"
+					"meshPath":"Assets/Game/Mesh/test-1.lm"
 				},
 				"components":[],
 				"child":[
@@ -229,6 +229,56 @@
 						"child":[]
 					}
 				]
+			},
+			{
+				"type":"MeshSprite3D",
+				"instanceID":5,
+				"props":{
+					"name":"HangerP",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.01100001,
+						0.879,
+						-0.1529542
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						0.01,
+						0.01,
+						0.01
+					],
+					"meshPath":"Library/unity default resources-Plane.lm",
+					"enableRender":true,
+					"materials":[
+						{
+							"type":"Laya.BlinnPhongMaterial",
+							"path":"Resources/unity_builtin_extra.lmat"
+						}
+					]
+				},
+				"components":[
+					{
+						"type":"PhysicsCollider",
+						"restitution":0,
+						"friction":0.5,
+						"rollingFriction":0,
+						"shapes":[
+							{
+								"type":"MeshColliderShape",
+								"mesh":"Library/unity default resources-Plane.lm"
+							}
+						],
+						"isTrigger":false
+					}
+				],
+				"child":[]
 			}
 		]
 	}

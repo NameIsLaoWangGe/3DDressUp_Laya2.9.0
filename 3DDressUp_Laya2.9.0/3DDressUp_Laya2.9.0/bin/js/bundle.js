@@ -4117,16 +4117,14 @@
                     camera.viewportPointToRay(vector2, _ray);
                     scene3D.physicsSimulation.rayCastAll(_ray, outs);
                     if (filtrateName) {
-                        let outsChaild = [];
-                        for (var i = 0; i < outs.length; i++) {
-                            let hitResult = outs[i].collider.owner;
-                            for (let index = 0; index < filtrateName.length; index++) {
-                                if (hitResult.name == filtrateName[index]) {
-                                    outsChaild.push(outs[i]);
-                                }
+                        let chek;
+                        for (let i = 0; i < outs.length; i++) {
+                            let Sp3d = outs[i].collider.owner;
+                            if (Sp3d.name == filtrateName) {
+                                chek = outs[i];
                             }
                         }
-                        return outsChaild.length > 0 ? outsChaild : null;
+                        return chek;
                     }
                     else {
                         return outs;
@@ -5770,25 +5768,24 @@
                         this.Tex.checkDir();
                         let _width = this._ImgVar(this.Tex.dir).width;
                         let _height = this._ImgVar(this.Tex.dir).height;
-                        let angleY = Tools._Point.pointByAngle(_MakeClothes._Hanger.transform.position.x - out[0].point.x, _MakeClothes._Hanger.transform.position.z - out[0].point.z);
-                        let _angleY = angleY + 90 + _MakeClothes._Hanger.transform.localRotationEulerY;
+                        let angleY = Tools._Point.pointByAngle(_MakeClothes._Hanger.transform.position.x - out.point.x, _MakeClothes._Hanger.transform.position.z - out.point.z);
+                        let _angleY;
                         if (this.Tex.dir == this.Tex.dirType.Front) {
+                            _angleY = angleY + 90 + _MakeClothes._HangerSimRY;
+                            this.Tex.Img.x = _width - _width / 180 * (_angleY);
+                            console.log(_MakeClothes._HangerSimRY, angleY, _angleY);
+                        }
+                        else {
+                            _angleY = angleY + 90 + _MakeClothes._HangerSimRY - 180;
+                            console.log(_MakeClothes._HangerSimRY, angleY, _angleY);
                             this.Tex.Img.x = _width - _width / 180 * (_angleY);
                         }
-                        else {
-                            this.Tex.Img.x = _width / 180 * (_angleY);
-                        }
                         let Dir = _MakeClothes._Hanger.getChildByName(this.Tex.dir);
-                        let outY = out[0].point.y;
-                        let p1 = _MakeClothes._Hanger.transform.position.y;
-                        let _DirHeight = Dir.transform.localScaleY + _MakeClothes._Hanger.transform.position.y;
-                        if (outY > p1) {
-                            this.Tex.Img.y = Math.abs((_DirHeight / 2 - outY) / _DirHeight * _height);
-                        }
-                        else {
-                            this.Tex.Img.y = Math.abs(outY / _DirHeight * _height);
-                        }
-                        console.log(out[0].collider.owner.name, this.Tex.dir, this.Tex.Img.x, this.Tex.Img.y);
+                        let outY = out.point.y;
+                        let h = outY - _MakeClothes._HangerP.transform.position.y;
+                        let _DirHeight = 0.28;
+                        let radio = 1 - h / _DirHeight;
+                        this.Tex.Img.y = radio * _height;
                     },
                     getOut: () => {
                         this.Tex.checkDir();
@@ -5808,7 +5805,7 @@
                         let posArr = [p5];
                         let out;
                         let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[0][0], posArr[0][1]));
-                        out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), [this.Tex.dir]);
+                        out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x + x, gPoint.y + y), this.Tex.dir);
                         return out;
                     },
                     move: (e) => {
@@ -5831,11 +5828,15 @@
                         this.Tex.DisImg.y += this.Tex.diffP.y;
                         let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y));
                         this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
-                        if (!this.Tex.getOut()) {
+                        let out = this.Tex.getOut();
+                        if (!out) {
                             this._ImgVar('Wireframe').visible = false;
                             this.Tex.state = this.Tex.stateType.move;
                             this.Tex.Img.x = Laya.stage.width;
                             this._SpriteVar('Dispaly').visible = true;
+                        }
+                        else {
+                            this.Tex.setImgPos(out);
                         }
                         EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
                     },
@@ -5974,14 +5975,12 @@
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
+        _MakeClothes._HangerSimRY = 0;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
                 _MakeClothes._Hanger = this._Child('Hanger');
+                _MakeClothes._HangerP = this._Child('HangerP');
                 _MakeClothes._MainCamara = this._MainCamera;
-            }
-            lwgReset() {
-            }
-            lwgOnStart() {
             }
             lwgEventRegister() {
                 EventAdmin._register(_Event.addTexture2D, this, (name, Text2D) => {
@@ -5992,13 +5991,18 @@
                 EventAdmin._register(_Event.rotateHanger, this, (num) => {
                     if (num == 1) {
                         this._childTrans('Hanger').localRotationEulerY++;
+                        _MakeClothes._HangerSimRY++;
+                        if (_MakeClothes._HangerSimRY > 360) {
+                            _MakeClothes._HangerSimRY = 0;
+                        }
                     }
                     else {
                         this._childTrans('Hanger').localRotationEulerY--;
+                        _MakeClothes._HangerSimRY--;
+                        if (_MakeClothes._HangerSimRY < 0) {
+                            _MakeClothes._HangerSimRY = 359;
+                        }
                     }
-                    this._childTrans('Hanger').localRotationEulerY %= 360;
-                    let ChildF = _MakeClothes._Hanger.getChildByName('CubeF');
-                    let ChildR = _MakeClothes._Hanger.getChildByName('CubeR');
                 });
             }
         }
