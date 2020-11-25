@@ -5323,12 +5323,12 @@
                 this.LineParent = LineParent;
                 this.OwnerScene = OwnerScene;
                 for (let index = 0; index < this.LineParent.numChildren; index++) {
-                    const element = this.LineParent.getChildAt(index);
-                    if (element.getComponents(Laya.BoxCollider)) {
+                    const Line = this.LineParent.getChildAt(index);
+                    if (Line.numChildren > 0) {
                         let data = {};
-                        data['Img'] = element;
-                        data[this._property.name] = element.name;
-                        data[this._property.conditionNum] = element.getComponents(Laya.BoxCollider).length;
+                        data['Line'] = Line;
+                        data[this._property.name] = Line.name;
+                        data[this._property.conditionNum] = Line.numChildren;
                         data[this._property.degreeNum] = 0;
                         this._arr.push(data);
                     }
@@ -5353,9 +5353,10 @@
         _Tailor.DottedLine = DottedLine;
         class Scissor extends Admin._ObjectBase {
             onTriggerEnter(other, self) {
+                console.log('裁剪！');
                 if (!other['cut']) {
                     other['cut'] = true;
-                    EventAdmin._notify(_Event.trigger, [other.owner.name]);
+                    EventAdmin._notify(_Event.trigger, [other.owner.parent.name]);
                 }
             }
         }
@@ -5992,6 +5993,8 @@
                             this.Tex.state = this.Tex.stateType.scale;
                         }, null, (e) => {
                             this.Tex.state = this.Tex.stateType.addTex;
+                        }, (e) => {
+                            this.Tex.state = this.Tex.stateType.addTex;
                         });
                         this._btnUp(this._ImgVar('WClose'), (e) => {
                             this.Tex.close();
@@ -6325,7 +6328,7 @@
     GameConfig.startScene = "Scene/LwgInit.scene";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
-    GameConfig.stat = false;
+    GameConfig.stat = true;
     GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();

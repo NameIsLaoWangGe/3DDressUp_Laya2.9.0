@@ -289,6 +289,8 @@ export module _MakeClothes {
                     this.Tex.state = this.Tex.stateType.scale;
                 }, null, (e: Laya.Event) => {
                     this.Tex.state = this.Tex.stateType.addTex;
+                }, (e: Laya.Event) => {
+                    this.Tex.state = this.Tex.stateType.addTex;
                 })
                 this._btnUp(this._ImgVar('WClose'), (e: Laya.Event) => {
                     this.Tex.close();

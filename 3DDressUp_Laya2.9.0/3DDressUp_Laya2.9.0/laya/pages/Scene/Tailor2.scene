@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
-    "selecteID":30,
+    "selectedBox":23,
+    "selecteID":17,
     "searchKey":"Scene",
     "referenceLines":[
         ],
@@ -203,13 +203,14 @@
                             "props":{"y":25,"x":317,"var":"Line1","skin":"Game/UI/MakeClothes/dottedline2.png","name":"Line1"},
                             "nodeParent":23,
                             "label":"Line1",
-                            "isOpen":false,
+                            "isOpen":true,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":17,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"RigidBody",
                                     "switchAble":true,
                                     "searchKey":"RigidBody",
@@ -225,6 +226,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -240,6 +242,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -255,6 +258,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -270,6 +274,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -285,6 +290,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -300,6 +306,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -315,6 +322,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -330,6 +338,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -345,6 +354,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -360,6 +370,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -375,6 +386,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -390,6 +402,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -405,6 +418,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -420,6 +434,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -435,6 +450,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -450,6 +466,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -465,6 +482,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -480,6 +498,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -495,6 +514,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -510,6 +530,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -525,6 +546,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -540,6 +562,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",

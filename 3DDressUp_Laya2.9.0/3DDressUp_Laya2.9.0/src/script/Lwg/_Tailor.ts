@@ -19,15 +19,23 @@ export module _Tailor {
             this.LineParent = LineParent;
             this.OwnerScene = OwnerScene;
             for (let index = 0; index < this.LineParent.numChildren; index++) {
-                const element = this.LineParent.getChildAt(index) as Laya.Image;
-                if (element.getComponents(Laya.BoxCollider)) {
+                const Line = this.LineParent.getChildAt(index) as Laya.Image;
+                if (Line.numChildren > 0) {
                     let data = {};
-                    data['Img'] = element;
-                    data[this._property.name] = element.name;
-                    data[this._property.conditionNum] = element.getComponents(Laya.BoxCollider).length;
+                    data['Line'] = Line;
+                    data[this._property.name] = Line.name;
+                    data[this._property.conditionNum] = Line.numChildren;
                     data[this._property.degreeNum] = 0;
                     this._arr.push(data);
                 }
+                // if (element.getComponents(Laya.BoxCollider)) {
+                //     let data = {};
+                //     data['Img'] = element;
+                //     data[this._property.name] = element.name;
+                //     data[this._property.conditionNum] = element.getComponents(Laya.BoxCollider).length;
+                //     data[this._property.degreeNum] = 0;
+                //     this._arr.push(data);
+                // }
             }
         }
         /**移除布料*/
@@ -55,9 +63,10 @@ export module _Tailor {
     /**剪刀*/
     export class Scissor extends Admin._ObjectBase {
         onTriggerEnter(other: Laya.CircleCollider, self: Laya.CircleCollider): void {
+            console.log('裁剪！')
             if (!other['cut']) {
                 other['cut'] = true;
-                EventAdmin._notify(_Event.trigger, [other.owner.name]);
+                EventAdmin._notify(_Event.trigger, [other.owner.parent.name]);
             }
         }
     }
