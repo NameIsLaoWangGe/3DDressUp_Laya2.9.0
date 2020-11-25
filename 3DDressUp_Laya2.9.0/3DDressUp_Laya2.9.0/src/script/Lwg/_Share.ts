@@ -1,8 +1,7 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import RecordManager from "../TJ/RecordManager";
-import { Admin, Click, _Gold, Tools, Dialogue, _SceneName, EventAdmin } from "./Lwg";
+import { Admin, Click, Tools, Dialogue, _SceneName, EventAdmin } from "./Lwg";
 import { _Game } from "./_Game";
-import { _PreloadUrl } from "./_PreLoad";
 export module _Share {
     export class _Data {
         static _photo = {

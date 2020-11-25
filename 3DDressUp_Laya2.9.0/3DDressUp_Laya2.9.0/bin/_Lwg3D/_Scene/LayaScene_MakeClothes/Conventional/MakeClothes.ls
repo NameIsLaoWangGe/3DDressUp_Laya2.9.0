@@ -219,15 +219,8 @@
 								"rollingFriction":0,
 								"shapes":[
 									{
-										"type":"CapsuleColliderShape",
-										"center":[
-											0,
-											-0.05,
-											1.013367
-										],
-										"radius":0.12,
-										"height":0.1385531,
-										"orientation":1
+										"type":"MeshColliderShape",
+										"mesh":"Assets/Game/Mesh/test-11.lm"
 									}
 								],
 								"isTrigger":false
@@ -261,7 +254,7 @@
 						0.01,
 						0.01
 					],
-					"meshPath":"Library/unity default resources-Plane.lm",
+					"meshPath":"Library/unity default resources-Cube.lm",
 					"enableRender":false,
 					"materials":[
 						{
@@ -278,8 +271,17 @@
 						"rollingFriction":0,
 						"shapes":[
 							{
-								"type":"MeshColliderShape",
-								"mesh":"Library/unity default resources-Plane.lm"
+								"type":"BoxColliderShape",
+								"center":[
+									0,
+									0,
+									0
+								],
+								"size":[
+									1,
+									1,
+									1
+								]
 							}
 						],
 						"isTrigger":false

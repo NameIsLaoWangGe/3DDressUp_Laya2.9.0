@@ -1100,6 +1100,38 @@
                     super(...arguments);
                     this.ownerSceneName = '';
                 }
+                getFind(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        let Node = Tools._Node.findChild2D(this.owner.scene, name);
+                        if (Node) {
+                            return this[`_Scene${type}${name}`] = Node;
+                        }
+                        else {
+                            console.log(`场景内不存在节点${name}`);
+                        }
+                    }
+                    else {
+                        return this[`_Scene${type}${name}`];
+                    }
+                }
+                _FindImg(name) {
+                    return this.getFind(name, '_FindImg');
+                }
+                _FindSp(name) {
+                    return this.getFind(name, '_FindSp');
+                }
+                _FindBox(name) {
+                    return this.getFind(name, '_FindBox');
+                }
+                _FindTap(name) {
+                    return this.getFind(name, '_FindTap');
+                }
+                _FindLabel(name) {
+                    return this.getFind(name, '_FindLabel');
+                }
+                _FindList(name) {
+                    return this.getFind(name, '_FindList');
+                }
                 _storeNum(name, initial) {
                     return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
                 }
@@ -5748,7 +5780,6 @@
                     createImg: (element) => {
                         this.Tex.DisImg && this.Tex.DisImg.destroy();
                         this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                        this._SpriteVar(this.Tex.dir).addChild(this.Tex.Img);
                         let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('Ultimately'));
                         this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
                         this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
@@ -5762,8 +5793,13 @@
                         this.Tex.restore();
                     },
                     getTex: () => {
-                        let Img = this._ImgVar(this.Tex.dir);
-                        return Img.drawToTexture(Img.width, Img.height, Img.x, Img.y + Img.height);
+                        let ImgF = this._ImgVar(this.Tex.dirType.Front);
+                        let ImgR = this._ImgVar(this.Tex.dirType.Reverse);
+                        let arr = [
+                            ImgF.drawToTexture(ImgF.width, ImgF.height, ImgF.x, ImgF.y + ImgF.height),
+                            ImgR.drawToTexture(ImgR.width, ImgR.height, ImgR.x, ImgR.y + ImgR.height)
+                        ];
+                        return arr;
                     },
                     checkDir: () => {
                         if (0 <= _MakeClothes._HangerSimRY && _MakeClothes._HangerSimRY < 180) {
@@ -5774,35 +5810,39 @@
                         }
                     },
                     setImgPos: () => {
-                        this.Tex.checkDir();
                         let posArr = this.Tex.setPosArr();
-                        let outArr = [];
                         let indexArr = [];
+                        let fOutArr = [];
+                        let rOutArr = [];
                         for (let index = 0; index < posArr.length; index++) {
                             let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index].x, posArr[index].y));
-                            let _out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dir);
-                            if (_out) {
+                            let _outF = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Front);
+                            _outF && fOutArr.push(_outF);
+                            let _outR = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Reverse);
+                            _outR && rOutArr.push(_outR);
+                            if (_outF || _outR) {
                                 indexArr.push(posArr[index]);
-                                outArr.push(_out);
-                                let Img = this._Owner.getChildByName(`Img${index}`);
-                                if (!Img) {
-                                    let Img = new Laya.Image;
-                                    Img.skin = `Lwg/UI/ui_circle_004.png`;
-                                    this._Owner.addChild(Img);
-                                    Img.name = `Img${index}`;
-                                    Img.width = 40;
-                                    Img.height = 40;
-                                    Img.pivotX = Img.width / 2;
-                                    Img.pivotY = Img.height / 2;
-                                }
-                                else {
-                                    Img.pos(gPoint.x, gPoint.y);
-                                }
                             }
                         }
                         if (indexArr.length !== 0) {
+                            let out;
+                            if (fOutArr.length == rOutArr.length) {
+                                this.Tex.checkDir();
+                            }
+                            else if (fOutArr.length > rOutArr.length) {
+                                this.Tex.dir = this.Tex.dirType.Front;
+                            }
+                            else if (fOutArr.length < rOutArr.length) {
+                                this.Tex.dir = this.Tex.dirType.Reverse;
+                            }
+                            if (this.Tex.dir == this.Tex.dirType.Front) {
+                                out = fOutArr[fOutArr.length - 1];
+                            }
+                            else {
+                                out = rOutArr[rOutArr.length - 1];
+                            }
+                            this._SpriteVar(this.Tex.dir).addChild(this.Tex.Img);
                             Tools._Node.changePivot(this.Tex.Img, indexArr[indexArr.length - 1].x, indexArr[indexArr.length - 1].y);
-                            let out = outArr[outArr.length - 1];
                             let _width = this._ImgVar(this.Tex.dir).width;
                             let _height = this._ImgVar(this.Tex.dir).height;
                             let angleXZ = Tools._Point.pointByAngle(_MakeClothes._HangerP.transform.position.x - out.point.x, _MakeClothes._HangerP.transform.position.z - out.point.z);
@@ -5832,7 +5872,11 @@
                         return [
                             new Laya.Point(x, y),
                             new Laya.Point(x + _width, y),
+                            new Laya.Point(_width * 1 / 4, _height * 3 / 4),
+                            new Laya.Point(_width * 3 / 4, _height * 1 / 4),
                             new Laya.Point(x + _width / 2, y + _height / 2),
+                            new Laya.Point(_width * 1 / 4, _height * 1 / 4),
+                            new Laya.Point(_width * 3 / 4, _height * 3 / 4),
                             new Laya.Point(x, y + _height),
                             new Laya.Point(x + _width, y + _height),
                         ];
@@ -5844,30 +5888,21 @@
                     },
                     chekInside: () => {
                         this.Tex.checkDir();
-                        let x = this._ImgVar('Frame').x;
-                        let y = this._ImgVar('Frame').y;
-                        let _width = this._ImgVar('Frame').width;
-                        let _height = this._ImgVar('Frame').height;
-                        let p1 = [_width * 1 / 4, _height * 1 / 4];
-                        let p2 = [_width * 1 / 4, _height * 3 / 4];
-                        let p3 = [_width * 3 / 4, _height * 1 / 4];
-                        let p4 = [_width * 3 / 4, _height * 3 / 4];
-                        let p5 = [x, y];
-                        let p6 = [x + _width, y];
-                        let p7 = [x, y + _height];
-                        let p9 = [x + _width, y + _height];
-                        let p8 = [x + _width / 2, y + _height / 2];
-                        let posArr = [];
-                        posArr = [
-                            p1, p2, p3, p4, p5, p6, p7, p8, p9
-                        ];
-                        let out;
+                        let posArr = this.Tex.setPosArr();
+                        let fOutArr = [];
+                        let rOutArr = [];
                         for (let index = 0; index < posArr.length; index++) {
-                            let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index][0], posArr[index][1]));
-                            out = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dir);
-                            if (out) {
-                                return [out, posArr[index]];
-                            }
+                            let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index].x, posArr[index].y));
+                            let _outF = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Front);
+                            _outF && fOutArr.push(_outF);
+                            let _outR = Tools._3D.rayScanning(_MakeClothes._MainCamara, _MakeClothes._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Reverse);
+                            _outR && rOutArr.push(_outR);
+                        }
+                        if (fOutArr.length !== 0 || rOutArr.length !== 0) {
+                            return true;
+                        }
+                        else {
+                            return false;
                         }
                     },
                     disMove: () => {
@@ -5878,6 +5913,7 @@
                     },
                     move: (e) => {
                         this.Tex.disMove();
+                        this._ImgVar('Wireframe').visible = false;
                         if (this.Tex.chekInside()) {
                             this.Tex.setImgPos();
                             this._ImgVar('Wireframe').visible = true;
@@ -5894,7 +5930,7 @@
                             this.Tex.Img.x = Laya.stage.width;
                             this._SpriteVar('Dispaly').visible = true;
                         }
-                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
+                        EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                     },
                     scale: (e) => {
                         let lPoint = this._ImgVar('Wireframe').globalToLocal(new Laya.Point(e.stageX, e.stageY));
@@ -5910,7 +5946,7 @@
                         Tools._Node.changePivotCenter(this.Tex.Img);
                         Tools._Node.changePivotCenter(this.Tex.DisImg);
                         this.Tex.setImgPos();
-                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
+                        EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                     },
                     rotate: (e) => {
                         if (this.Tex.diffP.x > 0) {
@@ -5942,7 +5978,7 @@
                         this.Tex.Img && this.Tex.Img.destroy();
                         this.Tex.state = this.Tex.stateType.none;
                         this.Tex.touchP = null;
-                        EventAdmin._notify(_Event.addTexture2D, [this.Tex.dir, this.Tex.getTex().bitmap]);
+                        EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                     },
                     btn: () => {
                         for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
@@ -6001,10 +6037,7 @@
                 else {
                     _MakeClothes._Scene3D.getComponent(MakeClothes3D).lwgOnStart();
                 }
-                this.Tex.dir = this.Tex.dirType.Reverse;
-                EventAdmin._notify(_Event.addTexture2D, [this.Tex.dirType.Reverse, this.Tex.getTex().bitmap]);
-                this.Tex.dir = this.Tex.dirType.Front;
-                EventAdmin._notify(_Event.addTexture2D, [this.Tex.dirType.Front, this.Tex.getTex().bitmap]);
+                EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
             lwgEventRegister() {
             }
@@ -6033,10 +6066,13 @@
                 _MakeClothes._MainCamara = this._MainCamera;
             }
             lwgEventRegister() {
-                EventAdmin._register(_Event.addTexture2D, this, (name, Text2D) => {
-                    let bMaterial = this._findMRenderer(name).material;
-                    bMaterial.albedoTexture.destroy();
-                    bMaterial.albedoTexture = Text2D;
+                EventAdmin._register(_Event.addTexture2D, this, (Text2DF, Text2DR) => {
+                    let bMaterialR = this._findMRenderer('Reverse').material;
+                    bMaterialR.albedoTexture.destroy();
+                    bMaterialR.albedoTexture = Text2DR;
+                    let bMaterialF = this._findMRenderer('Front').material;
+                    bMaterialF.albedoTexture.destroy();
+                    bMaterialF.albedoTexture = Text2DF;
                 });
                 EventAdmin._register(_Event.rotateHanger, this, (num) => {
                     if (num == 1) {

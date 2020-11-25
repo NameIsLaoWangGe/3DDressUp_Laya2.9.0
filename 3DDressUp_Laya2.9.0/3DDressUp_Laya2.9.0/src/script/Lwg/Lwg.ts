@@ -1397,6 +1397,43 @@ export module lwg {
          * 脚本通用类
          * */
         class _ScriptBase extends Laya.Script {
+            private getFind(name: string, type: string): any {
+                if (!this[`_Scene${type}${name}`]) {
+                    let Node = Tools._Node.findChild2D(this.owner.scene, name);
+                    if (Node) {
+                        return this[`_Scene${type}${name}`] = Node;
+                    } else {
+                        console.log(`场景内不存在节点${name}`);
+                    }
+                } else {
+                    return this[`_Scene${type}${name}`];
+                }
+            }
+
+            /**全局查找*/
+            _FindImg(name: string,): Laya.Image {
+                return this.getFind(name, '_FindImg');
+            }
+            /**全局查找*/
+            _FindSp(name: string,): Laya.Image {
+                return this.getFind(name, '_FindSp');
+            }
+            /**场景内查找*/
+            _FindBox(name: string,): Laya.Image {
+                return this.getFind(name, '_FindBox');
+            }
+            /**场景内查找*/
+            _FindTap(name: string,): Laya.Image {
+                return this.getFind(name, '_FindTap');
+            }
+            /**场景内查找*/
+            _FindLabel(name: string,): Laya.Image {
+                return this.getFind(name, '_FindLabel');
+            }
+            /**场景内查找*/
+            _FindList(name: string,): Laya.Image {
+                return this.getFind(name, '_FindList');
+            }
 
             _storeNum(name: string, initial?: number): StorageAdmin._NumVariable {
                 return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
@@ -1591,6 +1628,7 @@ export module lwg {
             _FontBox(name: string): Laya.Box {
                 return this.getVar(name, '_FontBox');
             }
+
             onAwake(): void {
                 // 类名
                 if (this._Owner.name == null) {

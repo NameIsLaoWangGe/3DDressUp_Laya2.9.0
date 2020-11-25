@@ -1,6 +1,6 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import RecordManager from "../TJ/RecordManager";
-import { Admin, Click, DateAdmin, EventAdmin, TimerAdmin, _Gold, _SceneName } from "./Lwg";
+import { Admin, Click, DateAdmin, EventAdmin, TimerAdmin, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 
 export module _Special {
