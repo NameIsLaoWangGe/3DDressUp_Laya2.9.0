@@ -188,7 +188,8 @@ R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
 D Game/UI/01_Repertory
 D Game/UI/Common
-D Game/UI/DesignPic
+D Game/UI/Design
+R FD466C26 星星路径特效路径.png
 D Game/UI/MakeClothes
 P 03F1DB41 dotted.png
 P 128C1138 dotted1.png

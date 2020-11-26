@@ -666,6 +666,7 @@ export module lwg {
          * 有一定次数的循环，基于帧
          * @param delay 时间间隔
          * @param num 次数
+         * @param caller 执行域
          * @param method 回调函数
          * @param compeletMethod 全部完成后的回调函数 
          * @param immediately 是否立即执行一次，默认为false
@@ -2331,26 +2332,26 @@ export module lwg {
     export module Effects {
         /**特效元素的图片地址，所有项目都可用*/
         export enum _SkinUrl {
-            爱心1 = 'Frame/Effects/aixin1.png',
-            爱心2 = "Frame/Effects/aixin2.png",
-            爱心3 = "Frame/Effects/aixin3.png",
-            花1 = "Frame/Effects/hua1.png",
-            花2 = "Frame/Effects/hua2.png",
-            花3 = "Frame/Effects/hua3.png",
-            花4 = "Frame/Effects/hua4.png",
-            星星1 = "Frame/Effects/star1.png",
-            星星2 = "Frame/Effects/star2.png",
-            星星3 = "Frame/Effects/star3.png",
-            星星4 = "Frame/Effects/star4.png",
-            星星5 = "Frame/Effects/star5.png",
-            星星6 = "Frame/Effects/star6.png",
-            星星7 = "Frame/Effects/star7.png",
-            雪花1 = "Frame/Effects/xuehua1.png",
-            叶子1 = "Frame/Effects/yezi1.png",
-            圆形发光1 = "Frame/Effects/yuanfaguang.png",
-            圆形1 = "Frame/Effects/yuan1.png",
-            光圈1 = "Frame/Effects/guangquan1.png",
-            光圈2 = "Frame/Effects/guangquan2.png",
+            爱心1 = 'Lwg/Effects/aixin1.png',
+            爱心2 = "Lwg/Effects/aixin2.png",
+            爱心3 = "Lwg/Effects/aixin3.png",
+            花1 = "Lwg/Effects/hua1.png",
+            花2 = "Lwg/Effects/hua2.png",
+            花3 = "Lwg/Effects/hua3.png",
+            花4 = "Lwg/Effects/hua4.png",
+            星星1 = "Lwg/Effects/star1.png",
+            星星2 = "Lwg/Effects/star2.png",
+            星星3 = "Lwg/Effects/star3.png",
+            星星4 = "Lwg/Effects/star4.png",
+            星星5 = "Lwg/Effects/star5.png",
+            星星6 = "Lwg/Effects/star6.png",
+            星星7 = "Lwg/Effects/star7.png",
+            雪花1 = "Lwg/Effects/xuehua1.png",
+            叶子1 = "Lwg/Effects/yezi1.png",
+            圆形发光1 = "Lwg/Effects/yuanfaguang.png",
+            圆形1 = "Lwg/Effects/yuan1.png",
+            光圈1 = "Lwg/Effects/guangquan1.png",
+            光圈2 = "Lwg/Effects/guangquan2.png",
         }
 
         /**
@@ -2545,7 +2546,6 @@ export module lwg {
             /**
               * 发射一个垂直向下的粒子，类似于火星下落熄灭，水滴下落，不是下雨状态
               * @param parent 父节点
-              * @param caller 执行域
               * @param centerPoint 中心点
               * @param sectionWH 以中心点为中心的矩形生成范围[w,h]
               * @param width 粒子的宽度区间[a,b]
@@ -2571,6 +2571,7 @@ export module lwg {
                 Img['moveCaller'] = moveCaller;
                 let distance0 = 0;
                 let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                distance1 += Img.y;
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (Img.alpha < 1 && moveCaller.alpha) {
                         Img.alpha += 0.05;
@@ -2588,6 +2589,7 @@ export module lwg {
                             moveCaller.vinish = true;
                         }
                     }
+                    // console.log(distance0, distance1, distance0 < distance1 && moveCaller.move);
                     if (moveCaller.vinish) {
                         acc -= accelerated0 / 2;
                         Img.alpha -= 0.03;
@@ -3620,10 +3622,10 @@ export module lwg {
 
     /**动画模块*/
     export module Animation2D {
-         /**
-         * @export 清理对象上的所有计时器
-         * @param {Array<any>} arr 清理的数组
-         */
+        /**
+        * @export 清理对象上的所有计时器
+        * @param {Array<any>} arr 清理的数组
+        */
         export function _clearAll(arr: Array<any>): void {
             for (let index = 0; index < arr.length; index++) {
                 Laya.Tween.clearAll(arr[index]);
@@ -3695,7 +3697,7 @@ export module lwg {
             if (!delayed) {
                 delayed = 0;
             }
-            Laya.Tween.to(node, { rotation: Erotate }, time, node, Laya.Handler.create(this, function () {
+            Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
                 if (func) {
                     func();
                 }

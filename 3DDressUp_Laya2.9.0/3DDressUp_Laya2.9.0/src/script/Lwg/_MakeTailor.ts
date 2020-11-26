@@ -1,4 +1,4 @@
-import lwg, { Admin, Animation2D, DataAdmin, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import lwg, { Admin, Animation2D, DataAdmin, Effects, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
 import { _Res } from "./_PreLoad";
 
 export module _MakeTailor {
@@ -64,7 +64,7 @@ export module _MakeTailor {
                 down: 'down',
             },
             paly: () => {
-                // TimerAdmin._clearAll([this.Ani])
+                TimerAdmin._clearAll([this.Ani]);
                 TimerAdmin._frameLoop(1, this.Ani, () => {
                     if (this._SceneImg('S2').rotation > this.Ani.range) {
                         this.Ani.dir = 'up';
@@ -79,17 +79,18 @@ export module _MakeTailor {
                         this._SceneImg('S1').rotation -= this.Ani.shearSpeed;
                     }
                 });
-                // Laya.Tween.clearAll(this._SceneImg('S1'))
-                // Laya.Tween.clearAll(this._SceneImg('S2'))
             },
             stop: () => {
                 TimerAdmin._frameOnce(60, this.Ani, () => {
-                    // TimerAdmin._clearAll([this.Ani]);
-                    // Laya.Tween.clearAll(this._SceneImg('S1'))
-                    // Laya.Tween.clearAll(this._SceneImg('S2'))
+                    TimerAdmin._clearAll([this.Ani]);
+                    let time = 10;
+                    let angel1 = (-this.Ani.range / 3 - this._SceneImg('S1').rotation) / time;
+                    let angel2 = (this.Ani.range / 3 - this._SceneImg('S2').rotation) / time;
+                    TimerAdmin._frameNumLoop(1, time, this.Ani, () => {
+                        this._SceneImg('S1').rotation += angel1;
+                        this._SceneImg('S2').rotation += angel2;
+                    })
                     this.Ani.switch = false;
-                    Animation2D.simple_Rotate(this._SceneImg('S2'), this._SceneImg('S2').rotation, this.Ani.range / 3, 200);
-                    Animation2D.simple_Rotate(this._SceneImg('S1'), this._SceneImg('S1').rotation, -this.Ani.range / 3, 200);
                 })
             },
             event: () => {
@@ -132,7 +133,6 @@ export module _MakeTailor {
                     this._evNotify(_Event.scissorPlay);
                     this._evNotify(_Event.scissorStop);
                     this.state = other.owner.parent.name;
-                    console.log('裁剪！');
                     other['cut'] = true;
                     EventAdmin._notify(_Event.trigger, [other.owner]);
                 }
@@ -168,7 +168,16 @@ export module _MakeTailor {
                 if (value) {
                     this.DottedLineControl.removeCloth(Dotted.parent.name);
                     if (this.DottedLineControl._checkAllCompelet()) {
-                        this.DottedLineControl.BtnCompelet.visible = true;
+                        this._AniVar('complete').play(0, false);
+                        let _caller = {};
+                        TimerAdmin._frameLoop(1, _caller, () => {
+                            let gP = (this._ImgVar('EFlower').parent as Laya.Image).localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y))
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]])
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 24, 0, 1], [255, 24, 0, 1]])
+                        })
+                        this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
+                            TimerAdmin._clearAll([_caller]);
+                        })
                     }
                 }
                 let Parent = Dotted.parent as Laya.Image;

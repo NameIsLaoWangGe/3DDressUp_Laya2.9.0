@@ -648,6 +648,18 @@
                 }, args, coverBefore);
             }
             TimerAdmin._once = _once;
+            function _clearAll(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.timer.clearAll(arr[index]);
+                }
+            }
+            TimerAdmin._clearAll = _clearAll;
+            function _clear(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.timer.clear(arr[index][0], arr[index][1]);
+                }
+            }
+            TimerAdmin._clear = _clear;
         })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
         let Adaptive;
         (function (Adaptive) {
@@ -1880,26 +1892,26 @@
         (function (Effects) {
             let _SkinUrl;
             (function (_SkinUrl) {
-                _SkinUrl["\u7231\u5FC31"] = "Frame/Effects/aixin1.png";
-                _SkinUrl["\u7231\u5FC32"] = "Frame/Effects/aixin2.png";
-                _SkinUrl["\u7231\u5FC33"] = "Frame/Effects/aixin3.png";
-                _SkinUrl["\u82B11"] = "Frame/Effects/hua1.png";
-                _SkinUrl["\u82B12"] = "Frame/Effects/hua2.png";
-                _SkinUrl["\u82B13"] = "Frame/Effects/hua3.png";
-                _SkinUrl["\u82B14"] = "Frame/Effects/hua4.png";
-                _SkinUrl["\u661F\u661F1"] = "Frame/Effects/star1.png";
-                _SkinUrl["\u661F\u661F2"] = "Frame/Effects/star2.png";
-                _SkinUrl["\u661F\u661F3"] = "Frame/Effects/star3.png";
-                _SkinUrl["\u661F\u661F4"] = "Frame/Effects/star4.png";
-                _SkinUrl["\u661F\u661F5"] = "Frame/Effects/star5.png";
-                _SkinUrl["\u661F\u661F6"] = "Frame/Effects/star6.png";
-                _SkinUrl["\u661F\u661F7"] = "Frame/Effects/star7.png";
-                _SkinUrl["\u96EA\u82B11"] = "Frame/Effects/xuehua1.png";
-                _SkinUrl["\u53F6\u5B501"] = "Frame/Effects/yezi1.png";
-                _SkinUrl["\u5706\u5F62\u53D1\u51491"] = "Frame/Effects/yuanfaguang.png";
-                _SkinUrl["\u5706\u5F621"] = "Frame/Effects/yuan1.png";
-                _SkinUrl["\u5149\u57081"] = "Frame/Effects/guangquan1.png";
-                _SkinUrl["\u5149\u57082"] = "Frame/Effects/guangquan2.png";
+                _SkinUrl["\u7231\u5FC31"] = "Lwg/Effects/aixin1.png";
+                _SkinUrl["\u7231\u5FC32"] = "Lwg/Effects/aixin2.png";
+                _SkinUrl["\u7231\u5FC33"] = "Lwg/Effects/aixin3.png";
+                _SkinUrl["\u82B11"] = "Lwg/Effects/hua1.png";
+                _SkinUrl["\u82B12"] = "Lwg/Effects/hua2.png";
+                _SkinUrl["\u82B13"] = "Lwg/Effects/hua3.png";
+                _SkinUrl["\u82B14"] = "Lwg/Effects/hua4.png";
+                _SkinUrl["\u661F\u661F1"] = "Lwg/Effects/star1.png";
+                _SkinUrl["\u661F\u661F2"] = "Lwg/Effects/star2.png";
+                _SkinUrl["\u661F\u661F3"] = "Lwg/Effects/star3.png";
+                _SkinUrl["\u661F\u661F4"] = "Lwg/Effects/star4.png";
+                _SkinUrl["\u661F\u661F5"] = "Lwg/Effects/star5.png";
+                _SkinUrl["\u661F\u661F6"] = "Lwg/Effects/star6.png";
+                _SkinUrl["\u661F\u661F7"] = "Lwg/Effects/star7.png";
+                _SkinUrl["\u96EA\u82B11"] = "Lwg/Effects/xuehua1.png";
+                _SkinUrl["\u53F6\u5B501"] = "Lwg/Effects/yezi1.png";
+                _SkinUrl["\u5706\u5F62\u53D1\u51491"] = "Lwg/Effects/yuanfaguang.png";
+                _SkinUrl["\u5706\u5F621"] = "Lwg/Effects/yuan1.png";
+                _SkinUrl["\u5149\u57081"] = "Lwg/Effects/guangquan1.png";
+                _SkinUrl["\u5149\u57082"] = "Lwg/Effects/guangquan2.png";
             })(_SkinUrl = Effects._SkinUrl || (Effects._SkinUrl = {}));
             let _Aperture;
             (function (_Aperture) {
@@ -2057,6 +2069,7 @@
                     Img['moveCaller'] = moveCaller;
                     let distance0 = 0;
                     let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    distance1 += Img.y;
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.05;
@@ -2842,6 +2855,12 @@
         })(Animation3D = lwg.Animation3D || (lwg.Animation3D = {}));
         let Animation2D;
         (function (Animation2D) {
+            function _clearAll(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.Tween.clearAll(arr[index]);
+                }
+            }
+            Animation2D._clearAll = _clearAll;
             function circulation_scale(node, range, time, delayed, func) {
                 Laya.Tween.to(node, { scaleX: 1 + range, scaleY: 1 + range }, time, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: 1 - range, scaleY: 1 - range }, time / 2, null, Laya.Handler.create(this, function () {
@@ -2880,7 +2899,7 @@
                 if (!delayed) {
                     delayed = 0;
                 }
-                Laya.Tween.to(node, { rotation: Erotate }, time, node, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
                     if (func) {
                         func();
                     }
@@ -6115,6 +6134,7 @@
                         down: 'down',
                     },
                     paly: () => {
+                        TimerAdmin._clearAll([this.Ani]);
                         TimerAdmin._frameLoop(1, this.Ani, () => {
                             if (this._SceneImg('S2').rotation > this.Ani.range) {
                                 this.Ani.dir = 'up';
@@ -6134,9 +6154,15 @@
                     },
                     stop: () => {
                         TimerAdmin._frameOnce(60, this.Ani, () => {
+                            TimerAdmin._clearAll([this.Ani]);
+                            let time = 10;
+                            let angel1 = (-this.Ani.range / 3 - this._SceneImg('S1').rotation) / time;
+                            let angel2 = (this.Ani.range / 3 - this._SceneImg('S2').rotation) / time;
+                            TimerAdmin._frameNumLoop(1, time, this.Ani, () => {
+                                this._SceneImg('S1').rotation += angel1;
+                                this._SceneImg('S2').rotation += angel2;
+                            });
                             this.Ani.switch = false;
-                            Animation2D.simple_Rotate(this._SceneImg('S2'), this._SceneImg('S2').rotation, this.Ani.range / 3, 200);
-                            Animation2D.simple_Rotate(this._SceneImg('S1'), this._SceneImg('S1').rotation, -this.Ani.range / 3, 200);
                         });
                     },
                     event: () => {
@@ -6179,7 +6205,6 @@
                         this._evNotify(_Event.scissorPlay);
                         this._evNotify(_Event.scissorStop);
                         this.state = other.owner.parent.name;
-                        console.log('裁剪！');
                         other['cut'] = true;
                         EventAdmin._notify(_Event.trigger, [other.owner]);
                     }
@@ -6213,7 +6238,16 @@
                     if (value) {
                         this.DottedLineControl.removeCloth(Dotted.parent.name);
                         if (this.DottedLineControl._checkAllCompelet()) {
-                            this.DottedLineControl.BtnCompelet.visible = true;
+                            this._AniVar('complete').play(0, false);
+                            let _caller = {};
+                            TimerAdmin._frameLoop(1, _caller, () => {
+                                let gP = this._ImgVar('EFlower').parent.localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y));
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]]);
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 24, 0, 1], [255, 24, 0, 1]]);
+                            });
+                            this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
+                                TimerAdmin._clearAll([_caller]);
+                            });
                         }
                     }
                     let Parent = Dotted.parent;

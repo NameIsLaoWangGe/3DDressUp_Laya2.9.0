@@ -1,15 +1,14 @@
 {
-    "x":0,
     "type":"Scene",
-    "selectedBox":207,
-    "selecteID":766,
-    "searchKey":"Scene,A",
+    "selectedBox":2,
+    "selecteID":776,
+    "searchKey":"Scene",
     "referenceLines":[
         ],
-    "props":{"width":1280,"sceneColor":"#000000","name":"A","height":720},
+    "props":{"width":1280,"sceneColor":"#000000","height":720},
     "nodeParent":-1,
-    "maxID":775,
-    "label":"A",
+    "maxID":778,
+    "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
     "isAniNode":true,
@@ -17,12 +16,12 @@
     "compId":2,
     "child":[
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image",
-            "props":{"width":1280,"top":0,"skin":"Lwg/UI/ui_orthogon_grass.png","right":0,"left":0,"height":720,"bottom":0},
+            "props":{"y":0,"x":0,"width":1280,"top":0,"skin":"Lwg/UI/ui_orthogon_grass.png","right":0,"left":0,"height":720,"bottom":0},
             "nodeParent":2,
             "label":"Image",
+            "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
@@ -31,7 +30,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,BtnNext,BtnNext",
             "props":{"y":60,"x":1198,"width":132,"var":"BtnNext","skin":"Lwg/UI/ui_l_orthogon_orange.png","sizeGrid":"13,13,22,6","pivotY":38,"pivotX":66,"name":"BtnNext","height":76},
@@ -44,7 +42,6 @@
             "compId":3,
             "child":[
                 {
-                    "x":30,
                     "type":"Label",
                     "searchKey":"Label",
                     "props":{"width":118,"valign":"middle","text":"下一步","height":52,"fontSize":35,"centerY":0,"centerX":0,"bold":true,"align":"center"},
@@ -59,7 +56,6 @@
                 }]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,NoAniRoot,Root",
             "props":{"y":39,"x":225,"width":878,"var":"Root","name":"NoAniRoot","height":655},
@@ -72,7 +68,6 @@
             "compId":8,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Ultimately,Ultimately",
                     "props":{"y":62,"x":143,"var":"Ultimately","skin":"Game/UI/MakeClothes/ultimately.png","name":"Ultimately"},
@@ -86,7 +81,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth1",
                     "props":{"y":73,"x":444,"width":167,"skin":"Game/UI/MakeClothes/tailor2.png","pivotY":42,"pivotX":84,"name":"Cloth1","height":83},
@@ -101,7 +95,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth2",
                     "props":{"y":139,"x":403.5,"width":81,"skin":"Game/UI/MakeClothes/tailor3.png","name":"Cloth2","height":41},
@@ -115,7 +108,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth3",
                     "props":{"y":202,"x":83,"width":138,"skin":"Game/UI/MakeClothes/tailor5.png","name":"Cloth3","height":142},
@@ -129,7 +121,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth4",
                     "props":{"y":200,"x":660,"skin":"Game/UI/MakeClothes/tailor4.png","name":"Cloth4"},
@@ -143,7 +134,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth5",
                     "props":{"y":234,"x":276,"width":33,"skin":"Game/UI/MakeClothes/tailor7.png","name":"Cloth5","height":265},
@@ -157,7 +147,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth6",
                     "props":{"y":230,"x":574,"skin":"Game/UI/MakeClothes/tailor6.png","name":"Cloth6"},
@@ -171,7 +160,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Cloth7,Cloth7",
                     "props":{"y":516,"x":269,"var":"Cloth7","skin":"Game/UI/MakeClothes/tailor1.png","name":"Cloth7"},
@@ -185,20 +173,18 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,LineParent,LineParent",
                     "props":{"y":32,"width":693,"var":"LineParent","name":"LineParent","height":591,"centerX":0},
                     "nodeParent":8,
                     "label":"LineParent",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":23,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line1,Line1",
                             "props":{"y":22,"x":266,"width":168,"var":"Line1","name":"Line1","height":62},
@@ -211,7 +197,6 @@
                             "compId":17,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":14,"x":4,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":147,"pivotY":11,"pivotX":6,"name":"A"},
@@ -268,7 +253,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":29,"x":16,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":139,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -327,7 +311,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":42,"x":28,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":132,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -386,7 +369,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":53,"x":44,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":115,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -445,7 +427,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A,A",
                                     "props":{"y":59,"x":62,"width":13,"var":"A","skin":"Game/UI/MakeClothes/dotted2.png","rotation":101,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -504,7 +485,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":61,"x":104,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":82,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -563,7 +543,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":61,"x":82,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -622,7 +601,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":55,"x":125,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":66,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -681,7 +659,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":43,"x":144,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":51,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -740,7 +717,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":28,"x":158,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":36,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -799,7 +775,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":15,"x":165,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":27,"pivotY":11,"pivotX":6,"name":"A","height":20},
@@ -859,7 +834,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line2,Line2",
                             "props":{"y":104,"x":301,"width":99,"var":"Line2","name":"Line2","height":51},
@@ -1512,7 +1486,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line3,Line3",
                             "props":{"y":167,"x":46,"width":85,"var":"Line3","name":"Line3","height":94},
@@ -1874,7 +1847,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line4,Line4",
                             "props":{"y":166,"x":566,"width":87,"var":"Line4","name":"Line4","height":93},
@@ -2236,7 +2208,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line5,Line5",
                             "props":{"y":197,"x":179,"width":41,"var":"Line5","name":"Line5","height":280},
@@ -3030,7 +3001,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line6,Line6",
                             "props":{"y":198,"x":476,"width":44,"var":"Line6","name":"Line6","height":279},
@@ -3824,7 +3794,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line7,Line7",
                             "props":{"y":473,"x":180,"width":341,"var":"Line7","name":"Line7","height":20},
@@ -3837,7 +3806,6 @@
                             "compId":207,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":15,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3897,7 +3865,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3957,7 +3924,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":57,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4017,7 +3983,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":78,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4077,7 +4042,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":98,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4137,7 +4101,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":119,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4197,7 +4160,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":141,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4257,7 +4219,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":163,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4317,7 +4278,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":9,"x":185,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4377,7 +4337,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":205,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4437,7 +4396,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":226,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4497,7 +4455,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":246,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4557,7 +4514,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":266,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4617,7 +4573,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":287,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4677,7 +4632,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":307,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4737,7 +4691,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,A",
                                     "props":{"y":10,"x":327,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4750,7 +4703,6 @@
                                     "compId":766,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":51,"x":0,"width":48,"skin":"Game/UI/MakeClothes/dotted2.png","sizeGrid":"4,5,6,3","rotation":-97,"renderType":"mask","height":28},
@@ -4764,7 +4716,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -4779,7 +4730,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -4796,7 +4746,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -4818,7 +4767,6 @@
                 }]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,Scissor,Scissor",
             "props":{"y":549,"x":1054,"width":126,"var":"Scissor","rotation":0,"pivotY":51,"pivotX":63,"name":"Scissor","height":124},
@@ -4831,7 +4779,6 @@
             "compId":30,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,S2,S2",
                     "props":{"y":64,"x":61,"width":62,"var":"S2","skin":"Game/UI/MakeClothes/scissors_02.png","scaleY":0.45,"scaleX":0.45,"rotation":25,"pivotY":135,"pivotX":47,"name":"S2","height":269},
@@ -4845,7 +4792,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,S1,S1",
                     "props":{"y":63,"x":62,"width":64,"var":"S1","skin":"Game/UI/MakeClothes/scissors_01.png","scaleY":0.45,"scaleX":0.45,"rotation":-22,"pivotY":134,"pivotX":12,"name":"S1","height":268},
@@ -4859,7 +4805,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"CircleCollider",
                     "switchAble":true,
                     "searchKey":"CircleCollider",
@@ -4875,7 +4820,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"RigidBody",
                     "switchAble":true,
                     "searchKey":"RigidBody",
@@ -4887,6 +4831,45 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":41,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "type":"Sprite",
+            "searchKey":"Sprite",
+            "props":{"y":0,"x":0,"texture":"Game/UI/Design/星星路径特效路径.png","alpha":0},
+            "nodeParent":2,
+            "label":"Sprite",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":777,
+            "child":[
+                ]
+        },
+        {
+            "type":"Image",
+            "searchKey":"Image,CompleteE,CompleteE",
+            "props":{"y":392.5,"x":640,"width":512,"var":"CompleteE","pivotY":157,"pivotX":256,"name":"CompleteE","height":313,"alpha":0},
+            "nodeParent":2,
+            "label":"CompleteE",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":776,
+            "child":[
+                {
+                    "type":"Image",
+                    "searchKey":"Image,EFlower,EFlower",
+                    "props":{"y":271,"x":105,"width":20,"var":"EFlower","skin":"Lwg/UI/ui_circle_005.png","pivotY":15,"pivotX":10,"name":"EFlower","height":30,"alpha":1},
+                    "nodeParent":776,
+                    "label":"EFlower",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":775,
                     "child":[
                         ]
                 }]
@@ -5285,70 +5268,1428 @@
         {
             "nodes":[
                 {
-                    "target":32,
+                    "target":775,
                     "keyframes":{
-                        "rotation":[
+                        "y":[
                             {
-                                "value":40,
+                                "value":141.5,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":32,
-                                "key":"rotation",
+                                "target":775,
+                                "key":"y",
                                 "index":0
                             },
                             {
-                                "value":0,
+                                "value":159.5,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":32,
-                                "key":"rotation",
+                                "target":775,
+                                "key":"y",
+                                "index":1
+                            },
+                            {
+                                "value":175,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "label":null,
+                                "key":"y",
+                                "index":2
+                            },
+                            {
+                                "value":191,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "label":null,
+                                "key":"y",
+                                "index":3
+                            },
+                            {
+                                "value":205,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":4
+                            },
+                            {
+                                "value":218,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
                                 "index":5
                             },
                             {
-                                "value":40,
+                                "value":230,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":32,
-                                "label":null,
-                                "key":"rotation",
-                                "index":15
-                            }]
-                    }
-                },
-                {
-                    "target":31,
-                    "keyframes":{
-                        "rotation":[
+                                "target":775,
+                                "key":"y",
+                                "index":6
+                            },
                             {
-                                "value":-40,
+                                "value":240,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":31,
-                                "key":"rotation",
+                                "target":775,
+                                "key":"y",
+                                "index":7
+                            },
+                            {
+                                "value":250,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":8
+                            },
+                            {
+                                "value":257,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":9
+                            },
+                            {
+                                "value":265,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":10
+                            },
+                            {
+                                "value":270,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":11
+                            },
+                            {
+                                "value":271,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":12
+                            },
+                            {
+                                "value":272,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":13
+                            },
+                            {
+                                "value":271,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":14
+                            },
+                            {
+                                "value":269,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":15
+                            },
+                            {
+                                "value":265,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":16
+                            },
+                            {
+                                "value":258,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":17
+                            },
+                            {
+                                "value":246,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":18
+                            },
+                            {
+                                "value":234,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":19
+                            },
+                            {
+                                "value":213,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":20
+                            },
+                            {
+                                "value":199,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":21
+                            },
+                            {
+                                "value":177,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":22
+                            },
+                            {
+                                "value":176,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":23
+                            },
+                            {
+                                "value":151.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":24
+                            },
+                            {
+                                "value":122.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":25
+                            },
+                            {
+                                "value":95,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":26
+                            },
+                            {
+                                "value":63,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":27
+                            },
+                            {
+                                "value":25,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":28
+                            },
+                            {
+                                "value":-15,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":29
+                            },
+                            {
+                                "value":-42,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":30
+                            },
+                            {
+                                "value":-62,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":31
+                            },
+                            {
+                                "value":-75,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":32
+                            },
+                            {
+                                "value":-72,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":33
+                            },
+                            {
+                                "value":-64,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":34
+                            },
+                            {
+                                "value":-51,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":35
+                            },
+                            {
+                                "value":-34,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":36
+                            },
+                            {
+                                "value":-21,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":37
+                            },
+                            {
+                                "value":-47,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":38
+                            },
+                            {
+                                "value":-73,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":39
+                            },
+                            {
+                                "value":-95,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":40
+                            },
+                            {
+                                "value":-112,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":41
+                            },
+                            {
+                                "value":-126,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":42
+                            },
+                            {
+                                "value":-135,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":43
+                            },
+                            {
+                                "value":-139,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":44
+                            },
+                            {
+                                "value":-138,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":45
+                            },
+                            {
+                                "value":-129,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":46
+                            },
+                            {
+                                "value":-114,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":47
+                            },
+                            {
+                                "value":-94,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":48
+                            },
+                            {
+                                "value":-73,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":49
+                            },
+                            {
+                                "value":-42,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":50
+                            },
+                            {
+                                "value":-9,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":51
+                            },
+                            {
+                                "value":22,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":52
+                            },
+                            {
+                                "value":53,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":53
+                            },
+                            {
+                                "value":81,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":54
+                            },
+                            {
+                                "value":117,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":55
+                            },
+                            {
+                                "value":152.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":56
+                            },
+                            {
+                                "value":180,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":57
+                            },
+                            {
+                                "value":206,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":58
+                            },
+                            {
+                                "value":227,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":59
+                            },
+                            {
+                                "value":246,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":60
+                            },
+                            {
+                                "value":266,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":61
+                            },
+                            {
+                                "value":283,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":62
+                            },
+                            {
+                                "value":297,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":63
+                            },
+                            {
+                                "value":308,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":64
+                            },
+                            {
+                                "value":319,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":65
+                            },
+                            {
+                                "value":326,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":66
+                            },
+                            {
+                                "value":330,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":67
+                            },
+                            {
+                                "value":328,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":68
+                            },
+                            {
+                                "value":321,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":69
+                            },
+                            {
+                                "value":304,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":70
+                            },
+                            {
+                                "value":280,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":71
+                            },
+                            {
+                                "value":255,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":72
+                            },
+                            {
+                                "value":228,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":73
+                            },
+                            {
+                                "value":207,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":74
+                            },
+                            {
+                                "value":183,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":75
+                            },
+                            {
+                                "value":159.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":76
+                            },
+                            {
+                                "value":137.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":77
+                            },
+                            {
+                                "value":128.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":78
+                            },
+                            {
+                                "value":122.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":79
+                            },
+                            {
+                                "value":126.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":80
+                            },
+                            {
+                                "value":135.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":81
+                            },
+                            {
+                                "value":144.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":82
+                            },
+                            {
+                                "value":159.5,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":83
+                            },
+                            {
+                                "value":178,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":84
+                            },
+                            {
+                                "value":191,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":85
+                            },
+                            {
+                                "value":202,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"y",
+                                "index":95
+                            }],
+                        "x":[
+                            {
+                                "value":-419,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
                                 "index":0
                             },
                             {
-                                "value":0,
+                                "value":-366,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":31,
-                                "key":"rotation",
+                                "target":775,
+                                "key":"x",
+                                "index":1
+                            },
+                            {
+                                "value":-337,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "label":null,
+                                "key":"x",
+                                "index":2
+                            },
+                            {
+                                "value":-296,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "label":null,
+                                "key":"x",
+                                "index":3
+                            },
+                            {
+                                "value":-266,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":4
+                            },
+                            {
+                                "value":-234,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
                                 "index":5
                             },
                             {
-                                "value":-40,
+                                "value":-197,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
-                                "target":31,
-                                "label":null,
-                                "key":"rotation",
+                                "target":775,
+                                "key":"x",
+                                "index":6
+                            },
+                            {
+                                "value":-156,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":7
+                            },
+                            {
+                                "value":-119,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":8
+                            },
+                            {
+                                "value":-83,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":9
+                            },
+                            {
+                                "value":-50,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":10
+                            },
+                            {
+                                "value":-13,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":11
+                            },
+                            {
+                                "value":18,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":12
+                            },
+                            {
+                                "value":60,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":13
+                            },
+                            {
+                                "value":105,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":14
+                            },
+                            {
+                                "value":141,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
                                 "index":15
+                            },
+                            {
+                                "value":180,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":16
+                            },
+                            {
+                                "value":218,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":17
+                            },
+                            {
+                                "value":247,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":18
+                            },
+                            {
+                                "value":289.3333333333333,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":19
+                            },
+                            {
+                                "value":330,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":20
+                            },
+                            {
+                                "value":363,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":21
+                            },
+                            {
+                                "value":397,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":22
+                            },
+                            {
+                                "value":397,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":23
+                            },
+                            {
+                                "value":434,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":24
+                            },
+                            {
+                                "value":464,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":25
+                            },
+                            {
+                                "value":489,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":26
+                            },
+                            {
+                                "value":508,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":27
+                            },
+                            {
+                                "value":524,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":28
+                            },
+                            {
+                                "value":525,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":29
+                            },
+                            {
+                                "value":517,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":30
+                            },
+                            {
+                                "value":496,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":31
+                            },
+                            {
+                                "value":465,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":32
+                            },
+                            {
+                                "value":429,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":33
+                            },
+                            {
+                                "value":400,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":34
+                            },
+                            {
+                                "value":372,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":35
+                            },
+                            {
+                                "value":351,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":36
+                            },
+                            {
+                                "value":331,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":37
+                            },
+                            {
+                                "value":315,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":38
+                            },
+                            {
+                                "value":297,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":39
+                            },
+                            {
+                                "value":277,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":40
+                            },
+                            {
+                                "value":254,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":41
+                            },
+                            {
+                                "value":228,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":42
+                            },
+                            {
+                                "value":203,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":43
+                            },
+                            {
+                                "value":177,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":44
+                            },
+                            {
+                                "value":146,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":45
+                            },
+                            {
+                                "value":112,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":46
+                            },
+                            {
+                                "value":87,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":47
+                            },
+                            {
+                                "value":70,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":48
+                            },
+                            {
+                                "value":56,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":49
+                            },
+                            {
+                                "value":43,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":50
+                            },
+                            {
+                                "value":41,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":51
+                            },
+                            {
+                                "value":47,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":52
+                            },
+                            {
+                                "value":59,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":53
+                            },
+                            {
+                                "value":76,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":54
+                            },
+                            {
+                                "value":101,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":55
+                            },
+                            {
+                                "value":132,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":56
+                            },
+                            {
+                                "value":164,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":57
+                            },
+                            {
+                                "value":192,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":58
+                            },
+                            {
+                                "value":221,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":59
+                            },
+                            {
+                                "value":248,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":60
+                            },
+                            {
+                                "value":275,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":61
+                            },
+                            {
+                                "value":299,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":62
+                            },
+                            {
+                                "value":326,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":63
+                            },
+                            {
+                                "value":351,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":64
+                            },
+                            {
+                                "value":380,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":65
+                            },
+                            {
+                                "value":410,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":66
+                            },
+                            {
+                                "value":442,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":67
+                            },
+                            {
+                                "value":474,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":68
+                            },
+                            {
+                                "value":508,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":69
+                            },
+                            {
+                                "value":532,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":70
+                            },
+                            {
+                                "value":552,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":71
+                            },
+                            {
+                                "value":566,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":72
+                            },
+                            {
+                                "value":581,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":73
+                            },
+                            {
+                                "value":592,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":74
+                            },
+                            {
+                                "value":607,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":75
+                            },
+                            {
+                                "value":623,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":76
+                            },
+                            {
+                                "value":646,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":77
+                            },
+                            {
+                                "value":676,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":78
+                            },
+                            {
+                                "value":710,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":79
+                            },
+                            {
+                                "value":747,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":80
+                            },
+                            {
+                                "value":785,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":81
+                            },
+                            {
+                                "value":821,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":82
+                            },
+                            {
+                                "value":854,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":83
+                            },
+                            {
+                                "value":886,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":84
+                            },
+                            {
+                                "value":923,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":85
+                            },
+                            {
+                                "value":1420,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"x",
+                                "index":95
+                            }],
+                        "pivotX":[
+                            {
+                                "value":10,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"pivotX",
+                                "index":0
+                            },
+                            {
+                                "value":10,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":775,
+                                "key":"pivotX",
+                                "index":76
                             }]
                     }
                 }],
-            "name":"aniScissor",
-            "id":9,
-            "frameRate":60,
+            "name":"complete",
+            "id":10,
+            "frameRate":45,
             "action":0
         }]
 }
