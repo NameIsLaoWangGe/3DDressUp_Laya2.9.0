@@ -28,7 +28,7 @@ export module _PreLoadCutIn {
         lwgOnStart(): void {
             EventAdmin._notify(_Event.animation1);
         }
-        lwgEventRegister(): void {
+        lwgEvent(): void {
             EventAdmin._register(_Event.animation1, this, () => {
                 let time = 0;
                 TimerAdmin._frameNumLoop(1, 30, this, () => {

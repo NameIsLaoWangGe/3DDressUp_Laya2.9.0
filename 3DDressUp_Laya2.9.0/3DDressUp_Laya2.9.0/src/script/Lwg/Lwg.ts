@@ -612,6 +612,7 @@ export module lwg {
     export module TimerAdmin {
         /**总控制开关,默认为打开*/
         export let _switch: boolean = true;
+
         /**
          * 普通无限循环，基于帧
          * @param delay 间隔帧数
@@ -880,6 +881,25 @@ export module lwg {
                 afterMethod();
             }, args, coverBefore)
         }
+
+        /**
+         * @export 清理对象上的所有计时器
+         * @param {Array<any>} arr 清理的数组
+         */
+        export function _clearAll(arr: Array<any>): void {
+            for (let index = 0; index < arr.length; index++) {
+                Laya.timer.clearAll(arr[index]);
+            }
+        }
+        /**
+         * @export 清理对象上的所有计时器上的函数
+         * @param {Array<any>} arr 清理的数组
+         */
+        export function _clear(arr: Array<[any, Function]>): void {
+            for (let index = 0; index < arr.length; index++) {
+                Laya.timer.clear(arr[index][0], arr[index][1]);
+            }
+        }
     }
 
     /**适配设置*/
@@ -964,8 +984,8 @@ export module lwg {
             centerRotate: 'centerRotate',
             drawUp: 'drawUp',
         }
-        export let _vanishSwitch = false;
         export let _openSwitch = true;
+        export let _vanishSwitch = false;
         export let _Use = {
             get value(): string {
                 return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
@@ -1005,11 +1025,15 @@ export module lwg {
             let delay: number;
             let sumDelay: number;//总延迟
             var afterAni = () => {
-                Click._switch = true
+                Click._switch = true;
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
-                    Scene[Scene.name].lwgBtnRegister();
+                    Scene[Scene.name].lwgButton();
                 }
+            }
+            if (!_openSwitch) {
+                afterAni();
+                return 0;
             }
             switch (_Use.value) {
                 case _Type.fadeOut:
@@ -1301,7 +1325,7 @@ export module lwg {
                 }
                 scene.name = openName;
                 _sceneControl[openName] = scene;//装入场景容器，此容器内每个场景唯一
-                // 背景图自适应并且居中
+                // 背景图自适应铺满
                 let background = scene.getChildByName('Background') as Laya.Image;
                 if (background) {
                     background.width = Laya.stage.width;
@@ -1327,7 +1351,7 @@ export module lwg {
             }
             /**传入的回调函数*/
             var closef = () => {
-                Click._switch = true
+                Click._switch = true;
                 _sceneControl[closeName].close();
                 // 先关闭场景在打开场景，否则有些场景可能因为上个场景而初始化失败
                 if (func) {
@@ -1343,13 +1367,13 @@ export module lwg {
             let cloesSceneScript = _sceneControl[closeName][_sceneControl[closeName].name];
             if (cloesSceneScript) {
                 if (cloesSceneScript) {
-                    Click._switch = false
+                    Click._switch = false;
                     cloesSceneScript.lwgBeforeVanishAni();
                     let time0 = cloesSceneScript.lwgVanishAni();
                     if (time0 !== null) {
                         Laya.timer.once(time0, this, () => {
                             closef();
-                            Click._switch = true
+                            Click._switch = true;
                         })
                     } else {
                         SceneAnimation._commonVanishAni(_sceneControl[closeName], closef);
@@ -1357,41 +1381,6 @@ export module lwg {
                 }
             }
         }
-
-        /**游戏当前处于什么状态中，并非是当前打开的场景*/
-        export let _gameState = {
-            type: {
-                /**开始界面*/
-                Start: 'Start',
-                /**游戏中*/
-                Play: 'Play',
-                /**暂停中*/
-                Pause: 'pause',
-                /**胜利*/
-                Victory: 'victory',
-                /**失败*/
-                Defeated: 'defeated',
-            },
-            state: 'Start',
-            setState(_calssName: string): void {
-                switch (_calssName) {
-                    case _SceneName.Start:
-                        _gameState.state = _gameState.type.Start;
-                        break;
-                    case _SceneName.Game:
-                        _gameState.state = _gameState.type.Play;
-                        break;
-                    case _SceneName.Defeated:
-                        _gameState.state = _gameState.type.Defeated;
-                        break;
-                    case _SceneName.Victory:
-                        _gameState.state = _gameState.type.Victory;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
 
         /**
          * 脚本通用类
@@ -1452,7 +1441,7 @@ export module lwg {
             /**适配位置*/
             lwgAdaptive(): void { };
             /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
-            lwgEventRegister(): void { };
+            lwgEvent(): void { };
             _evReg(name: string, func: Function): void {
                 EventAdmin._register(name, this, func);
             }
@@ -1467,7 +1456,7 @@ export module lwg {
             /**初始化完毕后，onUpdate前执行一次，重写覆盖*/
             lwgOnStart(): void { }
             /**按钮点击事件注册，在开场动画执行之后注册，在onEnable中完成*/
-            lwgBtnRegister(): void { };
+            lwgButton(): void { };
             /**
              * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
              * @param target 节点
@@ -1646,29 +1635,29 @@ export module lwg {
             /**每个模块优先执行的页面开始前执行的函数，比lwgOnAwake更早执行*/
             moduleOnAwake(): void { }
             onEnable() {
-                this.moduleEventRegister();
-                this.lwgEventRegister();
+                this.moduleEvent();
+                this.lwgEvent();
                 this.moduleOnEnable();
                 this.lwgOnEnable();
-                this.btnAndlwgOpenAni();
+                this.btnAndOpenAni();
             }
             /**每个模块优先执行的初始化函数，比lwgOnEnable早执行*/
             moduleOnEnable(): void { };
             /**模块中的事件*/
-            moduleEventRegister(): void { };
+            moduleEvent(): void { };
             onStart(): void {
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
             moduleOnStart(): void { }
             /**通过openni返回的时间来延时开启点击事件*/
-            private btnAndlwgOpenAni(): void {
+            private btnAndOpenAni(): void {
                 let time = this.lwgOpenAni();
                 if (time !== null) {
                     Laya.timer.once(time, this, () => {
-                        Click._switch = true
+                        Click._switch = true;
                         this.lwgOpenAniAfter();
-                        this.lwgBtnRegister();
+                        this.lwgButton();
                     });
                 } else {
                     time = SceneAnimation._commonOpenAni(this._Owner);
@@ -1768,6 +1757,9 @@ export module lwg {
             _SceneSprite(name: string): Laya.Sprite {
                 return this.getSceneVar(name, '_SceneSprite');
             }
+            _SceneAni(name: string): Laya.Animation {
+                return this.getSceneVar(name, '_SceneAni');
+            }
             _SceneImg(name: string): Laya.Image {
                 return this.getSceneVar(name, '_SceneImg');
             }
@@ -1830,8 +1822,8 @@ export module lwg {
                 this.lwgAdaptive();
             }
             onEnable(): void {
-                this.lwgBtnRegister();
-                this.lwgEventRegister();
+                this.lwgButton();
+                this.lwgEvent();
                 this.lwgOnEnable();
             }
             onStart(): void {
@@ -2138,7 +2130,7 @@ export module lwg {
             }
 
             /**
-              * 通过resCondition/degree,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
+              * 通过degreeNum/conditionNum,设置完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
               * @param calssName 商品种类
               * @param name 商品名称
               * @param number 完成几次，不传则默认为1次
@@ -2167,7 +2159,7 @@ export module lwg {
                 }
                 return chek;
             }
-            /**检测所有是否都完成了*/
+            /**检测所有对象的degreeNum/conditionNum是否都完成了*/
             _checkAllCompelet(): boolean {
                 let bool: boolean = true;
                 for (let index = 0; index < this._arr.length; index++) {
@@ -3628,6 +3620,15 @@ export module lwg {
 
     /**动画模块*/
     export module Animation2D {
+         /**
+         * @export 清理对象上的所有计时器
+         * @param {Array<any>} arr 清理的数组
+         */
+        export function _clearAll(arr: Array<any>): void {
+            for (let index = 0; index < arr.length; index++) {
+                Laya.Tween.clearAll(arr[index]);
+            }
+        }
         /**
          * @export 类似于呼吸
          * @param {(Laya.Sprite | Laya.Image)} node
@@ -3694,7 +3695,7 @@ export module lwg {
             if (!delayed) {
                 delayed = 0;
             }
-            Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(node, { rotation: Erotate }, time, node, Laya.Handler.create(this, function () {
                 if (func) {
                     func();
                 }
@@ -6208,7 +6209,7 @@ export module lwg {
             lwgStartLoding(any: any): void {
                 EventAdmin._notify(LwgPreLoad._Event.importList, (any));
             }
-            moduleEventRegister(): void {
+            moduleEvent(): void {
                 EventAdmin._register(_Event.importList, this, (listObj: {}) => {
                     for (const key in listObj) {
                         if (Object.prototype.hasOwnProperty.call(listObj, key)) {

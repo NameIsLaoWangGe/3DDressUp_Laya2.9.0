@@ -31,7 +31,7 @@ export module _MakeClothes {
             }
             EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
         }
-        lwgEventRegister(): void {
+        lwgEvent(): void {
         }
         /**图片移动控制*/
         Tex = {
@@ -319,7 +319,7 @@ export module _MakeClothes {
                 })
             }
         }
-        lwgBtnRegister(): void {
+        lwgButton(): void {
             this.Tex.btn();
             this._btnUp(this._ImgVar('BtnNext'), () => {
                 this._openScene('MakeUp', true, true);
@@ -347,7 +347,7 @@ export module _MakeClothes {
             _HangerP = this._Child('HangerP');
             _MainCamara = this._MainCamera;
         }
-        lwgEventRegister(): void {
+        lwgEvent(): void {
             EventAdmin._register(_Event.addTexture2D, this, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {
                 let bMaterialR = this._findMRenderer('Reverse').material as Laya.BlinnPhongMaterial;
                 bMaterialR.albedoTexture.destroy();

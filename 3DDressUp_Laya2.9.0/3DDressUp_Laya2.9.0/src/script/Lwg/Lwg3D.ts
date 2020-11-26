@@ -111,7 +111,7 @@ export module lwg3D {
         lwgOnAwake(): void {
         }
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
-        lwgEventRegister(): void { };
+        lwgEvent(): void { };
         _evReg(name: string, func: Function): void {
             EventAdmin._register(name, this, func);
         }
@@ -152,7 +152,7 @@ export module lwg3D {
         onEnable() {
             // 组件变为的self属性
             this._Owner[this._calssName] = this;
-            this.lwgEventRegister();
+            this.lwgEvent();
             this.lwgOnEnable();
             this.lwgOpenAni();
         }
@@ -216,7 +216,7 @@ export module lwg3D {
             this.lwgOnAwake();
         }
         onEnable() {
-            this.lwgEventRegister();
+            this.lwgEvent();
             this.lwgOnEnable();
         }
         onUpdate(): void {

@@ -716,8 +716,8 @@
                 centerRotate: 'centerRotate',
                 drawUp: 'drawUp',
             };
-            SceneAnimation._vanishSwitch = false;
             SceneAnimation._openSwitch = true;
+            SceneAnimation._vanishSwitch = false;
             SceneAnimation._Use = {
                 get value() {
                     return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
@@ -757,9 +757,13 @@
                     Click._switch = true;
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
-                        Scene[Scene.name].lwgBtnRegister();
+                        Scene[Scene.name].lwgButton();
                     }
                 };
+                if (!SceneAnimation._openSwitch) {
+                    afterAni();
+                    return 0;
+                }
                 switch (SceneAnimation._Use.value) {
                     case SceneAnimation._Type.fadeOut:
                         time = 400;
@@ -1067,34 +1071,6 @@
                 }
             }
             Admin._closeScene = _closeScene;
-            Admin._gameState = {
-                type: {
-                    Start: 'Start',
-                    Play: 'Play',
-                    Pause: 'pause',
-                    Victory: 'victory',
-                    Defeated: 'defeated',
-                },
-                state: 'Start',
-                setState(_calssName) {
-                    switch (_calssName) {
-                        case _SceneName.Start:
-                            Admin._gameState.state = Admin._gameState.type.Start;
-                            break;
-                        case _SceneName.Game:
-                            Admin._gameState.state = Admin._gameState.type.Play;
-                            break;
-                        case _SceneName.Defeated:
-                            Admin._gameState.state = Admin._gameState.type.Defeated;
-                            break;
-                        case _SceneName.Victory:
-                            Admin._gameState.state = Admin._gameState.type.Victory;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            };
             class _ScriptBase extends Laya.Script {
                 constructor() {
                     super(...arguments);
@@ -1148,7 +1124,7 @@
                 ;
                 lwgAdaptive() { }
                 ;
-                lwgEventRegister() { }
+                lwgEvent() { }
                 ;
                 _evReg(name, func) {
                     EventAdmin._register(name, this, func);
@@ -1161,7 +1137,7 @@
                 }
                 lwgOnEnable() { }
                 lwgOnStart() { }
-                lwgBtnRegister() { }
+                lwgButton() { }
                 ;
                 _btnDown(target, down, effect) {
                     Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e) => {
@@ -1283,28 +1259,28 @@
                 }
                 moduleOnAwake() { }
                 onEnable() {
-                    this.moduleEventRegister();
-                    this.lwgEventRegister();
+                    this.moduleEvent();
+                    this.lwgEvent();
                     this.moduleOnEnable();
                     this.lwgOnEnable();
-                    this.btnAndlwgOpenAni();
+                    this.btnAndOpenAni();
                 }
                 moduleOnEnable() { }
                 ;
-                moduleEventRegister() { }
+                moduleEvent() { }
                 ;
                 onStart() {
                     this.moduleOnStart();
                     this.lwgOnStart();
                 }
                 moduleOnStart() { }
-                btnAndlwgOpenAni() {
+                btnAndOpenAni() {
                     let time = this.lwgOpenAni();
                     if (time !== null) {
                         Laya.timer.once(time, this, () => {
                             Click._switch = true;
                             this.lwgOpenAniAfter();
-                            this.lwgBtnRegister();
+                            this.lwgButton();
                         });
                     }
                     else {
@@ -1399,6 +1375,9 @@
                 _SceneSprite(name) {
                     return this.getSceneVar(name, '_SceneSprite');
                 }
+                _SceneAni(name) {
+                    return this.getSceneVar(name, '_SceneAni');
+                }
                 _SceneImg(name) {
                     return this.getSceneVar(name, '_SceneImg');
                 }
@@ -1462,8 +1441,8 @@
                     this.lwgAdaptive();
                 }
                 onEnable() {
-                    this.lwgBtnRegister();
-                    this.lwgEventRegister();
+                    this.lwgButton();
+                    this.lwgEvent();
                     this.lwgOnEnable();
                 }
                 onStart() {
@@ -2901,7 +2880,7 @@
                 if (!delayed) {
                     delayed = 0;
                 }
-                Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { rotation: Erotate }, time, node, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
                     }
@@ -4614,7 +4593,7 @@
                 lwgStartLoding(any) {
                     EventAdmin._notify(LwgPreLoad._Event.importList, (any));
                 }
-                moduleEventRegister() {
+                moduleEvent() {
                     EventAdmin._register(_Event.importList, this, (listObj) => {
                         for (const key in listObj) {
                             if (Object.prototype.hasOwnProperty.call(listObj, key)) {
@@ -5294,7 +5273,7 @@
     (function (_PreLoad) {
         class PreLoad extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
+                this._evNotify(_LwgPreLoad._Event.importList, [_Res._list]);
             }
             lwgOpenAni() { return 1; }
             lwgStepComplete() {
@@ -5309,150 +5288,6 @@
     })(_PreLoad || (_PreLoad = {}));
     var _PreLoad$1 = _PreLoad.PreLoad;
 
-    var _Tailor;
-    (function (_Tailor) {
-        let _Event;
-        (function (_Event) {
-            _Event["trigger"] = "_MakeClothes_trigger";
-            _Event["playAni"] = "_MakeClothes_playAni";
-        })(_Event = _Tailor._Event || (_Tailor._Event = {}));
-        class DottedLine extends DataAdmin._Table {
-            constructor(Root, LineParent, OwnerScene) {
-                super();
-                this.Root = Root;
-                this.LineParent = LineParent;
-                this.OwnerScene = OwnerScene;
-                for (let index = 0; index < this.LineParent.numChildren; index++) {
-                    const Line = this.LineParent.getChildAt(index);
-                    if (Line.numChildren > 0) {
-                        let data = {};
-                        data['Line'] = Line;
-                        data[this._property.name] = Line.name;
-                        data[this._property.conditionNum] = Line.numChildren;
-                        data[this._property.degreeNum] = 0;
-                        this._arr.push(data);
-                    }
-                }
-            }
-            removeCloth(name) {
-                this.LineParent.getChildByName(name).removeSelf();
-                let Cloth = this.Root.getChildByName(`Cloth${name.substr(4)}`);
-                if (Cloth) {
-                    let ani = this.OwnerScene[`ani${name.substr(4)}`];
-                    ani.play(0, false);
-                    ani.on(Laya.Event.COMPLETE, this, () => {
-                        Cloth.removeSelf();
-                        console.log('删除节点！');
-                    });
-                }
-                else {
-                    console.log('当前虚线上没有可以裁剪布料，请查看');
-                }
-            }
-        }
-        _Tailor.DottedLine = DottedLine;
-        class Scissor extends Admin._ObjectBase {
-            onTriggerEnter(other, self) {
-                console.log('裁剪！');
-                if (!other['cut']) {
-                    other['cut'] = true;
-                    EventAdmin._notify(_Event.trigger, [other.owner.parent.name]);
-                }
-            }
-        }
-        _Tailor.Scissor = Scissor;
-        class Tailor extends Admin._SceneBase {
-            constructor() {
-                super(...arguments);
-                this.Cutting = {
-                    Scissor: () => {
-                        return this._ImgVar('Scissor');
-                    },
-                    touchP: new Laya.Point(),
-                    maxSpeed: 30,
-                    get diffP() {
-                        return this['_diffP'] ? this['_diffP'] : new Laya.Point();
-                    },
-                    set diffP(p) {
-                        p.x = p.x > this['maxSpeed'] ? this['maxSpeed'] : p.x;
-                        p.x = p.x < -this['maxSpeed'] ? -this['maxSpeed'] : p.x;
-                        p.y = p.y > this['maxSpeed'] ? this['maxSpeed'] : p.y;
-                        p.y = p.y < -this['maxSpeed'] ? -this['maxSpeed'] : p.y;
-                        this['_diffP'] = p;
-                    },
-                    EraserSp: () => {
-                        if (!this._ImgVar('LineParent').getChildByName('EraserSp')) {
-                            let Sp = new Laya.Sprite();
-                            Sp.name = 'EraserSp';
-                            Sp.blendMode = "destination-out";
-                            this._ImgVar('LineParent').addChild(Sp);
-                            return Sp;
-                        }
-                        else {
-                            return this._ImgVar('LineParent').getChildByName('EraserSp');
-                        }
-                    },
-                    EraserSize: 50,
-                    erasureLine: () => {
-                        let gPos = this.Cutting.Scissor().parent.localToGlobal(new Laya.Point(this._ImgVar('Scissor').x, this._ImgVar('Scissor').y));
-                        let localPos = this.Cutting.EraserSp().globalToLocal(gPos);
-                        this.Cutting.EraserSp().graphics.drawCircle(localPos.x, localPos.y, this.Cutting.EraserSize / 2, "#000000");
-                    }
-                };
-            }
-            lwgOnAwake() {
-                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
-                this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
-                this._Owner.addChild(this.DottedLineControl.BtnCompelet);
-                this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
-                this.DottedLineControl.BtnCompelet.visible = false;
-                this._ImgVar('Scissor').addComponent(Scissor);
-                this._ImgVar('LineParent').cacheAs = "bitmap";
-            }
-            lwgAdaptive() {
-            }
-            lwgOpenAni() {
-                return 100;
-            }
-            lwgEventRegister() {
-                EventAdmin._register(_Event.trigger, this, (name) => {
-                    let value = this.DottedLineControl._checkCondition(name);
-                    if (value) {
-                        this.DottedLineControl.removeCloth(name);
-                        let boll = this.DottedLineControl._checkAllCompelet();
-                        if (boll) {
-                            this.DottedLineControl.BtnCompelet.visible = true;
-                        }
-                    }
-                });
-            }
-            lwgBtnRegister() {
-                this._btnUp(this._ImgVar('BtnNext'), () => {
-                    this._openScene('MakeClothes', true, true);
-                });
-                this._btnUp(this.DottedLineControl.BtnCompelet, () => {
-                    this._openScene('MakeClothes', true, true);
-                });
-            }
-            onStageMouseDown(e) {
-                this.Cutting.touchP = new Laya.Point(e.stageX, e.stageY);
-            }
-            onStageMouseMove(e) {
-                if (this.Cutting.touchP) {
-                    this.Cutting.diffP = new Laya.Point(e.stageX - this.Cutting.touchP.x, e.stageY - this.Cutting.touchP.y);
-                    this.Cutting.Scissor().x += this.Cutting.diffP.x;
-                    this.Cutting.Scissor().y += this.Cutting.diffP.y;
-                    this.Cutting.erasureLine();
-                    this.Cutting.touchP = new Laya.Point(e.stageX, e.stageY);
-                }
-            }
-            onStageMouseUp() {
-                this.Cutting.touchP = null;
-            }
-        }
-        _Tailor.Tailor = Tailor;
-    })(_Tailor || (_Tailor = {}));
-
     var _PreLoadCutIn;
     (function (_PreLoadCutIn) {
         let _Event;
@@ -5465,7 +5300,7 @@
             lwgOnStart() {
                 EventAdmin._notify(_Event.animation1);
             }
-            lwgEventRegister() {
+            lwgEvent() {
                 EventAdmin._register(_Event.animation1, this, () => {
                     let time = 0;
                     TimerAdmin._frameNumLoop(1, 30, this, () => {
@@ -5515,9 +5350,9 @@
             lwgOpenAni() {
                 return 100;
             }
-            lwgBtnRegister() {
+            lwgButton() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
-                    this._openScene('Tailor');
+                    this._openScene('MakeTailor');
                 });
             }
         }
@@ -5635,7 +5470,7 @@
             lwgReset() { }
             lwgOnAwake() {
             }
-            lwgEventRegister() { }
+            lwgEvent() { }
             ;
             _evReg(name, func) {
                 EventAdmin._register(name, this, func);
@@ -5669,7 +5504,7 @@
             }
             onEnable() {
                 this._Owner[this._calssName] = this;
-                this.lwgEventRegister();
+                this.lwgEvent();
                 this.lwgOnEnable();
                 this.lwgOpenAni();
             }
@@ -5729,7 +5564,7 @@
                 this.lwgOnAwake();
             }
             onEnable() {
-                this.lwgEventRegister();
+                this.lwgEvent();
                 this.lwgOnEnable();
             }
             onUpdate() {
@@ -6042,9 +5877,9 @@
                 }
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
-            lwgEventRegister() {
+            lwgEvent() {
             }
-            lwgBtnRegister() {
+            lwgButton() {
                 this.Tex.btn();
                 this._btnUp(this._ImgVar('BtnNext'), () => {
                     this._openScene('MakeUp', true, true);
@@ -6068,7 +5903,7 @@
                 _MakeClothes._HangerP = this._Child('HangerP');
                 _MakeClothes._MainCamara = this._MainCamera;
             }
-            lwgEventRegister() {
+            lwgEvent() {
                 EventAdmin._register(_Event.addTexture2D, this, (Text2DF, Text2DR) => {
                     let bMaterialR = this._findMRenderer('Reverse').material;
                     bMaterialR.albedoTexture.destroy();
@@ -6138,13 +5973,13 @@
             lwgOpenAni() {
                 return 100;
             }
-            lwgEventRegister() {
+            lwgEvent() {
                 this._evReg(_Event.posCalibration, (p1, p2) => {
                     this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
                     this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y - this._ImgVar('Glasses1').height / 2);
                 });
             }
-            lwgBtnRegister() {
+            lwgButton() {
                 for (let index = 0; index < this._ImgVar('Case').numChildren; index++) {
                     const element = this._ImgVar('Case').getChildAt(index);
                     this._btnUp(element, (e) => {
@@ -6211,7 +6046,7 @@
                 let p2 = Tools._3D.posToScreen(this._Child('Glasses2').transform.position, this._MainCamera);
                 this._evNotify(_Event.posCalibration, [p1, p2]);
             }
-            lwgEventRegister() {
+            lwgEvent() {
                 this._evReg(_Event.addTexture2D, (name, Text2D) => {
                     let bMaterial = this._Child(name).meshRenderer.material;
                     bMaterial.albedoTexture.destroy();
@@ -6222,6 +6057,196 @@
         _MakeUp.MakeUp3D = MakeUp3D;
     })(_MakeUp || (_MakeUp = {}));
     var _MakeUp$1 = _MakeUp.MakeUp3D;
+
+    var _MakeTailor;
+    (function (_MakeTailor) {
+        let _Event;
+        (function (_Event) {
+            _Event["trigger"] = "_MakeTailor_trigger";
+            _Event["playAni"] = "_MakeTailor_playAni";
+            _Event["scissorPlay"] = "_MakeTailor_scissorPlay";
+            _Event["scissorStop"] = "_MakeTailor_scissorStop";
+        })(_Event = _MakeTailor._Event || (_MakeTailor._Event = {}));
+        class DottedLine extends DataAdmin._Table {
+            constructor(Root, LineParent, OwnerScene) {
+                super();
+                this.Root = Root;
+                this.LineParent = LineParent;
+                this.OwnerScene = OwnerScene;
+                for (let index = 0; index < this.LineParent.numChildren; index++) {
+                    const Line = this.LineParent.getChildAt(index);
+                    if (Line.numChildren > 0) {
+                        let data = {};
+                        data['Line'] = Line;
+                        data[this._property.name] = Line.name;
+                        data[this._property.conditionNum] = Line.numChildren;
+                        data[this._property.degreeNum] = 0;
+                        this._arr.push(data);
+                    }
+                }
+            }
+            removeCloth(name) {
+                let Cloth = this.Root.getChildByName(`Cloth${name.substr(4)}`);
+                if (Cloth) {
+                    let ani = this.OwnerScene[`ani${name.substr(4)}`];
+                    ani.play(0, false);
+                    ani.on(Laya.Event.COMPLETE, this, () => {
+                        Cloth.removeSelf();
+                        console.log('删除节点！');
+                    });
+                }
+                else {
+                    console.log('当前虚线上没有可以裁剪布料，请检查');
+                }
+            }
+        }
+        _MakeTailor.DottedLine = DottedLine;
+        class Scissor extends Admin._ObjectBase {
+            constructor() {
+                super(...arguments);
+                this.state = 'none';
+                this.Ani = {
+                    switch: true,
+                    shearSpeed: 5,
+                    range: 40,
+                    dir: 'up',
+                    dirType: {
+                        up: 'up',
+                        down: 'down',
+                    },
+                    paly: () => {
+                        TimerAdmin._frameLoop(1, this.Ani, () => {
+                            if (this._SceneImg('S2').rotation > this.Ani.range) {
+                                this.Ani.dir = 'up';
+                            }
+                            else if (this._SceneImg('S2').rotation <= 0) {
+                                this.Ani.dir = 'down';
+                            }
+                            if (this.Ani.dir == 'up') {
+                                this._SceneImg('S2').rotation -= this.Ani.shearSpeed;
+                                this._SceneImg('S1').rotation += this.Ani.shearSpeed;
+                            }
+                            else if (this.Ani.dir == 'down') {
+                                this._SceneImg('S2').rotation += this.Ani.shearSpeed;
+                                this._SceneImg('S1').rotation -= this.Ani.shearSpeed;
+                            }
+                        });
+                    },
+                    stop: () => {
+                        TimerAdmin._frameOnce(60, this.Ani, () => {
+                            this.Ani.switch = false;
+                            Animation2D.simple_Rotate(this._SceneImg('S2'), this._SceneImg('S2').rotation, this.Ani.range / 3, 200);
+                            Animation2D.simple_Rotate(this._SceneImg('S1'), this._SceneImg('S1').rotation, -this.Ani.range / 3, 200);
+                        });
+                    },
+                    event: () => {
+                        this._evReg(_Event.scissorPlay, () => {
+                            this.Ani.paly();
+                        });
+                        this._evReg(_Event.scissorStop, () => {
+                            this.Ani.stop();
+                        });
+                    }
+                };
+                this.Move = {
+                    touchP: null,
+                    diffP: null,
+                };
+            }
+            lwgEvent() {
+                this.Ani.event();
+            }
+            lwgOnStageDown(e) {
+                this._evNotify(_Event.scissorPlay);
+                this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+            }
+            lwgOnStageMove(e) {
+                if (this.Move.touchP) {
+                    this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
+                    this._Owner.x += this.Move.diffP.x;
+                    this._Owner.y += this.Move.diffP.y;
+                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                    this._evNotify(_Event.scissorPlay);
+                }
+            }
+            lwgOnStageUp() {
+                this._evNotify(_Event.scissorStop);
+                this.Move.touchP = null;
+            }
+            onTriggerEnter(other, _Owner) {
+                if (this.state == 'none' || this.state == other.owner.parent.name) {
+                    if (!other['cut']) {
+                        this._evNotify(_Event.scissorPlay);
+                        this._evNotify(_Event.scissorStop);
+                        this.state = other.owner.parent.name;
+                        console.log('裁剪！');
+                        other['cut'] = true;
+                        EventAdmin._notify(_Event.trigger, [other.owner]);
+                    }
+                }
+            }
+            onTriggerExit(other, _Owner) {
+                if (this.state == other.owner.parent.name) {
+                    this.state = 'none';
+                }
+            }
+        }
+        _MakeTailor.Scissor = Scissor;
+        class MakeTailor extends Admin._SceneBase {
+            lwgOnAwake() {
+                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
+                this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
+                this._Owner.addChild(this.DottedLineControl.BtnCompelet);
+                this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
+                this.DottedLineControl.BtnCompelet.visible = false;
+                this._ImgVar('Scissor').addComponent(Scissor);
+            }
+            lwgAdaptive() {
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgEvent() {
+                this._evReg(_Event.trigger, (Dotted) => {
+                    let value = this.DottedLineControl._checkCondition(Dotted.parent.name);
+                    Dotted.visible = false;
+                    if (value) {
+                        this.DottedLineControl.removeCloth(Dotted.parent.name);
+                        if (this.DottedLineControl._checkAllCompelet()) {
+                            this.DottedLineControl.BtnCompelet.visible = true;
+                        }
+                    }
+                    let Parent = Dotted.parent;
+                    let gPos = Parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
+                    if (Dotted.name == 'A') {
+                        if (this._ImgVar('Scissor').x <= gPos.x) {
+                            this._ImgVar('Scissor').rotation = Dotted.rotation;
+                        }
+                        else {
+                            this._ImgVar('Scissor').rotation = 180 + Dotted.rotation;
+                        }
+                    }
+                    else {
+                        if (this._ImgVar('Scissor').y >= gPos.y) {
+                            this._ImgVar('Scissor').rotation = Dotted.rotation;
+                        }
+                        else {
+                            this._ImgVar('Scissor').rotation = 180 + Dotted.rotation;
+                        }
+                    }
+                });
+            }
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnNext'), () => {
+                    this._openScene('MakeClothes', true, true);
+                });
+                this._btnUp(this.DottedLineControl.BtnCompelet, () => {
+                    this._openScene('MakeClothes', true, true);
+                });
+            }
+        }
+        _MakeTailor.MakeTailor = MakeTailor;
+    })(_MakeTailor || (_MakeTailor = {}));
 
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
@@ -6236,7 +6261,7 @@
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
-                _Tailor: _Tailor,
+                _MakeTailor: _MakeTailor,
                 _MakeClothes: _MakeClothes,
                 _MakeUp: _MakeUp,
             };

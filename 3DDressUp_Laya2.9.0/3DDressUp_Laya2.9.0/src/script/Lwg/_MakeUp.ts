@@ -20,7 +20,7 @@ export module _MakeUp {
         lwgOpenAni(): number {
             return 100;
         }
-        lwgEventRegister(): void {
+        lwgEvent(): void {
             this._evReg(_Event.posCalibration, (p1: Laya.Point, p2: Laya.Point,) => {
                 this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
                 this._ImgVar('Glasses2').pos(p2.x - this._ImgVar('Glasses2').width / 2, p2.y - this._ImgVar('Glasses1').height / 2);
@@ -41,7 +41,7 @@ export module _MakeUp {
                 return element.drawToTexture(element.width, element.height, element.x, element.y) as Laya.Texture;
             },
         }
-        lwgBtnRegister(): void {
+        lwgButton(): void {
             for (let index = 0; index < this._ImgVar('Case').numChildren; index++) {
                 const element = this._ImgVar('Case').getChildAt(index) as Laya.Image;
                 this._btnUp(element, (e: Laya.Stage) => {
@@ -118,7 +118,7 @@ export module _MakeUp {
             let p2 = Tools._3D.posToScreen(this._Child('Glasses2').transform.position, this._MainCamera);
             this._evNotify(_Event.posCalibration, [p1, p2]);
         }
-        lwgEventRegister(): void {
+        lwgEvent(): void {
             this._evReg(_Event.addTexture2D, (name: string, Text2D: Laya.Texture2D) => {
                 let bMaterial = this._Child(name).meshRenderer.material as Laya.BlinnPhongMaterial;
                 bMaterial.albedoTexture.destroy();

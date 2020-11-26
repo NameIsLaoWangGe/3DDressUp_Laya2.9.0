@@ -1,15 +1,15 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
-    "selecteID":8,
-    "searchKey":"Scene",
+    "selectedBox":207,
+    "selecteID":766,
+    "searchKey":"Scene,A",
     "referenceLines":[
         ],
-    "props":{"width":1280,"sceneColor":"#000000","height":720},
+    "props":{"width":1280,"sceneColor":"#000000","name":"A","height":720},
     "nodeParent":-1,
-    "maxID":771,
-    "label":"Scene",
+    "maxID":775,
+    "label":"A",
     "isOpen":true,
     "isDirectory":true,
     "isAniNode":true,
@@ -188,7 +188,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,LineParent,LineParent",
-                    "props":{"y":32,"width":793,"var":"LineParent","name":"LineParent","height":591,"centerX":0},
+                    "props":{"y":32,"width":693,"var":"LineParent","name":"LineParent","height":591,"centerX":0},
                     "nodeParent":8,
                     "label":"LineParent",
                     "isOpen":true,
@@ -201,7 +201,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line1,Line1",
-                            "props":{"y":24,"x":317,"width":168,"var":"Line1","name":"Line1","height":62},
+                            "props":{"y":22,"x":266,"width":168,"var":"Line1","name":"Line1","height":62},
                             "nodeParent":23,
                             "label":"Line1",
                             "isOpen":true,
@@ -213,10 +213,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":13,"x":1,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-24,"pivotY":11,"pivotX":6},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":14,"x":4,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":147,"pivotY":11,"pivotX":6,"name":"A"},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -270,10 +270,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":29,"x":10,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-46,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":29,"x":16,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":139,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -329,10 +329,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":42,"x":24,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-57,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":42,"x":28,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":132,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -388,10 +388,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":53,"x":41,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-65,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":53,"x":44,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":115,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -447,10 +447,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":60,"x":61,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-84,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A,A",
+                                    "props":{"y":59,"x":62,"width":13,"var":"A","skin":"Game/UI/MakeClothes/dotted2.png","rotation":101,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -506,10 +506,69 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":62,"x":82,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-89,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":61,"x":104,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":82,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
+                                    "isOpen":false,
+                                    "isDirectory":true,
+                                    "isAniNode":true,
+                                    "hasChild":true,
+                                    "compId":771,
+                                    "child":[
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image",
+                                            "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
+                                            "nodeParent":771,
+                                            "label":"Image",
+                                            "isOpen":true,
+                                            "isDirectory":false,
+                                            "isAniNode":true,
+                                            "hasChild":false,
+                                            "compId":772,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "type":"BoxCollider",
+                                            "switchAble":true,
+                                            "searchKey":"BoxCollider",
+                                            "removeAble":true,
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "nodeParent":771,
+                                            "label":"BoxCollider",
+                                            "isOpen":true,
+                                            "isDirectory":false,
+                                            "isAniNode":true,
+                                            "hasChild":false,
+                                            "compId":773,
+                                            "child":[
+                                                ]
+                                        },
+                                        {
+                                            "type":"RigidBody",
+                                            "switchAble":true,
+                                            "searchKey":"RigidBody",
+                                            "removeAble":true,
+                                            "props":{"type":"static","gravityScale":0},
+                                            "nodeParent":771,
+                                            "label":"RigidBody",
+                                            "isDirectory":false,
+                                            "isAniNode":true,
+                                            "hasChild":false,
+                                            "compId":774,
+                                            "child":[
+                                                ]
+                                        }]
+                                },
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,A",
+                                    "props":{"y":61,"x":82,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
+                                    "nodeParent":17,
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -565,69 +624,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":61,"x":103,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-98,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":55,"x":125,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":66,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
-                                    "isOpen":false,
-                                    "isDirectory":true,
-                                    "isAniNode":true,
-                                    "hasChild":true,
-                                    "compId":453,
-                                    "child":[
-                                        {
-                                            "type":"Image",
-                                            "searchKey":"Image",
-                                            "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
-                                            "nodeParent":453,
-                                            "label":"Image",
-                                            "isOpen":true,
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":454,
-                                            "child":[
-                                                ]
-                                        },
-                                        {
-                                            "type":"BoxCollider",
-                                            "switchAble":true,
-                                            "searchKey":"BoxCollider",
-                                            "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
-                                            "nodeParent":453,
-                                            "label":"BoxCollider",
-                                            "isOpen":true,
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":455,
-                                            "child":[
-                                                ]
-                                        },
-                                        {
-                                            "type":"RigidBody",
-                                            "switchAble":true,
-                                            "searchKey":"RigidBody",
-                                            "removeAble":true,
-                                            "props":{"type":"static","gravityScale":0},
-                                            "nodeParent":453,
-                                            "label":"RigidBody",
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":456,
-                                            "child":[
-                                                ]
-                                        }]
-                                },
-                                {
-                                    "x":60,
-                                    "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":55,"x":124,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-117,"pivotY":11,"pivotX":6,"height":24},
-                                    "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -683,10 +683,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":44,"x":142,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-130,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":43,"x":144,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":51,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -742,10 +742,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":29,"x":157,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-144,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":28,"x":158,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":36,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":17,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -801,18 +801,17 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":11,"x":167,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-154,"pivotY":11,"pivotX":6,"height":20},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":15,"x":165,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":27,"pivotY":11,"pivotX":6,"name":"A","height":20},
                                     "nodeParent":17,
-                                    "label":"Image",
-                                    "isOpen":true,
+                                    "label":"A",
+                                    "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
                                     "compId":583,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":5,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":12},
@@ -827,7 +826,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -844,7 +842,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -865,17 +862,16 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line2,Line2",
-                            "props":{"y":104,"x":352,"var":"Line2","skin":"Game/UI/MakeClothes/dottedline3.png","name":"Line2"},
+                            "props":{"y":104,"x":301,"width":99,"var":"Line2","name":"Line2","height":51},
                             "nodeParent":23,
                             "label":"Line2",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":14,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":9,"x":7,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-46,"pivotY":11,"pivotX":6,"height":24},
@@ -934,7 +930,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":24,"x":22,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-46,"pivotY":11,"pivotX":6,"height":24},
@@ -993,7 +988,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":38,"x":37,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-46,"pivotY":11,"pivotX":6,"height":24},
@@ -1052,7 +1046,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":38,"x":62,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":46,"pivotY":11,"pivotX":6,"height":24},
@@ -1111,7 +1104,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":24,"x":75,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":44,"pivotY":11,"pivotX":6,"height":24},
@@ -1170,7 +1162,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":7,"x":92,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":43,"pivotY":11,"pivotX":6,"height":28},
@@ -1229,7 +1220,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":1,"x":21,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","skewY":-29,"skewX":0,"scaleX":1,"rotation":91,"pivotY":11,"pivotX":6,"height":23},
@@ -1288,7 +1278,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":1,"x":41,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":91,"pivotY":11,"pivotX":6,"height":27},
@@ -1347,7 +1336,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":1,"x":82,"width":17,"skin":"Game/UI/MakeClothes/dotted2.png","skewY":41,"rotation":91,"pivotY":11,"pivotX":6,"height":24},
@@ -1406,7 +1394,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":1,"x":61,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":91,"pivotY":11,"pivotX":6,"height":24},
@@ -1466,20 +1453,18 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":49,"x":52,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":46,"pivotY":8,"pivotX":7,"height":15},
                                     "nodeParent":14,
                                     "label":"Image",
-                                    "isOpen":true,
+                                    "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
                                     "compId":559,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":4,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":7},
@@ -1494,7 +1479,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -1511,7 +1495,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -1532,7 +1515,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line3,Line3",
-                            "props":{"y":167,"x":97,"width":85,"var":"Line3","name":"Line3","height":94},
+                            "props":{"y":167,"x":46,"width":85,"var":"Line3","name":"Line3","height":94},
                             "nodeParent":23,
                             "label":"Line3",
                             "isOpen":false,
@@ -1894,7 +1877,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line4,Line4",
-                            "props":{"y":166,"x":616,"width":87,"var":"Line4","name":"Line4","height":93},
+                            "props":{"y":166,"x":566,"width":87,"var":"Line4","name":"Line4","height":93},
                             "nodeParent":23,
                             "label":"Line4",
                             "isOpen":false,
@@ -1934,7 +1917,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":535,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -1992,7 +1975,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":539,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -2050,7 +2033,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":543,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -2083,7 +2066,7 @@
                                     "props":{"y":53,"x":37,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":44,"pivotY":11,"pivotX":6,"height":24},
                                     "nodeParent":15,
                                     "label":"Image",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -2108,7 +2091,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":547,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -2166,7 +2149,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":555,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -2199,7 +2182,7 @@
                                     "props":{"y":69,"x":22,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":44,"pivotY":11,"pivotX":6,"height":28},
                                     "nodeParent":15,
                                     "label":"Image",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -2224,7 +2207,7 @@
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
                                             "removeAble":true,
-                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":24},
+                                            "props":{"y":1,"x":1,"width":13,"isSensor":true,"height":15},
                                             "nodeParent":551,
                                             "label":"BoxCollider",
                                             "isOpen":true,
@@ -2256,17 +2239,16 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line5,Line5",
-                            "props":{"y":197,"x":230,"width":41,"var":"Line5","name":"Line5","height":280},
+                            "props":{"y":197,"x":179,"width":41,"var":"Line5","name":"Line5","height":280},
                             "nodeParent":23,
                             "label":"Line5",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":20,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":11,"x":22,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-18,"pivotY":11,"pivotX":6,"height":24},
@@ -2279,7 +2261,6 @@
                                     "compId":587,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":-7,"x":12,"width":23,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":25,"renderType":"mask","height":44},
@@ -2293,7 +2274,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2308,7 +2288,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2325,7 +2304,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2342,7 +2320,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":32,"x":28,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-9,"pivotY":11,"pivotX":6,"height":24},
@@ -2355,7 +2332,6 @@
                                     "compId":592,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2370,7 +2346,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2387,7 +2362,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2404,7 +2378,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":55,"x":32.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-5,"pivotY":11,"pivotX":6,"height":24},
@@ -2417,7 +2390,6 @@
                                     "compId":597,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2432,7 +2404,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2449,7 +2420,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2466,7 +2436,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":77,"x":35,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-5,"pivotY":11,"pivotX":6,"height":24},
@@ -2479,7 +2448,6 @@
                                     "compId":601,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2494,7 +2462,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2511,7 +2478,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2528,7 +2494,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":99,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":1,"pivotY":11,"pivotX":6,"height":24},
@@ -2541,7 +2506,6 @@
                                     "compId":605,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2556,7 +2520,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2573,7 +2536,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2590,7 +2552,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":121,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":1,"pivotY":11,"pivotX":6,"height":24},
@@ -2603,7 +2564,6 @@
                                     "compId":609,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2618,7 +2578,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2635,7 +2594,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2652,7 +2610,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":142,"x":35,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":3,"pivotY":11,"pivotX":6,"height":24},
@@ -2665,7 +2622,6 @@
                                     "compId":613,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2680,7 +2636,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2697,7 +2652,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2714,7 +2668,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":164,"x":32.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":9,"pivotY":11,"pivotX":6,"height":24},
@@ -2727,7 +2680,6 @@
                                     "compId":617,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2742,7 +2694,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2759,7 +2710,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2776,7 +2726,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":185,"x":28.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":11,"pivotY":11,"pivotX":6,"height":24},
@@ -2789,7 +2738,6 @@
                                     "compId":621,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2804,7 +2752,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2821,7 +2768,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2838,7 +2784,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":206,"x":24,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":11,"pivotY":11,"pivotX":6,"height":24},
@@ -2851,7 +2796,6 @@
                                     "compId":625,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2866,7 +2810,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2883,7 +2826,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2900,7 +2842,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":227,"x":18.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":14,"pivotY":11,"pivotX":6,"height":24},
@@ -2913,7 +2854,6 @@
                                     "compId":629,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2928,7 +2868,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -2945,7 +2884,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -2962,7 +2900,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":247,"x":13,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":17,"pivotY":11,"pivotX":6,"height":24},
@@ -2975,7 +2912,6 @@
                                     "compId":633,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -2990,7 +2926,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3007,7 +2942,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3024,7 +2958,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":267,"x":6.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":19,"pivotY":11,"pivotX":6,"height":28},
@@ -3037,7 +2970,6 @@
                                     "compId":637,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3052,7 +2984,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3069,7 +3000,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3085,7 +3015,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":-9,"x":-4,"width":23,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-13,"renderType":"mask","height":36},
@@ -3104,17 +3033,16 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line6,Line6",
-                            "props":{"y":198,"x":527,"width":44,"var":"Line6","name":"Line6","height":279},
+                            "props":{"y":198,"x":476,"width":44,"var":"Line6","name":"Line6","height":279},
                             "nodeParent":23,
                             "label":"Line6",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":19,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":6,"x":13,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":12,"pivotY":11,"pivotX":6,"height":29},
@@ -3186,7 +3114,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":28,"x":8,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":10,"pivotY":11,"pivotX":6,"height":29},
@@ -3199,7 +3126,6 @@
                                     "compId":652,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3214,7 +3140,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3231,7 +3156,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3248,7 +3172,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":49,"x":4.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":8,"pivotY":11,"pivotX":6,"height":29},
@@ -3261,7 +3184,6 @@
                                     "compId":657,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3276,7 +3198,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3293,7 +3214,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3310,7 +3230,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":70,"x":2.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":5,"pivotY":11,"pivotX":6,"height":29},
@@ -3323,7 +3242,6 @@
                                     "compId":661,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3338,7 +3256,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3355,7 +3272,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3372,7 +3288,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":91,"x":1.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":2,"pivotY":11,"pivotX":6,"height":29},
@@ -3385,7 +3300,6 @@
                                     "compId":665,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3400,7 +3314,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3417,7 +3330,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3434,7 +3346,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":114,"x":1.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-1,"pivotY":11,"pivotX":6,"height":29},
@@ -3447,7 +3358,6 @@
                                     "compId":669,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3462,7 +3372,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3479,7 +3388,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3496,7 +3404,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":134.5,"x":3.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-6,"pivotY":11,"pivotX":6,"height":29},
@@ -3509,7 +3416,6 @@
                                     "compId":673,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3524,7 +3430,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3541,7 +3446,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3558,7 +3462,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":156.5,"x":7,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-10,"pivotY":11,"pivotX":6,"height":29},
@@ -3571,7 +3474,6 @@
                                     "compId":677,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3586,7 +3488,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3603,7 +3504,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3620,7 +3520,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":177,"x":11,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-12,"pivotY":11,"pivotX":6,"height":29},
@@ -3633,7 +3532,6 @@
                                     "compId":681,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3648,7 +3546,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3665,7 +3562,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3682,7 +3578,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":197.5,"x":15.5,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-13,"pivotY":11,"pivotX":6,"height":29},
@@ -3695,7 +3590,6 @@
                                     "compId":689,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3710,7 +3604,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3727,7 +3620,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3744,7 +3636,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":217.5,"x":21,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-15,"pivotY":11,"pivotX":6,"height":29},
@@ -3757,7 +3648,6 @@
                                     "compId":693,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3772,7 +3662,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3789,7 +3678,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3806,7 +3694,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":237.5,"x":27,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-17,"pivotY":11,"pivotX":6,"height":29},
@@ -3819,7 +3706,6 @@
                                     "compId":697,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","height":14},
@@ -3834,7 +3720,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3851,7 +3736,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3868,7 +3752,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":258,"x":34,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":-19,"pivotY":11,"pivotX":6,"height":29},
@@ -3881,7 +3764,6 @@
                                     "compId":701,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":-8,"x":-6,"width":21,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":10,"renderType":"mask","height":40},
@@ -3895,7 +3777,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
                                             "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","rotation":0,"height":14},
@@ -3910,7 +3791,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"BoxCollider",
                                             "switchAble":true,
                                             "searchKey":"BoxCollider",
@@ -3927,7 +3807,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"RigidBody",
                                             "switchAble":true,
                                             "searchKey":"RigidBody",
@@ -3948,7 +3827,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Line7,Line7",
-                            "props":{"y":479,"x":231,"width":341,"var":"Line7","name":"Line7","height":6},
+                            "props":{"y":473,"x":180,"width":341,"var":"Line7","name":"Line7","height":20},
                             "nodeParent":23,
                             "label":"Line7",
                             "isOpen":true,
@@ -3960,10 +3839,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":15,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":15,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4020,10 +3899,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4080,10 +3959,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":57,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":57,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4140,10 +4019,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":78,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":78,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4200,10 +4079,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":98,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":98,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4260,10 +4139,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":119,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":119,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4320,10 +4199,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":141,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":141,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4380,10 +4259,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":163,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":163,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4440,10 +4319,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":1,"x":185,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":9,"x":185,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":11,"pivotX":6,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4500,10 +4379,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":205,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":205,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4560,10 +4439,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":226,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":226,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4620,10 +4499,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":246,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":246,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4680,10 +4559,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":266,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":266,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4740,10 +4619,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":287,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":287,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4800,10 +4679,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":307,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":307,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":false,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4860,10 +4739,10 @@
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"y":2,"x":327,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"height":24},
+                                    "searchKey":"Image,A",
+                                    "props":{"y":10,"x":327,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"pivotY":12,"pivotX":7,"name":"A","height":24},
                                     "nodeParent":207,
-                                    "label":"Image",
+                                    "label":"A",
                                     "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
@@ -4874,7 +4753,7 @@
                                             "x":75,
                                             "type":"Image",
                                             "searchKey":"Image",
-                                            "props":{"y":22,"x":-2,"width":17,"skin":"Game/UI/MakeClothes/dotted2.png","sizeGrid":"4,5,6,3","rotation":-97,"renderType":"mask","height":28},
+                                            "props":{"y":51,"x":0,"width":48,"skin":"Game/UI/MakeClothes/dotted2.png","sizeGrid":"4,5,6,3","rotation":-97,"renderType":"mask","height":28},
                                             "nodeParent":766,
                                             "label":"Image",
                                             "isDirectory":false,
@@ -4942,7 +4821,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Scissor,Scissor",
-            "props":{"y":537,"x":986,"width":126,"var":"Scissor","pivotY":48,"pivotX":49,"name":"Scissor","height":124},
+            "props":{"y":549,"x":1054,"width":126,"var":"Scissor","rotation":0,"pivotY":51,"pivotX":63,"name":"Scissor","height":124},
             "nodeParent":2,
             "label":"Scissor",
             "isOpen":true,
@@ -4954,24 +4833,10 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"y":56,"x":65,"width":64,"skin":"Game/UI/MakeClothes/scissors_01.png","scaleY":0.45,"scaleX":0.45,"rotation":-66,"pivotY":134,"pivotX":32,"name":"","height":268},
+                    "searchKey":"Image,S2,S2",
+                    "props":{"y":64,"x":61,"width":62,"var":"S2","skin":"Game/UI/MakeClothes/scissors_02.png","scaleY":0.45,"scaleX":0.45,"rotation":25,"pivotY":135,"pivotX":47,"name":"S2","height":269},
                     "nodeParent":30,
-                    "label":"Image",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":31,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"y":69,"x":66,"width":62,"skin":"Game/UI/MakeClothes/scissors_02.png","scaleY":0.45,"scaleX":0.45,"rotation":-23,"pivotY":156,"pivotX":47,"name":"","height":269},
-                    "nodeParent":30,
-                    "label":"Image",
+                    "label":"S2",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
@@ -4981,11 +4846,25 @@
                 },
                 {
                     "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,S1,S1",
+                    "props":{"y":63,"x":62,"width":64,"var":"S1","skin":"Game/UI/MakeClothes/scissors_01.png","scaleY":0.45,"scaleX":0.45,"rotation":-22,"pivotY":134,"pivotX":12,"name":"S1","height":268},
+                    "nodeParent":30,
+                    "label":"S1",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":31,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
                     "type":"CircleCollider",
                     "switchAble":true,
                     "searchKey":"CircleCollider",
                     "removeAble":true,
-                    "props":{"y":30,"x":30,"radius":20,"label":"scissor","isSensor":true},
+                    "props":{"y":40,"x":54,"radius":8,"label":"scissor","isSensor":true},
                     "nodeParent":30,
                     "label":"CircleCollider",
                     "isDirectory":false,
@@ -5400,6 +5279,75 @@
                 }],
             "name":"ani1",
             "id":8,
+            "frameRate":60,
+            "action":0
+        },
+        {
+            "nodes":[
+                {
+                    "target":32,
+                    "keyframes":{
+                        "rotation":[
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"rotation",
+                                "index":0
+                            },
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "key":"rotation",
+                                "index":5
+                            },
+                            {
+                                "value":40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":32,
+                                "label":null,
+                                "key":"rotation",
+                                "index":15
+                            }]
+                    }
+                },
+                {
+                    "target":31,
+                    "keyframes":{
+                        "rotation":[
+                            {
+                                "value":-40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"rotation",
+                                "index":0
+                            },
+                            {
+                                "value":0,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "key":"rotation",
+                                "index":5
+                            },
+                            {
+                                "value":-40,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":31,
+                                "label":null,
+                                "key":"rotation",
+                                "index":15
+                            }]
+                    }
+                }],
+            "name":"aniScissor",
+            "id":9,
             "frameRate":60,
             "action":0
         }]

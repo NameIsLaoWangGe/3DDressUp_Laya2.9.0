@@ -170,11 +170,11 @@ export module _Example {
             _Example._data.getProperty2Func('测试设置');
         }
         lwgOnEnable(): void { }
-        lwgEventRegister(): void { }
+        lwgEvent(): void { }
         lwgOnStart(): void { }
         lwgAdaptive(): void { }
         lwgOpenAni(): number { return 100; }
-        lwgBtnClick(): void { }
+        lwgButton(): void { }
         lwgVanishAni(): number { return 100; }
         lwgOnUpdate(): void { }
         lwgOnDisable(): void { }

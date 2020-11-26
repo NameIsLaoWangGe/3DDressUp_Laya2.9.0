@@ -1,12 +1,12 @@
 import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
-import { _Tailor } from "./_Tailor";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
 import { _MakeClothes } from "./_MakeClothes";
 import { _MakeUp } from "./_MakeUp";
+import { _MakeTailor } from "./_MakeTailor";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -24,7 +24,7 @@ export default class LwgInit extends _LwgInitScene {
             _Guide: _Guide,
             _Start: _Start,
             _Game: _Game,
-            _Tailor: _Tailor,
+            _MakeTailor: _MakeTailor,
             _MakeClothes: _MakeClothes,
             _MakeUp: _MakeUp,
             // _Settle: _Settle,

@@ -14,13 +14,11 @@ export module _Start {
         lwgOpenAni(): number {
             return 100;
         }
-
-        lwgBtnRegister(): void {
+        lwgButton(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
-                this._openScene('Tailor');
+                this._openScene('MakeTailor');
             })
         }
-
     }
 }
 export default _Start.Start;
