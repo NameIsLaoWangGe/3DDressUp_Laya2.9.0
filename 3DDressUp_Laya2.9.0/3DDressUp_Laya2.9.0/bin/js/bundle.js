@@ -1473,28 +1473,31 @@
         })(Admin = lwg.Admin || (lwg.Admin = {}));
         let StorageAdmin;
         (function (StorageAdmin) {
-            class _NumVariable {
+            class admin {
+                removeSelf() { }
+            }
+            class _NumVariable extends admin {
                 get value() { return; }
                 ;
                 set value(val) { this['_numVariable'] = val; }
             }
             StorageAdmin._NumVariable = _NumVariable;
-            class _StrVariable {
+            class _StrVariable extends admin {
                 get value() { return; }
                 set value(val) { this['_strVariable'] = val; }
             }
             StorageAdmin._StrVariable = _StrVariable;
-            class _BoolVariable {
+            class _BoolVariable extends admin {
                 get value() { return; }
                 set value(val) { this['_boolVariable'] = val; }
             }
             StorageAdmin._BoolVariable = _BoolVariable;
-            class _ArrayVariable {
+            class _ArrayVariable extends admin {
                 get value() { return; }
                 set value(val) { this['_arrayVariable'] = val; }
             }
             StorageAdmin._ArrayVariable = _ArrayVariable;
-            class _ArrayArrVariable {
+            class _ArrayArrVariable extends admin {
                 get value() { return; }
                 set value(val) { this['_arrayArrVariable'] = val; }
             }
@@ -1514,6 +1517,9 @@
                     },
                     set value(data) {
                         Laya.LocalStorage.setItem(name, data.toString());
+                    },
+                    removeSelf() {
+                        Laya.LocalStorage.removeItem(name);
                     }
                 };
                 return _variable;
@@ -1534,6 +1540,9 @@
                     },
                     set value(data) {
                         Laya.LocalStorage.setItem(name, data.toString());
+                    },
+                    removeSelf() {
+                        Laya.LocalStorage.removeItem(name);
                     }
                 };
                 return _variable;
@@ -1564,6 +1573,9 @@
                     set value(bool) {
                         bool = bool ? "true" : "false";
                         Laya.LocalStorage.setItem(name, bool.toString());
+                    },
+                    removeSelf() {
+                        Laya.LocalStorage.removeItem(name);
                     }
                 };
                 return _variable;
@@ -1592,6 +1604,9 @@
                     set value(array) {
                         Laya.LocalStorage.setJSON(name, JSON.stringify(array));
                     },
+                    removeSelf() {
+                        Laya.LocalStorage.removeItem(name);
+                    }
                 };
                 return _variable;
             }
@@ -1619,6 +1634,9 @@
                     set value(array) {
                         Laya.LocalStorage.setJSON(name, JSON.stringify(array));
                     },
+                    removeSelf() {
+                        Laya.LocalStorage.removeItem(name);
+                    }
                 };
                 return _variable;
             }
@@ -1640,8 +1658,10 @@
                         have: 'have',
                         getAward: 'getAward',
                     };
+                    this._tableName = '';
                     this._arr = [];
                     if (dataName) {
+                        this._tableName = dataName;
                         if (localStorage) {
                             this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
                         }
@@ -1683,13 +1703,19 @@
                 }
                 ;
                 _randomOne(proName, value) {
-                    let data1;
                     let arr = [];
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                             const element = this._arr[key];
-                            if (element[proName]) {
-                                arr.push(element);
+                            if (value) {
+                                if (element[proName] && element[proName] == value) {
+                                    arr.push(element);
+                                }
+                            }
+                            else {
+                                if (element[proName]) {
+                                    arr.push(element);
+                                }
                             }
                         }
                     }
@@ -2073,7 +2099,6 @@
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.05;
-                            distance0 = Img.y++;
                             if (Img.alpha >= 1) {
                                 moveCaller.alpha = false;
                                 moveCaller.move = true;
@@ -2088,12 +2113,12 @@
                             }
                         }
                         if (moveCaller.vinish) {
-                            acc -= accelerated0 / 2;
+                            acc += accelerated0;
+                            distance0 = Img.y += (speed0 + acc);
                             Img.alpha -= 0.03;
-                            Img.y += (speed0 + acc);
-                            if (Img.alpha <= 0 || (speed0 + acc) <= 0) {
-                                Img.removeSelf();
+                            if (Img.alpha <= 0) {
                                 Laya.timer.clearAll(moveCaller);
+                                Img.removeSelf();
                             }
                         }
                     });
@@ -6125,8 +6150,7 @@
                 super(...arguments);
                 this.state = 'none';
                 this.Ani = {
-                    switch: true,
-                    shearSpeed: 5,
+                    shearSpeed: 4,
                     range: 40,
                     dir: 'up',
                     dirType: {
@@ -6143,8 +6167,8 @@
                                 this.Ani.dir = 'down';
                             }
                             if (this.Ani.dir == 'up') {
-                                this._SceneImg('S2').rotation -= this.Ani.shearSpeed;
-                                this._SceneImg('S1').rotation += this.Ani.shearSpeed;
+                                this._SceneImg('S2').rotation -= this.Ani.shearSpeed * 2;
+                                this._SceneImg('S1').rotation += this.Ani.shearSpeed * 2;
                             }
                             else if (this.Ani.dir == 'down') {
                                 this._SceneImg('S2').rotation += this.Ani.shearSpeed;
@@ -6162,7 +6186,6 @@
                                 this._SceneImg('S1').rotation += angel1;
                                 this._SceneImg('S2').rotation += angel2;
                             });
-                            this.Ani.switch = false;
                         });
                     },
                     event: () => {
@@ -6242,8 +6265,8 @@
                             let _caller = {};
                             TimerAdmin._frameLoop(1, _caller, () => {
                                 let gP = this._ImgVar('EFlower').parent.localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y));
-                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]]);
-                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 24, 0, 1], [255, 24, 0, 1]]);
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
                             });
                             this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
                                 TimerAdmin._clearAll([_caller]);

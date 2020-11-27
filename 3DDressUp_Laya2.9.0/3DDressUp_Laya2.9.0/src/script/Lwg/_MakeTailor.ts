@@ -55,8 +55,7 @@ export module _MakeTailor {
         state: string = 'none';//约束当前每次裁剪只裁剪一个线条
         /**动画控制*/
         Ani = {
-            switch: true,
-            shearSpeed: 5,
+            shearSpeed: 4,
             range: 40,
             dir: 'up',
             dirType: {
@@ -72,8 +71,8 @@ export module _MakeTailor {
                         this.Ani.dir = 'down';
                     }
                     if (this.Ani.dir == 'up') {
-                        this._SceneImg('S2').rotation -= this.Ani.shearSpeed;
-                        this._SceneImg('S1').rotation += this.Ani.shearSpeed;
+                        this._SceneImg('S2').rotation -= this.Ani.shearSpeed * 2;
+                        this._SceneImg('S1').rotation += this.Ani.shearSpeed * 2;
                     } else if (this.Ani.dir == 'down') {
                         this._SceneImg('S2').rotation += this.Ani.shearSpeed;
                         this._SceneImg('S1').rotation -= this.Ani.shearSpeed;
@@ -90,7 +89,6 @@ export module _MakeTailor {
                         this._SceneImg('S1').rotation += angel1;
                         this._SceneImg('S2').rotation += angel2;
                     })
-                    this.Ani.switch = false;
                 })
             },
             event: () => {
@@ -172,8 +170,9 @@ export module _MakeTailor {
                         let _caller = {};
                         TimerAdmin._frameLoop(1, _caller, () => {
                             let gP = (this._ImgVar('EFlower').parent as Laya.Image).localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y))
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]])
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 24, 0, 1], [255, 24, 0, 1]])
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
+                            
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
                         })
                         this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
                             TimerAdmin._clearAll([_caller]);

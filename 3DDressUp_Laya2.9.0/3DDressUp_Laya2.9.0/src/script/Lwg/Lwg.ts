@@ -1842,23 +1842,26 @@ export module lwg {
     }
 
     export module StorageAdmin {
-        export class _NumVariable {
+        class admin {
+            removeSelf(): void { }
+        }
+        export class _NumVariable extends admin {
             get value(): number { return };
             set value(val: number) { this['_numVariable'] = val }
         }
-        export class _StrVariable {
+        export class _StrVariable extends admin {
             get value(): string { return }
             set value(val: string) { this['_strVariable'] = val }
         }
-        export class _BoolVariable {
+        export class _BoolVariable extends admin {
             get value(): boolean { return }
             set value(val: boolean) { this['_boolVariable'] = val }
         }
-        export class _ArrayVariable {
+        export class _ArrayVariable extends admin {
             get value(): Array<any> { return }
             set value(val: Array<any>) { this['_arrayVariable'] = val }
         }
-        export class _ArrayArrVariable {
+        export class _ArrayArrVariable extends admin {
             get value(): Array<Array<any>> { return }
             set value(val: Array<Array<any>>) { this['_arrayArrVariable'] = val }
         }
@@ -1880,6 +1883,9 @@ export module lwg {
                 },
                 set value(data: any) {
                     Laya.LocalStorage.setItem(name, data.toString());
+                },
+                removeSelf(): void {
+                    Laya.LocalStorage.removeItem(name);
                 }
             }
             return _variable;
@@ -1903,6 +1909,9 @@ export module lwg {
                 },
                 set value(data: string) {
                     Laya.LocalStorage.setItem(name, data.toString());
+                },
+                removeSelf(): void {
+                    Laya.LocalStorage.removeItem(name);
                 }
             }
             return _variable;
@@ -1933,6 +1942,9 @@ export module lwg {
                 set value(bool: any) {
                     bool = bool ? "true" : "false";
                     Laya.LocalStorage.setItem(name, bool.toString());
+                },
+                removeSelf(): void {
+                    Laya.LocalStorage.removeItem(name);
                 }
             }
             return _variable;
@@ -1961,6 +1973,9 @@ export module lwg {
                 set value(array: Array<any>) {
                     Laya.LocalStorage.setJSON(name, JSON.stringify(array));
                 },
+                removeSelf(): void {
+                    Laya.LocalStorage.removeItem(name);
+                }
             }
             return _variable;
         }
@@ -1989,6 +2004,9 @@ export module lwg {
                 set value(array: Array<Array<any>>) {
                     Laya.LocalStorage.setJSON(name, JSON.stringify(array));
                 },
+                removeSelf(): void {
+                    Laya.LocalStorage.removeItem(name);
+                }
             }
             return _variable;
         }
@@ -2009,18 +2027,26 @@ export module lwg {
                 unlock: 'unlock',
                 have: 'have',
                 getAward: 'getAward',
+                versionUpdateTimes: 'versionUpdateTimes',
             };
+            _tableName: string = '';
             _arr: Array<any> = [];
+            _lastArr: Array<any> = [];
             /**
              * @param {string} dataName 在本地
              * @param {Array<any>} arrUrl 数据表地址
              * @param localStorage 是否存储在本地
              * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
+             * @param lastVtableName 如果表格发生改变，对比上个版本的数据表将一些成果继承赋值
              */
-            constructor(dataName?: string, arrUrl?: string, localStorage?: boolean, proName?: string) {
-                if (dataName) {
+            constructor(tableName?: string, arrUrl?: string, localStorage?: boolean, proName?: string, lastVtableName?: string) {
+                if (tableName) {
+                    this._tableName = tableName;
                     if (localStorage) {
-                        this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
+                        this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
+                        if (lastVtableName) {
+                            this._lastArr = _jsonCompare(arrUrl, lastVtableName, proName ? proName : 'name');
+                        }
                     } else {
                         if (Laya.Loader.getRes(arrUrl)) {
                             this._arr = Laya.Loader.getRes(arrUrl);
@@ -2029,6 +2055,26 @@ export module lwg {
                         }
                     }
                 }
+            }
+
+            _checkLastArrComplete(): void {
+                
+            }
+
+            /**
+              * 获取本地存储数据并且和文件中数据表对比,对比后会上传
+              * @param lastVtableName 上个版本名称
+              */
+            _getlastVersion(lastVtableName: string): Array<any> {
+                let dataArr: any;
+                try {
+                    if (Laya.LocalStorage.getJSON(lastVtableName)) {
+                        dataArr = JSON.parse(Laya.LocalStorage.getJSON(lastVtableName));
+                    }
+                } catch (error) {
+                    console.log(lastVtableName + '上个版本不存在！')
+                }
+                return dataArr;
             }
             /**
              *通过名称获取属性值
@@ -2064,23 +2110,29 @@ export module lwg {
                         }
                     }
                 }
+                Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
                 return value;
             };
 
             /**
-             * 通过一个属性和值随机出一个对象
-             * @param {string} [pro] 属性名如果不输入则从表中盲选一个。
+             * 通过一个属性和值随机出一个对象,用于从某个品类中随机获取一个对象
+             * @param {string} [pro] 属性名如果不输入则从表中有此属性的对象中盲选一个。
              * @param {*} [value] 属性值默认为null
              * @memberof _DataTable
              */
-            _randomOne(proName?: string, value?: any): any {
-                let data1: any;
+            _randomOne(proName: string, value?: any): any {
                 let arr = [];
                 for (const key in this._arr) {
                     if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                         const element = this._arr[key];
-                        if (element[proName]) {
-                            arr.push(element);
+                        if (value) {
+                            if (element[proName] && element[proName] == value) {
+                                arr.push(element);
+                            }
+                        } else {
+                            if (element[proName]) {
+                                arr.push(element);
+                            }
                         }
                     }
                 }
@@ -2092,7 +2144,7 @@ export module lwg {
                 }
             }
             /**
-             * 通过某个属性名称和值获取所有复合条件的属性，可以查找品类
+             * 通过某个属性名称和值获取所有复合条件的属性，可以查找出某种品类
              * @param {string} proName 属性名
              * @param {*} value 值
              * @memberof _DataTable
@@ -2110,7 +2162,7 @@ export module lwg {
                 return arr;
             }
             /**
-             * 通过某个属性名称设置全部属性值
+             * 通过某个属性名称设置全部属性值,用于设置所有对象某些属性值初始化或者全部达标。
              * @param {string} proName 属性名
              * @param {*} value 值
              * @return {*}  {Array<any>}
@@ -2127,6 +2179,7 @@ export module lwg {
                         }
                     }
                 }
+                Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
                 return arr;
             }
 
@@ -2172,6 +2225,54 @@ export module lwg {
                 }
                 return bool;
             }
+        }
+
+
+
+        /**
+          * 获取本地存储数据并且和文件中数据表对比,对比后会上传
+          * @param url 本地数据表地址
+          * @param storageName 本地存储中的json名称
+          * @param propertyName 数组中每个对象中同一个属性名，通过这个名称进行对比
+          */
+        function _jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
+            // 第一步，先尝试从本地缓存获取数据，
+            // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
+            // 第三步，如果本地缓存没有，那么直接从数据表获取
+            let dataArr: any;
+            try {
+                Laya.LocalStorage.getJSON(storageName);
+                // console.log(Laya.LocalStorage.getJSON(storageName));
+            } catch (error) {
+                dataArr = Laya.loader.getRes(url)['RECORDS'];
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+                return dataArr;
+            }
+            if (Laya.LocalStorage.getJSON(storageName)) {
+                dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
+                try {
+                    let dataArr_0: Array<any> = Laya.loader.getRes(url)['RECORDS'];
+                    // 如果本地数据条数大于json条数，说明json减东西了，不会对比，json只能增加不能删减
+                    if (dataArr_0.length >= dataArr.length) {
+                        let diffArray = Tools._ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                        console.log('两个数据的差值为：', diffArray);
+                        Tools._Array.oneAddToarray(dataArr, diffArray);
+                    } else {
+                        console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
+                    }
+                } catch (error) {
+                    console.log(storageName, '数据赋值失败！请检查数据表或者手动赋值！')
+                }
+            } else {
+                try {
+                    dataArr = Laya.loader.getRes(url)['RECORDS'];
+                } catch (error) {
+                    console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！')
+                }
+            }
+            Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+            return dataArr;
         }
     }
 
@@ -2457,7 +2558,7 @@ export module lwg {
                  * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
                  * @param zOrder 层级，默认为0
                  */
-                constructor(parent: Laya.Sprite, centerPoint: Laya.Point, sectionWH: Array<number>, width: Array<number>, height: Array<number>, rotation: Array<number>, urlArr: Array<string>, colorRGBA: Array<Array<number>>, zOrder: number) {
+                constructor(parent: Laya.Sprite, centerPoint: Laya.Point, sectionWH: [number, number], width: [number, number], height: [number, number], rotation: [number, number], urlArr: Array<string>, colorRGBA: [[number, number, number, number], [number, number, number, number]], zOrder: number) {
                     super();
                     parent.addChild(this);
                     let sectionWidth = sectionWH ? Tools._Number.randomOneBySection(sectionWH[0]) : Tools._Number.randomOneBySection(200);
@@ -2499,7 +2600,7 @@ export module lwg {
              * @param {Array<number>} [speed] 速度区间[a,b]
              * @param {[number, number]} [windX] 风力（X轴偏移速度）区间[a,b]
              */
-            export function _snow(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance?: Array<number>, rotationSpeed?: [number, number], speed?: Array<number>, windX?: [number, number]): Laya.Image {
+            export function _snow(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], windX?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
                 let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
                 _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
@@ -2554,11 +2655,11 @@ export module lwg {
               * @param urlArr 图片地址集合，默认为框架中随机的样式
               * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
               * @param zOrder 层级，默认为0
-              * @param distance 移动距离，区间[a,b]，在其中随机移动一定的距离后消失;
-              * @param speed 吸入速度区间[a,b]
-              * @param accelerated 加速度区间[a,b]
+              * @param distance 移动距离，区间[a,b]，在其中随机移动一定的距离后消失,默认[100,300]
+              * @param speed 吸入速度区间[a,b],默认[4,8]
+              * @param accelerated 加速度区间[a,b],默认[0.25, 0.45];
               */
-            export function _fallingVertical(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: Array<number>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
+            export function _fallingVertical(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
                 let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
@@ -2575,7 +2676,6 @@ export module lwg {
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (Img.alpha < 1 && moveCaller.alpha) {
                         Img.alpha += 0.05;
-                        distance0 = Img.y++;
                         if (Img.alpha >= 1) {
                             moveCaller.alpha = false;
                             moveCaller.move = true;
@@ -2591,12 +2691,12 @@ export module lwg {
                     }
                     // console.log(distance0, distance1, distance0 < distance1 && moveCaller.move);
                     if (moveCaller.vinish) {
-                        acc -= accelerated0 / 2;
+                        acc += accelerated0;
+                        distance0 = Img.y += (speed0 + acc);
                         Img.alpha -= 0.03;
-                        Img.y += (speed0 + acc);
-                        if (Img.alpha <= 0 || (speed0 + acc) <= 0) {
-                            Img.removeSelf();
+                        if (Img.alpha <= 0) {
                             Laya.timer.clearAll(moveCaller);
+                            Img.removeSelf();
                         }
                     }
                 })
@@ -2618,7 +2718,7 @@ export module lwg {
              * @param accelerated 加速度区间[a,b]
              * @param zOrder 层级，默认为0
              */
-            export function _slowlyUp(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance?: Array<number>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
+            export function _slowlyUp(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
                 let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.001, 0.005);
@@ -2828,7 +2928,7 @@ export module lwg {
              * @param accelerated 加速度区间[a,b]
              * @param zOrder 层级，默认为0
              */
-            export function _moveToTargetToMove(parent: Laya.Sprite, centerPoint?: Laya.Point, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, angle?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance1?: Array<number>, distance2?: Array<number>, rotationSpeed?: Array<null>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
+            export function _moveToTargetToMove(parent: Laya.Sprite, centerPoint?: Laya.Point, width?: [number, number], height?: [number, number], rotation?: [number, number], angle?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance1?: [number, number], distance2?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(5, 6);
@@ -6053,51 +6153,7 @@ export module lwg {
             }
         }
 
-        /**
-          * 获取本地存储数据并且和文件中数据表对比,对比后会上传
-          * @param url 本地数据表地址
-          * @param storageName 本地存储中的json名称
-          * @param propertyName 数组中每个对象中同一个属性名，通过这个名称进行对比
-          */
-        export function jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
-            // 第一步，先尝试从本地缓存获取数据，
-            // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
-            // 第三步，如果本地缓存没有，那么直接从数据表获取
-            let dataArr: any;
-            try {
-                Laya.LocalStorage.getJSON(storageName);
-                // console.log(Laya.LocalStorage.getJSON(storageName));
-            } catch (error) {
-                dataArr = Laya.loader.getRes(url)['RECORDS'];
-                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
-                return dataArr;
-            }
-            if (Laya.LocalStorage.getJSON(storageName)) {
-                dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
-                console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
-                try {
-                    let dataArr_0: Array<any> = Laya.loader.getRes(url)['RECORDS'];
-                    // 如果本地数据条数大于json条数，说明json减东西了，不会对比，json只能增加不能删减
-                    if (dataArr_0.length >= dataArr.length) {
-                        let diffArray = _ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
-                        console.log('两个数据的差值为：', diffArray);
-                        _Array.oneAddToarray(dataArr, diffArray);
-                    } else {
-                        console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
-                    }
-                } catch (error) {
-                    console.log(storageName, '数据赋值失败！请检查数据表或者手动赋值！')
-                }
-            } else {
-                try {
-                    dataArr = Laya.loader.getRes(url)['RECORDS'];
-                } catch (error) {
-                    console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！')
-                }
-            }
-            Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
-            return dataArr;
-        }
+
     }
 
     export module LwgPreLoad {
