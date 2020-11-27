@@ -15,7 +15,7 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp3", root: "3DPrefab" },
         ];
         Platform._Ues.value = Platform._Tpye.Research;
-        SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
+        SceneAnimation._Use.value = SceneAnimation._Type.shutters;
         Click._Use.value = Click._Type.largen;
         Adaptive._Use.value = [1280, 720];
         Admin._Moudel = {

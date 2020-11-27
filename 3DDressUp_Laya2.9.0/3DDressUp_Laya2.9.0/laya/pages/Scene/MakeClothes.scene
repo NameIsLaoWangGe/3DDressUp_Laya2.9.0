@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":39,
+    "selectedBox":10,
+    "selecteID":34,
     "searchKey":"View",
     "referenceLines":[
         ],
@@ -117,7 +117,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Front,Front",
-                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/Front01.png","scaleY":-1,"name":"Front"},
+                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Front","height":512},
                     "nodeParent":10,
                     "label":"Front",
                     "isOpen":true,
@@ -132,7 +132,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Reverse,Reverse",
-                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/Front02.png","scaleY":-1,"name":"Reverse"},
+                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Reverse","height":512},
                     "nodeParent":10,
                     "label":"Reverse",
                     "isOpen":true,

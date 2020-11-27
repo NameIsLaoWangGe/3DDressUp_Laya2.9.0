@@ -306,9 +306,9 @@ export module _Shop {
     /**在loding界面或者开始界面执行一次！*/
     export function _init(): void {
         //如果上个日期等于今天的日期，那么从存储中获取，如果不相等则直接从数据表中获取
-        _Shop._allSkin = Tools.jsonCompare('GameData/_Shop/Skin.json', GoodsClass.Skin, _Property.name);
-        _Shop._allProps = Tools.jsonCompare('GameData/_Shop/Props.json', GoodsClass.Props, _Property.name);
-        _Shop._allOther = Tools.jsonCompare('GameData/_Shop/Other.json', GoodsClass.Other, _Property.name);
+        // _Shop._allSkin = Tools.jsonCompare('GameData/_Shop/Skin.json', GoodsClass.Skin, _Property.name);
+        // _Shop._allProps = Tools.jsonCompare('GameData/_Shop/Props.json', GoodsClass.Props, _Property.name);
+        // _Shop._allOther = Tools.jsonCompare('GameData/_Shop/Other.json', GoodsClass.Other, _Property.name);
     }
 
     /**商品属性列表，数据表中的商品应该有哪些属性,name和have是必须有的属性,可以无限增加*/
@@ -368,15 +368,15 @@ export module _Shop {
             /**结构，如果没有则为null*/
             _Shop._ShopTap = this._Owner['MyTap'];
             _Shop._ShopList = this._Owner['MyList'];
-            if (!_Shop._allSkin) {
-                _Shop._allSkin = Tools.jsonCompare('GameData/_Shop/Skin.json', GoodsClass.Skin, _Property.name);
-            }
-            if (!_Shop._allProps) {
-                _Shop._allProps = Tools.jsonCompare('GameData/_Shop/Props.json', GoodsClass.Props, _Property.name);
-            }
-            if (!_Shop._allOther) {
-                _Shop._allOther = Tools.jsonCompare('GameData/_Shop/Other.json', GoodsClass.Other, _Property.name);
-            }
+            // if (!_Shop._allSkin) {
+            //     _Shop._allSkin = Tools.jsonCompare('GameData/_Shop/Skin.json', GoodsClass.Skin, _Property.name);
+            // }
+            // if (!_Shop._allProps) {
+            //     _Shop._allProps = Tools.jsonCompare('GameData/_Shop/Props.json', GoodsClass.Props, _Property.name);
+            // }
+            // if (!_Shop._allOther) {
+            //     _Shop._allOther = Tools.jsonCompare('GameData/_Shop/Other.json', GoodsClass.Other, _Property.name);
+            // }
             _Classify = [_Shop._allSkin, _Shop._allProps, _Shop._allOther];
         }
         moduleOnEnable(): void {

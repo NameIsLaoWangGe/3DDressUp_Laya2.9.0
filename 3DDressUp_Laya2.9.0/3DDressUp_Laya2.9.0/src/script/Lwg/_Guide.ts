@@ -112,6 +112,9 @@ export module _Guide {
             console.log('新手引导完成！')
             this._openScene(_SceneName.Start)
         }
+        lwgOpenAni(): number {
+            return 20;
+        }
         lwgEventRegister(): void {
             /**第一次十连抽*/
             // var step1 = () => {

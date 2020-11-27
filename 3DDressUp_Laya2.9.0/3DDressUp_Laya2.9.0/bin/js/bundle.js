@@ -723,6 +723,7 @@
                     upLeftDownLeft: 'upLeftDownRight',
                     upRightDownLeft: 'upRightDownLeft',
                 },
+                shutters: 'shutters',
                 leftMove: 'leftMove',
                 rightMove: 'rightMove',
                 centerRotate: 'centerRotate',
@@ -738,33 +739,8 @@
                     this['SceneAnimation_name'] = val;
                 }
             };
-            function _commonVanishAni(CloseScene, closeFunc) {
-                CloseScene[CloseScene.name].lwgBeforeVanishAni();
-                let time;
-                let delay;
-                switch (SceneAnimation._Use.value) {
-                    case SceneAnimation._Type.fadeOut:
-                        time = 150;
-                        delay = 50;
-                        if (CloseScene['Background']) {
-                            Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
-                        }
-                        Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
-                            closeFunc();
-                        });
-                        break;
-                    case SceneAnimation._Type.stickIn.random:
-                        closeFunc();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            SceneAnimation._commonVanishAni = _commonVanishAni;
             function _commonOpenAni(Scene) {
-                let time;
-                let delay;
-                let sumDelay;
+                let sumDelay = 0;
                 var afterAni = () => {
                     Click._switch = true;
                     if (Scene[Scene.name]) {
@@ -778,21 +754,17 @@
                 }
                 switch (SceneAnimation._Use.value) {
                     case SceneAnimation._Type.fadeOut:
-                        time = 400;
-                        delay = 300;
-                        if (Scene['Background']) {
-                            Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
-                        }
-                        Animation2D.fadeOut(Scene, 0, 1, time, 0);
-                        sumDelay = 400;
+                        sumDelay = _fadeOut(Scene);
                         break;
                     case SceneAnimation._Type.stickIn.upLeftDownLeft:
-                        _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
                         break;
                     case SceneAnimation._Type.stickIn.upRightDownLeft:
-                        _stickIn(Scene, SceneAnimation._Type.stickIn.upRightDownLeft);
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upRightDownLeft);
                     case SceneAnimation._Type.stickIn.random:
-                        _stickIn(Scene, SceneAnimation._Type.stickIn.random);
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.random);
+                    case SceneAnimation._Type.shutters:
+                        sumDelay = _shutters(Scene);
                     default:
                         break;
                 }
@@ -802,6 +774,51 @@
                 return sumDelay;
             }
             SceneAnimation._commonOpenAni = _commonOpenAni;
+            function _fadeOut(Scene) {
+                let time = 400;
+                let delay = 300;
+                if (Scene['Background']) {
+                    Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                }
+                Animation2D.fadeOut(Scene, 0, 1, time, 0);
+                return time + delay;
+            }
+            function _shutters(Scene, type) {
+                let num = 12;
+                let time = 500;
+                let caller = {};
+                Scene.scale(1, 0);
+                Laya.timer.frameOnce(10, caller, () => {
+                    Scene.scale(1, 1);
+                    var htmlCanvas1 = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
+                    let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    Scene.scale(1, 0);
+                    for (let index = 0; index < num; index++) {
+                        let Sp = new Laya.Image;
+                        Laya.stage.addChild(Sp);
+                        Sp.width = Laya.stage.width;
+                        Sp.height = Laya.stage.height;
+                        Sp.pos(0, 0);
+                        Sp.zOrder = 100;
+                        Sp.name = 'shutters';
+                        Sp.skin = base641;
+                        let Mask = new Laya.Image;
+                        Mask.width = Sp.width;
+                        Mask.height = Laya.stage.height / num;
+                        Mask.pos(0, Laya.stage.height / num * index);
+                        Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                        Sp.mask = Mask;
+                        Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                        Sp.scale(1, 0);
+                        Animation2D.scale(Sp, 1, 0, 1, 1, time, 0, () => {
+                            Scene.scale(1, 1);
+                            Sp.destroy();
+                        });
+                    }
+                });
+                return time;
+            }
+            SceneAnimation._shutters = _shutters;
             function _stickIn(Scene, type) {
                 let sumDelay = 0;
                 let time = 700;
@@ -844,6 +861,39 @@
                 sumDelay = Scene.numChildren * delay + time + 200;
                 return sumDelay;
             }
+            function _commonVanishAni(CloseScene, closeFunc) {
+                CloseScene[CloseScene.name].lwgBeforeVanishAni();
+                let time;
+                let delay;
+                let sumDelay = 0;
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        time = 150;
+                        delay = 50;
+                        if (CloseScene['Background']) {
+                            Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
+                        }
+                        Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
+                            closeFunc();
+                        });
+                        break;
+                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                        closeFunc();
+                        break;
+                    case SceneAnimation._Type.stickIn.upRightDownLeft:
+                        closeFunc();
+                        break;
+                    case SceneAnimation._Type.stickIn.random:
+                        closeFunc();
+                        break;
+                    case SceneAnimation._Type.shutters:
+                        closeFunc();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            SceneAnimation._commonVanishAni = _commonVanishAni;
         })(SceneAnimation = lwg.SceneAnimation || (lwg.SceneAnimation = {}));
         let Platform;
         (function (Platform) {
@@ -1005,16 +1055,6 @@
             function _openScene(openName, cloesName, func, zOrder) {
                 Click._switch = false;
                 Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
-                    if (Admin._Moudel['_' + openName]) {
-                        if (Admin._Moudel['_' + openName][openName]) {
-                            if (!scene.getComponent(Admin._Moudel['_' + openName][openName])) {
-                                scene.addComponent(Admin._Moudel['_' + openName][openName]);
-                            }
-                        }
-                    }
-                    else {
-                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
-                    }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
                     var openf = () => {
@@ -1045,20 +1085,30 @@
                     else {
                         openf();
                     }
+                    if (Admin._Moudel['_' + openName]) {
+                        if (Admin._Moudel['_' + openName][openName]) {
+                            if (!scene.getComponent(Admin._Moudel['_' + openName][openName])) {
+                                scene.addComponent(Admin._Moudel['_' + openName][openName]);
+                            }
+                        }
+                    }
+                    else {
+                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
+                    }
                 }));
             }
             Admin._openScene = _openScene;
-            function _closeScene(closeName, func) {
+            function _closeScene(closeName, openf) {
                 if (!Admin._sceneControl[closeName]) {
                     console.log('场景', closeName, '关闭失败！可能是名称不对！');
                     return;
                 }
+                if (openf) {
+                    openf();
+                }
                 var closef = () => {
                     Click._switch = true;
                     Admin._sceneControl[closeName].close();
-                    if (func) {
-                        func();
-                    }
                 };
                 if (!SceneAnimation._vanishSwitch) {
                     closef();
@@ -1275,13 +1325,13 @@
                     this.lwgEvent();
                     this.moduleOnEnable();
                     this.lwgOnEnable();
-                    this.btnAndOpenAni();
                 }
                 moduleOnEnable() { }
                 ;
                 moduleEvent() { }
                 ;
                 onStart() {
+                    this.btnAndOpenAni();
                     this.moduleOnStart();
                     this.lwgOnStart();
                 }
@@ -1479,27 +1529,27 @@
             class _NumVariable extends admin {
                 get value() { return; }
                 ;
-                set value(val) { this['_numVariable'] = val; }
+                set value(val) { }
             }
             StorageAdmin._NumVariable = _NumVariable;
             class _StrVariable extends admin {
                 get value() { return; }
-                set value(val) { this['_strVariable'] = val; }
+                set value(val) { }
             }
             StorageAdmin._StrVariable = _StrVariable;
             class _BoolVariable extends admin {
                 get value() { return; }
-                set value(val) { this['_boolVariable'] = val; }
+                set value(val) { }
             }
             StorageAdmin._BoolVariable = _BoolVariable;
             class _ArrayVariable extends admin {
                 get value() { return; }
-                set value(val) { this['_arrayVariable'] = val; }
+                set value(val) { }
             }
             StorageAdmin._ArrayVariable = _ArrayVariable;
             class _ArrayArrVariable extends admin {
                 get value() { return; }
-                set value(val) { this['_arrayArrVariable'] = val; }
+                set value(val) { }
             }
             StorageAdmin._ArrayArrVariable = _ArrayArrVariable;
             function _mum(name, initial) {
@@ -1645,7 +1695,7 @@
         let DataAdmin;
         (function (DataAdmin) {
             class _Table {
-                constructor(dataName, arrUrl, localStorage, proName) {
+                constructor(tableName, arrUrl, localStorage, proName, lastVtableName) {
                     this._property = {
                         name: 'name',
                         chName: 'chName',
@@ -1657,13 +1707,20 @@
                         unlock: 'unlock',
                         have: 'have',
                         getAward: 'getAward',
+                        versionUpdateTimes: 'versionUpdateTimes',
                     };
                     this._tableName = '';
                     this._arr = [];
-                    if (dataName) {
-                        this._tableName = dataName;
+                    this._lastArr = [];
+                    this._localStorage = false;
+                    if (tableName) {
+                        this._tableName = tableName;
                         if (localStorage) {
-                            this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
+                            this._localStorage = localStorage;
+                            this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
+                            if (lastVtableName) {
+                                this._compareLastInfor(lastVtableName);
+                            }
                         }
                         else {
                             if (Laya.Loader.getRes(arrUrl)) {
@@ -1674,6 +1731,44 @@
                             }
                         }
                     }
+                }
+                _compareLastInfor(lastVtableName) {
+                    this._lastArr = this._getlastVersion(lastVtableName);
+                    if (this._lastArr.length > 0) {
+                        for (let i = 0; i < this._lastArr.length; i++) {
+                            const _lastelement = this._lastArr[i];
+                            for (let j = 0; j < this._arr.length; j++) {
+                                const element = this._arr[j];
+                                if (_lastelement[this._property.compelet]) {
+                                    element[this._property.compelet] = true;
+                                }
+                                if (_lastelement[this._property.have]) {
+                                    element[this._property.have] = true;
+                                }
+                                if (_lastelement[this._property.unlock]) {
+                                    element[this._property.unlock] = true;
+                                }
+                                if (_lastelement[this._property.getAward]) {
+                                    element[this._property.getAward] = true;
+                                }
+                                if (_lastelement[this._property.degreeNum] > element[this._property.degreeNum]) {
+                                    element[this._property.getAward] = _lastelement[this._property.degreeNum];
+                                }
+                            }
+                        }
+                    }
+                }
+                _getlastVersion(lastVtableName) {
+                    let dataArr = [];
+                    try {
+                        if (Laya.LocalStorage.getJSON(lastVtableName)) {
+                            dataArr = JSON.parse(Laya.LocalStorage.getJSON(lastVtableName));
+                        }
+                    }
+                    catch (error) {
+                        console.log(lastVtableName + '前版本不存在！');
+                    }
+                    return dataArr;
                 }
                 _getProperty(name, pro) {
                     let value;
@@ -1698,6 +1793,9 @@
                                 break;
                             }
                         }
+                    }
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
                     }
                     return value;
                 }
@@ -1750,6 +1848,9 @@
                             }
                         }
                     }
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                    }
                     return arr;
                 }
                 _checkCondition(name, number, func) {
@@ -1790,6 +1891,45 @@
                 }
             }
             DataAdmin._Table = _Table;
+            function _jsonCompare(url, storageName, propertyName) {
+                let dataArr;
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    dataArr = Laya.loader.getRes(url)['RECORDS'];
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+                    return dataArr;
+                }
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
+                    try {
+                        let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
+                        if (dataArr_0.length >= dataArr.length) {
+                            let diffArray = Tools._ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                            console.log('两个数据的差值为：', diffArray);
+                            Tools._Array.oneAddToarray(dataArr, diffArray);
+                        }
+                        else {
+                            console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
+                        }
+                    }
+                    catch (error) {
+                        console.log(storageName, '数据赋值失败！请检查数据表或者手动赋值！');
+                    }
+                }
+                else {
+                    try {
+                        dataArr = Laya.loader.getRes(url)['RECORDS'];
+                    }
+                    catch (error) {
+                        console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！');
+                    }
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+                return dataArr;
+            }
         })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
@@ -3371,7 +3511,7 @@
                 if (!delayed) {
                     delayed = 0;
                 }
-                if (!delayed) {
+                if (!ease) {
                     ease = null;
                 }
                 target.alpha = fAlpha;
@@ -3384,6 +3524,16 @@
                 }), delayed);
             }
             Animation2D.scale_Alpha = scale_Alpha;
+            function scale(target, fScaleX, fScaleY, eScaleX, eScaleY, time, delayed, func, ease) {
+                target.scaleX = fScaleX;
+                target.scaleY = fScaleY;
+                Laya.Tween.to(target, { scaleX: eScaleX, scaleY: eScaleY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.scale = scale;
             function rotate_Magnify_KickBack(node, eAngle, eScale, time1, time2, delayed1, delayed2, func) {
                 node.alpha = 0;
                 node.scaleX = 0;
@@ -4508,46 +4658,6 @@
                 }
                 _Array.moreExclude = moreExclude;
             })(_Array = Tools._Array || (Tools._Array = {}));
-            function jsonCompare(url, storageName, propertyName) {
-                let dataArr;
-                try {
-                    Laya.LocalStorage.getJSON(storageName);
-                }
-                catch (error) {
-                    dataArr = Laya.loader.getRes(url)['RECORDS'];
-                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
-                    return dataArr;
-                }
-                if (Laya.LocalStorage.getJSON(storageName)) {
-                    dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
-                    console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
-                    try {
-                        let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
-                        if (dataArr_0.length >= dataArr.length) {
-                            let diffArray = _ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
-                            console.log('两个数据的差值为：', diffArray);
-                            _Array.oneAddToarray(dataArr, diffArray);
-                        }
-                        else {
-                            console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
-                        }
-                    }
-                    catch (error) {
-                        console.log(storageName, '数据赋值失败！请检查数据表或者手动赋值！');
-                    }
-                }
-                else {
-                    try {
-                        dataArr = Laya.loader.getRes(url)['RECORDS'];
-                    }
-                    catch (error) {
-                        console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！');
-                    }
-                }
-                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
-                return dataArr;
-            }
-            Tools.jsonCompare = jsonCompare;
         })(Tools = lwg.Tools || (lwg.Tools = {}));
         let LwgPreLoad;
         (function (LwgPreLoad) {
@@ -5269,6 +5379,9 @@
                 console.log('新手引导完成！');
                 this._openScene(_SceneName.Start);
             }
+            lwgOpenAni() {
+                return 20;
+            }
             lwgEventRegister() {
             }
         }
@@ -5288,6 +5401,10 @@
                     url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
                     Scene: null,
                 }
+            },
+            pic2D: {
+                Effects: "res/atlas/lwg/Effects.png",
+                MakeClothes: `res/atlas/Game/UI/MakeClothes.png`,
             },
             prefab2D: {
                 BtnCompelet: {
@@ -5310,6 +5427,7 @@
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
                 PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
+                _MakeClothes: `Scene/${'MakeClothes'}.json`,
             },
         };
     })(_Res || (_Res = {}));
@@ -5319,7 +5437,7 @@
             lwgOnStart() {
                 this._evNotify(_LwgPreLoad._Event.importList, [_Res._list]);
             }
-            lwgOpenAni() { return 1; }
+            lwgOpenAni() { return 100; }
             lwgStepComplete() {
             }
             lwgAllComplete() {
@@ -5391,8 +5509,8 @@
         }
         _Start._init = _init;
         class Start extends Admin._SceneBase {
-            lwgOpenAni() {
-                return 100;
+            lwgOnStart() {
+                console.log('fff');
             }
             lwgButton() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
@@ -6241,6 +6359,25 @@
         }
         _MakeTailor.Scissor = Scissor;
         class MakeTailor extends Admin._SceneBase {
+            constructor() {
+                super(...arguments);
+                this.completeAni = {
+                    ani1: () => {
+                        this._AniVar('complete').play(0, false);
+                        let _caller = {};
+                        TimerAdmin._frameLoop(1, _caller, () => {
+                            let gP = this._ImgVar('EFlower').parent.localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y));
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 40), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                        });
+                        this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
+                            TimerAdmin._clearAll([_caller]);
+                        });
+                    },
+                    ani2: () => {
+                    }
+                };
+            }
             lwgOnAwake() {
                 this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
                 this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
@@ -6251,9 +6388,6 @@
             }
             lwgAdaptive() {
             }
-            lwgOpenAni() {
-                return 100;
-            }
             lwgEvent() {
                 this._evReg(_Event.trigger, (Dotted) => {
                     let value = this.DottedLineControl._checkCondition(Dotted.parent.name);
@@ -6261,16 +6395,7 @@
                     if (value) {
                         this.DottedLineControl.removeCloth(Dotted.parent.name);
                         if (this.DottedLineControl._checkAllCompelet()) {
-                            this._AniVar('complete').play(0, false);
-                            let _caller = {};
-                            TimerAdmin._frameLoop(1, _caller, () => {
-                                let gP = this._ImgVar('EFlower').parent.localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y));
-                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
-                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
-                            });
-                            this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
-                                TimerAdmin._clearAll([_caller]);
-                            });
+                            this.completeAni.ani1();
                         }
                     }
                     let Parent = Dotted.parent;
@@ -6309,7 +6434,7 @@
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
             Platform._Ues.value = Platform._Tpye.Research;
-            SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
+            SceneAnimation._Use.value = SceneAnimation._Type.shutters;
             Click._Use.value = Click._Type.largen;
             Adaptive._Use.value = [1280, 720];
             Admin._Moudel = {

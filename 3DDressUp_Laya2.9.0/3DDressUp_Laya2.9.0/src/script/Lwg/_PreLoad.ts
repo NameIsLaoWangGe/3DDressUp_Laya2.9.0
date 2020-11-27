@@ -18,12 +18,10 @@ export module _Res {
         //         Prefab: null as Laya.Sprite3D,
         //     }
         // },
-        // pic2D: {
-        //     // "res/atlas/Frame/Effects.png",
-        //     // "res/atlas/Frame/UI.png",
-        //     // "res/atlas/Game/UI/UISkinQualified.png",
-        //     // "res/atlas/Game/UI/UIDrawCard/Card.png",
-        // },
+        pic2D: {
+            Effects: "res/atlas/lwg/Effects.png",
+            MakeClothes: `res/atlas/Game/UI/MakeClothes.png`,
+        },
         // mesh3D: {},
         // material: {},
         prefab2D: {
@@ -61,6 +59,7 @@ export module _Res {
             Start: `Scene/${_SceneName.Start}.json`,
             Guide: `Scene/${_SceneName.Guide}.json`,
             PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
+            _MakeClothes: `Scene/${'MakeClothes'}.json`,
             // AdsHint: `Scene/${_SceneName.AdsHint}.json`,
             // Special: `Scene/${_SceneName.Special}.json`,
             // Victory: `Scene/${_SceneName.Victory}.json`,
@@ -69,6 +68,7 @@ export module _Res {
             // PropTry: `Scene/${_SceneName.PropTry}.json`,
             // Share: `Scene/${_SceneName.Share}.json`,
         },
+
         // json: {
         //     General: {
         //         url: "_LwgData" + "/_Game/General" + ".json",
@@ -106,7 +106,7 @@ export module _PreLoad {
             //     EventAdmin._notify(_LwgPreLoad._Event.importList, (_PreloadUrl._list));
             // })
         }
-        lwgOpenAni(): number { return 1; }
+        lwgOpenAni(): number { return 100; }
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {

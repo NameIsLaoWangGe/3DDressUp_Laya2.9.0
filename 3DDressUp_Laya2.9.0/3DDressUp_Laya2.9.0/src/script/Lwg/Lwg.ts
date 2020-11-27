@@ -980,6 +980,7 @@ export module lwg {
                 // upLeftDownRight: 'upLeftDownRight',
                 upRightDownLeft: 'upRightDownLeft',
             },
+            shutters: 'shutters',
             leftMove: 'leftMove',
             rightMove: 'rightMove',
             centerRotate: 'centerRotate',
@@ -995,36 +996,10 @@ export module lwg {
                 this['SceneAnimation_name'] = val;
             }
         };
-        /**通用场景消失动画*/
-        export function _commonVanishAni(CloseScene: Laya.Scene, closeFunc: Function) {
-            CloseScene[CloseScene.name].lwgBeforeVanishAni();
-            let time: number;
-            let delay: number;
-            switch (_Use.value) {
-                case _Type.fadeOut:
-                    time = 150;
-                    delay = 50;
-                    if (CloseScene['Background']) {
-                        Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
-                    }
-                    Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
-                        closeFunc();
-                    })
-                    break;
-                case _Type.stickIn.random:
-                    closeFunc();
-                    break;
-
-                default:
-                    break;
-            }
-        }
 
         /**通用场景进场动画*/
         export function _commonOpenAni(Scene: Laya.Scene): number {
-            let time: number;
-            let delay: number;
-            let sumDelay: number;//总延迟
+            let sumDelay: number = 0;//总延迟
             var afterAni = () => {
                 Click._switch = true;
                 if (Scene[Scene.name]) {
@@ -1038,21 +1013,20 @@ export module lwg {
             }
             switch (_Use.value) {
                 case _Type.fadeOut:
-                    time = 400;
-                    delay = 300;
-                    if (Scene['Background']) {
-                        Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
-                    }
-                    Animation2D.fadeOut(Scene, 0, 1, time, 0);
-                    sumDelay = 400;
+                    sumDelay = _fadeOut(Scene);
                     break;
+
                 case _Type.stickIn.upLeftDownLeft:
-                    _stickIn(Scene, _Type.stickIn.upLeftDownLeft)
+                    sumDelay = _stickIn(Scene, _Type.stickIn.upLeftDownLeft)
                     break;
                 case _Type.stickIn.upRightDownLeft:
-                    _stickIn(Scene, _Type.stickIn.upRightDownLeft);
+                    sumDelay = _stickIn(Scene, _Type.stickIn.upRightDownLeft);
                 case _Type.stickIn.random:
-                    _stickIn(Scene, _Type.stickIn.random);
+                    sumDelay = _stickIn(Scene, _Type.stickIn.random);
+
+                case _Type.shutters:
+                    sumDelay = _shutters(Scene);
+
                 default:
                     break;
             }
@@ -1061,6 +1035,53 @@ export module lwg {
             })
             return sumDelay;
         }
+
+        function _fadeOut(Scene: Laya.Scene): number {
+            let time = 400;
+            let delay = 300;
+            if (Scene['Background']) {
+                Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
+            }
+            Animation2D.fadeOut(Scene, 0, 1, time, 0);
+            return time + delay;
+        }
+
+        export function _shutters(Scene: Laya.Scene, type?: string): number {
+            let num = 12;
+            let time = 500;
+            let caller = {};
+            Scene.scale(1, 0);
+            Laya.timer.frameOnce(10, caller, () => {
+                Scene.scale(1, 1);
+                var htmlCanvas1: Laya.HTMLCanvas = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
+                let base641 = htmlCanvas1.toBase64("image/png", 1);
+                Scene.scale(1, 0);
+                for (let index = 0; index < num; index++) {
+                    let Sp = new Laya.Image;
+                    Laya.stage.addChild(Sp);
+                    Sp.width = Laya.stage.width;
+                    Sp.height = Laya.stage.height;
+                    Sp.pos(0, 0);
+                    Sp.zOrder = 100;
+                    Sp.name = 'shutters';
+                    Sp.skin = base641;
+                    let Mask = new Laya.Image;
+                    Mask.width = Sp.width;
+                    Mask.height = Laya.stage.height / num;
+                    Mask.pos(0, Laya.stage.height / num * index);
+                    Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                    Sp.mask = Mask;
+                    Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                    Sp.scale(1, 0);
+                    Animation2D.scale(Sp, 1, 0, 1, 1, time, 0, () => {
+                        Scene.scale(1, 1);
+                        Sp.destroy();
+                    });
+                }
+            })
+            return time;
+        }
+
         function _stickIn(Scene: Laya.Scene, type: string): number {
             let sumDelay: number = 0;
             let time: number = 700;
@@ -1104,6 +1125,40 @@ export module lwg {
             }
             sumDelay = Scene.numChildren * delay + time + 200;
             return sumDelay;
+        }
+
+        /**通用场景消失动画*/
+        export function _commonVanishAni(CloseScene: Laya.Scene, closeFunc: Function) {
+            CloseScene[CloseScene.name].lwgBeforeVanishAni();
+            let time: number;
+            let delay: number;
+            let sumDelay: number = 0;//总延迟
+            switch (_Use.value) {
+                case _Type.fadeOut:
+                    time = 150;
+                    delay = 50;
+                    if (CloseScene['Background']) {
+                        Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
+                    }
+                    Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
+                        closeFunc();
+                    })
+                    break;
+                case _Type.stickIn.upLeftDownLeft:
+                    closeFunc();
+                    break;
+                case _Type.stickIn.upRightDownLeft:
+                    closeFunc();
+                    break;
+                case _Type.stickIn.random:
+                    closeFunc();
+                    break;
+                case _Type.shutters:
+                    closeFunc();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -1289,6 +1344,7 @@ export module lwg {
             _PreLoadCutIn.func = func;
             _PreLoadCutIn.zOrder = zOrder;
         }
+
         /**
           * 打开场景
           * @param openName 需要打开的场景名称
@@ -1299,15 +1355,6 @@ export module lwg {
         export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
             Click._switch = false;
             Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
-                if (_Moudel['_' + openName]) {
-                    if (_Moudel['_' + openName][openName]) {
-                        if (!scene.getComponent(_Moudel['_' + openName][openName])) {
-                            scene.addComponent(_Moudel['_' + openName][openName]);
-                        }
-                    }
-                } else {
-                    console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
-                }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
                 var openf = () => {
@@ -1337,6 +1384,15 @@ export module lwg {
                 } else {
                     openf();
                 }
+                if (_Moudel['_' + openName]) {
+                    if (_Moudel['_' + openName][openName]) {
+                        if (!scene.getComponent(_Moudel['_' + openName][openName])) {
+                            scene.addComponent(_Moudel['_' + openName][openName]);
+                        }
+                    }
+                } else {
+                    console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
+                }
             }))
         }
 
@@ -1345,19 +1401,19 @@ export module lwg {
          * @param closeName 需要关闭的场景名称
          * @param func 关闭后的回调函数
          * */
-        export function _closeScene(closeName?: string, func?: Function): void {
+        export function _closeScene(closeName?: string, openf?: Function): void {
             if (!_sceneControl[closeName]) {
                 console.log('场景', closeName, '关闭失败！可能是名称不对！');
                 return;
+            }
+            if (openf) {
+                openf();
             }
             /**传入的回调函数*/
             var closef = () => {
                 Click._switch = true;
                 _sceneControl[closeName].close();
                 // 先关闭场景在打开场景，否则有些场景可能因为上个场景而初始化失败
-                if (func) {
-                    func();
-                }
             }
             // 如果关闭了场景消失动画，则不会执行任何动画
             if (!SceneAnimation._vanishSwitch) {
@@ -1640,13 +1696,13 @@ export module lwg {
                 this.lwgEvent();
                 this.moduleOnEnable();
                 this.lwgOnEnable();
-                this.btnAndOpenAni();
             }
             /**每个模块优先执行的初始化函数，比lwgOnEnable早执行*/
             moduleOnEnable(): void { };
             /**模块中的事件*/
             moduleEvent(): void { };
             onStart(): void {
+                this.btnAndOpenAni();
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
@@ -1847,23 +1903,23 @@ export module lwg {
         }
         export class _NumVariable extends admin {
             get value(): number { return };
-            set value(val: number) { this['_numVariable'] = val }
+            set value(val: number) { }
         }
         export class _StrVariable extends admin {
             get value(): string { return }
-            set value(val: string) { this['_strVariable'] = val }
+            set value(val: string) { }
         }
         export class _BoolVariable extends admin {
             get value(): boolean { return }
-            set value(val: boolean) { this['_boolVariable'] = val }
+            set value(val: boolean) { }
         }
         export class _ArrayVariable extends admin {
             get value(): Array<any> { return }
-            set value(val: Array<any>) { this['_arrayVariable'] = val }
+            set value(val: Array<any>) { }
         }
         export class _ArrayArrVariable extends admin {
             get value(): Array<Array<any>> { return }
-            set value(val: Array<Array<any>>) { this['_arrayArrVariable'] = val }
+            set value(val: Array<Array<any>>) { }
         }
         /**
         * @param name 名称
@@ -2032,6 +2088,7 @@ export module lwg {
             _tableName: string = '';
             _arr: Array<any> = [];
             _lastArr: Array<any> = [];
+            _localStorage: boolean = false;
             /**
              * @param {string} dataName 在本地
              * @param {Array<any>} arrUrl 数据表地址
@@ -2043,9 +2100,10 @@ export module lwg {
                 if (tableName) {
                     this._tableName = tableName;
                     if (localStorage) {
+                        this._localStorage = localStorage;
                         this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
                         if (lastVtableName) {
-                            this._lastArr = _jsonCompare(arrUrl, lastVtableName, proName ? proName : 'name');
+                            this._compareLastInfor(lastVtableName);
                         }
                     } else {
                         if (Laya.Loader.getRes(arrUrl)) {
@@ -2056,23 +2114,50 @@ export module lwg {
                     }
                 }
             }
-
-            _checkLastArrComplete(): void {
-                
+            /**
+             *拿到上个版本的完成情况
+             * @param {string} lastVtableName 上个存储名
+             * @memberof _Table
+             */
+            _compareLastInfor(lastVtableName: string): void {
+                this._lastArr = this._getlastVersion(lastVtableName);
+                if (this._lastArr.length > 0) {
+                    for (let i = 0; i < this._lastArr.length; i++) {
+                        const _lastelement = this._lastArr[i];
+                        for (let j = 0; j < this._arr.length; j++) {
+                            const element = this._arr[j];
+                            if (_lastelement[this._property.compelet]) {
+                                element[this._property.compelet] = true;
+                            }
+                            if (_lastelement[this._property.have]) {
+                                element[this._property.have] = true;
+                            }
+                            if (_lastelement[this._property.unlock]) {
+                                element[this._property.unlock] = true;
+                            }
+                            if (_lastelement[this._property.getAward]) {
+                                element[this._property.getAward] = true;
+                            }
+                            if (_lastelement[this._property.degreeNum] > element[this._property.degreeNum]) {
+                                element[this._property.getAward] = _lastelement[this._property.degreeNum];
+                            }
+                        }
+                    }
+                }
             }
 
             /**
-              * 获取本地存储数据并且和文件中数据表对比,对比后会上传
+              * 查询前版本的表格
               * @param lastVtableName 上个版本名称
               */
             _getlastVersion(lastVtableName: string): Array<any> {
-                let dataArr: any;
+                let dataArr: any = [];
                 try {
                     if (Laya.LocalStorage.getJSON(lastVtableName)) {
                         dataArr = JSON.parse(Laya.LocalStorage.getJSON(lastVtableName));
                     }
                 } catch (error) {
-                    console.log(lastVtableName + '上个版本不存在！')
+                    console.log(lastVtableName + '前版本不存在！')
                 }
                 return dataArr;
             }
@@ -2110,7 +2195,9 @@ export module lwg {
                         }
                     }
                 }
-                Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                if (this._localStorage) {
+                    Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                }
                 return value;
             };
 
@@ -2179,7 +2266,9 @@ export module lwg {
                         }
                     }
                 }
-                Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                if (this._localStorage) {
+                    Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                }
                 return arr;
             }
 
@@ -2226,8 +2315,6 @@ export module lwg {
                 return bool;
             }
         }
-
-
 
         /**
           * 获取本地存储数据并且和文件中数据表对比,对比后会上传
@@ -4608,7 +4695,7 @@ export module lwg {
             if (!delayed) {
                 delayed = 0;
             }
-            if (!delayed) {
+            if (!ease) {
                 ease = null;
             }
             target.alpha = fAlpha;
@@ -4619,6 +4706,28 @@ export module lwg {
                     func()
                 }
             }), delayed);
+        }
+
+        /**
+        * 普通缩放
+        * @param target 节点
+        * @param fScaleX 初始X大小
+        * @param fScaleY 初始Y大小
+        * @param endScaleX 最终X大小
+        * @param endScaleY 最终Y大小
+        * @param time 花费时间
+        * @param delayed 延迟时间
+        * @param func 结束回调
+        * @param ease 效果
+        */
+        export function scale(target: Laya.Sprite, fScaleX: number, fScaleY: number, eScaleX: number, eScaleY: number, time: number, delayed?: number, func?: Function, ease?: Function): void {
+            target.scaleX = fScaleX;
+            target.scaleY = fScaleY;
+            Laya.Tween.to(target, { scaleX: eScaleX, scaleY: eScaleY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
+                if (func) {
+                    func()
+                }
+            }), delayed ? delayed : 0);
         }
 
         /**
@@ -6152,8 +6261,6 @@ export module lwg {
                 }
             }
         }
-
-
     }
 
     export module LwgPreLoad {

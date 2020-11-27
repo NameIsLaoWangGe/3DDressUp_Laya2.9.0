@@ -156,8 +156,26 @@ export module _MakeTailor {
         lwgAdaptive(): void {
             // this._Owner.x += 100;
         }
-        lwgOpenAni(): number {
-            return 100;
+        // lwgOpenAni(): number {
+        //     return 100;
+        // }
+
+        completeAni = {
+            ani1: () => {
+                this._AniVar('complete').play(0, false);
+                let _caller = {};
+                TimerAdmin._frameLoop(1, _caller, () => {
+                    let gP = (this._ImgVar('EFlower').parent as Laya.Image).localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y))
+                    Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 40), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
+
+                    Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
+                })
+                this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
+                    TimerAdmin._clearAll([_caller]);
+                })
+            },
+            ani2: () => {
+            }
         }
         lwgEvent(): void {
             this._evReg(_Event.trigger, (Dotted: Laya.Image) => {
@@ -166,17 +184,7 @@ export module _MakeTailor {
                 if (value) {
                     this.DottedLineControl.removeCloth(Dotted.parent.name);
                     if (this.DottedLineControl._checkAllCompelet()) {
-                        this._AniVar('complete').play(0, false);
-                        let _caller = {};
-                        TimerAdmin._frameLoop(1, _caller, () => {
-                            let gP = (this._ImgVar('EFlower').parent as Laya.Image).localToGlobal(new Laya.Point(this._ImgVar('EFlower').x, this._ImgVar('EFlower').y))
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y - 50), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 222, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
-                            
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(gP.x, gP.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
-                        })
-                        this._AniVar('complete').on(Laya.Event.COMPLETE, this, () => {
-                            TimerAdmin._clearAll([_caller]);
-                        })
+                        this.completeAni.ani1();
                     }
                 }
                 let Parent = Dotted.parent as Laya.Image;
