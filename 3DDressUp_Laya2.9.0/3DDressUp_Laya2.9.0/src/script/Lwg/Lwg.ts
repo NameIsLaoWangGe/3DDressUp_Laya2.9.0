@@ -1013,7 +1013,7 @@ export module lwg {
             fadeOut: 'fadeOut',
             /**用于竖屏,类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
             stickIn: {
-                random: 'random',
+                randomstickIn: 'randomstickIn',
                 upLeftDownLeft: 'upLeftDownRight',
                 upRightDownLeft: 'upRightDownLeft',
             },
@@ -1022,8 +1022,9 @@ export module lwg {
                 vertical: 'vertical',
                 lSideling: 'lSideling',
                 rSideling: 'rSideling',
-                intersection: 'intersection',
-                random: 'random',
+                intersection1: 'intersection1',
+                intersection2: 'intersection2',
+                randomshutters: 'randomshutters',
             },
             leftMove: 'leftMove',
             rightMove: 'rightMove',
@@ -1067,8 +1068,8 @@ export module lwg {
                     break;
                 case _Type.stickIn.upRightDownLeft:
                     sumDelay = _stickIn(Scene, _Type.stickIn.upRightDownLeft);
-                case _Type.stickIn.random:
-                    sumDelay = _stickIn(Scene, _Type.stickIn.random);
+                case _Type.stickIn.randomstickIn:
+                    sumDelay = _stickIn(Scene, _Type.stickIn.randomstickIn);
 
                 case _Type.shutters.lSideling:
                     sumDelay = _shutters_Open(Scene, _Type.shutters.lSideling);
@@ -1095,7 +1096,7 @@ export module lwg {
                 case _Type.stickIn.upRightDownLeft:
 
                     break;
-                case _Type.stickIn.random:
+                case _Type.stickIn.randomstickIn:
 
                     break;
                 case _Type.shutters.vertical:
@@ -1110,8 +1111,14 @@ export module lwg {
                 case _Type.shutters.rSideling:
                     sumDelay = _shutters_Close(CloseScene, _Type.shutters.rSideling);
                     break;
-                case _Type.shutters.random:
-                    sumDelay = _shutters_Close(CloseScene, _Type.shutters.random);
+                case _Type.shutters.intersection1:
+                    sumDelay = _shutters_Close(CloseScene, _Type.shutters.intersection1);
+                    break;
+                case _Type.shutters.intersection2:
+                    sumDelay = _shutters_Close(CloseScene, _Type.shutters.intersection2);
+                    break;
+                case _Type.shutters.randomshutters:
+                    sumDelay = _shutters_Close(CloseScene, _Type.shutters.randomshutters);
                     break;
 
                 default:
@@ -1183,9 +1190,10 @@ export module lwg {
 
         function _shutters_Close(Scene: Laya.Scene, type?: string): number {
             let num = 12;
-            let time = 500;
+            let time = 600;
             let delaye = 100;
             let caller = {};
+            let ran = Tools._Array.randomGetOne([0, 1, 2, 3, 4, 5])
             // 延迟执行是为了场景渲染完毕，截图更加全面
             Laya.timer.once(delaye, caller, () => {
                 var htmlCanvas1: Laya.HTMLCanvas = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
@@ -1203,42 +1211,133 @@ export module lwg {
                     let Mask = new Laya.Image;
                     Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
                     Sp.mask = Mask;
+
+                    var func1 = () => {
+                        Mask.width = Laya.stage.width;
+                        Mask.height = Laya.stage.height / num;
+                        Mask.pos(0, Laya.stage.height / num * index);
+                        Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                        Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
+                            Sp.destroy();
+                        });
+                    }
+                    var func2 = () => {
+                        Mask.width = Laya.stage.width / num;
+                        Mask.height = Laya.stage.height;
+                        Mask.pos(Laya.stage.width / num * index, 0);
+                        Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                        Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                            Sp.destroy();
+                        });
+                    }
+
+                    var func6 = () => {
+                        Mask.width = Laya.stage.width;
+                        Mask.height = Laya.stage.height / num;
+                        Mask.pos(0, Laya.stage.height / num * index);
+                        Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                        Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
+                            Sp.destroy();
+                        });
+
+                        if (index % 2 == 0) {
+                            let Sp1 = new Laya.Image;
+                            Laya.stage.addChild(Sp1);
+                            Sp1.width = Laya.stage.width;
+                            Sp1.height = Laya.stage.height;
+                            Sp1.pos(0, 0);
+                            Sp1.zOrder = 100;
+                            Sp1.name = 'shutters';
+                            Sp1.skin = base641;
+                            let Mask1 = new Laya.Image;
+                            Mask1.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                            Sp1.mask = Mask1;
+                            Mask1.width = Laya.stage.width / num;
+                            Mask1.height = Laya.stage.height;
+                            Mask1.pos(Laya.stage.width / num * index, 0);
+                            Tools._Node.changePivot(Sp1, index * Sp1.width / num + Sp1.width / num / 2, Sp1.height / 2);
+                            Animation2D.scale(Sp1, 1, 1, 0, 1, time, 0, () => {
+                                Sp1.destroy();
+                            });
+                        }
+                    }
+
+                    var func3 = () => {
+                        Mask.width = Laya.stage.width / num;
+                        Mask.height = Laya.stage.height + 1000;
+                        Mask.pos(Laya.stage.width / num * index, -1000 / 2);
+                        Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
+                        Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                        Mask.rotation = 10;
+                        Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                            Sp.destroy();
+                        });
+                    }
+                    let addLen = 1000;
+                    var func4 = () => {
+                        Mask.width = Laya.stage.width / num;
+                        Mask.height = Laya.stage.height + addLen;
+                        Mask.pos(Laya.stage.width / num * index, -addLen / 2);
+                        Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
+                        Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                        Mask.rotation = -10;
+                        Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                            Sp.destroy();
+                        });
+                    }
+                    var func5 = () => {
+                        Mask.width = Laya.stage.width / num;
+                        Mask.height = Laya.stage.height + addLen;
+                        Mask.pos(Laya.stage.width / num * index, -addLen / 2);
+                        Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
+                        Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                        Mask.rotation = -15;
+                        Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                            Sp.destroy();
+                        });
+
+                        let Sp2 = new Laya.Image;
+                        Laya.stage.addChild(Sp2);
+                        Sp2.width = Laya.stage.width;
+                        Sp2.height = Laya.stage.height;
+                        Sp2.pos(0, 0);
+                        Sp2.zOrder = 100;
+                        Sp2.name = 'shutters';
+                        Sp2.skin = base641;
+                        let Mask1 = new Laya.Image;
+                        Mask1.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                        Sp2.mask = Mask1;
+                        Mask1.width = Laya.stage.width / num;
+                        Mask1.height = Laya.stage.height + addLen;
+                        Mask1.pos(Laya.stage.width / num * index, -addLen / 2);
+                        Tools._Node.changePivot(Mask1, Mask1.width / 2, Mask1.height / 2);
+                        Tools._Node.changePivot(Sp2, index * Sp2.width / num + Sp2.width / num / 2, Sp2.height / 2);
+                        Mask1.rotation = 15;
+                        Animation2D.scale(Sp2, 1, 1, 0, 1, time, 0, () => {
+                            Sp2.destroy();
+                        });
+                    }
+                    let arr = [func1, func2, func3, func4, func5, func6];
                     switch (type) {
                         case _Type.shutters.crosswise:
-                            Mask.width = Laya.stage.width;
-                            Mask.height = Laya.stage.height / num;
-                            Mask.pos(0, Laya.stage.height / num * index);
-                            Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
-                            Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
-                                Sp.destroy();
-                            });
+                            func1();
                             break;
                         case _Type.shutters.vertical:
-                            Mask.width = Laya.stage.width / num;
-                            Mask.height = Laya.stage.height;
-                            Mask.pos(Laya.stage.width / num * index, 0);
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
-                            });
+                            func2();
                             break;
                         case _Type.shutters.lSideling:
-                            Mask.width = Laya.stage.width / num;
-                            Mask.height = Laya.stage.height;
-                            Mask.pos(Laya.stage.width / num * index, 0);
-                            // Tools._Node.changePivot(Mask, index * Sp.width / num + Sp.width, Sp.height / 2);
-                            Mask.rotation = 45;
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
-                            });
+                            func3();
                             break;
-
                         case _Type.shutters.rSideling:
-
+                            func4();
                             break;
-                        case _Type.shutters.random:
-
+                        case _Type.shutters.intersection1:
+                            func5();
+                            break;
+                        case _Type.shutters.intersection2:
+                            func6();
+                        case _Type.shutters.randomshutters:
+                            arr[ran]();
                             break;
                         default:
                             break;
@@ -1273,7 +1372,7 @@ export module lwg {
                             Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
 
                             break;
-                        case _Type.stickIn.random:
+                        case _Type.stickIn.randomstickIn:
                             element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
                             Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
                             break;
@@ -1284,7 +1383,7 @@ export module lwg {
                     let originalY = element.y;
                     element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                     element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
-                    Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
+                    Animation2D.rotate(element, element.rotation, 0, time, delay * index);
                     Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
                         Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                     });
@@ -2943,9 +3042,8 @@ export module lwg {
                     vinish: false,
                 };
                 Img['moveCaller'] = moveCaller;
-                let distance0 = 0;
                 let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
-                distance1 += Img.y;
+                let fY = Img.y;
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (Img.alpha < 1 && moveCaller.alpha) {
                         Img.alpha += 0.04;
@@ -2956,15 +3054,14 @@ export module lwg {
                     }
                     if (!moveCaller.alpha) {
                         acc += accelerated0;
-                        distance0 = Img.y += (speed0 + acc);
+                        Img.y += (speed0 + acc);
                     }
-                    if (distance0 < distance1 && moveCaller.move) {
-                        if (distance0 >= distance1) {
+                    if (!moveCaller.alpha && moveCaller.move) {
+                        if (Img.y - fY >= distance1) {
                             moveCaller.move = false;
                             moveCaller.vinish = true;
                         }
                     }
-                    // console.log(distance0, distance1, distance0 < distance1 && moveCaller.move);
                     if (moveCaller.vinish) {
                         Img.alpha -= 0.03;
                         if (Img.alpha <= 0) {
@@ -3997,7 +4094,7 @@ export module lwg {
           * @param delayed 延时时间
           * @param func 回调函数
         */
-        export function simple_Rotate(node, Frotate, Erotate, time, delayed?: number, func?: Function): void {
+        export function rotate(node, Frotate: number, Erotate: number, time: number, delayed?: number, func?: Function): void {
             node.rotation = Frotate;
             if (!delayed) {
                 delayed = 0;

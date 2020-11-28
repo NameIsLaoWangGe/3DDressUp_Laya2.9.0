@@ -18,7 +18,7 @@ export default class LwgInit extends _LwgInitScene {
 
         Platform._Ues.value = Platform._Tpye.Research;
 
-        SceneAnimation._Use.value = SceneAnimation._Type.shutters.lSideling;
+        SceneAnimation._Use.value = SceneAnimation._Type.shutters.randomshutters;
         SceneAnimation._closeSwitch = true;
         SceneAnimation._openSwitch = false;
 

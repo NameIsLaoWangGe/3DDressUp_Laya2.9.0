@@ -178,6 +178,20 @@ export module _MakeTailor {
                 })
             },
             ani2: () => {
+                // Tools._Point.getPArrBetweenTwoP()
+                let _caller = {};
+                let p1 = new Laya.Point(0, 0);
+                let p2 = new Laya.Point(Laya.stage.width, Laya.stage.height);
+                TimerAdmin._frameNumLoop(1, 80, _caller, () => {
+                    p1.x += 10;
+                    p1.y += 10;
+                    p2.x -= 10;
+                    p2.y -= 10;
+                    Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
+
+                    Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
+                })
+
             }
         }
         lwgEvent(): void {
@@ -187,7 +201,8 @@ export module _MakeTailor {
                 if (value) {
                     this.DottedLineControl.removeCloth(Dotted.parent.name);
                     if (this.DottedLineControl._checkAllCompelet()) {
-                        this.completeAni.ani1();
+                        Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
+                        this.completeAni.ani2();
                     }
                 }
                 let Parent = Dotted.parent as Laya.Image;
@@ -215,6 +230,6 @@ export module _MakeTailor {
                 this._openScene('MakeClothes', true, true);
             })
         }
-       
+
     }
 }
