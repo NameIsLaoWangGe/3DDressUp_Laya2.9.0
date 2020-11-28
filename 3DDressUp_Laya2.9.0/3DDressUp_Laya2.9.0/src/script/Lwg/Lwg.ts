@@ -986,7 +986,9 @@ export module lwg {
             centerRotate: 'centerRotate',
             drawUp: 'drawUp',
         }
+        /**通常情况下，开场动画和关闭动画只有一种，否则可能会有空白时间*/
         export let _openSwitch = true;
+        /**通常情况下，开场动画和关闭动画只有一种，否则可能会有空白时间*/
         export let _vanishSwitch = false;
         export let _Use = {
             get value(): string {
@@ -1005,6 +1007,7 @@ export module lwg {
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
                     Scene[Scene.name].lwgButton();
+                    Admin._SceneChange._close();
                 }
             }
             if (!_openSwitch) {
@@ -1015,7 +1018,6 @@ export module lwg {
                 case _Type.fadeOut:
                     sumDelay = _fadeOut(Scene);
                     break;
-
                 case _Type.stickIn.upLeftDownLeft:
                     sumDelay = _stickIn(Scene, _Type.stickIn.upLeftDownLeft)
                     break;
@@ -1049,9 +1051,11 @@ export module lwg {
         export function _shutters(Scene: Laya.Scene, type?: string): number {
             let num = 12;
             let time = 500;
+            let delaye = 100
             let caller = {};
             Scene.scale(1, 0);
-            Laya.timer.frameOnce(10, caller, () => {
+            // 延迟执行是为了场景渲染完毕，截图更加全面
+            Laya.timer.once(delaye, caller, () => {
                 Scene.scale(1, 1);
                 var htmlCanvas1: Laya.HTMLCanvas = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
                 let base641 = htmlCanvas1.toBase64("image/png", 1);
@@ -1079,7 +1083,7 @@ export module lwg {
                     });
                 }
             })
-            return time;
+            return time + delaye;
         }
 
         function _stickIn(Scene: Laya.Scene, type: string): number {
@@ -1326,51 +1330,86 @@ export module lwg {
         /**预加载完毕后，需要打开的场景信息*/
         export let _PreLoadCutIn = {
             openName: null,
-            cloesName: null,
+            closeName: null,
             func: null,
             zOrder: null,
         }
         /**
          *预加载后打开场景，预加载内容将在预加载界面按照界面名称执行
          * @param {string} openName 需要打开的场景名称
-         * @param {string} [cloesName] 需要关闭的场景，默认为null
+         * @param {string} [closeName] 需要关闭的场景，默认为null
          * @param {Function} [func] 完成回调，默认为null
          * @param {number} [zOrder] 指定层级，默认为最上层
          */
-        export function _preLoadOpenScene(openName: string, cloesName?: string, func?: Function, zOrder?: number) {
+        export function _preLoadOpenScene(openName: string, closeName?: string, func?: Function, zOrder?: number) {
             _openScene(_SceneName.PreLoadCutIn);
             _PreLoadCutIn.openName = openName;
-            _PreLoadCutIn.cloesName = cloesName;
+            _PreLoadCutIn.closeName = closeName;
             _PreLoadCutIn.func = func;
             _PreLoadCutIn.zOrder = zOrder;
+        }
+
+        export class _SceneChange {
+            static _openScene: Laya.Scene = null;
+            static _openZOder: number = 1;
+            static _openFunc: Function = null;
+            static _closeScene: Laya.Scene = null;
+            static _closeZOder: number = 0;
+            //场景数量，和层级有关
+            static _sceneNum: number = 1;
+            static _exchangeZOder: () => {
+
+            };
+            /**当前打开场景放在最上面*/
+            static _openZOderUp(): void {
+
+            };
+            /**当前打开场景放在最上面*/
+            static _closeZOderUP(): void {
+
+            };
+            static _open(): void {
+                if (this._openScene) {
+                    if (this._openZOder) {
+                        Laya.stage.addChildAt(this._openScene, this._openZOder)
+                    } else {
+                        Laya.stage.addChild(this._openScene)
+                    }
+                    if (_Moudel[`_${this._openScene.name}`]) {
+                        if (_Moudel[`_${this._openScene.name}`][this._openScene.name]) {
+                            if (!this._openScene.getComponent(_Moudel[`_${this._openScene.name}`][this._openScene.name])) {
+                                this._openScene.addComponent(_Moudel[`_${this._openScene.name}`][this._openScene.name]);
+                            }
+                        }
+                        this._openFunc();
+                    } else {
+                        console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
+                    }
+                }
+            };
+            static _close(): void {
+                if (this._closeScene) {
+                    this._closeScene.close();
+                }
+            }
         }
 
         /**
           * 打开场景
           * @param openName 需要打开的场景名称
-          * @param cloesName 需要关闭的场景，默认为null
+          * @param closeName 需要关闭的场景，默认为null
           * @param func 完成回调，默认为null
           * @param zOrder 指定层级
          */
-        export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
+        export function _openScene(openName: string, closeName?: string, func?: Function, zOrder?: number): void {
             Click._switch = false;
             Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
+                if (Tools._Node.checkChildren(Laya.stage, openName)) {
+                    console.log(openName, '场景重复出现！请检查代码');
+                    return;
+                }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
-                var openf = () => {
-                    if (Tools._Node.checkChildren(Laya.stage, openName)) {
-                        console.log(openName, '场景重复出现！请检查代码');
-                        return;
-                    }
-                    if (zOrder) {
-                        Laya.stage.addChildAt(scene, zOrder);
-                    } else {
-                        Laya.stage.addChild(scene);
-                    }
-                    if (func) {
-                        func();
-                    }
-                }
                 scene.name = openName;
                 _sceneControl[openName] = scene;//装入场景容器，此容器内每个场景唯一
                 // 背景图自适应铺满
@@ -1379,20 +1418,12 @@ export module lwg {
                     background.width = Laya.stage.width;
                     background.height = Laya.stage.height;
                 }
-                if (_sceneControl[cloesName]) {
-                    _closeScene(cloesName, openf);
-                } else {
-                    openf();
-                }
-                if (_Moudel['_' + openName]) {
-                    if (_Moudel['_' + openName][openName]) {
-                        if (!scene.getComponent(_Moudel['_' + openName][openName])) {
-                            scene.addComponent(_Moudel['_' + openName][openName]);
-                        }
-                    }
-                } else {
-                    console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
-                }
+                _SceneChange._openScene = scene;
+                _SceneChange._closeScene = closeName ? _sceneControl[closeName] : null;
+                _SceneChange._closeZOder = closeName ? _sceneControl[closeName].zOrder : 0;
+                _SceneChange._openZOder = zOrder ? zOrder : null;
+                _SceneChange._openFunc = func ? func : () => { };
+                _SceneChange._open();
             }))
         }
 
@@ -1715,9 +1746,10 @@ export module lwg {
                         Click._switch = true;
                         this.lwgOpenAniAfter();
                         this.lwgButton();
+                        _SceneChange._close();
                     });
                 } else {
-                    time = SceneAnimation._commonOpenAni(this._Owner);
+                    SceneAnimation._commonOpenAni(this._Owner);
                 }
             }
             /**开场动画,返回的数字为时间倒计时，倒计时结束后开启点击事件,也可以用来屏蔽通用动画，只需返回一个数字即可,如果场景内节点是以prefab添加进去的，那么必须卸载lwgOpenAni之前*/
@@ -6337,7 +6369,7 @@ export module lwg {
                     if (this['len'] == number) {
                         _loadOrderIndex++;
                     }
-                    EventAdmin._notify(LwgPreLoad._Event.startLoding);
+                    EventAdmin._notify(LwgPreLoad._Event.stepLoding);
                 }
             },
         };
@@ -6346,7 +6378,7 @@ export module lwg {
         export enum _Event {
             importList = '_PreLoad_importList',
             complete = '_PreLoad_complete',
-            startLoding = '_PreLoad_startLoding',
+            stepLoding = '_PreLoad_startLoding',
             progress = '_PreLoad_progress',
         }
         /**重制一些加载变量，方便在其他页面重新使用*/
@@ -6375,7 +6407,7 @@ export module lwg {
                 EventAdmin._notify(LwgPreLoad._Event.importList, (any));
             }
             moduleEvent(): void {
-                EventAdmin._register(_Event.importList, this, (listObj: {}) => {
+                EventAdmin._registerOnce(_Event.importList, this, (listObj: {}) => {
                     for (const key in listObj) {
                         if (Object.prototype.hasOwnProperty.call(listObj, key)) {
                             for (const key1 in listObj[key]) {
@@ -6431,29 +6463,24 @@ export module lwg {
                         }
                     }
                     let time = this.lwgOpenAni();
-                    if (time == null) {
-                        time = 0;
-                    }
-                    Laya.timer.once(time, this, () => {
-                        EventAdmin._notify(LwgPreLoad._Event.startLoding);
+                    Laya.timer.once(time ? time : 0, this, () => {
+                        EventAdmin._notify(LwgPreLoad._Event.stepLoding);
                     })
                 });
-                EventAdmin._register(_Event.startLoding, this, () => { this.startLodingRule() });
-                EventAdmin._register(_Event.complete, this, () => {
-                    let time = this.lwgAllComplete();
-                    Laya.timer.once(time, this, () => {
-                        // 通过预加载进入页面
-                        this._Owner.name = _loadType;
-                        Admin._sceneControl[_loadType] = this._Owner;
+                EventAdmin._register(_Event.stepLoding, this, () => { this.startLodingRule() });
+                EventAdmin._registerOnce(_Event.complete, this, () => {
+                    Laya.timer.once(this.lwgAllComplete(), this, () => {
+                        // 页面前
                         if (_loadType !== Admin._SceneName.PreLoad) {
                             if (Admin._PreLoadCutIn.openName) {
-                                Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.cloesName, () => {
+                                console.log('预加载完毕开始打开界面！')
+                                Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.closeName, () => {
                                     Admin._PreLoadCutIn.func;
                                     Admin._closeScene(_loadType);
                                 }, Admin._PreLoadCutIn.zOrder);
                             }
                         } else {
-                            //初始化所有添加过的模块
+                            //游戏开始前
                             for (const key in Admin._Moudel) {
                                 if (Object.prototype.hasOwnProperty.call(Admin._Moudel, key)) {
                                     const element = Admin._Moudel[key];
@@ -6465,6 +6492,7 @@ export module lwg {
                                 }
                             }
                             Audio._playMusic();
+                            Admin._sceneControl[_SceneName.PreLoad] = this._Owner;
                             this._openScene(_SceneName.Guide, true, false, () => {
                                 _loadType = Admin._SceneName.PreLoadCutIn;
                             })
@@ -6715,6 +6743,9 @@ export module lwg {
             }
         }
         export class _LwgInitScene extends Admin._SceneBase {
+            lwgOpenAni(): number {
+                return 10;
+            }
             moduleOnStart(): void {
                 _init();
                 DateAdmin._init();

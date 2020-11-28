@@ -35,7 +35,7 @@ export module _PreLoadCutIn {
                     time++;
                     this._LabelVar('Schedule').text = `${time}`;
                 }, () => {
-                    EventAdmin._notify(_LwgPreLoad._Event.importList,[{}]);
+                    EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
                 })
             })
         }

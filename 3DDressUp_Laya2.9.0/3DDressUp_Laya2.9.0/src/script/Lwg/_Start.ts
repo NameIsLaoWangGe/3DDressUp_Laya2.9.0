@@ -17,7 +17,6 @@ export module _Start {
         // }
 
         lwgOnStart(): void {
-            console.log('fff');
             // let tex = Laya.stage.drawToTexture(this._Owner.width, this._Owner.height, 0, 0) as Laya.Texture;
             // let sp1 = new Laya.Sprite;
             // let sp2 = new Laya.Sprite;

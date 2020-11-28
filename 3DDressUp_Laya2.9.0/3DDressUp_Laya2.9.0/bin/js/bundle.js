@@ -746,6 +746,7 @@
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
                         Scene[Scene.name].lwgButton();
+                        Admin._SceneChange._close();
                     }
                 };
                 if (!SceneAnimation._openSwitch) {
@@ -786,9 +787,10 @@
             function _shutters(Scene, type) {
                 let num = 12;
                 let time = 500;
+                let delaye = 100;
                 let caller = {};
                 Scene.scale(1, 0);
-                Laya.timer.frameOnce(10, caller, () => {
+                Laya.timer.once(delaye, caller, () => {
                     Scene.scale(1, 1);
                     var htmlCanvas1 = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
                     let base641 = htmlCanvas1.toBase64("image/png", 1);
@@ -816,7 +818,7 @@
                         });
                     }
                 });
-                return time;
+                return time + delaye;
             }
             SceneAnimation._shutters = _shutters;
             function _stickIn(Scene, type) {
@@ -1040,38 +1042,69 @@
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
             Admin._PreLoadCutIn = {
                 openName: null,
-                cloesName: null,
+                closeName: null,
                 func: null,
                 zOrder: null,
             };
-            function _preLoadOpenScene(openName, cloesName, func, zOrder) {
+            function _preLoadOpenScene(openName, closeName, func, zOrder) {
                 _openScene(_SceneName.PreLoadCutIn);
                 Admin._PreLoadCutIn.openName = openName;
-                Admin._PreLoadCutIn.cloesName = cloesName;
+                Admin._PreLoadCutIn.closeName = closeName;
                 Admin._PreLoadCutIn.func = func;
                 Admin._PreLoadCutIn.zOrder = zOrder;
             }
             Admin._preLoadOpenScene = _preLoadOpenScene;
-            function _openScene(openName, cloesName, func, zOrder) {
-                Click._switch = false;
-                Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
-                    scene.width = Laya.stage.width;
-                    scene.height = Laya.stage.height;
-                    var openf = () => {
-                        if (Tools._Node.checkChildren(Laya.stage, openName)) {
-                            console.log(openName, '场景重复出现！请检查代码');
-                            return;
-                        }
-                        if (zOrder) {
-                            Laya.stage.addChildAt(scene, zOrder);
+            class _SceneChange {
+                static _openZOderUp() {
+                }
+                ;
+                static _closeZOderUP() {
+                }
+                ;
+                static _open() {
+                    if (this._openScene) {
+                        if (this._openZOder) {
+                            Laya.stage.addChildAt(this._openScene, this._openZOder);
                         }
                         else {
-                            Laya.stage.addChild(scene);
+                            Laya.stage.addChild(this._openScene);
                         }
-                        if (func) {
-                            func();
+                        if (Admin._Moudel[`_${this._openScene.name}`]) {
+                            if (Admin._Moudel[`_${this._openScene.name}`][this._openScene.name]) {
+                                if (!this._openScene.getComponent(Admin._Moudel[`_${this._openScene.name}`][this._openScene.name])) {
+                                    this._openScene.addComponent(Admin._Moudel[`_${this._openScene.name}`][this._openScene.name]);
+                                }
+                            }
+                            this._openFunc();
                         }
-                    };
+                        else {
+                            console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
+                        }
+                    }
+                }
+                ;
+                static _close() {
+                    if (this._closeScene) {
+                        this._closeScene.close();
+                    }
+                }
+            }
+            _SceneChange._openScene = null;
+            _SceneChange._openZOder = 1;
+            _SceneChange._openFunc = null;
+            _SceneChange._closeScene = null;
+            _SceneChange._closeZOder = 0;
+            _SceneChange._sceneNum = 1;
+            Admin._SceneChange = _SceneChange;
+            function _openScene(openName, closeName, func, zOrder) {
+                Click._switch = false;
+                Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
+                    if (Tools._Node.checkChildren(Laya.stage, openName)) {
+                        console.log(openName, '场景重复出现！请检查代码');
+                        return;
+                    }
+                    scene.width = Laya.stage.width;
+                    scene.height = Laya.stage.height;
                     scene.name = openName;
                     Admin._sceneControl[openName] = scene;
                     let background = scene.getChildByName('Background');
@@ -1079,22 +1112,12 @@
                         background.width = Laya.stage.width;
                         background.height = Laya.stage.height;
                     }
-                    if (Admin._sceneControl[cloesName]) {
-                        _closeScene(cloesName, openf);
-                    }
-                    else {
-                        openf();
-                    }
-                    if (Admin._Moudel['_' + openName]) {
-                        if (Admin._Moudel['_' + openName][openName]) {
-                            if (!scene.getComponent(Admin._Moudel['_' + openName][openName])) {
-                                scene.addComponent(Admin._Moudel['_' + openName][openName]);
-                            }
-                        }
-                    }
-                    else {
-                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
-                    }
+                    _SceneChange._openScene = scene;
+                    _SceneChange._closeScene = closeName ? Admin._sceneControl[closeName] : null;
+                    _SceneChange._closeZOder = closeName ? Admin._sceneControl[closeName].zOrder : 0;
+                    _SceneChange._openZOder = zOrder ? zOrder : null;
+                    _SceneChange._openFunc = func ? func : () => { };
+                    _SceneChange._open();
                 }));
             }
             Admin._openScene = _openScene;
@@ -1343,10 +1366,11 @@
                             Click._switch = true;
                             this.lwgOpenAniAfter();
                             this.lwgButton();
+                            _SceneChange._close();
                         });
                     }
                     else {
-                        time = SceneAnimation._commonOpenAni(this._Owner);
+                        SceneAnimation._commonOpenAni(this._Owner);
                     }
                 }
                 lwgOpenAni() { return null; }
@@ -4712,7 +4736,7 @@
                         if (this['len'] == number) {
                             LwgPreLoad._loadOrderIndex++;
                         }
-                        EventAdmin._notify(LwgPreLoad._Event.startLoding);
+                        EventAdmin._notify(LwgPreLoad._Event.stepLoding);
                     }
                 },
             };
@@ -4720,7 +4744,7 @@
             (function (_Event) {
                 _Event["importList"] = "_PreLoad_importList";
                 _Event["complete"] = "_PreLoad_complete";
-                _Event["startLoding"] = "_PreLoad_startLoding";
+                _Event["stepLoding"] = "_PreLoad_startLoding";
                 _Event["progress"] = "_PreLoad_progress";
             })(_Event = LwgPreLoad._Event || (LwgPreLoad._Event = {}));
             function _remakeLode() {
@@ -4748,7 +4772,7 @@
                     EventAdmin._notify(LwgPreLoad._Event.importList, (any));
                 }
                 moduleEvent() {
-                    EventAdmin._register(_Event.importList, this, (listObj) => {
+                    EventAdmin._registerOnce(_Event.importList, this, (listObj) => {
                         for (const key in listObj) {
                             if (Object.prototype.hasOwnProperty.call(listObj, key)) {
                                 for (const key1 in listObj[key]) {
@@ -4804,22 +4828,17 @@
                             }
                         }
                         let time = this.lwgOpenAni();
-                        if (time == null) {
-                            time = 0;
-                        }
-                        Laya.timer.once(time, this, () => {
-                            EventAdmin._notify(LwgPreLoad._Event.startLoding);
+                        Laya.timer.once(time ? time : 0, this, () => {
+                            EventAdmin._notify(LwgPreLoad._Event.stepLoding);
                         });
                     });
-                    EventAdmin._register(_Event.startLoding, this, () => { this.startLodingRule(); });
-                    EventAdmin._register(_Event.complete, this, () => {
-                        let time = this.lwgAllComplete();
-                        Laya.timer.once(time, this, () => {
-                            this._Owner.name = LwgPreLoad._loadType;
-                            Admin._sceneControl[LwgPreLoad._loadType] = this._Owner;
+                    EventAdmin._register(_Event.stepLoding, this, () => { this.startLodingRule(); });
+                    EventAdmin._registerOnce(_Event.complete, this, () => {
+                        Laya.timer.once(this.lwgAllComplete(), this, () => {
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
                                 if (Admin._PreLoadCutIn.openName) {
-                                    Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.cloesName, () => {
+                                    console.log('预加载完毕开始打开界面！');
+                                    Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.closeName, () => {
                                         Admin._PreLoadCutIn.func;
                                         Admin._closeScene(LwgPreLoad._loadType);
                                     }, Admin._PreLoadCutIn.zOrder);
@@ -4838,6 +4857,8 @@
                                     }
                                 }
                                 Audio._playMusic();
+                                Admin._sceneControl[_SceneName.PreLoad] = this._Owner;
+                                this._Owner.close();
                                 this._openScene(_SceneName.Guide, true, false, () => {
                                     LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
                                 });
@@ -5073,6 +5094,9 @@
             }
             _LwgInit._loadPkg_Wechat = _loadPkg_Wechat;
             class _LwgInitScene extends Admin._SceneBase {
+                lwgOpenAni() {
+                    return 10;
+                }
                 moduleOnStart() {
                     _init();
                     DateAdmin._init();
@@ -5380,7 +5404,7 @@
                 this._openScene(_SceneName.Start);
             }
             lwgOpenAni() {
-                return 20;
+                return 1;
             }
             lwgEventRegister() {
             }
@@ -5437,7 +5461,7 @@
             lwgOnStart() {
                 this._evNotify(_LwgPreLoad._Event.importList, [_Res._list]);
             }
-            lwgOpenAni() { return 100; }
+            lwgOpenAni() { return 1; }
             lwgStepComplete() {
             }
             lwgAllComplete() {
@@ -5510,7 +5534,6 @@
         _Start._init = _init;
         class Start extends Admin._SceneBase {
             lwgOnStart() {
-                console.log('fff');
             }
             lwgButton() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {

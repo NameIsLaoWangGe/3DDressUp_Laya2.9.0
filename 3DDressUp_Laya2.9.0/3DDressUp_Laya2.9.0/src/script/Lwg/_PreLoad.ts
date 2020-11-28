@@ -106,7 +106,7 @@ export module _PreLoad {
             //     EventAdmin._notify(_LwgPreLoad._Event.importList, (_PreloadUrl._list));
             // })
         }
-        lwgOpenAni(): number { return 100; }
+        lwgOpenAni(): number { return 1; }
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {
