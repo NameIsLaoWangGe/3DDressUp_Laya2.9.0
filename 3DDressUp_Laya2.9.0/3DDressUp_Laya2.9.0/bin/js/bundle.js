@@ -714,6 +714,40 @@
             }
             Adaptive._center = _center;
         })(Adaptive = lwg.Adaptive || (lwg.Adaptive = {}));
+        let Platform;
+        (function (Platform) {
+            Platform._Tpye = {
+                Bytedance: 'Bytedance',
+                WeChat: 'WeChat',
+                OPPO: 'OPPO',
+                OPPOTest: 'OPPOTest',
+                VIVO: 'VIVO',
+                General: 'General',
+                Web: 'Web',
+                WebTest: 'WebTest',
+                Research: 'Research',
+            };
+            Platform._Ues = {
+                get value() {
+                    return this['_platform_name'] ? this['_platform_name'] : null;
+                },
+                set value(val) {
+                    this['_platform_name'] = val;
+                    switch (val) {
+                        case Platform._Tpye.WebTest:
+                            Laya.LocalStorage.clear();
+                            Gold._num.value = 5000;
+                            break;
+                        case Platform._Tpye.Research:
+                            Laya.Stat.show();
+                            Gold._num.value = 50000000000000;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+        })(Platform = lwg.Platform || (lwg.Platform = {}));
         let SceneAnimation;
         (function (SceneAnimation) {
             SceneAnimation._Type = {
@@ -723,14 +757,21 @@
                     upLeftDownLeft: 'upLeftDownRight',
                     upRightDownLeft: 'upRightDownLeft',
                 },
-                shutters: 'shutters',
+                shutters: {
+                    crosswise: 'crosswise',
+                    vertical: 'vertical',
+                    lSideling: 'lSideling',
+                    rSideling: 'rSideling',
+                    intersection: 'intersection',
+                    random: 'random',
+                },
                 leftMove: 'leftMove',
                 rightMove: 'rightMove',
                 centerRotate: 'centerRotate',
                 drawUp: 'drawUp',
             };
             SceneAnimation._openSwitch = true;
-            SceneAnimation._vanishSwitch = false;
+            SceneAnimation._closeSwitch = false;
             SceneAnimation._Use = {
                 get value() {
                     return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
@@ -755,7 +796,7 @@
                 }
                 switch (SceneAnimation._Use.value) {
                     case SceneAnimation._Type.fadeOut:
-                        sumDelay = _fadeOut(Scene);
+                        sumDelay = _fadeOut_Open(Scene);
                         break;
                     case SceneAnimation._Type.stickIn.upLeftDownLeft:
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
@@ -764,8 +805,8 @@
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upRightDownLeft);
                     case SceneAnimation._Type.stickIn.random:
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.random);
-                    case SceneAnimation._Type.shutters:
-                        sumDelay = _shutters(Scene);
+                    case SceneAnimation._Type.shutters.lSideling:
+                        sumDelay = _shutters_Open(Scene, SceneAnimation._Type.shutters.lSideling);
                     default:
                         break;
                 }
@@ -775,7 +816,44 @@
                 return sumDelay;
             }
             SceneAnimation._commonOpenAni = _commonOpenAni;
-            function _fadeOut(Scene) {
+            function _commonCloseAni(CloseScene, closeFunc) {
+                CloseScene[CloseScene.name].lwgBeforeCloseAni();
+                let sumDelay = 0;
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        sumDelay = _fadeOut_Close(CloseScene);
+                        break;
+                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                        break;
+                    case SceneAnimation._Type.stickIn.upRightDownLeft:
+                        break;
+                    case SceneAnimation._Type.stickIn.random:
+                        break;
+                    case SceneAnimation._Type.shutters.vertical:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.vertical);
+                        break;
+                    case SceneAnimation._Type.shutters.crosswise:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.crosswise);
+                        break;
+                    case SceneAnimation._Type.shutters.lSideling:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.lSideling);
+                        break;
+                    case SceneAnimation._Type.shutters.rSideling:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.rSideling);
+                        break;
+                    case SceneAnimation._Type.shutters.random:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.random);
+                        break;
+                    default:
+                        sumDelay = _fadeOut_Close(CloseScene);
+                        break;
+                }
+                Laya.timer.once(sumDelay, this, () => {
+                    closeFunc();
+                });
+            }
+            SceneAnimation._commonCloseAni = _commonCloseAni;
+            function _fadeOut_Open(Scene) {
                 let time = 400;
                 let delay = 300;
                 if (Scene['Background']) {
@@ -784,7 +862,16 @@
                 Animation2D.fadeOut(Scene, 0, 1, time, 0);
                 return time + delay;
             }
-            function _shutters(Scene, type) {
+            function _fadeOut_Close(Scene) {
+                let time = 150;
+                let delay = 50;
+                if (Scene['Background']) {
+                    Animation2D.fadeOut(Scene, 1, 0, time / 2);
+                }
+                Animation2D.fadeOut(Scene, 1, 0, time, delay);
+                return time + delay;
+            }
+            function _shutters_Open(Scene, type) {
                 let num = 12;
                 let time = 500;
                 let delaye = 100;
@@ -818,9 +905,69 @@
                         });
                     }
                 });
+                return time + delaye + 100;
+            }
+            function _shutters_Close(Scene, type) {
+                let num = 12;
+                let time = 500;
+                let delaye = 100;
+                let caller = {};
+                Laya.timer.once(delaye, caller, () => {
+                    var htmlCanvas1 = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
+                    let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    Scene.scale(1, 0);
+                    for (let index = 0; index < num; index++) {
+                        let Sp = new Laya.Image;
+                        Laya.stage.addChild(Sp);
+                        Sp.width = Laya.stage.width;
+                        Sp.height = Laya.stage.height;
+                        Sp.pos(0, 0);
+                        Sp.zOrder = 100;
+                        Sp.name = 'shutters';
+                        Sp.skin = base641;
+                        let Mask = new Laya.Image;
+                        Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                        Sp.mask = Mask;
+                        switch (type) {
+                            case SceneAnimation._Type.shutters.crosswise:
+                                Mask.width = Laya.stage.width;
+                                Mask.height = Laya.stage.height / num;
+                                Mask.pos(0, Laya.stage.height / num * index);
+                                Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                                Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
+                                    Sp.destroy();
+                                });
+                                break;
+                            case SceneAnimation._Type.shutters.vertical:
+                                Mask.width = Laya.stage.width / num;
+                                Mask.height = Laya.stage.height;
+                                Mask.pos(Laya.stage.width / num * index, 0);
+                                Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                                Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                                    Sp.destroy();
+                                });
+                                break;
+                            case SceneAnimation._Type.shutters.lSideling:
+                                Mask.width = Laya.stage.width / num;
+                                Mask.height = Laya.stage.height;
+                                Mask.pos(Laya.stage.width / num * index, 0);
+                                Mask.rotation = 45;
+                                Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                                Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
+                                    Sp.destroy();
+                                });
+                                break;
+                            case SceneAnimation._Type.shutters.rSideling:
+                                break;
+                            case SceneAnimation._Type.shutters.random:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
                 return time + delaye;
             }
-            SceneAnimation._shutters = _shutters;
             function _stickIn(Scene, type) {
                 let sumDelay = 0;
                 let time = 700;
@@ -863,74 +1010,7 @@
                 sumDelay = Scene.numChildren * delay + time + 200;
                 return sumDelay;
             }
-            function _commonVanishAni(CloseScene, closeFunc) {
-                CloseScene[CloseScene.name].lwgBeforeVanishAni();
-                let time;
-                let delay;
-                let sumDelay = 0;
-                switch (SceneAnimation._Use.value) {
-                    case SceneAnimation._Type.fadeOut:
-                        time = 150;
-                        delay = 50;
-                        if (CloseScene['Background']) {
-                            Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
-                        }
-                        Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
-                            closeFunc();
-                        });
-                        break;
-                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
-                        closeFunc();
-                        break;
-                    case SceneAnimation._Type.stickIn.upRightDownLeft:
-                        closeFunc();
-                        break;
-                    case SceneAnimation._Type.stickIn.random:
-                        closeFunc();
-                        break;
-                    case SceneAnimation._Type.shutters:
-                        closeFunc();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            SceneAnimation._commonVanishAni = _commonVanishAni;
         })(SceneAnimation = lwg.SceneAnimation || (lwg.SceneAnimation = {}));
-        let Platform;
-        (function (Platform) {
-            Platform._Tpye = {
-                Bytedance: 'Bytedance',
-                WeChat: 'WeChat',
-                OPPO: 'OPPO',
-                OPPOTest: 'OPPOTest',
-                VIVO: 'VIVO',
-                General: 'General',
-                Web: 'Web',
-                WebTest: 'WebTest',
-                Research: 'Research',
-            };
-            Platform._Ues = {
-                get value() {
-                    return this['_platform_name'] ? this['_platform_name'] : null;
-                },
-                set value(val) {
-                    this['_platform_name'] = val;
-                    switch (val) {
-                        case Platform._Tpye.WebTest:
-                            Laya.LocalStorage.clear();
-                            Gold._num.value = 5000;
-                            break;
-                        case Platform._Tpye.Research:
-                            Laya.Stat.show();
-                            Gold._num.value = 50000000000000;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            };
-        })(Platform = lwg.Platform || (lwg.Platform = {}));
         let Admin;
         (function (Admin) {
             Admin._game = {
@@ -998,7 +1078,10 @@
             class _Game {
             }
             Admin._Game = _Game;
-            Admin._sceneControl = {};
+            Admin._GuideControl = {
+                switch: false,
+            };
+            Admin._SceneControl = {};
             Admin._sceneScript = {};
             Admin._Moudel = {};
             let _SceneName;
@@ -1047,7 +1130,7 @@
                 zOrder: null,
             };
             function _preLoadOpenScene(openName, closeName, func, zOrder) {
-                _openScene(_SceneName.PreLoadCutIn);
+                _openScene(_SceneName.PreLoadCutIn, closeName);
                 Admin._PreLoadCutIn.openName = openName;
                 Admin._PreLoadCutIn.closeName = closeName;
                 Admin._PreLoadCutIn.func = func;
@@ -1058,7 +1141,24 @@
                 static _openZOderUp() {
                 }
                 ;
-                static _closeZOderUP() {
+                static _closeZOderUP(CloseScene) {
+                    if (SceneAnimation._closeSwitch) {
+                        let num = 0;
+                        for (const key in Admin._SceneControl) {
+                            if (Object.prototype.hasOwnProperty.call(Admin._SceneControl, key)) {
+                                const Scene = Admin._SceneControl[key];
+                                if (Scene.parent) {
+                                    num++;
+                                }
+                            }
+                        }
+                        if (CloseScene) {
+                            CloseScene.zOrder = num;
+                            if (this._openScene) {
+                                this._openScene.zOrder = num - 1;
+                            }
+                        }
+                    }
                 }
                 ;
                 static _open() {
@@ -1084,15 +1184,29 @@
                 }
                 ;
                 static _close() {
-                    if (this._closeScene) {
-                        this._closeScene.close();
+                    if (this._closeScene.length > 0) {
+                        for (let index = 0; index < this._closeScene.length; index++) {
+                            let scene = this._closeScene[index];
+                            if (scene) {
+                                _closeScene(scene.name);
+                                this._closeScene.splice(index, 1);
+                                index--;
+                            }
+                        }
                     }
+                    this._remake();
+                }
+                static _remake() {
+                    this._openScene = null;
+                    this._openZOder = 1;
+                    this._openFunc = null;
+                    this._closeZOder = 0;
                 }
             }
             _SceneChange._openScene = null;
             _SceneChange._openZOder = 1;
             _SceneChange._openFunc = null;
-            _SceneChange._closeScene = null;
+            _SceneChange._closeScene = [];
             _SceneChange._closeZOder = 0;
             _SceneChange._sceneNum = 1;
             Admin._SceneChange = _SceneChange;
@@ -1101,48 +1215,39 @@
                 Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
                     if (Tools._Node.checkChildren(Laya.stage, openName)) {
                         console.log(openName, '场景重复出现！请检查代码');
-                        return;
                     }
-                    scene.width = Laya.stage.width;
-                    scene.height = Laya.stage.height;
-                    scene.name = openName;
-                    Admin._sceneControl[openName] = scene;
-                    let background = scene.getChildByName('Background');
-                    if (background) {
-                        background.width = Laya.stage.width;
-                        background.height = Laya.stage.height;
+                    else {
+                        _SceneChange._openScene = Admin._SceneControl[scene.name = openName] = scene;
+                        _SceneChange._closeScene.push(Admin._SceneControl[closeName]);
+                        _SceneChange._closeZOder = closeName ? Admin._SceneControl[closeName].zOrder : 0;
+                        _SceneChange._openZOder = zOrder ? zOrder : null;
+                        _SceneChange._openFunc = func ? func : () => { };
+                        _SceneChange._open();
                     }
-                    _SceneChange._openScene = scene;
-                    _SceneChange._closeScene = closeName ? Admin._sceneControl[closeName] : null;
-                    _SceneChange._closeZOder = closeName ? Admin._sceneControl[closeName].zOrder : 0;
-                    _SceneChange._openZOder = zOrder ? zOrder : null;
-                    _SceneChange._openFunc = func ? func : () => { };
-                    _SceneChange._open();
                 }));
             }
             Admin._openScene = _openScene;
-            function _closeScene(closeName, openf) {
-                if (!Admin._sceneControl[closeName]) {
+            function _closeScene(closeName, func) {
+                if (!Admin._SceneControl[closeName]) {
                     console.log('场景', closeName, '关闭失败！可能是名称不对！');
                     return;
                 }
-                if (openf) {
-                    openf();
-                }
                 var closef = () => {
+                    func && func();
                     Click._switch = true;
-                    Admin._sceneControl[closeName].close();
+                    Admin._SceneControl[closeName].close();
                 };
-                if (!SceneAnimation._vanishSwitch) {
+                if (!SceneAnimation._closeSwitch) {
                     closef();
                     return;
                 }
-                let cloesSceneScript = Admin._sceneControl[closeName][Admin._sceneControl[closeName].name];
-                if (cloesSceneScript) {
-                    if (cloesSceneScript) {
+                _SceneChange._closeZOderUP(Admin._SceneControl[closeName]);
+                let script = Admin._SceneControl[closeName][Admin._SceneControl[closeName].name];
+                if (script) {
+                    if (script) {
                         Click._switch = false;
-                        cloesSceneScript.lwgBeforeVanishAni();
-                        let time0 = cloesSceneScript.lwgVanishAni();
+                        script.lwgBeforeCloseAni();
+                        let time0 = script.lwgCloseAni();
                         if (time0 !== null) {
                             Laya.timer.once(time0, this, () => {
                                 closef();
@@ -1150,7 +1255,7 @@
                             });
                         }
                         else {
-                            SceneAnimation._commonVanishAni(Admin._sceneControl[closeName], closef);
+                            SceneAnimation._commonCloseAni(Admin._SceneControl[closeName], closef);
                         }
                     }
                 }
@@ -1193,17 +1298,17 @@
                 _FindList(name) {
                     return this.getFind(name, '_FindList');
                 }
-                _storeNum(name, initial) {
-                    return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
+                _storeNum(name, _func, initial) {
+                    return StorageAdmin._mum(`${this.owner.name}/${name}`, _func, initial);
                 }
-                _storeStr(name, initial) {
-                    return StorageAdmin._str(`${this.owner.name}/${name}`, initial);
+                _storeStr(name, _func, initial) {
+                    return StorageAdmin._str(`${this.owner.name}/${name}`, _func, initial);
                 }
-                _storeBool(name, initial) {
-                    return StorageAdmin._bool(`${this.owner.name}/${name}`, initial);
+                _storeBool(name, _func, initial) {
+                    return StorageAdmin._bool(`${this.owner.name}/${name}`, _func, initial);
                 }
-                _storeArray(name, initial) {
-                    return StorageAdmin._array(`${this.owner.name}/${name}`, initial);
+                _storeArray(name, _func, initial) {
+                    return StorageAdmin._array(`${this.owner.name}/${name}`, _func, initial);
                 }
                 lwgOnAwake() { }
                 ;
@@ -1330,14 +1435,19 @@
                     return this.getVar(name, '_FontBox');
                 }
                 onAwake() {
+                    this._Owner.width = Laya.stage.width;
+                    this._Owner.height = Laya.stage.height;
+                    if (this._Owner.getChildByName('Background')) {
+                        this._Owner.getChildByName('Background')['width'] = Laya.stage.width;
+                        this._Owner.getChildByName('Background')['height'] = Laya.stage.height;
+                    }
                     if (this._Owner.name == null) {
                         console.log('场景名称失效，脚本赋值失败');
                     }
                     else {
-                        this._calssName = this._Owner.name;
+                        this.ownerSceneName = this._calssName = this._Owner.name;
                         this._Owner[this._calssName] = this;
                     }
-                    this.ownerSceneName = this.owner.name;
                     this.moduleOnAwake();
                     this.lwgOnAwake();
                     this.lwgAdaptive();
@@ -1391,8 +1501,8 @@
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
                 ;
-                lwgBeforeVanishAni() { }
-                lwgVanishAni() { return null; }
+                lwgBeforeCloseAni() { }
+                lwgCloseAni() { return null; }
                 ;
                 onDisable() {
                     Animation2D.fadeOut(this._Owner, 1, 0, 2000, 1);
@@ -1549,6 +1659,7 @@
         (function (StorageAdmin) {
             class admin {
                 removeSelf() { }
+                func() { }
             }
             class _NumVariable extends admin {
                 get value() { return; }
@@ -1576,143 +1687,184 @@
                 set value(val) { }
             }
             StorageAdmin._ArrayArrVariable = _ArrayArrVariable;
-            function _mum(name, initial) {
-                let _variable = new _NumVariable();
-                _variable = this[`_mum${name}`] = {
-                    get value() {
-                        if (Laya.LocalStorage.getItem(name)) {
-                            return Laya.LocalStorage.getItem(name);
+            function _mum(name, _func, initial) {
+                if (!this[`_mum${name}`]) {
+                    this[`_mum${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                return Number(Laya.LocalStorage.getItem(name));
+                            }
+                            else {
+                                initial = initial ? initial : 0;
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        },
+                        set value(data) {
+                            Laya.LocalStorage.setItem(name, data.toString());
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            this['_func'] && this['_func']();
+                            console.log(this['_func']);
                         }
-                        else {
-                            initial = initial ? initial : 0;
-                            Laya.LocalStorage.setItem(name, initial.toString());
-                            return initial;
-                        }
-                    },
-                    set value(data) {
-                        Laya.LocalStorage.setItem(name, data.toString());
-                    },
-                    removeSelf() {
-                        Laya.LocalStorage.removeItem(name);
-                    }
-                };
-                return _variable;
+                    };
+                }
+                if (_func) {
+                    this[`_mum${name}`]['_func'] = _func;
+                }
+                return this[`_mum${name}`];
             }
             StorageAdmin._mum = _mum;
-            function _str(name, initial) {
-                let _variable = new _StrVariable();
-                _variable = this[`_str${name}`] = {
-                    get value() {
-                        if (Laya.LocalStorage.getItem(name)) {
-                            return Laya.LocalStorage.getItem(name);
+            function _str(name, _func, initial) {
+                if (!this[`_str${name}`]) {
+                    this[`_str${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                return Laya.LocalStorage.getItem(name);
+                            }
+                            else {
+                                initial = initial ? initial : null;
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        },
+                        set value(data) {
+                            Laya.LocalStorage.setItem(name, data.toString());
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
                         }
-                        else {
-                            initial = initial ? initial : null;
-                            Laya.LocalStorage.setItem(name, initial.toString());
-                            return initial;
-                        }
-                    },
-                    set value(data) {
-                        Laya.LocalStorage.setItem(name, data.toString());
-                    },
-                    removeSelf() {
-                        Laya.LocalStorage.removeItem(name);
-                    }
-                };
-                return _variable;
+                    };
+                }
+                if (_func) {
+                    this[`_str${name}`]['_func'] = _func;
+                }
+                return this[`_str${name}`];
             }
             StorageAdmin._str = _str;
-            function _bool(name, initial) {
-                let _variable = new _BoolVariable();
-                _variable = this[`_bool${name}`] = {
-                    get value() {
-                        if (Laya.LocalStorage.getItem(name)) {
-                            if (Laya.LocalStorage.getItem(name) == "false") {
-                                return false;
-                            }
-                            else if (Laya.LocalStorage.getItem(name) == "true") {
-                                return true;
-                            }
-                        }
-                        else {
-                            if (initial) {
-                                Laya.LocalStorage.setItem(name, "true");
+            function _bool(name, _func, initial) {
+                if (!this[`_bool${name}`]) {
+                    this[`_bool${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                if (Laya.LocalStorage.getItem(name) == "false") {
+                                    return false;
+                                }
+                                else if (Laya.LocalStorage.getItem(name) == "true") {
+                                    return true;
+                                }
                             }
                             else {
-                                Laya.LocalStorage.setItem(name, "false");
+                                if (initial) {
+                                    Laya.LocalStorage.setItem(name, "true");
+                                }
+                                else {
+                                    Laya.LocalStorage.setItem(name, "false");
+                                }
+                                this['func']();
+                                return initial;
                             }
-                            return initial;
+                        },
+                        set value(bool) {
+                            bool = bool ? "true" : "false";
+                            Laya.LocalStorage.setItem(name, bool.toString());
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
                         }
-                    },
-                    set value(bool) {
-                        bool = bool ? "true" : "false";
-                        Laya.LocalStorage.setItem(name, bool.toString());
-                    },
-                    removeSelf() {
-                        Laya.LocalStorage.removeItem(name);
-                    }
-                };
-                return _variable;
+                    };
+                }
+                if (_func) {
+                    this[`_bool${name}`]['_func'] = _func;
+                }
+                return this[`_bool${name}`];
             }
             StorageAdmin._bool = _bool;
-            function _array(name, initial) {
-                let _variable = new _ArrayVariable();
-                _variable = this[`_array${name}`] = {
-                    get value() {
-                        try {
-                            let data = Laya.LocalStorage.getJSON(name);
-                            if (data) {
-                                return JSON.parse(data);
-                                ;
+            function _array(name, _func, initial) {
+                if (!this[`_array${name}`]) {
+                    this[`_array${name}`] = {
+                        get value() {
+                            try {
+                                let data = Laya.LocalStorage.getJSON(name);
+                                if (data) {
+                                    return JSON.parse(data);
+                                    ;
+                                }
+                                else {
+                                    initial = initial ? initial : [];
+                                    Laya.LocalStorage.setItem(name, initial.toString());
+                                    this['func']();
+                                    return initial;
+                                }
                             }
-                            else {
-                                initial = initial ? initial : [];
-                                Laya.LocalStorage.setItem(name, initial.toString());
-                                return initial;
+                            catch (error) {
+                                return [];
                             }
+                        },
+                        set value(array) {
+                            Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
                         }
-                        catch (error) {
-                            return [];
-                        }
-                    },
-                    set value(array) {
-                        Laya.LocalStorage.setJSON(name, JSON.stringify(array));
-                    },
-                    removeSelf() {
-                        Laya.LocalStorage.removeItem(name);
-                    }
-                };
-                return _variable;
+                    };
+                }
+                if (_func) {
+                    this[`_array${name}`]['_func'] = _func;
+                }
+                return this[`_array${name}`];
             }
             StorageAdmin._array = _array;
-            function _arrayArr(name, initial) {
-                let _variable = new _ArrayVariable();
-                _variable = this[`_arrayArr${name}`] = {
-                    get value() {
-                        try {
-                            let data = Laya.LocalStorage.getJSON(name);
-                            if (data) {
-                                return JSON.parse(data);
-                                ;
+            function _arrayArr(name, _func, initial) {
+                if (!this[`_arrayArr${name}`]) {
+                    this[`_arrayArr${name}`] = {
+                        get value() {
+                            try {
+                                let data = Laya.LocalStorage.getJSON(name);
+                                if (data) {
+                                    return JSON.parse(data);
+                                    ;
+                                }
+                                else {
+                                    initial = initial ? initial : [];
+                                    Laya.LocalStorage.setItem(name, initial.toString());
+                                    return initial;
+                                }
                             }
-                            else {
-                                initial = initial ? initial : [];
-                                Laya.LocalStorage.setItem(name, initial.toString());
-                                return initial;
+                            catch (error) {
+                                return [];
                             }
+                        },
+                        set value(array) {
+                            Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
                         }
-                        catch (error) {
-                            return [];
-                        }
-                    },
-                    set value(array) {
-                        Laya.LocalStorage.setJSON(name, JSON.stringify(array));
-                    },
-                    removeSelf() {
-                        Laya.LocalStorage.removeItem(name);
-                    }
-                };
-                return _variable;
+                    };
+                }
+                if (_func) {
+                    this[`_arrayArr${name}`]['_func'] = _func;
+                }
+                return this[`_arrayArr${name}`];
             }
             StorageAdmin._arrayArr = _arrayArr;
         })(StorageAdmin = lwg.StorageAdmin || (lwg.StorageAdmin = {}));
@@ -2262,23 +2414,23 @@
                     distance1 += Img.y;
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
-                            Img.alpha += 0.05;
+                            Img.alpha += 0.04;
                             if (Img.alpha >= 1) {
                                 moveCaller.alpha = false;
                                 moveCaller.move = true;
                             }
                         }
-                        if (distance0 < distance1 && moveCaller.move) {
+                        if (!moveCaller.alpha) {
                             acc += accelerated0;
                             distance0 = Img.y += (speed0 + acc);
+                        }
+                        if (distance0 < distance1 && moveCaller.move) {
                             if (distance0 >= distance1) {
                                 moveCaller.move = false;
                                 moveCaller.vinish = true;
                             }
                         }
                         if (moveCaller.vinish) {
-                            acc += accelerated0;
-                            distance0 = Img.y += (speed0 + acc);
                             Img.alpha -= 0.03;
                             if (Img.alpha <= 0) {
                                 Laya.timer.clearAll(moveCaller);
@@ -2772,8 +2924,7 @@
             Click._Type = {
                 no: 'no',
                 largen: 'largen',
-                balloon: 'balloon',
-                beetle: 'beetle',
+                reduce: 'reduce',
             };
             Click._Use = {
                 get value() {
@@ -2792,14 +2943,11 @@
                     case Click._Type.largen:
                         btnEffect = new _Largen();
                         break;
-                    case Click._Type.balloon:
-                        btnEffect = new _Balloon();
-                        break;
-                    case Click._Type.balloon:
-                        btnEffect = new _Beetle();
+                    case Click._Type.reduce:
+                        btnEffect = new _Reduce();
                         break;
                     default:
-                        btnEffect = new _NoEffect();
+                        btnEffect = new _Largen();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2821,14 +2969,11 @@
                     case Click._Type.largen:
                         btnEffect = new _Largen();
                         break;
-                    case Click._Type.balloon:
-                        btnEffect = new _Balloon();
-                        break;
-                    case Click._Type.balloon:
-                        btnEffect = new _Beetle();
+                    case Click._Type.reduce:
+                        btnEffect = new _Largen();
                         break;
                     default:
-                        btnEffect = new _Largen();
+                        btnEffect = new _Reduce();
                         break;
                 }
                 target._off(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2841,73 +2986,48 @@
                 target._off(Laya.Event.MOUSE_OUT, caller, btnEffect.out);
             }
             Click._off = _off;
+            class _NoEffect {
+                constructor() {
+                }
+                down() { }
+                move() { }
+                up() { }
+                out() { }
+            }
+            Click._NoEffect = _NoEffect;
+            class _Largen {
+                constructor() {
+                }
+                down(event) {
+                    event.currentTarget.scale(1.1, 1.1);
+                    Audio._playSound(Click._audioUrl);
+                }
+                move() { }
+                up(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+                out(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+            }
+            Click._Largen = _Largen;
+            class _Reduce {
+                constructor() {
+                }
+                down(event) {
+                    event.currentTarget.scale(0.9, 0.9);
+                    Audio._playSound(Click._audioUrl);
+                }
+                move() { }
+                up(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+                out(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+            }
+            Click._Reduce = _Reduce;
         })(Click = lwg.Click || (lwg.Click = {}));
-        class _NoEffect {
-            constructor() {
-            }
-            down(event) {
-            }
-            move(event) {
-            }
-            up(event) {
-            }
-            out(event) {
-            }
-        }
-        lwg._NoEffect = _NoEffect;
-        class _Largen {
-            constructor() {
-            }
-            down(event) {
-                event.currentTarget.scale(1.1, 1.1);
-                Audio._playSound(Click._audioUrl);
-            }
-            move(event) {
-            }
-            up(event) {
-                event.currentTarget.scale(1, 1);
-            }
-            out(event) {
-                event.currentTarget.scale(1, 1);
-            }
-        }
-        lwg._Largen = _Largen;
-        class _Balloon {
-            constructor() {
-            }
-            down(event) {
-                event.currentTarget.scale(Click._balloonScale + 0.06, Click._balloonScale + 0.06);
-                Audio._playSound(Click._audioUrl);
-            }
-            up(event) {
-                event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
-            }
-            move(event) {
-                event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
-            }
-            out(event) {
-                event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
-            }
-        }
-        lwg._Balloon = _Balloon;
-        class _Beetle {
-            constructor() {
-            }
-            down(event) {
-                event.currentTarget.scale(Click._beetleScale + 0.06, Click._beetleScale + 0.06);
-                Audio._playSound(Click._audioUrl);
-            }
-            up(event) {
-                event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
-            }
-            move(event) {
-                event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
-            }
-            out(event) {
-                event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
-            }
-        }
-        lwg._Beetle = _Beetle;
         let Animation3D;
         (function (Animation3D) {
             Animation3D.tweenMap = {};
@@ -4835,6 +4955,7 @@
                     EventAdmin._register(_Event.stepLoding, this, () => { this.startLodingRule(); });
                     EventAdmin._registerOnce(_Event.complete, this, () => {
                         Laya.timer.once(this.lwgAllComplete(), this, () => {
+                            Admin._SceneControl[LwgPreLoad._loadType] = this._Owner;
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
                                 if (Admin._PreLoadCutIn.openName) {
                                     console.log('预加载完毕开始打开界面！');
@@ -4857,11 +4978,16 @@
                                     }
                                 }
                                 Audio._playMusic();
-                                Admin._sceneControl[_SceneName.PreLoad] = this._Owner;
-                                this._Owner.close();
-                                this._openScene(_SceneName.Guide, true, false, () => {
-                                    LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
-                                });
+                                if (Admin._GuideControl.switch) {
+                                    this._openScene(_SceneName.Guide, true, false, () => {
+                                        LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
+                                    });
+                                }
+                                else {
+                                    this._openScene(_SceneName.Start, true, false, () => {
+                                        LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
+                                    });
+                                }
                             }
                         });
                     });
@@ -5095,12 +5221,15 @@
             _LwgInit._loadPkg_Wechat = _loadPkg_Wechat;
             class _LwgInitScene extends Admin._SceneBase {
                 lwgOpenAni() {
-                    return 10;
+                    return 1;
+                }
+                moduleOnAwake() {
                 }
                 moduleOnStart() {
                     _init();
                     DateAdmin._init();
                     this._openScene(_SceneName.PreLoad);
+                    this._Owner.close();
                 }
                 ;
             }
@@ -5207,9 +5336,9 @@
                 label.x = Execution._ExecutionNode.x + 100;
                 label.y = Execution._ExecutionNode.y - label.height / 2 + 4;
                 label.zOrder = 100;
-                Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
+                Animation2D.fadeOut(label, 0, 1, 200, 150, () => {
                     Animation2D.leftRight_Shake(Execution._ExecutionNode, 15, 60, 0, null);
-                    Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
+                    Animation2D.fadeOut(label, 1, 0, 600, 400, () => {
                     });
                 });
             }
@@ -5402,6 +5531,7 @@
             lwgOnStart() {
                 console.log('新手引导完成！');
                 this._openScene(_SceneName.Start);
+                console.log(Laya.stage['_children']);
             }
             lwgOpenAni() {
                 return 1;
@@ -5484,7 +5614,6 @@
         })(_Event = _PreLoadCutIn._Event || (_PreLoadCutIn._Event = {}));
         class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                EventAdmin._notify(_Event.animation1);
             }
             lwgEvent() {
                 EventAdmin._register(_Event.animation1, this, () => {
@@ -5497,8 +5626,8 @@
                     });
                 });
             }
-            lwgOpenAni() {
-                return 100;
+            lwgOpenAniAfter() {
+                EventAdmin._notify(_Event.animation1);
             }
             lwgStepComplete() {
             }
@@ -6049,9 +6178,6 @@
             lwgAdaptive() {
                 this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
             }
-            lwgOpenAni() {
-                return 100;
-            }
             lwgOnStart() {
                 _MakeClothes._Scene3D = _Res._list.scene3D.MakeClothes.Scene;
                 if (!_MakeClothes._Scene3D.getComponent(MakeClothes3D)) {
@@ -6078,6 +6204,9 @@
             }
             onStageMouseUp() {
                 !this.Tex.chekInside() && this.Tex.close();
+            }
+            lwgCloseAni() {
+                return 10;
             }
         }
         _MakeClothes.MakeClothes = MakeClothes;
@@ -6155,9 +6284,6 @@
                 this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses1').name, this.Make.getTex(this._ImgVar('Glasses1')).bitmap]);
                 this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses2').name, this.Make.getTex(this._ImgVar('Glasses2')).bitmap]);
             }
-            lwgOpenAni() {
-                return 100;
-            }
             lwgEvent() {
                 this._evReg(_Event.posCalibration, (p1, p2) => {
                     this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
@@ -6220,6 +6346,9 @@
             onStageMouseMove(e) {
             }
             onStageMouseUp() {
+            }
+            lwgCloseAni() {
+                return 10;
             }
         }
         _MakeUp.MakeUp = MakeUp;
@@ -6343,6 +6472,8 @@
                     diffP: null,
                 };
             }
+            lwgOnStart() {
+            }
             lwgEvent() {
                 this.Ani.event();
             }
@@ -6457,9 +6588,12 @@
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
             Platform._Ues.value = Platform._Tpye.Research;
-            SceneAnimation._Use.value = SceneAnimation._Type.shutters;
-            Click._Use.value = Click._Type.largen;
+            SceneAnimation._Use.value = SceneAnimation._Type.shutters.lSideling;
+            SceneAnimation._closeSwitch = true;
+            SceneAnimation._openSwitch = false;
+            Click._Use.value = Click._Type.reduce;
             Adaptive._Use.value = [1280, 720];
+            Admin._GuideControl.switch = false;
             Admin._Moudel = {
                 _PreLoad: _PreLoad,
                 _PreLoadCutIn: _PreLoadCutIn,

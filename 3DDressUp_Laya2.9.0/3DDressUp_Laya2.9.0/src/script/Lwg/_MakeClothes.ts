@@ -19,10 +19,9 @@ export module _MakeClothes {
             // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
             this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
         }
-        lwgOpenAni(): number {
-            return 100;
-        }
+    
         lwgOnStart(): void {
+            // console.log(Laya.stage['_children'])
             _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
             if (!_Scene3D.getComponent(MakeClothes3D)) {
                 _Scene3D.addComponent(MakeClothes3D);
@@ -301,12 +300,23 @@ export module _MakeClothes {
                     TimerAdmin._frameLoop(1, this._ImgVar('BtnL'), () => {
                         EventAdmin._notify(_Event.rotateHanger, [0]);
                     })
+
+
                 }, null, () => {
                     Laya.timer.clearAll(this._ImgVar('BtnL'));
                 }, () => {
                     Laya.timer.clearAll(this._ImgVar('BtnL'));
                 })
                 this._btnFour(this._ImgVar('BtnR'), (e: Laya.Event) => {
+                    // var htmlCanvas1: Laya.HTMLCanvas =_Scene3D.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
+                    // let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    // this._ImgVar('TestImg').skin = base641;
+                    // console.log(base641);
+                    // var htmlCanvas1: Laya.HTMLCanvas = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
+                    // let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    // let tex = _Scene3D.drawToTexture(this._ImgVar('TestSp').x, this._ImgVar('TestSp').y, 0, 0) as Laya.Texture;
+                    // this._ImgVar('TestSp').texture = tex;
+
                     this._ImgVar('Wireframe').visible = false;
                     this.Tex.state = this.Tex.stateType.rotate;
                     TimerAdmin._frameLoop(1, this._ImgVar('BtnR'), () => {
@@ -333,6 +343,9 @@ export module _MakeClothes {
         }
         onStageMouseUp() {
             !this.Tex.chekInside() && this.Tex.close();
+        }
+        lwgCloseAni(): number {
+            return 10;
         }
     }
     export let _Scene3D: Laya.Scene3D;

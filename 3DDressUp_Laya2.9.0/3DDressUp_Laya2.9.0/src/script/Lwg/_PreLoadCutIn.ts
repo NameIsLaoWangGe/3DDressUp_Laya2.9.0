@@ -26,7 +26,6 @@ export module _PreLoadCutIn {
     /**可以手动挂在脚本中的类，全脚本唯一的默认导出，也可动态添加，动态添加写在模块内更方便*/
     export class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
-            EventAdmin._notify(_Event.animation1);
         }
         lwgEvent(): void {
             EventAdmin._register(_Event.animation1, this, () => {
@@ -39,9 +38,10 @@ export module _PreLoadCutIn {
                 })
             })
         }
-        lwgOpenAni(): number {
-            return 100;
+        lwgOpenAniAfter(): void {
+            EventAdmin._notify(_Event.animation1);
         }
+        
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {

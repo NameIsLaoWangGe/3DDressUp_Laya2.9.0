@@ -52,6 +52,10 @@ export module _MakeTailor {
     /**剪刀*/
     export class Scissor extends Admin._ObjectBase {
 
+        lwgOnStart(): void {
+            // console.log(Laya.stage['_children'])
+        }
+
         state: string = 'none';//约束当前每次裁剪只裁剪一个线条
         /**动画控制*/
         Ani = {
@@ -159,7 +163,6 @@ export module _MakeTailor {
         // lwgOpenAni(): number {
         //     return 100;
         // }
-
         completeAni = {
             ani1: () => {
                 this._AniVar('complete').play(0, false);
@@ -212,5 +215,6 @@ export module _MakeTailor {
                 this._openScene('MakeClothes', true, true);
             })
         }
+       
     }
 }

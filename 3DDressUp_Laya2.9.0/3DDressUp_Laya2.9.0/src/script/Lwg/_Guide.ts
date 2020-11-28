@@ -111,6 +111,7 @@ export module _Guide {
         lwgOnStart(): void {
             console.log('新手引导完成！')
             this._openScene(_SceneName.Start);
+            console.log(Laya.stage['_children'])
         }
         lwgOpenAni(): number {
             return 1;

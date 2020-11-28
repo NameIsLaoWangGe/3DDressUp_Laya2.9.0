@@ -8,6 +8,7 @@ export module _MakeUp {
     }
     export class MakeUp extends Admin._SceneBase {
         lwgOnStart(): void {
+            // console.log(Laya.stage['_children'])
             _Scene3D = _Res._list.scene3D.MakeUp.Scene;
             if (!_Scene3D.getComponent(MakeUp3D)) {
                 _Scene3D.addComponent(MakeUp3D);
@@ -17,9 +18,7 @@ export module _MakeUp {
             this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses1').name, this.Make.getTex(this._ImgVar('Glasses1')).bitmap]);
             this._evNotify(_Event.addTexture2D, [this._ImgVar('Glasses2').name, this.Make.getTex(this._ImgVar('Glasses2')).bitmap]);
         }
-        lwgOpenAni(): number {
-            return 100;
-        }
+      
         lwgEvent(): void {
             this._evReg(_Event.posCalibration, (p1: Laya.Point, p2: Laya.Point,) => {
                 this._ImgVar('Glasses1').pos(p1.x - this._ImgVar('Glasses1').width / 2, p1.y - this._ImgVar('Glasses1').height / 2);
@@ -107,6 +106,9 @@ export module _MakeUp {
         onStageMouseMove(e: Laya.Event) {
         }
         onStageMouseUp() {
+        }
+        lwgCloseAni(): number {
+            return 10;
         }
     }
     export let _Scene3D: Laya.Scene3D;

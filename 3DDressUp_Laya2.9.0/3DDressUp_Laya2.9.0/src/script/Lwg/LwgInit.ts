@@ -9,15 +9,22 @@ import { _MakeUp } from "./_MakeUp";
 import { _MakeTailor } from "./_MakeTailor";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
+
         _LwgInit._pkgInfo = [
             // { name: "sp1", root: "res" },
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
+
         Platform._Ues.value = Platform._Tpye.Research;
-        SceneAnimation._Use.value = SceneAnimation._Type.shutters;
-        Click._Use.value = Click._Type.largen;
+
+        SceneAnimation._Use.value = SceneAnimation._Type.shutters.lSideling;
+        SceneAnimation._closeSwitch = true;
+        SceneAnimation._openSwitch = false;
+
+        Click._Use.value = Click._Type.reduce;
         Adaptive._Use.value = [1280, 720];
+        Admin._GuideControl.switch = false;
         Admin._Moudel = {
             _PreLoad: _PreLoad,
             _PreLoadCutIn: _PreLoadCutIn,

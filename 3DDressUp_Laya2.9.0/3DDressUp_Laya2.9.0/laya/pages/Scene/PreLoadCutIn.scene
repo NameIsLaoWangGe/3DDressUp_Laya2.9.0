@@ -24,7 +24,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Background,Background",
-            "props":{"y":0,"x":0,"width":1280,"var":"Background","skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"13,5,11,9","name":"Background","height":720},
+            "props":{"y":0,"x":0,"width":1280,"var":"Background","skin":"Lwg/UI/ui_l_orthogon_magenta.png","sizeGrid":"13,5,11,9","name":"Background","height":720},
             "nodeParent":2,
             "label":"Background",
             "isDirectory":false,
