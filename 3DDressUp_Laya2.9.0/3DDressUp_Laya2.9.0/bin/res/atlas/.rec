@@ -187,6 +187,7 @@ R E23D09D2 guoguan.wav
 R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
 D Game/UI/01_Repertory
+D Game/UI/Clothes
 D Game/UI/Common
 D Game/UI/Design
 R FD466C26 星星路径特效路径.png
@@ -252,3 +253,27 @@ D Game/UI/01_Repertory/Start
 D Game/UI/01_Repertory/Task
 D Game/UI/01_Repertory/Victory
 D Game/UI/01_Repertory/VictoryBox
+D Game/UI/Clothes/Icon
+P B9E46B78 diy_bottom_001_final.png
+P 0542B40D diy_bottom_002_final.png
+P F2BA05DA diy_bottom_003_final.png
+P E4919B94 diy_bottom_004_final.png
+P 30A657F0 diy_bottom_005_final.png
+P 8FD57785 diy_bottom_006_final.png
+P 7487F3A4 diy_bottom_007_final.png
+P 5CCFEFCA diy_bottom_008_final.png
+P 979D14E6 diy_dress_001_final.png
+P A99E3E6B diy_dress_002_final.png
+P B946AA52 diy_dress_003_final.png
+P 0D964977 diy_dress_004_final.png
+P 2FFD9D00 diy_dress_005_final.png
+P EDFC63B0 diy_dress_006_final.png
+P 132AA938 diy_dress_007_final.png
+P 28644678 diy_dress_008_final.png
+P 036AB900 diy_top_001_final.png
+P 2B15A84C diy_top_002_final.png
+P 28BF7D65 diy_top_003_final.png
+P F7C4DDEA diy_top_004_final.png
+P E2351576 diy_top_005_final.png
+P 2299F5DF diy_top_006_final.png
+P 72ABC1D3 diy_top_007_final.png

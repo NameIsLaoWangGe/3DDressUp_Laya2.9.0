@@ -1978,6 +1978,7 @@
                         degreeNum: 'degreeNum',
                         Compelet: 'Compelet',
                         getAward: 'getAward',
+                        pitch: 'pitch',
                     };
                     this._unlockWay = {
                         ads: 'ads',
@@ -2209,6 +2210,7 @@
                 Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
                 return dataArr;
             }
+            DataAdmin._jsonCompare = _jsonCompare;
         })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
@@ -3131,8 +3133,6 @@
             }
             Click._off = _off;
             class _NoEffect {
-                constructor() {
-                }
                 down() { }
                 move() { }
                 up() { }
@@ -3140,8 +3140,6 @@
             }
             Click._NoEffect = _NoEffect;
             class _Largen {
-                constructor() {
-                }
                 down(event) {
                     event.currentTarget.scale(1.1, 1.1);
                     Audio._playSound(Click._audioUrl);
@@ -3156,8 +3154,6 @@
             }
             Click._Largen = _Largen;
             class _Reduce {
-                constructor() {
-                }
                 down(event) {
                     event.currentTarget.scale(0.9, 0.9);
                     Audio._playSound(Click._audioUrl);
@@ -6816,7 +6812,7 @@
 
     var _DressingRoom;
     (function (_DressingRoom) {
-        class _Data extends DataAdmin._Table {
+        class _General extends DataAdmin._Table {
             constructor() {
                 super(...arguments);
                 this._classify = {
@@ -6825,24 +6821,59 @@
                     Bottoms: 'Bottoms',
                 };
             }
-            static _getIns() {
+            static _Ins() {
                 if (!this.instance) {
-                    this.instance = new _Data('Clothes', _Res._list.json.Clothes.url, true, 'name', null);
+                    this.instance = new _General('ClothesDIY', _Res._list.json.Clothes.url, true);
                 }
                 return this.instance;
             }
         }
-        _DressingRoom._Data = _Data;
+        _DressingRoom._General = _General;
+        class _DIY extends DataAdmin._Table {
+            static _Ins() {
+                if (!this.instance) {
+                    this.instance = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
+                }
+                return this.instance;
+            }
+        }
+        _DressingRoom._DIY = _DIY;
+        class _Item extends Admin._ObjectBase {
+            lwgButton() {
+                this._btnUp(this._Owner, () => {
+                }, null);
+            }
+        }
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
-                _Data._getIns()._List = this._ListVar('List');
-                _Data._getIns()._List.selectEnable = true;
-                _Data._getIns()._List.vScrollBarSkin = "";
-                _Data._getIns()._List.array = _Data._getIns()._arr;
-                console.log(_Data._getIns()._List.array);
-                _Data._getIns()._List.renderHandler = new Laya.Handler(this, () => {
+                _General._Ins()._List = this._ListVar('List');
+                _DIY._Ins()._List = this._ListVar('List');
+                _DIY._Ins()._List.selectEnable = true;
+                _DIY._Ins()._List.vScrollBarSkin = "";
+                _DIY._Ins()._List.array = _DIY._Ins()._arr;
+                _DIY._Ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                    let data = Cell.dataSource;
+                    let Icon = Cell.getChildByName('Icon');
+                    Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
+                    let Board = Cell.getChildByName('Board');
+                    Board.skin = `Lwg/UI/ui_orthogon_green.png`;
+                    if (data[_DIY._Ins()._property.pitch]) {
+                        Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
+                    }
+                    else {
+                        Board.skin = `Lwg/UI/ui_orthogon_grass.png`;
+                    }
+                    if (!Cell.getComponent(_Item)) {
+                        Cell.addComponent(_Item);
+                    }
                 });
-                _Data._getIns()._Tap = this._ListVar('Tap');
+                _DIY._Ins()._Tap = this._ListVar('Tap');
+            }
+            lwgOnStart() {
+            }
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnOK'), () => {
+                });
             }
         }
         _DressingRoom.DressingRoom = DressingRoom;

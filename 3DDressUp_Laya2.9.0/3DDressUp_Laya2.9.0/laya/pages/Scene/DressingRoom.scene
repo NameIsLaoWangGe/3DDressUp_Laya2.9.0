@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":11,
+    "selecteID":6,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#000000","height":720},
     "nodeParent":-1,
-    "maxID":31,
+    "maxID":35,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -31,7 +31,7 @@
                     "x":30,
                     "type":"Tab",
                     "searchKey":"Tab,Tap,Tap",
-                    "props":{"y":83,"x":285,"var":"Tap","skin":"comp/tab.png","rotation":90,"name":"Tap","labels":"label1,label2","labelSize":20,"direction":"horizontal"},
+                    "props":{"y":95,"x":285,"var":"Tap","skin":"comp/tab.png","rotation":90,"name":"Tap","labels":"label1,label2","labelSize":20,"direction":"horizontal"},
                     "nodeParent":6,
                     "label":"Tap",
                     "isDirectory":false,
@@ -40,48 +40,90 @@
                     "compId":7,
                     "child":[
                         ]
+                },
+                {
+                    "x":30,
+                    "type":"List",
+                    "searchKey":"List,List,List",
+                    "props":{"y":19,"x":34,"width":197,"var":"List","spaceY":0,"rotation":0,"repeatY":4,"name":"List","height":672},
+                    "nodeParent":6,
+                    "label":"List",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":11,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Box",
+                            "searchKey":"Box",
+                            "props":{"y":0,"x":0,"width":197,"renderType":"render","height":198},
+                            "nodeParent":11,
+                            "label":"Box",
+                            "isOpen":true,
+                            "isDirectory":true,
+                            "isAniNode":false,
+                            "hasChild":true,
+                            "compId":12,
+                            "child":[
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Board",
+                                    "props":{"width":180,"skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"9,12,14,13","name":"Board","height":180,"centerY":0,"centerX":0},
+                                    "nodeParent":12,
+                                    "label":"Board",
+                                    "isDirectory":false,
+                                    "isAniNode":false,
+                                    "hasChild":false,
+                                    "compId":30,
+                                    "child":[
+                                        ]
+                                },
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Icon",
+                                    "props":{"width":200,"skin":"Game/UI/Clothes/Icon/diy_bottom_008_final.png","name":"Icon","height":204,"centerY":0,"centerX":0},
+                                    "nodeParent":12,
+                                    "label":"Icon",
+                                    "isDirectory":false,
+                                    "isAniNode":false,
+                                    "hasChild":false,
+                                    "compId":32,
+                                    "child":[
+                                        ]
+                                }]
+                        }]
                 }]
         },
         {
             "x":15,
-            "type":"List",
-            "searchKey":"List,List,List",
-            "props":{"y":29,"x":1004,"width":173,"var":"List","spaceY":20,"rotation":0,"name":"List","height":922},
+            "type":"Image",
+            "searchKey":"Image,BtnOK,BtnOK",
+            "props":{"y":42,"x":846,"width":123,"var":"BtnOK","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"16,9,9,15","name":"BtnOK","height":123},
             "nodeParent":2,
-            "label":"List",
+            "label":"BtnOK",
             "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
-            "compId":11,
+            "compId":31,
             "child":[
                 {
                     "x":30,
-                    "type":"Box",
-                    "searchKey":"Box",
-                    "props":{"y":0,"x":0,"width":150,"renderType":"render","height":150},
-                    "nodeParent":11,
-                    "label":"Box",
-                    "isOpen":true,
-                    "isDirectory":true,
-                    "isAniNode":false,
-                    "hasChild":true,
-                    "compId":12,
+                    "type":"Label",
+                    "searchKey":"Label",
+                    "props":{"width":87,"valign":"middle","text":"OK","height":66,"fontSize":40,"centerY":0,"centerX":0,"align":"center"},
+                    "nodeParent":31,
+                    "label":"Label",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":33,
                     "child":[
-                        {
-                            "x":45,
-                            "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"width":150,"skin":"Lwg/UI/ui_l_orthogon_green.png","height":150},
-                            "nodeParent":12,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":false,
-                            "hasChild":false,
-                            "compId":30,
-                            "child":[
-                                ]
-                        }]
+                        ]
                 }]
         }],
     "animations":[

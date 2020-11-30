@@ -2,7 +2,6 @@ import ADManager, { TaT } from "../TJ/Admanager";
 import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, Gold, _SceneName, SceneAnimation, Tools, Effects } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Res } from "./_PreLoad";
-import { _SelectLevel } from "./_SelectLevel";
 
 /**测试模块,每个模块分开，默认导出一个类，这个类是默认挂载的脚本类，如果有多个脚本，
  * 那么在这个默认类中进行添加，或者在其他地方动态添加*/

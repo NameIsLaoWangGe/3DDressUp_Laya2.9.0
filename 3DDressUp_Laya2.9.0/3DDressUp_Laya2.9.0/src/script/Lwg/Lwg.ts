@@ -2356,8 +2356,9 @@ export module lwg {
     }
     /**数据管理*/
     export module DataAdmin {
-        /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
+        /**new出一个通用数据表管理对象，如果属性不通能用，则继承使用*/
         export class _Table {
+
             /**一些通用的属性名称，可重写*/
             _property = {
                 name: 'name',
@@ -2370,6 +2371,7 @@ export module lwg {
                 Compelet: 'Compelet',
                 /**有奖励而没有领取*/
                 getAward: 'getAward',
+                pitch: 'pitch',
             };
             /**解锁方式*/
             _unlockWay = {
@@ -2618,6 +2620,39 @@ export module lwg {
                 }
                 return bool;
             }
+            get _pitchClassify(): string {
+                return this[`${this._tableName}/pitchClassify`] ? `${this._tableName}/pitchClassify` : this._arr[0][this._property.classify];
+            };
+            set _pitchClassify(str: string) {
+                if (this._List) {
+                    this._List.refresh();
+                }
+                this[`${this._tableName}/pitchClassify`] = str;
+            };
+            get _pitchName(): string {
+                return Laya.LocalStorage.getItem('_SelectLevel_pichcustoms') ? Laya.LocalStorage.getItem('_SelectLevel_pichcustoms') : null;
+            };
+            set _pitchName(str: string) {
+                if (this._List) {
+                    this._List.refresh();
+                }
+                Laya.LocalStorage.setItem('_SelectLevel_pichcustoms', str.toString());
+            };
+
+            _setPitch(cassify: string, nameArr: Array<string>): void {
+                for (let index = 0; index < this._arr.length; index++) {
+                    const element = this._arr[index];
+                    for (let i = 0; i < nameArr.length; i++) {
+                        if (element[this._property.classify] == cassify && element[this._property.name] == nameArr[i]) {
+                            element[this._property.pitch] = true;
+                        } else {
+                            element[this._property.pitch] = false;
+                        }
+                    }
+                }
+                this._pitchClassify = cassify;
+                this._pitchName = nameArr[nameArr.length - 1];
+            }
 
             /**
              * 在表格中增加一个对象
@@ -2636,7 +2671,7 @@ export module lwg {
           * @param storageName 本地存储中的json名称
           * @param propertyName 数组中每个对象中同一个属性名，通过这个名称进行对比
           */
-        function _jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
+        export function _jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
             // 第一步，先尝试从本地缓存获取数据，
             // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
             // 第三步，如果本地缓存没有，那么直接从数据表获取
@@ -3846,8 +3881,6 @@ export module lwg {
          * 没有效果的点击事件，有时候用于防止界面的事件穿透
          */
         export class _NoEffect {
-            constructor() {
-            }
             down(): void { }
             move(): void { }
             up(): void { }
@@ -3857,8 +3890,6 @@ export module lwg {
          * 点击放大的按钮点击效果,每个类是一种效果，和点击的声音一一对应
          */
         export class _Largen {
-            constructor() {
-            }
             down(event: Laya.Event): void {
                 event.currentTarget.scale(1.1, 1.1);
                 Audio._playSound(Click._audioUrl);
@@ -3871,12 +3902,13 @@ export module lwg {
                 event.currentTarget.scale(1, 1);
             }
         }
+
+
         /**
         * 点击放大的按钮点击效果,每个类是一种效果，和点击的声音一一对应
         */
         export class _Reduce {
-            constructor() {
-            }
+
             down(event: Laya.Event): void {
                 event.currentTarget.scale(0.9, 0.9);
                 Audio._playSound(Click._audioUrl);
