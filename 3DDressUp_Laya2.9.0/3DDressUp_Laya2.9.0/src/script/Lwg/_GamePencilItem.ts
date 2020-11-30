@@ -1,7 +1,6 @@
 import GameConfig from "../../GameConfig";
 import ADManager, { TaT } from "../TJ/Admanager";
 import { Admin, Animation2D, Click, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
-import { _Compound } from "./_Compound";
 import { _Game } from "./_Game";
 import { _GameItem } from "./_GameItem";
 import { _PropTry } from "./_PropTry";

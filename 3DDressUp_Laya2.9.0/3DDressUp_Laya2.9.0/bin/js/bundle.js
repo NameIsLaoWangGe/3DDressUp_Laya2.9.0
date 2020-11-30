@@ -1807,7 +1807,6 @@
                         },
                         func() {
                             this['_func'] && this['_func']();
-                            console.log(this['_func']);
                         }
                     };
                 }
@@ -1977,11 +1976,15 @@
                         unlockWay: 'unlockWay',
                         conditionNum: 'conditionNum',
                         degreeNum: 'degreeNum',
-                        compelet: 'compelet',
-                        unlock: 'unlock',
-                        have: 'have',
+                        Compelet: 'Compelet',
                         getAward: 'getAward',
-                        versionUpdateTimes: 'versionUpdateTimes',
+                    };
+                    this._unlockWay = {
+                        ads: 'ads',
+                        gold: 'gold',
+                        customs: 'free',
+                        diamond: 'diamond',
+                        free: 'free',
                     };
                     this._tableName = '';
                     this._arr = [];
@@ -2001,9 +2004,17 @@
                                 this._arr = Laya.Loader.getRes(arrUrl);
                             }
                             else {
-                                console.log(arrUrl, '数据表不存在！');
+                                console.log(`${arrUrl}数据表不存在！`);
                             }
                         }
+                    }
+                }
+                _refreshAndStorage() {
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                    }
+                    if (this._List) {
+                        this._List.refresh();
                     }
                 }
                 _compareLastInfor(lastVtableName) {
@@ -2013,14 +2024,8 @@
                             const _lastelement = this._lastArr[i];
                             for (let j = 0; j < this._arr.length; j++) {
                                 const element = this._arr[j];
-                                if (_lastelement[this._property.compelet]) {
-                                    element[this._property.compelet] = true;
-                                }
-                                if (_lastelement[this._property.have]) {
-                                    element[this._property.have] = true;
-                                }
-                                if (_lastelement[this._property.unlock]) {
-                                    element[this._property.unlock] = true;
+                                if (_lastelement[this._property.Compelet]) {
+                                    element[this._property.Compelet] = true;
                                 }
                                 if (_lastelement[this._property.getAward]) {
                                     element[this._property.getAward] = true;
@@ -2068,9 +2073,7 @@
                             }
                         }
                     }
-                    if (this._localStorage) {
-                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                    }
+                    this._refreshAndStorage();
                     return value;
                 }
                 ;
@@ -2122,9 +2125,7 @@
                             }
                         }
                     }
-                    if (this._localStorage) {
-                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                    }
+                    this._refreshAndStorage();
                     return arr;
                 }
                 _checkCondition(name, number, func) {
@@ -2132,11 +2133,11 @@
                     number = number == undefined ? 1 : number;
                     let degreeNum = this._getProperty(name, this._property.degreeNum);
                     let condition = this._getProperty(name, this._property.conditionNum);
-                    let compelet = this._getProperty(name, this._property.compelet);
+                    let compelet = this._getProperty(name, this._property.Compelet);
                     if (!compelet) {
                         if (condition <= degreeNum + number) {
                             this._setProperty(name, this._property.degreeNum, condition);
-                            this._setProperty(name, this._property.compelet, true);
+                            this._setProperty(name, this._property.Compelet, true);
                             chek = true;
                         }
                         else {
@@ -2156,12 +2157,16 @@
                     let bool = true;
                     for (let index = 0; index < this._arr.length; index++) {
                         const element = this._arr[index];
-                        if (!element[this._property.compelet]) {
+                        if (!element[this._property.Compelet]) {
                             bool = false;
                             return bool;
                         }
                     }
                     return bool;
+                }
+                _addObject(obj) {
+                    let _obj = Tools._ObjArray.objCopy(obj);
+                    this._arr.push(_obj);
                 }
             }
             DataAdmin._Table = _Table;
@@ -4786,25 +4791,25 @@
                 }
                 _ObjArray.arrCopy = arrCopy;
                 function objCopy(obj) {
-                    var copyObj = {};
+                    var _copyObj = {};
                     for (const item in obj) {
                         if (obj.hasOwnProperty(item)) {
                             const element = obj[item];
                             if (typeof element === 'object') {
                                 if (Array.isArray(element)) {
                                     let arr1 = _Array.copy(element);
-                                    copyObj[item] = arr1;
+                                    _copyObj[item] = arr1;
                                 }
                                 else {
                                     objCopy(element);
                                 }
                             }
                             else {
-                                copyObj[item] = element;
+                                _copyObj[item] = element;
                             }
                         }
                     }
-                    return objCopy;
+                    return _copyObj;
                 }
                 _ObjArray.objCopy = objCopy;
             })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
@@ -5702,16 +5707,18 @@
                     url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/Assets/13213/qunzi1.jpg`,
                     texture2D: null,
                 },
-                Figure2: {
-                    url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Sprite/repeat_pattern_04 _9681.jpg`,
-                    texture2D: null,
-                },
             },
             scene2D: {
                 Start: `Scene/${_SceneName.Start}.json`,
                 Guide: `Scene/${_SceneName.Guide}.json`,
                 PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
                 _MakeClothes: `Scene/${'MakeClothes'}.json`,
+            },
+            json: {
+                Clothes: {
+                    url: `_LwgData/_DressingRoom/Clothes.json`,
+                    data: new Array,
+                }
             },
         };
     })(_Res || (_Res = {}));
@@ -5767,11 +5774,8 @@
                         Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                         break;
                     case 'MakeUp':
-                        _Res._list.scene3D.MakeClothes.Scene.removeSelf();
-                        Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
                         break;
                     case 'Start':
-                        _Res._list.scene3D.MakeUp.Scene.removeSelf();
                         break;
                     default:
                         break;
@@ -6323,7 +6327,7 @@
             lwgButton() {
                 this.Tex.btn();
                 this._btnUp(this._ImgVar('BtnNext'), () => {
-                    this._openScene('MakeUp', true, true);
+                    this._openScene('DressingRoom', true, true);
                 });
             }
             onStageMouseDown(e) {
@@ -6404,7 +6408,6 @@
                 };
             }
             lwgOnStart() {
-                _MakeUp._Scene3D = _Res._list.scene3D.MakeUp.Scene;
                 if (!_MakeUp._Scene3D.getComponent(MakeUp3D)) {
                     _MakeUp._Scene3D.addComponent(MakeUp3D);
                 }
@@ -6507,7 +6510,7 @@
         let _Event;
         (function (_Event) {
             _Event["trigger"] = "_MakeTailor_trigger";
-            _Event["playAni"] = "_MakeTailor_playAni";
+            _Event["completeAni"] = "_MakeTailor_completeAni";
             _Event["scissorPlay"] = "_MakeTailor_scissorPlay";
             _Event["scissorStop"] = "_MakeTailor_scissorStop";
             _Event["scissorRotation"] = "_MakeTailor_scissorRotation";
@@ -6580,8 +6583,8 @@
                         });
                     },
                     stop: () => {
-                        TimerAdmin._frameOnce(60, this.Ani, () => {
-                            let time = 10;
+                        TimerAdmin._frameOnce(30, this.Ani, () => {
+                            let time = 100;
                             TimerAdmin._clearAll([this.Ani]);
                             Animation2D._clearAll([this.Ani]);
                             Animation2D.rotate(this._SceneImg('S1'), -this.Ani.range / 3, time);
@@ -6598,10 +6601,24 @@
                             this.Ani.stop();
                         });
                         this._evReg(_Event.scissorSitu, () => {
-                            Animation2D.move_rotate(this._Owner, this.fRotation, this.fPoint, 200);
+                            Animation2D.move_rotate(this._Owner, this.fRotation + 360, this.fPoint, 600, 0, () => {
+                                this._evNotify(_Event.completeAni);
+                            });
                         });
                         this._evReg(_Event.scissorRotation, (rotate) => {
-                            Animation2D.rotate(this.owner, rotate, 200);
+                            TimerAdmin._clearAll([this._Owner]);
+                            let time = 10;
+                            let angle;
+                            if (Math.abs(rotate - this._Owner.rotation) < 180) {
+                                angle = rotate - this._Owner.rotation;
+                            }
+                            else {
+                                angle = -(360 - (rotate - this._Owner.rotation));
+                            }
+                            let unit = angle / time;
+                            TimerAdmin._frameNumLoop(1, time, this._Owner, () => {
+                                this._Owner.rotation += unit;
+                            });
                         });
                     }
                 };
@@ -6632,7 +6649,6 @@
             }
             lwgOnStageUp() {
                 this._evNotify(_Event.scissorStop);
-                this._evNotify(_Event.scissorSitu);
                 this.Move.touchP = null;
             }
             onTriggerEnter(other, _Owner) {
@@ -6671,32 +6687,33 @@
                     },
                     ani2: () => {
                         let num = 6;
+                        let spcaing = 20;
                         for (let index = 0; index < num; index++) {
-                            let moveY = 8 * index + 5;
+                            let moveY = 7 * index + 5;
                             let p1 = new Laya.Point(-200, Laya.stage.height);
                             let _caller = {};
                             let funcL = () => {
-                                p1.x += 25;
+                                p1.x += spcaing;
                                 if (p1.x > Laya.stage.width) {
                                     Laya.timer.clearAll(_caller);
                                 }
                                 p1.y -= moveY;
                                 Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
                             };
-                            TimerAdmin._frameLoop(1, _caller, () => {
+                            TimerAdmin._frameLoop(2, _caller, () => {
                                 funcL();
                             });
                             let p2 = new Laya.Point(Laya.stage.width + 200, Laya.stage.height);
                             let _callerR = {};
                             let funcR = () => {
-                                p2.x -= 30;
+                                p2.x -= spcaing;
                                 if (p2.x < 0) {
                                     Laya.timer.clearAll(_callerR);
                                 }
                                 p2.y -= moveY;
                                 Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
                             };
-                            TimerAdmin._frameLoop(1, _callerR, () => {
+                            TimerAdmin._frameLoop(2, _callerR, () => {
                                 funcR();
                             });
                         }
@@ -6713,16 +6730,17 @@
                         Laya.stage.addChild(Img);
                         Img.zOrder = 1000;
                         let num = 20;
+                        let spcaing = 40;
                         for (let index = 0; index < num; index++) {
                             let p1 = new Laya.Point(0, Img.height / num * index);
                             let p2 = new Laya.Point(Laya.stage.width, Img.height / num * index);
                             let _caller = {};
                             let func = () => {
-                                p1.x += 40;
+                                p1.x += spcaing;
                                 if (p1.x > len) {
                                     Laya.timer.clearAll(_caller);
                                 }
-                                p2.x -= 50;
+                                p2.x -= spcaing;
                                 if (p2.x > len) {
                                     Laya.timer.clearAll(_caller);
                                 }
@@ -6733,7 +6751,7 @@
                                     Effects._Particle._fallingVertical_Reverse(Img, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [-100, -200], [-0.8, -1.5], [-0.05, -0.1]);
                                 }
                             };
-                            TimerAdmin._frameNumLoop(1, 50, _caller, () => {
+                            TimerAdmin._frameNumLoop(2, 50, _caller, () => {
                                 func();
                             });
                         }
@@ -6751,6 +6769,9 @@
             lwgAdaptive() {
             }
             lwgEvent() {
+                this._evReg(_Event.completeAni, () => {
+                    this.completeAni.ani3();
+                });
                 this._evReg(_Event.trigger, (Dotted) => {
                     let value = this.DottedLineControl._checkCondition(Dotted.parent.name);
                     Dotted.visible = false;
@@ -6758,7 +6779,7 @@
                         this.DottedLineControl.removeCloth(Dotted.parent.name);
                         if (this.DottedLineControl._checkAllCompelet()) {
                             Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
-                            this.completeAni.ani2();
+                            this._evNotify(_Event.scissorSitu);
                         }
                     }
                     let Parent = Dotted.parent;
@@ -6793,6 +6814,41 @@
         _MakeTailor.MakeTailor = MakeTailor;
     })(_MakeTailor || (_MakeTailor = {}));
 
+    var _DressingRoom;
+    (function (_DressingRoom) {
+        class _Data extends DataAdmin._Table {
+            constructor() {
+                super(...arguments);
+                this._classify = {
+                    Dress: 'Dress',
+                    Top: 'Top',
+                    Bottoms: 'Bottoms',
+                };
+            }
+            static _getIns() {
+                if (!this.instance) {
+                    this.instance = new _Data('Clothes', _Res._list.json.Clothes.url, true, 'name', null);
+                }
+                return this.instance;
+            }
+        }
+        _DressingRoom._Data = _Data;
+        class DressingRoom extends Admin._SceneBase {
+            lwgOnAwake() {
+                _Data._getIns()._List = this._ListVar('List');
+                _Data._getIns()._List.selectEnable = true;
+                _Data._getIns()._List.vScrollBarSkin = "";
+                _Data._getIns()._List.array = _Data._getIns()._arr;
+                console.log(_Data._getIns()._List.array);
+                _Data._getIns()._List.renderHandler = new Laya.Handler(this, () => {
+                });
+                _Data._getIns()._Tap = this._ListVar('Tap');
+            }
+        }
+        _DressingRoom.DressingRoom = DressingRoom;
+    })(_DressingRoom || (_DressingRoom = {}));
+    var _DressingRoom$1 = _DressingRoom.DressingRoom;
+
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
@@ -6812,6 +6868,7 @@
                 _MakeTailor: _MakeTailor,
                 _MakeClothes: _MakeClothes,
                 _MakeUp: _MakeUp,
+                _DressingRoom: _DressingRoom,
             };
         }
     }

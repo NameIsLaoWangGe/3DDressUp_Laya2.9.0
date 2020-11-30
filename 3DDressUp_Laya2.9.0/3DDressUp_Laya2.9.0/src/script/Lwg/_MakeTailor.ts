@@ -4,7 +4,7 @@ import { _Res } from "./_PreLoad";
 export module _MakeTailor {
     export enum _Event {
         trigger = '_MakeTailor_trigger',
-        playAni = '_MakeTailor_playAni',
+        completeAni = '_MakeTailor_completeAni',
         scissorPlay = '_MakeTailor_scissorPlay',
         scissorStop = '_MakeTailor_scissorStop',
         scissorRotation = '_MakeTailor_scissorRotation',
@@ -89,8 +89,8 @@ export module _MakeTailor {
                 });
             },
             stop: () => {
-                TimerAdmin._frameOnce(60, this.Ani, () => {
-                    let time = 10;
+                TimerAdmin._frameOnce(30, this.Ani, () => {
+                    let time = 100;
                     TimerAdmin._clearAll([this.Ani]);
                     Animation2D._clearAll([this.Ani]);
                     Animation2D.rotate(this._SceneImg('S1'), -this.Ani.range / 3, time)
@@ -108,10 +108,23 @@ export module _MakeTailor {
                     this.Ani.stop();
                 })
                 this._evReg(_Event.scissorSitu, () => {
-                    Animation2D.move_rotate(this._Owner, this.fRotation, this.fPoint, 200);
+                    Animation2D.move_rotate(this._Owner, this.fRotation + 360, this.fPoint, 600, 0, () => {
+                        this._evNotify(_Event.completeAni);
+                    });
                 })
                 this._evReg(_Event.scissorRotation, (rotate: number) => {
-                    Animation2D.rotate(this.owner, rotate, 200);
+                    TimerAdmin._clearAll([this._Owner]);
+                    let time = 10;
+                    let angle: number;
+                    if (Math.abs(rotate - this._Owner.rotation) < 180) {
+                        angle = rotate - this._Owner.rotation;
+                    } else {
+                        angle = -(360 - (rotate - this._Owner.rotation));
+                    }
+                    let unit = angle / time;
+                    TimerAdmin._frameNumLoop(1, time, this._Owner, () => {
+                        this._Owner.rotation += unit;
+                    })
                 })
             }
         }
@@ -139,7 +152,6 @@ export module _MakeTailor {
         }
         lwgOnStageUp() {
             this._evNotify(_Event.scissorStop);
-            this._evNotify(_Event.scissorSitu);
             this.Move.touchP = null;
         }
 
@@ -194,33 +206,34 @@ export module _MakeTailor {
             },
             ani2: () => {
                 let num = 6;
+                let spcaing = 20;
                 for (let index = 0; index < num; index++) {
-                    let moveY = 8 * index + 5;
+                    let moveY = 7 * index + 5;
                     let p1 = new Laya.Point(-200, Laya.stage.height);
                     let _caller = {};
                     let funcL = () => {
-                        p1.x += 25;
+                        p1.x += spcaing;
                         if (p1.x > Laya.stage.width) {
                             Laya.timer.clearAll(_caller);
                         }
                         p1.y -= moveY;
                         Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
                     }
-                    TimerAdmin._frameLoop(1, _caller, () => {
+                    TimerAdmin._frameLoop(2, _caller, () => {
                         funcL();
                     })
 
                     let p2 = new Laya.Point(Laya.stage.width + 200, Laya.stage.height);
                     let _callerR = {};
                     let funcR = () => {
-                        p2.x -= 30;
+                        p2.x -= spcaing;
                         if (p2.x < 0) {
                             Laya.timer.clearAll(_callerR);
                         }
                         p2.y -= moveY;
                         Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1])
                     }
-                    TimerAdmin._frameLoop(1, _callerR, () => {
+                    TimerAdmin._frameLoop(2, _callerR, () => {
                         funcR();
                     })
                 }
@@ -240,16 +253,17 @@ export module _MakeTailor {
                 Img.zOrder = 1000;
 
                 let num = 20;
+                let spcaing = 40;
                 for (let index = 0; index < num; index++) {
                     let p1 = new Laya.Point(0, Img.height / num * index);
                     let p2 = new Laya.Point(Laya.stage.width, Img.height / num * index);
                     let _caller = {};
                     let func = () => {
-                        p1.x += 40;
+                        p1.x += spcaing;
                         if (p1.x > len) {
                             Laya.timer.clearAll(_caller);
                         }
-                        p2.x -= 50;
+                        p2.x -= spcaing;
                         if (p2.x > len) {
                             Laya.timer.clearAll(_caller);
                         }
@@ -259,13 +273,16 @@ export module _MakeTailor {
                             Effects._Particle._fallingVertical_Reverse(Img, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [-100, -200], [-0.8, -1.5], [-0.05, -0.1])
                         }
                     }
-                    TimerAdmin._frameNumLoop(1, 50, _caller, () => {
+                    TimerAdmin._frameNumLoop(2, 50, _caller, () => {
                         func();
                     })
                 }
             }
         }
         lwgEvent(): void {
+            this._evReg(_Event.completeAni, () => {
+                this.completeAni.ani3();
+            })
             this._evReg(_Event.trigger, (Dotted: Laya.Image) => {
                 let value = this.DottedLineControl._checkCondition(Dotted.parent.name);
                 Dotted.visible = false;
@@ -273,7 +290,7 @@ export module _MakeTailor {
                     this.DottedLineControl.removeCloth(Dotted.parent.name);
                     if (this.DottedLineControl._checkAllCompelet()) {
                         Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
-                        this.completeAni.ani2();
+                        this._evNotify(_Event.scissorSitu);
                     }
                 }
                 let Parent = Dotted.parent as Laya.Image;

@@ -69,24 +69,12 @@ export module _Res {
             // Share: `Scene/${_SceneName.Share}.json`,
         },
 
-        // json: {
-        //     General: {
-        //         url: "_LwgData" + "/_Game/General" + ".json",
-        //         data: new Array,
-        //     },
-        //     Colours: {
-        //         url: "_LwgData" + "/_Game/Colours" + ".json",
-        //         data: new Array,
-        //     },
-        //     Blink: {
-        //         url: "_LwgData" + "/_Game/Blink" + ".json",
-        //         data: new Array,
-        //     },
-        //     SelectLevel1: {
-        //         url: "_LwgData" + "/_SelectLevel/SelectLevel1" + ".json",
-        //         data: new Array,
-        //     }
-        // },
+        json: {
+            Clothes: {
+                url: `_LwgData/_DressingRoom/Clothes.json`,
+                data: new Array,
+            }
+        },
         // skeleton: {
         //     test: {
         //         url: 'Game/Skeleton/test.sk',

@@ -2139,6 +2139,9 @@ export module lwg {
         }
     }
 
+
+
+
     export module StorageAdmin {
         class admin {
             removeSelf(): void { }
@@ -2190,7 +2193,6 @@ export module lwg {
                     },
                     func(): void {
                         this['_func'] && this['_func']();
-                        console.log(this['_func']);
                     }
                 }
             }
@@ -2356,7 +2358,7 @@ export module lwg {
     export module DataAdmin {
         /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
         export class _Table {
-            /**一些通用的属性名称*/
+            /**一些通用的属性名称，可重写*/
             _property = {
                 name: 'name',
                 chName: 'chName',
@@ -2364,21 +2366,39 @@ export module lwg {
                 unlockWay: 'unlockWay',
                 conditionNum: 'conditionNum',
                 degreeNum: 'degreeNum',
-                compelet: 'compelet',
-                unlock: 'unlock',
-                have: 'have',
+                /**达到，取得，完成,解锁*/
+                Compelet: 'Compelet',
+                /**有奖励而没有领取*/
                 getAward: 'getAward',
-                versionUpdateTimes: 'versionUpdateTimes',
             };
+            /**解锁方式*/
+            _unlockWay = {
+                ads: 'ads',
+                gold: 'gold',
+                customs: 'free',
+                diamond: 'diamond',
+                free: 'free',
+            }
+            /**种类*/
+            _classify: any;
+            /**数据表名称*/
             _tableName: string = '';
+            /**表格数组*/
             _arr: Array<any> = [];
+            /**上个版本的表格*/
             _lastArr: Array<any> = [];
+            /**是否启用本地存储*/
             _localStorage: boolean = false;
+            /**表格中的List*/
+            _List: Laya.List;
+            /**表格中的Tap*/
+            _Tap: Laya.List;
             /**
-             * @param {string} dataName 在本地
+             * @param {string} tableName 在本地存储的名称
              * @param {Array<any>} arrUrl 数据表地址
+             * @param addPro 新增的表格属性
              * @param localStorage 是否存储在本地
-             * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
+             * @param proName 通过这个属性名称，检索一次每个对象，是一个所有对象都存在的属性名称，默认为'name'
              * @param lastVtableName 如果表格发生改变，对比上个版本的数据表将一些成果继承赋值
              */
             constructor(tableName?: string, arrUrl?: string, localStorage?: boolean, proName?: string, lastVtableName?: string) {
@@ -2394,15 +2414,24 @@ export module lwg {
                         if (Laya.Loader.getRes(arrUrl)) {
                             this._arr = Laya.Loader.getRes(arrUrl);
                         } else {
-                            console.log(arrUrl, '数据表不存在！');
+                            console.log(`${arrUrl}数据表不存在！`);
                         }
                     }
                 }
             }
+
+            private _refreshAndStorage(): void {
+                if (this._localStorage) {
+                    Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                }
+                if (this._List) {
+                    this._List.refresh();
+                }
+            }
+
             /**
              *拿到上个版本的完成情况
              * @param {string} lastVtableName 上个存储名
-             * @memberof _Table
              */
             _compareLastInfor(lastVtableName: string): void {
                 this._lastArr = this._getlastVersion(lastVtableName);
@@ -2411,14 +2440,8 @@ export module lwg {
                         const _lastelement = this._lastArr[i];
                         for (let j = 0; j < this._arr.length; j++) {
                             const element = this._arr[j];
-                            if (_lastelement[this._property.compelet]) {
-                                element[this._property.compelet] = true;
-                            }
-                            if (_lastelement[this._property.have]) {
-                                element[this._property.have] = true;
-                            }
-                            if (_lastelement[this._property.unlock]) {
-                                element[this._property.unlock] = true;
+                            if (_lastelement[this._property.Compelet]) {
+                                element[this._property.Compelet] = true;
                             }
                             if (_lastelement[this._property.getAward]) {
                                 element[this._property.getAward] = true;
@@ -2432,8 +2455,8 @@ export module lwg {
             }
 
             /**
-              * 查询前版本的表格
-              * @param lastVtableName 上个版本名称
+              * 查询以前版本的表格
+              * @param lastVtableName 以前版本名称
               */
             _getlastVersion(lastVtableName: string): Array<any> {
                 let dataArr: any = [];
@@ -2480,9 +2503,7 @@ export module lwg {
                         }
                     }
                 }
-                if (this._localStorage) {
-                    Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                }
+                this._refreshAndStorage();
                 return value;
             };
 
@@ -2551,15 +2572,13 @@ export module lwg {
                         }
                     }
                 }
-                if (this._localStorage) {
-                    Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                }
+                this._refreshAndStorage();
                 return arr;
             }
 
             /**
               * 通过degreeNum/conditionNum,设置完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
-              * @param calssName 商品种类
+              * @param classify 商品种类
               * @param name 商品名称
               * @param number 完成几次，不传则默认为1次
               * @param func 回调函数，可以在条件完成数次后执行某个步骤
@@ -2569,11 +2588,11 @@ export module lwg {
                 number = number == undefined ? 1 : number;
                 let degreeNum = this._getProperty(name, this._property.degreeNum);
                 let condition = this._getProperty(name, this._property.conditionNum);
-                let compelet = this._getProperty(name, this._property.compelet);
+                let compelet = this._getProperty(name, this._property.Compelet);
                 if (!compelet) {
                     if (condition <= degreeNum + number) {
                         this._setProperty(name, this._property.degreeNum, condition);
-                        this._setProperty(name, this._property.compelet, true);
+                        this._setProperty(name, this._property.Compelet, true);
                         chek = true;
                     } else {
                         this._setProperty(name, this._property.degreeNum, degreeNum + number);
@@ -2592,12 +2611,22 @@ export module lwg {
                 let bool: boolean = true;
                 for (let index = 0; index < this._arr.length; index++) {
                     const element = this._arr[index];
-                    if (!element[this._property.compelet]) {
+                    if (!element[this._property.Compelet]) {
                         bool = false;
                         return bool;
                     }
                 }
                 return bool;
+            }
+
+            /**
+             * 在表格中增加一个对象
+             * @param obj 增加的对象
+             * */
+            _addObject(obj: any): void {
+                // 必须拷贝
+                let _obj = Tools._ObjArray.objCopy(obj);
+                this._arr.push(_obj);
             }
         }
 
@@ -6342,7 +6371,7 @@ export module lwg {
               * @param obj 需要拷贝的对象
               */
             export function objCopy(obj: any) {
-                var copyObj = {};
+                var _copyObj = {};
                 for (const item in obj) {
                     if (obj.hasOwnProperty(item)) {
                         const element = obj[item];
@@ -6350,16 +6379,16 @@ export module lwg {
                             // 其中有一种情况是对某个对象值为数组的拷贝
                             if (Array.isArray(element)) {
                                 let arr1 = _Array.copy(element);
-                                copyObj[item] = arr1;
+                                _copyObj[item] = arr1;
                             } else {
                                 objCopy(element);
                             }
                         } else {
-                            copyObj[item] = element;
+                            _copyObj[item] = element;
                         }
                     }
                 }
-                return objCopy;
+                return _copyObj;
             }
         }
 

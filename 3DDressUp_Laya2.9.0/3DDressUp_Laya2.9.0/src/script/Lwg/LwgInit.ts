@@ -7,6 +7,7 @@ import { _Start } from "./_Start";
 import { _MakeClothes } from "./_MakeClothes";
 import { _MakeUp } from "./_MakeUp";
 import { _MakeTailor } from "./_MakeTailor";
+import { _DressingRoom } from "./_DressingRoom";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
 
@@ -34,6 +35,8 @@ export default class LwgInit extends _LwgInitScene {
             _MakeTailor: _MakeTailor,
             _MakeClothes: _MakeClothes,
             _MakeUp: _MakeUp,
+            _DressingRoom: _DressingRoom,
+
             // _Settle: _Settle,
             // _Victory: _Victory,
             // _Share: _Share,

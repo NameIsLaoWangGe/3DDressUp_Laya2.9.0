@@ -9,7 +9,7 @@ export module _MakeUp {
     export class MakeUp extends Admin._SceneBase {
         lwgOnStart(): void {
             // console.log(Laya.stage['_children'])
-            _Scene3D = _Res._list.scene3D.MakeUp.Scene;
+            // _Scene3D = _Res._list.scene3D.MakeUp.Scene;
             if (!_Scene3D.getComponent(MakeUp3D)) {
                 _Scene3D.addComponent(MakeUp3D);
             } else {

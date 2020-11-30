@@ -332,7 +332,7 @@ export module _MakeClothes {
         lwgButton(): void {
             this.Tex.btn();
             this._btnUp(this._ImgVar('BtnNext'), () => {
-                this._openScene('MakeUp', true, true);
+                this._openScene('DressingRoom', true, true);
             })
         }
         onStageMouseDown(e: Laya.Event): void {

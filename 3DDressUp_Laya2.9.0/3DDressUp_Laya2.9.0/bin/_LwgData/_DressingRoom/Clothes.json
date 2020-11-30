@@ -1,0 +1,65 @@
+{ 
+"RECORDS": 
+[
+  {
+    "index": 1,
+    "classify": "Dress",
+    "name": "diy_dress_001_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": true,
+    "reach": true
+  },
+  {
+    "index": 2,
+    "classify": "Dress",
+    "name": "diy_dress_002_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": false,
+    "reach": true
+  },
+  {
+    "index": 1,
+    "classify": "Top",
+    "name": "diy_top_001_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": false,
+    "reach": true
+  },
+  {
+    "index": 2,
+    "classify": "Top",
+    "name": "diy_top_002_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": false,
+    "reach": true
+  },
+  {
+    "index": 1,
+    "classify": "Bottoms",
+    "name": "diy_bottom_001_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": false,
+    "reach": true
+  },
+  {
+    "index": 2,
+    "classify": "Bottoms",
+    "name": "diy_bottom_002_final",
+    "unlockWay": "free",
+    "conditionNum": 5,
+    "degreeNum": 5,
+    "pitch": false,
+    "reach": true
+  }
+]
+}
