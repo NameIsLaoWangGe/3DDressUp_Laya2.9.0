@@ -1,5 +1,5 @@
 import ADManager, { TaT } from "../TJ/Admanager";
-import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, Gold, _SceneName, SceneAnimation } from "./Lwg";
+import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, Gold, _SceneName, SceneAnimation, Tools, Effects } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Res } from "./_PreLoad";
 import { _SelectLevel } from "./_SelectLevel";
@@ -17,6 +17,17 @@ export module _Start {
         // }
 
         lwgOnStart(): void {
+           
+
+            // let Img2 = new Laya.Image;
+            // Img2.width = Laya.stage.height;
+            // Img2.height = Laya.stage.width;
+            // Img2.skin = `Lwg/UI/ui_l_orthogon_orange.png`;
+            // Img2.pos(Laya.stage.width, Laya.stage.height);
+            // Tools._Node.changePivot(Img2, 0, Img1.height / 2);
+            // Img2.rotation = -140;
+            // Laya.stage.addChild(Img2);
+            // Img2.zOrder = 100;         
             // console.log(Admin._sceneControl)
             // console.log(Laya.stage['_children'])
             // let tex = Laya.stage.drawToTexture(this._Owner.width, this._Owner.height, 0, 0) as Laya.Texture;

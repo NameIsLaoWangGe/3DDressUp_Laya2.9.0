@@ -1099,7 +1099,7 @@
                         let originalY = element.y;
                         element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
-                        Animation2D.rotate(element, element.rotation, 0, time, delay * index);
+                        Animation2D.rotate(element, 0, time, delay * index);
                         Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
                             Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                         });
@@ -2538,6 +2538,48 @@
                     return Img;
                 }
                 _Particle._fallingVertical = _fallingVertical;
+                function _fallingVertical_Reverse(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    let fY = Img.y;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.04;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (!moveCaller.alpha) {
+                            acc += accelerated0;
+                            Img.y += (speed0 + acc);
+                        }
+                        if (!moveCaller.alpha && moveCaller.move) {
+                            if (Img.y - fY <= distance1) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.03;
+                            if (Img.alpha <= 0) {
+                                Laya.timer.clearAll(moveCaller);
+                                Img.removeSelf();
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._fallingVertical_Reverse = _fallingVertical_Reverse;
                 function _slowlyUp(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
                     let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
@@ -3300,16 +3342,12 @@
                 }), delayed);
             }
             Animation2D.leftRight_Shake = leftRight_Shake;
-            function rotate(node, Frotate, Erotate, time, delayed, func) {
-                node.rotation = Frotate;
-                if (!delayed) {
-                    delayed = 0;
-                }
+            function rotate(node, Erotate, time, delayed, func) {
                 Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
                     if (func) {
                         func();
                     }
-                }), delayed);
+                }), delayed ? delayed : 0);
             }
             Animation2D.rotate = rotate;
             function upDown_Overturn(node, time, func) {
@@ -5074,7 +5112,6 @@
                                         }
                                     }
                                 }
-                                Audio._playMusic();
                                 if (Admin._GuideControl.switch) {
                                     this._openScene(_SceneName.Guide, true, false, () => {
                                         LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
@@ -5533,7 +5570,7 @@
     let Execution = lwg.Execution;
     let Gold = lwg.Gold;
     let Setting = lwg.Setting;
-    let Audio = lwg.Audio;
+    let AudioAdmin = lwg.Audio;
     let Click = lwg.Click;
     let Color = lwg.Color;
     let Effects = lwg.Effects;
@@ -5648,10 +5685,6 @@
                     url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/MakeClothes.ls`,
                     Scene: null,
                 },
-                MakeUp: {
-                    url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
-                    Scene: null,
-                }
             },
             pic2D: {
                 Effects: "res/atlas/lwg/Effects.png",
@@ -6477,6 +6510,8 @@
             _Event["playAni"] = "_MakeTailor_playAni";
             _Event["scissorPlay"] = "_MakeTailor_scissorPlay";
             _Event["scissorStop"] = "_MakeTailor_scissorStop";
+            _Event["scissorRotation"] = "_MakeTailor_scissorRotation";
+            _Event["scissorSitu"] = "_MakeTailor_scissorSitu";
         })(_Event = _MakeTailor._Event || (_MakeTailor._Event = {}));
         class DottedLine extends DataAdmin._Table {
             constructor(Root, LineParent, OwnerScene) {
@@ -6526,6 +6561,7 @@
                     },
                     paly: () => {
                         TimerAdmin._clearAll([this.Ani]);
+                        Animation2D._clearAll([this.Ani]);
                         TimerAdmin._frameLoop(1, this.Ani, () => {
                             if (this._SceneImg('S2').rotation > this.Ani.range) {
                                 this.Ani.dir = 'up';
@@ -6545,15 +6581,14 @@
                     },
                     stop: () => {
                         TimerAdmin._frameOnce(60, this.Ani, () => {
-                            TimerAdmin._clearAll([this.Ani]);
                             let time = 10;
-                            let angel1 = (-this.Ani.range / 3 - this._SceneImg('S1').rotation) / time;
-                            let angel2 = (this.Ani.range / 3 - this._SceneImg('S2').rotation) / time;
-                            TimerAdmin._frameNumLoop(1, time, this.Ani, () => {
-                                this._SceneImg('S1').rotation += angel1;
-                                this._SceneImg('S2').rotation += angel2;
-                            });
+                            TimerAdmin._clearAll([this.Ani]);
+                            Animation2D._clearAll([this.Ani]);
+                            Animation2D.rotate(this._SceneImg('S1'), -this.Ani.range / 3, time);
+                            Animation2D.rotate(this._SceneImg('S2'), this.Ani.range / 3, time);
                         });
+                    },
+                    rotate: () => {
                     },
                     event: () => {
                         this._evReg(_Event.scissorPlay, () => {
@@ -6562,6 +6597,12 @@
                         this._evReg(_Event.scissorStop, () => {
                             this.Ani.stop();
                         });
+                        this._evReg(_Event.scissorSitu, () => {
+                            Animation2D.move_rotate(this._Owner, this.fRotation, this.fPoint, 200);
+                        });
+                        this._evReg(_Event.scissorRotation, (rotate) => {
+                            Animation2D.rotate(this.owner, rotate, 200);
+                        });
                     }
                 };
                 this.Move = {
@@ -6569,7 +6610,9 @@
                     diffP: null,
                 };
             }
-            lwgOnStart() {
+            lwgOnAwake() {
+                this.fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                this.fRotation = this._Owner.rotation;
             }
             lwgEvent() {
                 this.Ani.event();
@@ -6589,15 +6632,16 @@
             }
             lwgOnStageUp() {
                 this._evNotify(_Event.scissorStop);
+                this._evNotify(_Event.scissorSitu);
                 this.Move.touchP = null;
             }
             onTriggerEnter(other, _Owner) {
                 if (this.state == 'none' || this.state == other.owner.parent.name) {
                     if (!other['cut']) {
+                        other['cut'] = true;
                         this._evNotify(_Event.scissorPlay);
                         this._evNotify(_Event.scissorStop);
                         this.state = other.owner.parent.name;
-                        other['cut'] = true;
                         EventAdmin._notify(_Event.trigger, [other.owner]);
                     }
                 }
@@ -6626,17 +6670,73 @@
                         });
                     },
                     ani2: () => {
-                        let _caller = {};
-                        let p1 = new Laya.Point(0, 0);
-                        let p2 = new Laya.Point(Laya.stage.width, Laya.stage.height);
-                        TimerAdmin._frameNumLoop(1, 80, _caller, () => {
-                            p1.x += 10;
-                            p1.y += 10;
-                            p2.x -= 10;
-                            p2.y -= 10;
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
-                            Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
-                        });
+                        let num = 6;
+                        for (let index = 0; index < num; index++) {
+                            let moveY = 8 * index + 5;
+                            let p1 = new Laya.Point(-200, Laya.stage.height);
+                            let _caller = {};
+                            let funcL = () => {
+                                p1.x += 25;
+                                if (p1.x > Laya.stage.width) {
+                                    Laya.timer.clearAll(_caller);
+                                }
+                                p1.y -= moveY;
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                            };
+                            TimerAdmin._frameLoop(1, _caller, () => {
+                                funcL();
+                            });
+                            let p2 = new Laya.Point(Laya.stage.width + 200, Laya.stage.height);
+                            let _callerR = {};
+                            let funcR = () => {
+                                p2.x -= 30;
+                                if (p2.x < 0) {
+                                    Laya.timer.clearAll(_callerR);
+                                }
+                                p2.y -= moveY;
+                                Effects._Particle._fallingVertical(this._Owner, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                            };
+                            TimerAdmin._frameLoop(1, _callerR, () => {
+                                funcR();
+                            });
+                        }
+                    },
+                    ani3: () => {
+                        let len = Laya.stage.width;
+                        let _height = Laya.stage.height * 2.5;
+                        let Img = new Laya.Image;
+                        Img.width = 100;
+                        Img.height = _height;
+                        Img.rotation = 40;
+                        Tools._Node.changePivot(Img, 0, _height / 2);
+                        Img.pos(0, 0);
+                        Laya.stage.addChild(Img);
+                        Img.zOrder = 1000;
+                        let num = 20;
+                        for (let index = 0; index < num; index++) {
+                            let p1 = new Laya.Point(0, Img.height / num * index);
+                            let p2 = new Laya.Point(Laya.stage.width, Img.height / num * index);
+                            let _caller = {};
+                            let func = () => {
+                                p1.x += 40;
+                                if (p1.x > len) {
+                                    Laya.timer.clearAll(_caller);
+                                }
+                                p2.x -= 50;
+                                if (p2.x > len) {
+                                    Laya.timer.clearAll(_caller);
+                                }
+                                if (index % 2 == 0) {
+                                    Effects._Particle._fallingVertical(Img, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                                }
+                                else {
+                                    Effects._Particle._fallingVertical_Reverse(Img, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [-100, -200], [-0.8, -1.5], [-0.05, -0.1]);
+                                }
+                            };
+                            TimerAdmin._frameNumLoop(1, 50, _caller, () => {
+                                func();
+                            });
+                        }
                     }
                 };
             }
@@ -6657,25 +6757,26 @@
                     if (value) {
                         this.DottedLineControl.removeCloth(Dotted.parent.name);
                         if (this.DottedLineControl._checkAllCompelet()) {
-                            this.completeAni.ani1();
+                            Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
+                            this.completeAni.ani2();
                         }
                     }
                     let Parent = Dotted.parent;
                     let gPos = Parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
                     if (Dotted.name == 'A') {
                         if (this._ImgVar('Scissor').x <= gPos.x) {
-                            this._ImgVar('Scissor').rotation = Dotted.rotation;
+                            this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
                         }
                         else {
-                            this._ImgVar('Scissor').rotation = 180 + Dotted.rotation;
+                            this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation]);
                         }
                     }
                     else {
                         if (this._ImgVar('Scissor').y >= gPos.y) {
-                            this._ImgVar('Scissor').rotation = Dotted.rotation;
+                            this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
                         }
                         else {
-                            this._ImgVar('Scissor').rotation = 180 + Dotted.rotation;
+                            this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation]);
                         }
                     }
                 });
@@ -6801,7 +6902,7 @@
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = true;
-    GameConfig.physicsDebug = false;
+    GameConfig.physicsDebug = true;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 

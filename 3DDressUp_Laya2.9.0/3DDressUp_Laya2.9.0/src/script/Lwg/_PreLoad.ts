@@ -7,10 +7,10 @@ export module _Res {
                 url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/MakeClothes.ls`,
                 Scene: null as Laya.Scene3D,
             },
-            MakeUp: {
-                url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
-                Scene: null as Laya.Scene3D,
-            }
+            // MakeUp: {
+            //     url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
+            //     Scene: null as Laya.Scene3D,
+            // }
         },
         // prefab3D: {
         //     Level1: {
@@ -45,10 +45,10 @@ export module _Res {
                 url: `_Lwg3D/_Scene/LayaScene_MakeClothes/Conventional/Assets/13213/qunzi1.jpg`,
                 texture2D: null as Laya.Texture2D,
             },
-            Figure2: {
-                url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Sprite/repeat_pattern_04 _9681.jpg`,
-                texture2D: null as Laya.Texture2D,
-            },
+            // Figure2: {
+            //     url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/Assets/Reference/Sprite/repeat_pattern_04 _9681.jpg`,
+            //     texture2D: null as Laya.Texture2D,
+            // },
             // Figure3: {
             //     url: 'Game/UI/MakeClothes/figure_03.png',
             //     texture2D: null as Laya.Texture2D,

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
-    "selecteID":7,
+    "selectedBox":30,
+    "selecteID":40,
     "searchKey":"Scene",
     "referenceLines":[
         ],
@@ -4865,7 +4865,7 @@
                     "switchAble":true,
                     "searchKey":"CircleCollider",
                     "removeAble":true,
-                    "props":{"y":40,"x":54,"radius":8,"label":"scissor","isSensor":true},
+                    "props":{"y":37,"x":50,"radius":12,"label":"scissor","isSensor":true},
                     "nodeParent":30,
                     "label":"CircleCollider",
                     "isDirectory":false,

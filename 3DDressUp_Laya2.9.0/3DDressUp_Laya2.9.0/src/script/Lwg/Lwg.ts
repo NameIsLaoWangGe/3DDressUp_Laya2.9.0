@@ -1383,7 +1383,7 @@ export module lwg {
                     let originalY = element.y;
                     element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                     element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
-                    Animation2D.rotate(element, element.rotation, 0, time, delay * index);
+                    Animation2D.rotate(element, 0, time, delay * index);
                     Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
                         Tools._Node.changePivot(element, originalPovitX, originalPovitY);
                     });
@@ -3028,7 +3028,7 @@ export module lwg {
               * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
               * @param zOrder 层级，默认为0
               * @param distance 移动距离，区间[a,b]，在其中随机移动一定的距离后消失,默认[100,300]
-              * @param speed 吸入速度区间[a,b],默认[4,8]
+              * @param speed 速度区间[a,b],默认[4,8]
               * @param accelerated 加速度区间[a,b],默认[0.25, 0.45];
               */
             export function _fallingVertical(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
@@ -3072,7 +3072,62 @@ export module lwg {
                 })
                 return Img;
             }
-
+            /**
+              * 发射一个垂直向上的粒子和 _fallingVertical相反
+              * @param parent 父节点
+              * @param centerPoint 中心点
+              * @param sectionWH 以中心点为中心的矩形生成范围[w,h]
+              * @param width 粒子的宽度区间[a,b]
+              * @param height 粒子的高度区间[a,b],如果为空，这高度和宽度一样
+              * @param rotation 角度旋转[a,b]
+              * @param urlArr 图片地址集合，默认为框架中随机的样式
+              * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
+              * @param zOrder 层级，默认为0
+              * @param distance 移动距离，区间[a,b]，在其中随机移动一定的距离后消失,默认[100,300]
+              * @param speed 速度区间[a,b],默认[4,8]
+              * @param accelerated 加速度区间[a,b],默认[0.25, 0.45];
+              */
+            export function _fallingVertical_Reverse(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
+                let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                let acc = 0;
+                let moveCaller = {
+                    alpha: true,
+                    move: false,
+                    vinish: false,
+                };
+                Img['moveCaller'] = moveCaller;
+                let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                let fY = Img.y;
+                TimerAdmin._frameLoop(1, moveCaller, () => {
+                    if (Img.alpha < 1 && moveCaller.alpha) {
+                        Img.alpha += 0.04;
+                        if (Img.alpha >= 1) {
+                            moveCaller.alpha = false;
+                            moveCaller.move = true;
+                        }
+                    }
+                    if (!moveCaller.alpha) {
+                        acc += accelerated0;
+                        Img.y += (speed0 + acc);
+                    }
+                    if (!moveCaller.alpha && moveCaller.move) {
+                        if (Img.y - fY <= distance1) {
+                            moveCaller.move = false;
+                            moveCaller.vinish = true;
+                        }
+                    }
+                    if (moveCaller.vinish) {
+                        Img.alpha -= 0.03;
+                        if (Img.alpha <= 0) {
+                            Laya.timer.clearAll(moveCaller);
+                            Img.removeSelf();
+                        }
+                    }
+                })
+                return Img;
+            }
             /**
              * 发射一个徐徐向上的粒子，类似于蒸汽上升，烟雾上升，光点上升，气球上升
              * @param parent 父节点
@@ -4025,7 +4080,7 @@ export module lwg {
     /**动画模块*/
     export module Animation2D {
         /**
-        * @export 清理对象上的所有计时器
+        * @export 清理对象上的所有Tween动画
         * @param {Array<any>} arr 清理的数组
         */
         export function _clearAll(arr: Array<any>): void {
@@ -4094,16 +4149,12 @@ export module lwg {
           * @param delayed 延时时间
           * @param func 回调函数
         */
-        export function rotate(node, Frotate: number, Erotate: number, time: number, delayed?: number, func?: Function): void {
-            node.rotation = Frotate;
-            if (!delayed) {
-                delayed = 0;
-            }
+        export function rotate(node, Erotate: number, time: number, delayed?: number, func?: Function): void {
             Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
                 if (func) {
                     func();
                 }
-            }), delayed);
+            }), delayed ? delayed : 0);
         }
 
         /**
@@ -6675,7 +6726,7 @@ export module lwg {
                                     }
                                 }
                             }
-                            Audio._playMusic();
+                            // Audio._playMusic();
                             // 有新手引导则进入新手引导，没有
                             if (Admin._GuideControl.switch) {
                                 this._openScene(_SceneName.Guide, true, false, () => {
@@ -7167,7 +7218,7 @@ export let TimerAdmin = lwg.TimerAdmin;
 export let Execution = lwg.Execution;
 export let Gold = lwg.Gold;
 export let Setting = lwg.Setting;
-export let Audio = lwg.Audio;
+export let AudioAdmin = lwg.Audio;
 export let Click = lwg.Click;
 export let Color = lwg.Color;
 export let Effects = lwg.Effects;
