@@ -25,13 +25,17 @@ export module _Res {
         // mesh3D: {},
         // material: {},
         prefab2D: {
-            // LwgGold: {
-            //     url: 'Prefab/LwgGold.json',
-            //     prefab: new Laya.Prefab,
-            // },
-            BtnCompelet: {
-                url: 'Prefab/BtnCompelet.json',
-                prefab: null as Laya.Prefab,
+            BtnBack: {
+                url: 'Prefab/BtnBack.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_dress_001_final: {
+                url: 'Prefab/diy_dress_001_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_dress_002_final: {
+                url: 'Prefab/diy_dress_002_final.json',
+                prefab: new Laya.Prefab,
             },
         },
         texture: {

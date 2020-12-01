@@ -1100,9 +1100,9 @@
                         element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.rotate(element, 0, time, delay * index);
-                        Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
+                        Animation2D.move(element, originalX, originalY, time, () => {
                             Tools._Node.changePivot(element, originalPovitX, originalPovitY);
-                        });
+                        }, delay * index);
                     }
                 }
                 sumDelay = Scene.numChildren * delay + time + 200;
@@ -1222,14 +1222,14 @@
                 _SceneName["Compound"] = "Compound";
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
             Admin._PreLoadCutIn = {
-                openName: null,
+                openScene: null,
                 closeName: null,
                 func: null,
                 zOrder: null,
             };
             function _preLoadOpenScene(openName, closeName, func, zOrder) {
                 _openScene(_SceneName.PreLoadCutIn, closeName);
-                Admin._PreLoadCutIn.openName = openName;
+                Admin._PreLoadCutIn.openScene = openName;
                 Admin._PreLoadCutIn.closeName = closeName;
                 Admin._PreLoadCutIn.func = func;
                 Admin._PreLoadCutIn.zOrder = zOrder;
@@ -2105,6 +2105,20 @@
                         return any;
                     }
                 }
+                _getArrByClassify(classify) {
+                    if (!this[`${classify}Arr`]) {
+                        this[`${classify}Arr`] = [];
+                        for (const key in this._arr) {
+                            if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                                const element = this._arr[key];
+                                if (element[this._property.classify] == classify) {
+                                    this[`${classify}Arr`].push(element);
+                                }
+                            }
+                        }
+                    }
+                    return this[`${classify}Arr`];
+                }
                 _getPropertyArr(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
@@ -2168,25 +2182,51 @@
                     return bool;
                 }
                 get _pitchClassify() {
-                    return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                    if (!this[`${this._tableName}/pitchClassify`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/pitchClassify`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/pitchClassify`];
+                    }
                 }
                 ;
                 set _pitchClassify(str) {
                     if (this._List) {
                         this._List.refresh();
                     }
-                    Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                    this[`${this._tableName}/pitchClassify`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                    }
                 }
                 ;
                 get _pitchName() {
-                    return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                    if (!this[`${this._tableName}/_pitchName`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_pitchName`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_pitchName`];
+                    }
                 }
                 ;
                 set _pitchName(str) {
                     if (this._List) {
                         this._List.refresh();
                     }
-                    Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                    this[`${this._tableName}/_pitchName`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                    }
                 }
                 ;
                 _setPitch(name) {
@@ -2393,6 +2433,13 @@
                 _SkinUrl["\u661F\u661F5"] = "Lwg/Effects/star5.png";
                 _SkinUrl["\u661F\u661F6"] = "Lwg/Effects/star6.png";
                 _SkinUrl["\u661F\u661F7"] = "Lwg/Effects/star7.png";
+                _SkinUrl["\u661F\u661F8"] = "Lwg/Effects/star8.png";
+                _SkinUrl["\u83F1\u5F621"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F622"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F623"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u77E9\u5F621"] = "Lwg/Effects/rectangle1.png";
+                _SkinUrl["\u77E9\u5F622"] = "Lwg/Effects/rectangle2.png";
+                _SkinUrl["\u77E9\u5F623"] = "Lwg/Effects/rectangle3.png";
                 _SkinUrl["\u96EA\u82B11"] = "Lwg/Effects/xuehua1.png";
                 _SkinUrl["\u53F6\u5B501"] = "Lwg/Effects/yezi1.png";
                 _SkinUrl["\u5706\u5F62\u53D1\u51491"] = "Lwg/Effects/yuanfaguang.png";
@@ -3084,7 +3131,7 @@
                         if (index == posArray.length + 1) {
                             targetXY = [posArray[0][0], posArray[0][1]];
                         }
-                        Animation2D.move_Simple(Img, Img.x, Img.y, targetXY[0], targetXY[1], time, 0, () => {
+                        Animation2D.move(Img, targetXY[0], targetXY[1], time, () => {
                             index++;
                             if (index == posArray.length) {
                                 index = 0;
@@ -3659,10 +3706,10 @@
                 }), delayed);
             }
             Animation2D.bomb_LeftRight = bomb_LeftRight;
-            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation1, time1, time2, delayed, func) {
+            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation, time1, time2, delayed, func) {
                 node.scale(0, 0);
                 node.alpha = firstAlpha;
-                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                             Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
@@ -3736,16 +3783,14 @@
                 }), delayed);
             }
             Animation2D.swell_shrink = swell_shrink;
-            function move_Simple(node, fX, fY, targetX, targetY, time, delayed, func, ease) {
-                node.x = fX;
-                node.y = fY;
+            function move(node, targetX, targetY, time, func, delayed, ease) {
                 Laya.Tween.to(node, { x: targetX, y: targetY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
                     }
                 }), delayed ? delayed : 0);
             }
-            Animation2D.move_Simple = move_Simple;
+            Animation2D.move = move;
             function move_Deform_X(node, firstX, firstR, targetX, scaleX, scaleY, time, delayed, func) {
                 node.alpha = 0;
                 node.x = firstX;
@@ -5133,9 +5178,9 @@
                         Laya.timer.once(this.lwgAllComplete(), this, () => {
                             Admin._SceneControl[LwgPreLoad._loadType] = this._Owner;
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
-                                if (Admin._PreLoadCutIn.openName) {
+                                if (Admin._PreLoadCutIn.openScene) {
                                     console.log('预加载完毕开始打开界面！');
-                                    Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.closeName, () => {
+                                    Admin._openScene(Admin._PreLoadCutIn.openScene, Admin._PreLoadCutIn.closeName, () => {
                                         Admin._PreLoadCutIn.func;
                                         Admin._closeScene(LwgPreLoad._loadType);
                                     }, Admin._PreLoadCutIn.zOrder);
@@ -5488,14 +5533,14 @@
                     sp.y = Laya.stage.height / 2;
                     sp.zOrder = 50;
                     if (Execution._ExecutionNode) {
-                        Animation2D.move_Simple(sp, sp.x, sp.y, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, 100, f => {
-                            Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
+                        Animation2D.move(sp, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, () => {
+                            Animation2D.fadeOut(sp, 1, 0, 200, 0, () => {
                                 Animation2D.upDwon_Shake(Execution._ExecutionNode, 10, 80, 0, null);
                                 if (func) {
                                     func();
                                 }
                             });
-                        });
+                        }, 100);
                     }
                 }));
             }
@@ -5732,9 +5777,17 @@
                 MakeClothes: `res/atlas/Game/UI/MakeClothes.png`,
             },
             prefab2D: {
-                BtnCompelet: {
-                    url: 'Prefab/BtnCompelet.json',
-                    prefab: null,
+                BtnBack: {
+                    url: 'Prefab/BtnBack.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_dress_001_final: {
+                    url: 'Prefab/diy_dress_001_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_dress_002_final: {
+                    url: 'Prefab/diy_dress_002_final.json',
+                    prefab: new Laya.Prefab,
                 },
             },
             texture: {},
@@ -5805,7 +5858,7 @@
             lwgStepComplete() {
             }
             lwgAllComplete() {
-                switch (Admin._PreLoadCutIn.openName) {
+                switch (Admin._PreLoadCutIn.openScene) {
                     case 'MakeClothes':
                         Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                         break;
@@ -6547,35 +6600,27 @@
         let _Event;
         (function (_Event) {
             _Event["trigger"] = "_MakeTailor_trigger";
-            _Event["completeAni"] = "_MakeTailor_completeAni";
+            _Event["completeEffc"] = "_MakeTailor_completeAni";
+            _Event["changeClothes"] = "_MakeTailor_changeClothes";
+            _Event["scissorAppear"] = "_MakeTailor_scissorAppear";
             _Event["scissorPlay"] = "_MakeTailor_scissorPlay";
             _Event["scissorStop"] = "_MakeTailor_scissorStop";
             _Event["scissorRotation"] = "_MakeTailor_scissorRotation";
             _Event["scissorSitu"] = "_MakeTailor_scissorSitu";
         })(_Event = _MakeTailor._Event || (_MakeTailor._Event = {}));
-        class DottedLine extends DataAdmin._Table {
-            constructor(LineParent, OwnerScene) {
-                super();
-                this.LineParent = LineParent;
-                this.OwnerScene = OwnerScene;
-                for (let index = 0; index < this.LineParent.numChildren; index++) {
-                    const Line = this.LineParent.getChildAt(index);
-                    if (Line.numChildren > 0) {
-                        let data = {};
-                        data['Line'] = Line;
-                        data[this._property.name] = Line.name;
-                        data[this._property.conditionNum] = Line.numChildren;
-                        data[this._property.degreeNum] = 0;
-                        this._arr.push(data);
-                    }
-                }
-            }
-        }
-        _MakeTailor.DottedLine = DottedLine;
         class _Data extends DataAdmin._Table {
+            constructor() {
+                super(...arguments);
+                this._classify = {
+                    Dress: 'Dress',
+                    Top: 'Top',
+                    Bottoms: 'Bottoms',
+                };
+            }
             static _Ins() {
                 if (!this.ins) {
                     this.ins = new _Data('DIY_Data', _Res._list.json.Clothes.url);
+                    this.ins._pitchClassify = this.ins._classify.Dress;
                 }
                 return this.ins;
             }
@@ -6584,7 +6629,6 @@
         class _Scissor extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
-                this.state = 'none';
                 this.Ani = {
                     shearSpeed: 4,
                     range: 40,
@@ -6592,6 +6636,12 @@
                     dirType: {
                         up: 'up',
                         down: 'down',
+                    },
+                    appear: () => {
+                        let time = 500;
+                        Animation2D.move_rotate(this._Owner, 720, this._fPoint, time, 0, () => {
+                            this._Owner.rotation = 0;
+                        });
                     },
                     paly: () => {
                         TimerAdmin._clearAll([this.Ani]);
@@ -6623,6 +6673,9 @@
                         });
                     },
                     event: () => {
+                        this._evReg(_Event.scissorAppear, () => {
+                            this.Ani.appear();
+                        });
                         this._evReg(_Event.scissorPlay, () => {
                             this.Ani.paly();
                         });
@@ -6630,9 +6683,7 @@
                             this.Ani.stop();
                         });
                         this._evReg(_Event.scissorSitu, () => {
-                            Animation2D.move_rotate(this._Owner, this._fRotation + 360, this._fPoint, 600, 0, () => {
-                                this._evNotify(_Event.completeAni);
-                            });
+                            Animation2D.move_rotate(this._Owner, this._fRotation + 360, this._fPoint, 600, 0);
                         });
                         this._evReg(_Event.scissorRotation, (rotate) => {
                             TimerAdmin._clearAll([this._Owner]);
@@ -6655,6 +6706,10 @@
                     touchP: null,
                     diffP: null,
                 };
+                this.state = 'none';
+            }
+            lwgOnAwake() {
+                this._Owner.x = Laya.stage.width + 500;
             }
             lwgEvent() {
                 this.Ani.event();
@@ -6697,13 +6752,87 @@
             lwgButton() {
                 this._btnUp(this._Owner, () => {
                     _Data._Ins()._setPitch(this._Owner['_dataSource'][_Data._Ins()._property.name]);
+                    this._evNotify(_Event.changeClothes);
                 }, null);
             }
         }
         class MakeTailor extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.completeAni = {
+                this.DLine = {
+                    Data: new DataAdmin._Table(),
+                    getClothesArr: () => {
+                        if (!this[`DLCloArr`]) {
+                            this[`DLCloArr`] = [];
+                            let classArr = _Data._Ins()._arr;
+                            for (let index = 0; index < classArr.length; index++) {
+                                let clo = Tools._Node.createPrefab(_Res._list.prefab2D[`${classArr[index]['name']}`]['prefab']);
+                                this[`DLCloArr`].push(clo);
+                            }
+                        }
+                        return this[`DLCloArr`];
+                    },
+                    Clothes: null,
+                    LineParent: null,
+                    setData: () => {
+                        this.DLine.Data._arr = [];
+                        for (let index = 0; index < this.DLine.LineParent.numChildren; index++) {
+                            const Line = this.DLine.LineParent.getChildAt(index);
+                            if (Line.numChildren > 0) {
+                                let data = {};
+                                data['Line'] = Line;
+                                data[this.DLine.Data._property.name] = Line.name;
+                                data[this.DLine.Data._property.conditionNum] = Line.numChildren;
+                                data[this.DLine.Data._property.degreeNum] = 0;
+                                this.DLine.Data._arr.push(data);
+                            }
+                        }
+                    },
+                    changeClothes: () => {
+                        let clothesArr = this.DLine.getClothesArr();
+                        let name = _Data._Ins()._pitchName ? _Data._Ins()._pitchName : clothesArr[0]['name'];
+                        for (let index = 0; index < clothesArr.length; index++) {
+                            const element = clothesArr[index];
+                            if (element.name == name) {
+                                this._Owner.addChild(element);
+                                this.DLine.Clothes = element;
+                                element.zOrder = 20;
+                                this.DLine.LineParent = element.getChildByName('LineParent');
+                                this.DLine.setData();
+                                return;
+                            }
+                            else {
+                                element.removeSelf();
+                            }
+                        }
+                    },
+                };
+                this.Navigation = {
+                    appear: () => {
+                        let time = 500;
+                        let delay = 800;
+                        Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width - this._ImgVar('Navigation').width - 80, 0, time, () => {
+                            Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width - this._ImgVar('Navigation').width, 0, time / 3, () => {
+                                this._ImgVar('BtnChoose').visible = true;
+                                Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, 1.1, 0, time / 5, time / 5 / 2);
+                            });
+                        }, delay);
+                    },
+                    vinish: () => {
+                        let time = 400;
+                        let delay = 100;
+                        Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, time / 2, delay, () => {
+                            this._evNotify(_Event.scissorAppear);
+                            Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width + 500, 0, time);
+                        });
+                    },
+                    btn: () => {
+                        this._btnUp(this._ImgVar('BtnChoose'), () => {
+                            this.Navigation.vinish();
+                        });
+                    }
+                };
+                this.completeEffc = {
                     ani1: () => {
                         this._AniVar('complete').play(0, false);
                         let _caller = {};
@@ -6776,10 +6905,10 @@
                                     Laya.timer.clearAll(_caller);
                                 }
                                 if (index % 2 == 0) {
-                                    Effects._Particle._fallingVertical(Img, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
+                                    Effects._Particle._fallingVertical(Img, new Laya.Point(p1.x, p1.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.星星8], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [100, 200], [0.8, 1.5], [0.05, 0.1]);
                                 }
                                 else {
-                                    Effects._Particle._fallingVertical_Reverse(Img, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.花2], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [-100, -200], [-0.8, -1.5], [-0.05, -0.1]);
+                                    Effects._Particle._fallingVertical_Reverse(Img, new Laya.Point(p2.x, p2.y), [0, 0], null, null, [0, 360], [Effects._SkinUrl.星星8], [[255, 222, 0, 1], [255, 24, 0, 1]], null, [-100, -200], [-0.8, -1.5], [-0.05, -0.1]);
                                 }
                             };
                             TimerAdmin._frameNumLoop(2, 50, _caller, () => {
@@ -6790,11 +6919,11 @@
                 };
             }
             lwgOnAwake() {
-                this.DLineControl = new DottedLine(this._ImgVar('LineParent'), this._Owner);
                 this._ImgVar('Scissor').addComponent(_Scissor);
                 _Data._Ins()._List = this._ListVar('List');
                 _Data._Ins()._List.selectEnable = true;
                 _Data._Ins()._List.vScrollBarSkin = "";
+                _Data._Ins()._arr = _Data._Ins()._getArrByClassify(_Data._Ins()._classify.Dress);
                 _Data._Ins()._List.array = _Data._Ins()._arr;
                 _Data._Ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
                     let data = Cell.dataSource;
@@ -6814,25 +6943,34 @@
                 });
             }
             lwgAdaptive() {
-                this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
+                this._ImgVar('Navigation').x = Laya.stage.width + 500;
+                this._ImgVar('BtnChoose').visible = false;
+            }
+            lwgOpenAniAfter() {
+                this.Navigation.appear();
+            }
+            lwgOnStart() {
+                this.DLine.changeClothes();
             }
             lwgEvent() {
-                this._evReg(_Event.completeAni, () => {
-                    this.completeAni.ani3();
+                this._evReg(_Event.changeClothes, () => {
+                    this.DLine.changeClothes();
                 });
                 this._evReg(_Event.trigger, (Dotted) => {
-                    let value = this.DLineControl._checkCondition(Dotted.parent.name);
+                    let value = this.DLine.Data._checkCondition(Dotted.parent.name);
                     Dotted.visible = false;
                     if (value) {
-                        let Cloth = this._ImgVar('Root').getChildByName(`Cloth${Dotted.parent.name.substr(4)}`);
-                        let ani = this._Owner[`ani${Dotted.parent.name.substr(4)}`];
-                        ani.play(0, false);
-                        ani.on(Laya.Event.COMPLETE, this, () => {
-                            Cloth.removeSelf();
-                        });
-                        if (this.DLineControl._checkAllCompelet()) {
-                            Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
+                        let Cloth = this.DLine.Clothes.getChildByName(`Cloth${Dotted.parent.name.substr(4)}`);
+                        Cloth.removeSelf();
+                        if (this.DLine.Data._checkAllCompelet()) {
+                            Tools._Node.removeAllChildren(this.DLine.LineParent);
                             this._evNotify(_Event.scissorSitu);
+                            TimerAdmin._frameOnce(60, this, () => {
+                                this._evNotify(_Event.completeEffc);
+                            });
+                            TimerAdmin._frameOnce(240, this, () => {
+                                this._openScene('MakeClothes', true, true);
+                            });
                         }
                     }
                     let gPos = Dotted.parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
@@ -6853,11 +6991,12 @@
                         }
                     }
                 });
+                this._evReg(_Event.completeEffc, () => {
+                    this.completeEffc.ani3();
+                });
             }
             lwgButton() {
-                this._btnUp(this._ImgVar('BtnComplete'), () => {
-                    this._openScene('MakeClothes', true, true);
-                });
+                this.Navigation.btn();
             }
         }
         _MakeTailor.MakeTailor = MakeTailor;

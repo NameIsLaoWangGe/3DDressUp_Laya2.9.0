@@ -45,7 +45,7 @@ export module _PreLoadCutIn {
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {
-            switch (Admin._PreLoadCutIn.openName) {
+            switch (Admin._PreLoadCutIn.openScene) {
                 case 'MakeClothes':
                     Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                     break;

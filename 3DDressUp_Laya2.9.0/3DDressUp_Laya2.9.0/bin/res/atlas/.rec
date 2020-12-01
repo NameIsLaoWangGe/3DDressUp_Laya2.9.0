@@ -46,9 +46,9 @@ D Game/Skeleton
 D Game/UI
 D Game/Voice
 D Lwg/Effects
-P 479E26FC aixin1.png
-P D31680DB aixin2.png
-P DBA95F56 aixin3.png
+P 50FCB712 aixin1.png
+P C35F44EB aixin2.png
+P 6DADE129 aixin3.png
 P 03F236DC cir_black.png
 P EBB4CAAE cir_blue.png
 P E694A5F0 cir_bluish.png
@@ -69,6 +69,12 @@ P BA1DC9D1 hua1.png
 P B2F649D2 hua2.png
 P 11BBE783 hua3.png
 P 28BAE417 hua4.png
+P 2D05CD52 rectangle1.png
+P 585776F5 rectangle2.png
+P AF688011 rectangle3.png
+P 8600E0CA rhombus1.png
+P 20855C5C rhombus2.png
+P B2AFECC6 rhombus3.png
 P DA95B77D star1.png
 P CA15C6E9 star2.png
 P 2B464813 star3.png
@@ -76,6 +82,7 @@ P B1AE5A72 star4.png
 P 1292F90D star5.png
 P 8FC6C14D star6.png
 P A9BD8825 star7.png
+P 6E81E2AB star8.png
 P D474AF7E star_black.png
 P 325DC547 star_blue.png
 P D1775015 star_bluish.png

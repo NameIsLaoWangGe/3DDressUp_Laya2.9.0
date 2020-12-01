@@ -1519,10 +1519,10 @@ export module lwg {
         }
         /**预加载完毕后，需要打开的场景信息*/
         export let _PreLoadCutIn = {
-            openName: null,
-            closeName: null,
-            func: null,
-            zOrder: null,
+            openScene: null as string,
+            closeName: null as string,
+            func: null as Function,
+            zOrder: null as number,
         }
         /**
          *预加载后打开场景，预加载内容将在预加载界面按照界面名称执行
@@ -1533,7 +1533,7 @@ export module lwg {
          */
         export function _preLoadOpenScene(openName: string, closeName: string, func?: Function, zOrder?: number) {
             _openScene(_SceneName.PreLoadCutIn, closeName);
-            _PreLoadCutIn.openName = openName;
+            _PreLoadCutIn.openScene = openName;
             _PreLoadCutIn.closeName = closeName;
             _PreLoadCutIn.func = func;
             _PreLoadCutIn.zOrder = zOrder;
@@ -2549,6 +2549,27 @@ export module lwg {
                     return any;
                 }
             }
+
+            /**
+             * 获取某种品类中所有的对象
+             * @param {string} classify
+             * @memberof _Table
+             */
+            _getArrByClassify(classify: string): Array<any> {
+                if (!this[`${classify}Arr`]) {
+                    this[`${classify}Arr`] = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == classify) {
+                                this[`${classify}Arr`].push(element);
+                            }
+                        }
+                    }
+                }
+                return this[`${classify}Arr`];
+            }
+
             /**
              * 通过某个属性名称和值获取所有复合条件的属性，可以查找出某种品类
              * @param {string} proName 属性名
@@ -2633,23 +2654,46 @@ export module lwg {
             }
             /**设置选中类别*/
             get _pitchClassify(): string {
-                return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                if (!this[`${this._tableName}/pitchClassify`]) {
+                    if (this._localStorage) {
+                        return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                    } else {
+                        return this[`${this._tableName}/pitchClassify`] = null;
+                    }
+                } else {
+                    return this[`${this._tableName}/pitchClassify`];
+                }
             };
             set _pitchClassify(str: string) {
                 if (this._List) {
                     this._List.refresh();
                 }
-                Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                this[`${this._tableName}/pitchClassify`] = str;
+                if (this._localStorage) {
+                    Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                }
             };
             /**设置选中名称*/
             get _pitchName(): string {
-                return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+
+                if (!this[`${this._tableName}/_pitchName`]) {
+                    if (this._localStorage) {
+                        return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                    } else {
+                        return this[`${this._tableName}/_pitchName`] = null;
+                    }
+                } else {
+                    return this[`${this._tableName}/_pitchName`];
+                }
             };
             set _pitchName(str: string) {
                 if (this._List) {
                     this._List.refresh();
                 }
-                Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                this[`${this._tableName}/_pitchName`] = str;
+                if (this._localStorage) {
+                    Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                }
             };
 
             _setPitch(name: string): void {
@@ -2897,6 +2941,13 @@ export module lwg {
             星星5 = "Lwg/Effects/star5.png",
             星星6 = "Lwg/Effects/star6.png",
             星星7 = "Lwg/Effects/star7.png",
+            星星8 = "Lwg/Effects/star8.png",
+            菱形1 = "Lwg/Effects/rhombus1.png",
+            菱形2 = "Lwg/Effects/rhombus1.png",
+            菱形3 = "Lwg/Effects/rhombus1.png",
+            矩形1 = "Lwg/Effects/rectangle1.png",
+            矩形2 = "Lwg/Effects/rectangle2.png",
+            矩形3 = "Lwg/Effects/rectangle3.png",
             雪花1 = "Lwg/Effects/xuehua1.png",
             叶子1 = "Lwg/Effects/yezi1.png",
             圆形发光1 = "Lwg/Effects/yuanfaguang.png",
@@ -4724,10 +4775,10 @@ export module lwg {
          * @param delayed 延时时间
          * @param func 完成后的回调
          */
-        export function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation1, time1, time2, delayed?: number, func?: Function): void {
+        export function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation, time1, time2, delayed?: number, func?: Function): void {
             node.scale(0, 0);
             node.alpha = firstAlpha;
-            Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
                 Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
 
@@ -6778,9 +6829,9 @@ export module lwg {
                         Admin._SceneControl[_loadType] = this._Owner;
                         // 页面前
                         if (_loadType !== Admin._SceneName.PreLoad) {
-                            if (Admin._PreLoadCutIn.openName) {
+                            if (Admin._PreLoadCutIn.openScene) {
                                 console.log('预加载完毕开始打开界面！')
-                                Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.closeName, () => {
+                                Admin._openScene(Admin._PreLoadCutIn.openScene, Admin._PreLoadCutIn.closeName, () => {
                                     Admin._PreLoadCutIn.func;
                                     Admin._closeScene(_loadType);
                                 }, Admin._PreLoadCutIn.zOrder);

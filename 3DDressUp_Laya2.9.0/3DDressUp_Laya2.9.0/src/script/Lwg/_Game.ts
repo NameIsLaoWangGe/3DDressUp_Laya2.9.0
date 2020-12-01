@@ -4,7 +4,6 @@ import { Admin, Animation2D, Click, Color, EventAdmin, TimerAdmin, Tools, Gold, 
 import { _GameItem } from "./_GameItem";
 import { _Res } from "./_PreLoad";
 import { _PropTry } from "./_PropTry";
-import { _SelectLevel } from "./_SelectLevel";
 import { _Share } from "./_Share";
 /**游戏场景模块*/
 export module _Game {
