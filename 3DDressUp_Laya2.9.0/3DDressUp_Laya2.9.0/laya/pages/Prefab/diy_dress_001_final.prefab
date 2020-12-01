@@ -2,7 +2,7 @@
     "x":0,
     "type":"Box",
     "selectedBox":1447,
-    "selecteID":796,
+    "selecteID":797,
     "searchKey":"Box,diy_dress_001_final",
     "props":{"y":0,"x":0,"presetID":1,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"diy_dress_001_final","isPresetRoot":true,"centerY":0,"centerX":0},
     "nodeParent":-1,
@@ -26,106 +26,114 @@
             "hasChild":false,
             "compId":794,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth1_U",
-            "props":{"y":42,"x":361,"width":167,"skin":"Game/UI/MakeClothes/tailor2.png","presetID":3,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":42,"pivotX":84,"name":"Cloth1_U","height":83},
+            "searchKey":"Image,Cloth01_U",
+            "props":{"y":42,"x":361,"width":167,"skin":"Game/UI/MakeClothes/tailor2.png","presetID":3,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":42,"pivotX":84,"name":"Cloth01_U","height":83},
             "nodeParent":1447,
-            "label":"Cloth1_U",
+            "label":"Cloth01_U",
             "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":795,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth2_RU",
-            "props":{"y":108,"x":321,"width":81,"skin":"Game/UI/MakeClothes/tailor3.png","presetID":4,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth2_RU","height":41},
+            "searchKey":"Image,Cloth02_RU",
+            "props":{"y":108,"x":321,"width":81,"skin":"Game/UI/MakeClothes/tailor3.png","presetID":4,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth02_RU","height":41},
             "nodeParent":1447,
-            "label":"Cloth2_RU",
+            "label":"Cloth02_RU",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":796,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth3_L",
-            "props":{"y":171,"width":138,"skin":"Game/UI/MakeClothes/tailor5.png","presetID":5,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth3_L","height":142},
+            "searchKey":"Image,Cloth03_LD",
+            "props":{"y":171,"width":138,"skin":"Game/UI/MakeClothes/tailor5.png","presetID":5,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth03_LD","height":142},
             "nodeParent":1447,
-            "label":"Cloth3_L",
+            "label":"Cloth03_LD",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":797,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth4_R",
-            "props":{"y":168,"x":577,"skin":"Game/UI/MakeClothes/tailor4.png","presetID":6,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth4_R"},
+            "searchKey":"Image,Cloth04_R",
+            "props":{"y":168,"x":577,"skin":"Game/UI/MakeClothes/tailor4.png","presetID":6,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth04_R"},
             "nodeParent":1447,
-            "label":"Cloth4_R",
+            "label":"Cloth04_R",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":798,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth5_LD",
-            "props":{"y":202,"x":193,"width":33,"skin":"Game/UI/MakeClothes/tailor7.png","presetID":7,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth5_LD","height":265},
+            "searchKey":"Image,Cloth05_LD",
+            "props":{"y":202,"x":193,"width":33,"skin":"Game/UI/MakeClothes/tailor7.png","presetID":7,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth05_LD","height":265},
             "nodeParent":1447,
-            "label":"Cloth5_LD",
+            "label":"Cloth05_LD",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":799,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth6_RD",
-            "props":{"y":198,"x":491,"skin":"Game/UI/MakeClothes/tailor6.png","presetID":8,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth6_RD"},
+            "searchKey":"Image,Cloth06_RD",
+            "props":{"y":198,"x":491,"skin":"Game/UI/MakeClothes/tailor6.png","presetID":8,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth06_RD"},
             "nodeParent":1447,
-            "label":"Cloth6_RD",
+            "label":"Cloth06_RD",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":800,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Cloth7_D",
-            "props":{"y":484,"x":186,"skin":"Game/UI/MakeClothes/tailor1.png","presetID":9,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth7_D"},
+            "searchKey":"Image,Cloth07_D",
+            "props":{"y":484,"x":186,"skin":"Game/UI/MakeClothes/tailor1.png","presetID":9,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Cloth07_D"},
             "nodeParent":1447,
-            "label":"Cloth7_D",
+            "label":"Cloth07_D",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":801,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -143,18 +151,17 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line1",
-                    "props":{"y":22,"x":266,"width":168,"presetID":11,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line1","height":62},
+                    "searchKey":"Image,Line01",
+                    "props":{"y":22,"x":266,"width":168,"presetID":11,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line01","height":62},
                     "nodeParent":802,
-                    "label":"Line1",
-                    "isOpen":true,
+                    "label":"Line01",
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":803,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":14,"x":4,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":147,"presetID":12,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A"},
@@ -177,7 +184,8 @@
                                     "hasChild":false,
                                     "compId":805,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -192,7 +200,8 @@
                                     "hasChild":false,
                                     "compId":806,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -207,11 +216,12 @@
                                     "hasChild":false,
                                     "compId":807,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":29,"x":16,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":139,"presetID":16,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -235,7 +245,8 @@
                                     "hasChild":false,
                                     "compId":809,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -251,7 +262,8 @@
                                     "hasChild":false,
                                     "compId":810,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -266,11 +278,12 @@
                                     "hasChild":false,
                                     "compId":811,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":42,"x":28,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":132,"presetID":20,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -294,7 +307,8 @@
                                     "hasChild":false,
                                     "compId":813,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -310,7 +324,8 @@
                                     "hasChild":false,
                                     "compId":814,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -325,11 +340,12 @@
                                     "hasChild":false,
                                     "compId":815,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":53,"x":44,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":115,"presetID":24,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -353,7 +369,8 @@
                                     "hasChild":false,
                                     "compId":817,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -369,7 +386,8 @@
                                     "hasChild":false,
                                     "compId":818,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -384,11 +402,12 @@
                                     "hasChild":false,
                                     "compId":819,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":59,"x":62,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":101,"presetID":28,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -412,7 +431,8 @@
                                     "hasChild":false,
                                     "compId":821,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -428,7 +448,8 @@
                                     "hasChild":false,
                                     "compId":822,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -443,11 +464,12 @@
                                     "hasChild":false,
                                     "compId":823,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":61,"x":104,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":82,"presetID":32,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -471,7 +493,8 @@
                                     "hasChild":false,
                                     "compId":825,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -487,7 +510,8 @@
                                     "hasChild":false,
                                     "compId":826,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -502,11 +526,12 @@
                                     "hasChild":false,
                                     "compId":827,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":61,"x":82,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":36,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -530,7 +555,8 @@
                                     "hasChild":false,
                                     "compId":829,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -546,7 +572,8 @@
                                     "hasChild":false,
                                     "compId":830,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -561,11 +588,12 @@
                                     "hasChild":false,
                                     "compId":831,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":55,"x":125,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":66,"presetID":40,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -589,7 +617,8 @@
                                     "hasChild":false,
                                     "compId":833,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -605,7 +634,8 @@
                                     "hasChild":false,
                                     "compId":834,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -620,11 +650,12 @@
                                     "hasChild":false,
                                     "compId":835,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":43,"x":144,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":51,"presetID":44,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -648,7 +679,8 @@
                                     "hasChild":false,
                                     "compId":837,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -664,7 +696,8 @@
                                     "hasChild":false,
                                     "compId":838,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -679,11 +712,12 @@
                                     "hasChild":false,
                                     "compId":839,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":28,"x":158,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":36,"presetID":48,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -707,7 +741,8 @@
                                     "hasChild":false,
                                     "compId":841,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -723,7 +758,8 @@
                                     "hasChild":false,
                                     "compId":842,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -738,11 +774,12 @@
                                     "hasChild":false,
                                     "compId":843,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":15,"x":165,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":27,"presetID":52,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":20},
@@ -766,7 +803,8 @@
                                     "hasChild":false,
                                     "compId":845,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -782,7 +820,8 @@
                                     "hasChild":false,
                                     "compId":846,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -797,17 +836,20 @@
                                     "hasChild":false,
                                     "compId":847,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line2",
-                    "props":{"y":104,"x":301,"width":99,"presetID":56,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line2","height":51},
+                    "searchKey":"Image,Line02",
+                    "props":{"y":104,"x":301,"width":99,"presetID":56,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line02","height":51},
                     "nodeParent":802,
-                    "label":"Line2",
+                    "label":"Line02",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -838,7 +880,8 @@
                                     "hasChild":false,
                                     "compId":850,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -854,7 +897,8 @@
                                     "hasChild":false,
                                     "compId":851,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -869,8 +913,10 @@
                                     "hasChild":false,
                                     "compId":852,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -896,7 +942,8 @@
                                     "hasChild":false,
                                     "compId":854,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -912,7 +959,8 @@
                                     "hasChild":false,
                                     "compId":855,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -927,8 +975,10 @@
                                     "hasChild":false,
                                     "compId":856,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -954,7 +1004,8 @@
                                     "hasChild":false,
                                     "compId":858,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -970,7 +1021,8 @@
                                     "hasChild":false,
                                     "compId":859,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -985,8 +1037,10 @@
                                     "hasChild":false,
                                     "compId":860,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1012,7 +1066,8 @@
                                     "hasChild":false,
                                     "compId":862,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1028,7 +1083,8 @@
                                     "hasChild":false,
                                     "compId":863,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1043,8 +1099,10 @@
                                     "hasChild":false,
                                     "compId":864,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1070,7 +1128,8 @@
                                     "hasChild":false,
                                     "compId":866,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1086,7 +1145,8 @@
                                     "hasChild":false,
                                     "compId":867,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1101,8 +1161,10 @@
                                     "hasChild":false,
                                     "compId":868,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1128,7 +1190,8 @@
                                     "hasChild":false,
                                     "compId":870,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1144,7 +1207,8 @@
                                     "hasChild":false,
                                     "compId":871,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1159,8 +1223,10 @@
                                     "hasChild":false,
                                     "compId":872,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1186,7 +1252,8 @@
                                     "hasChild":false,
                                     "compId":874,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1202,7 +1269,8 @@
                                     "hasChild":false,
                                     "compId":875,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1217,8 +1285,10 @@
                                     "hasChild":false,
                                     "compId":876,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1244,7 +1314,8 @@
                                     "hasChild":false,
                                     "compId":878,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1260,7 +1331,8 @@
                                     "hasChild":false,
                                     "compId":879,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1275,8 +1347,10 @@
                                     "hasChild":false,
                                     "compId":880,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1302,7 +1376,8 @@
                                     "hasChild":false,
                                     "compId":882,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1318,7 +1393,8 @@
                                     "hasChild":false,
                                     "compId":883,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1333,8 +1409,10 @@
                                     "hasChild":false,
                                     "compId":884,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1360,7 +1438,8 @@
                                     "hasChild":false,
                                     "compId":886,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1376,7 +1455,8 @@
                                     "hasChild":false,
                                     "compId":887,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1392,8 +1472,10 @@
                                     "hasChild":false,
                                     "compId":888,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1419,7 +1501,8 @@
                                     "hasChild":false,
                                     "compId":890,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1435,7 +1518,8 @@
                                     "hasChild":false,
                                     "compId":891,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1450,17 +1534,20 @@
                                     "hasChild":false,
                                     "compId":892,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line3",
-                    "props":{"y":167,"x":46,"width":85,"presetID":101,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line3","height":94},
+                    "searchKey":"Image,Line03",
+                    "props":{"y":167,"x":46,"width":85,"presetID":101,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line03","height":94},
                     "nodeParent":802,
-                    "label":"Line3",
+                    "label":"Line03",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -1491,7 +1578,8 @@
                                     "hasChild":false,
                                     "compId":895,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1507,7 +1595,8 @@
                                     "hasChild":false,
                                     "compId":896,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1522,8 +1611,10 @@
                                     "hasChild":false,
                                     "compId":897,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1549,7 +1640,8 @@
                                     "hasChild":false,
                                     "compId":899,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1565,7 +1657,8 @@
                                     "hasChild":false,
                                     "compId":900,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1580,8 +1673,10 @@
                                     "hasChild":false,
                                     "compId":901,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1607,7 +1702,8 @@
                                     "hasChild":false,
                                     "compId":903,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1623,7 +1719,8 @@
                                     "hasChild":false,
                                     "compId":904,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1638,8 +1735,10 @@
                                     "hasChild":false,
                                     "compId":905,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1665,7 +1764,8 @@
                                     "hasChild":false,
                                     "compId":907,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1681,7 +1781,8 @@
                                     "hasChild":false,
                                     "compId":908,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1696,8 +1797,10 @@
                                     "hasChild":false,
                                     "compId":909,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1723,7 +1826,8 @@
                                     "hasChild":false,
                                     "compId":911,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1739,7 +1843,8 @@
                                     "hasChild":false,
                                     "compId":912,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1754,8 +1859,10 @@
                                     "hasChild":false,
                                     "compId":913,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1781,7 +1888,8 @@
                                     "hasChild":false,
                                     "compId":915,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1797,7 +1905,8 @@
                                     "hasChild":false,
                                     "compId":916,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1812,17 +1921,20 @@
                                     "hasChild":false,
                                     "compId":917,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line4",
-                    "props":{"y":166,"x":566,"width":87,"presetID":126,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line4","height":93},
+                    "searchKey":"Image,Line04",
+                    "props":{"y":166,"x":566,"width":87,"presetID":126,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line04","height":93},
                     "nodeParent":802,
-                    "label":"Line4",
+                    "label":"Line04",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -1853,7 +1965,8 @@
                                     "hasChild":false,
                                     "compId":920,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1869,7 +1982,8 @@
                                     "hasChild":false,
                                     "compId":921,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1884,8 +1998,10 @@
                                     "hasChild":false,
                                     "compId":922,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1911,7 +2027,8 @@
                                     "hasChild":false,
                                     "compId":924,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1927,7 +2044,8 @@
                                     "hasChild":false,
                                     "compId":925,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -1942,8 +2060,10 @@
                                     "hasChild":false,
                                     "compId":926,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -1969,7 +2089,8 @@
                                     "hasChild":false,
                                     "compId":928,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -1985,7 +2106,8 @@
                                     "hasChild":false,
                                     "compId":929,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2000,8 +2122,10 @@
                                     "hasChild":false,
                                     "compId":930,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2027,7 +2151,8 @@
                                     "hasChild":false,
                                     "compId":932,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2043,7 +2168,8 @@
                                     "hasChild":false,
                                     "compId":933,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2058,8 +2184,10 @@
                                     "hasChild":false,
                                     "compId":934,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2085,7 +2213,8 @@
                                     "hasChild":false,
                                     "compId":936,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2101,7 +2230,8 @@
                                     "hasChild":false,
                                     "compId":937,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2116,8 +2246,10 @@
                                     "hasChild":false,
                                     "compId":938,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2143,7 +2275,8 @@
                                     "hasChild":false,
                                     "compId":940,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2159,7 +2292,8 @@
                                     "hasChild":false,
                                     "compId":941,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2174,17 +2308,20 @@
                                     "hasChild":false,
                                     "compId":942,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line5",
-                    "props":{"y":197,"x":179,"width":41,"presetID":151,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line5","height":280},
+                    "searchKey":"Image,Line05",
+                    "props":{"y":197,"x":179,"width":41,"presetID":151,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line05","height":280},
                     "nodeParent":802,
-                    "label":"Line5",
+                    "label":"Line05",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -2214,7 +2351,8 @@
                                     "hasChild":false,
                                     "compId":945,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Image",
@@ -2228,7 +2366,8 @@
                                     "hasChild":false,
                                     "compId":946,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2244,7 +2383,8 @@
                                     "hasChild":false,
                                     "compId":947,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2259,8 +2399,10 @@
                                     "hasChild":false,
                                     "compId":948,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2286,7 +2428,8 @@
                                     "hasChild":false,
                                     "compId":950,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2302,7 +2445,8 @@
                                     "hasChild":false,
                                     "compId":951,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2317,8 +2461,10 @@
                                     "hasChild":false,
                                     "compId":952,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2344,7 +2490,8 @@
                                     "hasChild":false,
                                     "compId":954,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2360,7 +2507,8 @@
                                     "hasChild":false,
                                     "compId":955,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2375,8 +2523,10 @@
                                     "hasChild":false,
                                     "compId":956,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2402,7 +2552,8 @@
                                     "hasChild":false,
                                     "compId":958,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2418,7 +2569,8 @@
                                     "hasChild":false,
                                     "compId":959,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2433,8 +2585,10 @@
                                     "hasChild":false,
                                     "compId":960,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2460,7 +2614,8 @@
                                     "hasChild":false,
                                     "compId":962,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2476,7 +2631,8 @@
                                     "hasChild":false,
                                     "compId":963,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2491,8 +2647,10 @@
                                     "hasChild":false,
                                     "compId":964,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2518,7 +2676,8 @@
                                     "hasChild":false,
                                     "compId":966,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2534,7 +2693,8 @@
                                     "hasChild":false,
                                     "compId":967,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2549,8 +2709,10 @@
                                     "hasChild":false,
                                     "compId":968,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2576,7 +2738,8 @@
                                     "hasChild":false,
                                     "compId":970,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2592,7 +2755,8 @@
                                     "hasChild":false,
                                     "compId":971,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2607,8 +2771,10 @@
                                     "hasChild":false,
                                     "compId":972,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2634,7 +2800,8 @@
                                     "hasChild":false,
                                     "compId":974,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2650,7 +2817,8 @@
                                     "hasChild":false,
                                     "compId":975,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2665,8 +2833,10 @@
                                     "hasChild":false,
                                     "compId":976,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2692,7 +2862,8 @@
                                     "hasChild":false,
                                     "compId":978,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2708,7 +2879,8 @@
                                     "hasChild":false,
                                     "compId":979,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2723,8 +2895,10 @@
                                     "hasChild":false,
                                     "compId":980,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2750,7 +2924,8 @@
                                     "hasChild":false,
                                     "compId":982,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2766,7 +2941,8 @@
                                     "hasChild":false,
                                     "compId":983,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2781,8 +2957,10 @@
                                     "hasChild":false,
                                     "compId":984,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2808,7 +2986,8 @@
                                     "hasChild":false,
                                     "compId":986,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2824,7 +3003,8 @@
                                     "hasChild":false,
                                     "compId":987,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2839,8 +3019,10 @@
                                     "hasChild":false,
                                     "compId":988,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2866,7 +3048,8 @@
                                     "hasChild":false,
                                     "compId":990,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2882,7 +3065,8 @@
                                     "hasChild":false,
                                     "compId":991,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2897,8 +3081,10 @@
                                     "hasChild":false,
                                     "compId":992,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -2924,7 +3110,8 @@
                                     "hasChild":false,
                                     "compId":994,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -2940,7 +3127,8 @@
                                     "hasChild":false,
                                     "compId":995,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -2955,7 +3143,8 @@
                                     "hasChild":false,
                                     "compId":996,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Image",
@@ -2968,17 +3157,20 @@
                                     "hasChild":false,
                                     "compId":997,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line6",
-                    "props":{"y":198,"x":476,"width":44,"presetID":206,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line6","height":279},
+                    "searchKey":"Image,Line06",
+                    "props":{"y":198,"x":476,"width":44,"presetID":206,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line06","height":279},
                     "nodeParent":802,
-                    "label":"Line6",
+                    "label":"Line06",
                     "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -3008,7 +3200,8 @@
                                     "hasChild":false,
                                     "compId":1000,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Image",
@@ -3022,7 +3215,8 @@
                                     "hasChild":false,
                                     "compId":1001,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3038,7 +3232,8 @@
                                     "hasChild":false,
                                     "compId":1002,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3053,8 +3248,10 @@
                                     "hasChild":false,
                                     "compId":1003,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3080,7 +3277,8 @@
                                     "hasChild":false,
                                     "compId":1005,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3096,7 +3294,8 @@
                                     "hasChild":false,
                                     "compId":1006,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3111,8 +3310,10 @@
                                     "hasChild":false,
                                     "compId":1007,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3138,7 +3339,8 @@
                                     "hasChild":false,
                                     "compId":1009,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3154,7 +3356,8 @@
                                     "hasChild":false,
                                     "compId":1010,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3169,8 +3372,10 @@
                                     "hasChild":false,
                                     "compId":1011,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3196,7 +3401,8 @@
                                     "hasChild":false,
                                     "compId":1013,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3212,7 +3418,8 @@
                                     "hasChild":false,
                                     "compId":1014,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3227,8 +3434,10 @@
                                     "hasChild":false,
                                     "compId":1015,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3254,7 +3463,8 @@
                                     "hasChild":false,
                                     "compId":1017,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3270,7 +3480,8 @@
                                     "hasChild":false,
                                     "compId":1018,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3285,8 +3496,10 @@
                                     "hasChild":false,
                                     "compId":1019,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3312,7 +3525,8 @@
                                     "hasChild":false,
                                     "compId":1021,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3328,7 +3542,8 @@
                                     "hasChild":false,
                                     "compId":1022,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3343,8 +3558,10 @@
                                     "hasChild":false,
                                     "compId":1023,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3370,7 +3587,8 @@
                                     "hasChild":false,
                                     "compId":1025,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3386,7 +3604,8 @@
                                     "hasChild":false,
                                     "compId":1026,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3401,8 +3620,10 @@
                                     "hasChild":false,
                                     "compId":1027,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3428,7 +3649,8 @@
                                     "hasChild":false,
                                     "compId":1029,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3444,7 +3666,8 @@
                                     "hasChild":false,
                                     "compId":1030,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3459,8 +3682,10 @@
                                     "hasChild":false,
                                     "compId":1031,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3486,7 +3711,8 @@
                                     "hasChild":false,
                                     "compId":1033,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3502,7 +3728,8 @@
                                     "hasChild":false,
                                     "compId":1034,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3517,8 +3744,10 @@
                                     "hasChild":false,
                                     "compId":1035,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3544,7 +3773,8 @@
                                     "hasChild":false,
                                     "compId":1037,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3560,7 +3790,8 @@
                                     "hasChild":false,
                                     "compId":1038,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3575,8 +3806,10 @@
                                     "hasChild":false,
                                     "compId":1039,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3602,7 +3835,8 @@
                                     "hasChild":false,
                                     "compId":1041,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3618,7 +3852,8 @@
                                     "hasChild":false,
                                     "compId":1042,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3633,8 +3868,10 @@
                                     "hasChild":false,
                                     "compId":1043,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3660,7 +3897,8 @@
                                     "hasChild":false,
                                     "compId":1045,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3676,7 +3914,8 @@
                                     "hasChild":false,
                                     "compId":1046,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3691,8 +3930,10 @@
                                     "hasChild":false,
                                     "compId":1047,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
                             "type":"Image",
@@ -3717,7 +3958,8 @@
                                     "hasChild":false,
                                     "compId":1049,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"Image",
@@ -3731,7 +3973,8 @@
                                     "hasChild":false,
                                     "compId":1050,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3747,7 +3990,8 @@
                                     "hasChild":false,
                                     "compId":1051,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3762,25 +4006,27 @@
                                     "hasChild":false,
                                     "compId":1052,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Line7",
-                    "props":{"y":473,"x":180,"width":341,"presetID":261,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line7","height":20},
+                    "searchKey":"Image,Line07",
+                    "props":{"y":473,"x":180,"width":341,"presetID":261,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","name":"Line07","height":20},
                     "nodeParent":802,
-                    "label":"Line7",
-                    "isOpen":true,
+                    "label":"Line07",
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":1053,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":15,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":262,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3804,7 +4050,8 @@
                                     "hasChild":false,
                                     "compId":1055,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3820,7 +4067,8 @@
                                     "hasChild":false,
                                     "compId":1056,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3836,11 +4084,12 @@
                                     "hasChild":false,
                                     "compId":1057,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":36,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":266,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3864,7 +4113,8 @@
                                     "hasChild":false,
                                     "compId":1059,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3880,7 +4130,8 @@
                                     "hasChild":false,
                                     "compId":1060,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3896,11 +4147,12 @@
                                     "hasChild":false,
                                     "compId":1061,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":57,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":270,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3924,7 +4176,8 @@
                                     "hasChild":false,
                                     "compId":1063,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -3940,7 +4193,8 @@
                                     "hasChild":false,
                                     "compId":1064,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -3956,11 +4210,12 @@
                                     "hasChild":false,
                                     "compId":1065,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":78,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":274,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -3984,7 +4239,8 @@
                                     "hasChild":false,
                                     "compId":1067,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4000,7 +4256,8 @@
                                     "hasChild":false,
                                     "compId":1068,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4016,11 +4273,12 @@
                                     "hasChild":false,
                                     "compId":1069,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":98,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":278,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4044,7 +4302,8 @@
                                     "hasChild":false,
                                     "compId":1071,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4060,7 +4319,8 @@
                                     "hasChild":false,
                                     "compId":1072,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4076,11 +4336,12 @@
                                     "hasChild":false,
                                     "compId":1073,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":119,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":282,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4104,7 +4365,8 @@
                                     "hasChild":false,
                                     "compId":1075,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4120,7 +4382,8 @@
                                     "hasChild":false,
                                     "compId":1076,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4136,11 +4399,12 @@
                                     "hasChild":false,
                                     "compId":1077,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":141,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":286,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4164,7 +4428,8 @@
                                     "hasChild":false,
                                     "compId":1079,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4180,7 +4445,8 @@
                                     "hasChild":false,
                                     "compId":1080,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4196,11 +4462,12 @@
                                     "hasChild":false,
                                     "compId":1081,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":163,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":290,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4224,7 +4491,8 @@
                                     "hasChild":false,
                                     "compId":1083,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4240,7 +4508,8 @@
                                     "hasChild":false,
                                     "compId":1084,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4256,11 +4525,12 @@
                                     "hasChild":false,
                                     "compId":1085,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":9,"x":185,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":294,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":11,"pivotX":6,"name":"A","height":24},
@@ -4284,7 +4554,8 @@
                                     "hasChild":false,
                                     "compId":1087,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4300,7 +4571,8 @@
                                     "hasChild":false,
                                     "compId":1088,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4316,11 +4588,12 @@
                                     "hasChild":false,
                                     "compId":1089,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":205,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":298,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4344,7 +4617,8 @@
                                     "hasChild":false,
                                     "compId":1091,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4360,7 +4634,8 @@
                                     "hasChild":false,
                                     "compId":1092,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4376,11 +4651,12 @@
                                     "hasChild":false,
                                     "compId":1093,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":226,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":302,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4404,7 +4680,8 @@
                                     "hasChild":false,
                                     "compId":1095,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4420,7 +4697,8 @@
                                     "hasChild":false,
                                     "compId":1096,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4436,11 +4714,12 @@
                                     "hasChild":false,
                                     "compId":1097,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":246,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":306,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4464,7 +4743,8 @@
                                     "hasChild":false,
                                     "compId":1099,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4480,7 +4760,8 @@
                                     "hasChild":false,
                                     "compId":1100,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4496,11 +4777,12 @@
                                     "hasChild":false,
                                     "compId":1101,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":266,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":310,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4524,7 +4806,8 @@
                                     "hasChild":false,
                                     "compId":1103,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4540,7 +4823,8 @@
                                     "hasChild":false,
                                     "compId":1104,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4556,11 +4840,12 @@
                                     "hasChild":false,
                                     "compId":1105,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":287,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":314,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4584,7 +4869,8 @@
                                     "hasChild":false,
                                     "compId":1107,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4600,7 +4886,8 @@
                                     "hasChild":false,
                                     "compId":1108,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4616,11 +4903,12 @@
                                     "hasChild":false,
                                     "compId":1109,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":307,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":318,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4644,7 +4932,8 @@
                                     "hasChild":false,
                                     "compId":1111,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"BoxCollider",
@@ -4660,7 +4949,8 @@
                                     "hasChild":false,
                                     "compId":1112,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
                                     "type":"RigidBody",
@@ -4676,11 +4966,12 @@
                                     "hasChild":false,
                                     "compId":1113,
                                     "child":[
-                                        ]
-                                }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,A",
                             "props":{"y":10,"x":327,"width":13,"skin":"Game/UI/MakeClothes/dotted2.png","rotation":90,"presetID":322,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","pivotY":12,"pivotX":7,"name":"A","height":24},
@@ -4693,7 +4984,6 @@
                             "compId":1114,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":51,"x":0,"width":48,"skin":"Game/UI/MakeClothes/dotted2.png","sizeGrid":"4,5,6,3","rotation":-97,"renderType":"mask","presetID":323,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","height":28},
@@ -4704,10 +4994,10 @@
                                     "hasChild":false,
                                     "compId":1115,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image",
                                     "props":{"y":6,"x":4,"width":7,"skin":"Game/UI/MakeClothes/dotted1.png","presetID":324,"preset":"laya/pages/Prefab/diy_dress_001_final.prefab","height":14},
@@ -4719,10 +5009,10 @@
                                     "hasChild":false,
                                     "compId":1116,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"BoxCollider",
                                     "switchAble":true,
                                     "searchKey":"BoxCollider",
@@ -4736,10 +5026,10 @@
                                     "hasChild":false,
                                     "compId":1117,
                                     "child":[
-                                        ]
+                                        ],
+                                    "$HIDDEN":false
                                 },
                                 {
-                                    "x":60,
                                     "type":"RigidBody",
                                     "switchAble":true,
                                     "searchKey":"RigidBody",
@@ -4753,9 +5043,12 @@
                                     "hasChild":false,
                                     "compId":1118,
                                     "child":[
-                                        ]
-                                }]
-                        }]
+                                        ],
+                                    "$HIDDEN":false
+                                }],
+                            "$HIDDEN":false
+                        }],
+                    "$HIDDEN":false
                 }],
             "$HIDDEN":false
         },
@@ -4771,7 +5064,8 @@
             "hasChild":false,
             "compId":1448,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         }],
     "animations":[
         {
@@ -4781,5 +5075,6 @@
             "id":1,
             "frameRate":24,
             "action":0
-        }]
+        }],
+    "$HIDDEN":false
 }

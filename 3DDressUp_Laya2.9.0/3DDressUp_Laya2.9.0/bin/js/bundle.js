@@ -6799,7 +6799,6 @@
                                 element.zOrder = 20;
                                 this.DLine.LineParent = element.getChildByName('LineParent');
                                 this.DLine.setData();
-                                return;
                             }
                             else {
                                 element.removeSelf();
@@ -6960,8 +6959,41 @@
                     let value = this.DLine.Data._checkCondition(Dotted.parent.name);
                     Dotted.visible = false;
                     if (value) {
-                        let Cloth = this.DLine.Clothes.getChildByName(`Cloth${Dotted.parent.name.substr(4)}`);
-                        Cloth.removeSelf();
+                        for (let index = 0; index < this.DLine.Clothes.numChildren; index++) {
+                            const element = this.DLine.Clothes.getChildAt(index);
+                            if (element.name.substr(5, 2) == Dotted.parent.name.substr(4, 2)) {
+                                let time = 2000;
+                                let disX = 2000;
+                                let disY = 2000;
+                                switch (element.name.substr(8)) {
+                                    case 'U':
+                                        disX = 0;
+                                        disY = -disY;
+                                        break;
+                                    case 'LU':
+                                        disX = -disX;
+                                        disY = -disY;
+                                        break;
+                                    case 'RU':
+                                        disY = -disY;
+                                        break;
+                                    case 'D':
+                                        disX = 0;
+                                        break;
+                                    case 'RD':
+                                        break;
+                                    case 'LD':
+                                        disX = -disX;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? 50 : -50, new Laya.Point(element.x + disX / 20, element.y + disY / 20), time / 5, 0, () => {
+                                    Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? 360 : -360, new Laya.Point(element.x + disX, element.y + disY), time, 0, () => {
+                                    });
+                                });
+                            }
+                        }
                         if (this.DLine.Data._checkAllCompelet()) {
                             Tools._Node.removeAllChildren(this.DLine.LineParent);
                             this._evNotify(_Event.scissorSitu);

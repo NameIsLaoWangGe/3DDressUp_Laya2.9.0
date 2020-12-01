@@ -35,7 +35,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Scissor,Scissor",
-            "props":{"zOrder":50,"y":549,"x":1054,"width":126,"var":"Scissor","rotation":0,"pivotY":51,"pivotX":63,"name":"Scissor","height":124},
+            "props":{"zOrder":1000,"y":549,"x":1054,"width":126,"var":"Scissor","rotation":0,"pivotY":51,"pivotX":63,"name":"Scissor","height":124},
             "nodeParent":2,
             "label":"Scissor",
             "isOpen":false,
