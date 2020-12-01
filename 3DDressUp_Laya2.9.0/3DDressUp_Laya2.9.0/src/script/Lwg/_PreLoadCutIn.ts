@@ -54,7 +54,7 @@ export module _PreLoadCutIn {
                     // Laya.stage.addChildAt(_Res._list.scene3D.MakeUp.Scene, 0);
                     break;
                 case 'Start':
-                    // _Res._list.scene3D.MakeUp.Scene.removeSelf();
+                    _Res._list.scene3D.MakeClothes.Scene.removeSelf();
                     break;
 
                 default:

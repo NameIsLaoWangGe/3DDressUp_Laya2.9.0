@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":6,
+    "selectedBox":6,
+    "selecteID":31,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#000000","height":720},
     "nodeParent":-1,
@@ -17,16 +17,44 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image",
-            "props":{"y":0,"x":949,"width":331,"height":720},
+            "searchKey":"Image,Navigation,Navigation",
+            "props":{"y":0,"x":949,"width":331,"var":"Navigation","name":"Navigation","height":720},
             "nodeParent":2,
-            "label":"Image",
+            "label":"Navigation",
             "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":6,
             "child":[
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,BtnComplete,BtnComplete",
+                    "props":{"y":42,"x":-103,"width":100,"var":"BtnComplete","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"16,9,9,15","name":"BtnComplete","height":100},
+                    "nodeParent":6,
+                    "label":"BtnComplete",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":31,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Label",
+                            "searchKey":"Label",
+                            "props":{"width":87,"valign":"middle","text":"OK","height":66,"fontSize":40,"centerY":0,"centerX":0,"align":"center"},
+                            "nodeParent":31,
+                            "label":"Label",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":33,
+                            "child":[
+                                ]
+                        }]
+                },
                 {
                     "x":30,
                     "type":"Tab",
@@ -96,34 +124,6 @@
                                         ]
                                 }]
                         }]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,BtnOK,BtnOK",
-            "props":{"y":42,"x":846,"width":123,"var":"BtnOK","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"16,9,9,15","name":"BtnOK","height":123},
-            "nodeParent":2,
-            "label":"BtnOK",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":31,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Label",
-                    "searchKey":"Label",
-                    "props":{"width":87,"valign":"middle","text":"OK","height":66,"fontSize":40,"centerY":0,"centerX":0,"align":"center"},
-                    "nodeParent":31,
-                    "label":"Label",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":33,
-                    "child":[
-                        ]
                 }]
         }],
     "animations":[

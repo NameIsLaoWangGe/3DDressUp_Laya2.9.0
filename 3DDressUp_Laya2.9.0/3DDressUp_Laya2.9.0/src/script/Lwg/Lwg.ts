@@ -1384,9 +1384,9 @@ export module lwg {
                     element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                     element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                     Animation2D.rotate(element, 0, time, delay * index);
-                    Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
+                    Animation2D.move(element, originalX, originalY, time, () => {
                         Tools._Node.changePivot(element, originalPovitX, originalPovitY);
-                    });
+                    }, delay * index);
                 }
             }
             sumDelay = Scene.numChildren * delay + time + 200;
@@ -1679,6 +1679,7 @@ export module lwg {
          * 脚本通用类
          * */
         class _ScriptBase extends Laya.Script {
+
             private getFind(name: string, type: string): any {
                 if (!this[`_Scene${type}${name}`]) {
                     let Node = Tools._Node.findChild2D(this.owner.scene, name);
@@ -1857,6 +1858,7 @@ export module lwg {
 
         /**2D场景通用父类*/
         export class _SceneBase extends _ScriptBase {
+
             /**类名*/
             private _calssName: string = _SceneName.PreLoad;
             constructor() {
@@ -2001,6 +2003,10 @@ export module lwg {
             get _Owner(): Laya.Image | Laya.Sprite {
                 return this.owner as Laya.Image | Laya.Sprite;
             }
+            /**初始位置*/
+            _fPoint: Laya.Point;
+            /**初始角度*/
+            _fRotation: number;
             /**所属场景*/
             get _Scene(): Laya.Sprite {
                 return this.owner.scene as Laya.Scene;
@@ -2117,6 +2123,10 @@ export module lwg {
                 // 组件变为的self属性
                 this._Owner[this['__proto__']['constructor'].name] = this;
                 this.ownerSceneName = this._Scene.name;
+                /**初始位置*/
+                this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                /**初始角度*/
+                this._fRotation = this._Owner.rotation;
                 this.lwgOnAwake();
                 this.lwgAdaptive();
             }
@@ -2356,11 +2366,12 @@ export module lwg {
     }
     /**数据管理*/
     export module DataAdmin {
-        /**new出一个通用数据表管理对象，如果属性不通能用，则继承使用*/
+        /**new出一个通用数据表管理对象，如果属性不能通用，则继承使用*/
         export class _Table {
 
             /**一些通用的属性名称，可重写*/
             _property = {
+                /**名称是必须有的属性，可以是数字,不可以重名*/
                 name: 'name',
                 chName: 'chName',
                 classify: 'classify',
@@ -2385,7 +2396,7 @@ export module lwg {
             _classify: any;
             /**数据表名称*/
             _tableName: string = '';
-            /**表格数组*/
+            /**表格数据数组*/
             _arr: Array<any> = [];
             /**上个版本的表格*/
             _lastArr: Array<any> = [];
@@ -2414,7 +2425,7 @@ export module lwg {
                         }
                     } else {
                         if (Laya.Loader.getRes(arrUrl)) {
-                            this._arr = Laya.Loader.getRes(arrUrl);
+                            this._arr = Tools._ObjArray.arrCopy(Laya.Loader.getRes(arrUrl)['RECORDS']);
                         } else {
                             console.log(`${arrUrl}数据表不存在！`);
                         }
@@ -2432,7 +2443,7 @@ export module lwg {
             }
 
             /**
-             *拿到上个版本的完成情况
+             *附加上个版本的完成情况
              * @param {string} lastVtableName 上个存储名
              */
             _compareLastInfor(lastVtableName: string): void {
@@ -2620,38 +2631,41 @@ export module lwg {
                 }
                 return bool;
             }
+            /**设置选中类别*/
             get _pitchClassify(): string {
-                return this[`${this._tableName}/pitchClassify`] ? `${this._tableName}/pitchClassify` : this._arr[0][this._property.classify];
+                return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
             };
             set _pitchClassify(str: string) {
                 if (this._List) {
                     this._List.refresh();
                 }
-                this[`${this._tableName}/pitchClassify`] = str;
+                Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
             };
+            /**设置选中名称*/
             get _pitchName(): string {
-                return Laya.LocalStorage.getItem('_SelectLevel_pichcustoms') ? Laya.LocalStorage.getItem('_SelectLevel_pichcustoms') : null;
+                return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
             };
             set _pitchName(str: string) {
                 if (this._List) {
                     this._List.refresh();
                 }
-                Laya.LocalStorage.setItem('_SelectLevel_pichcustoms', str.toString());
+                Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
             };
 
-            _setPitch(cassify: string, nameArr: Array<string>): void {
+            _setPitch(name: string): void {
+                let _calssify: string;
                 for (let index = 0; index < this._arr.length; index++) {
                     const element = this._arr[index];
-                    for (let i = 0; i < nameArr.length; i++) {
-                        if (element[this._property.classify] == cassify && element[this._property.name] == nameArr[i]) {
-                            element[this._property.pitch] = true;
-                        } else {
-                            element[this._property.pitch] = false;
-                        }
+                    if (element[this._property.name] == name) {
+                        element[this._property.pitch] = true;
+                        _calssify = element[this._property.classify]
+                    } else {
+                        element[this._property.pitch] = false;
                     }
                 }
-                this._pitchClassify = cassify;
-                this._pitchName = nameArr[nameArr.length - 1];
+                this._pitchClassify = _calssify;
+                this._pitchName = name;
+                this._refreshAndStorage();
             }
 
             /**
@@ -3758,7 +3772,7 @@ export module lwg {
                     if (index == posArray.length + 1) {
                         targetXY = [posArray[0][0], posArray[0][1]];
                     }
-                    Animation2D.move_Simple(Img, Img.x, Img.y, targetXY[0], targetXY[1], time, 0, () => {
+                    Animation2D.move(Img, targetXY[0], targetXY[1], time, () => {
                         index++;
                         if (index == posArray.length) {
                             index = 0;
@@ -3826,7 +3840,7 @@ export module lwg {
                     btnEffect = new _Reduce();
                     break;
                 default:
-                    btnEffect = new _Largen();
+                    btnEffect = new _NoEffect();
                     break;
             }
             target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -3863,7 +3877,7 @@ export module lwg {
                     btnEffect = new _Largen();
                     break;
                 default:
-                    btnEffect = new _Reduce();
+                    btnEffect = new _NoEffect();
                     break;
             }
 
@@ -4837,8 +4851,6 @@ export module lwg {
         /**
          * 简单移动,初始位置可以为null
          * @param node 节点
-         * @param fX 初始x位置
-         * @param fY 初始y位置
          * @param targetX 目标x位置
          * @param targetY 目标y位置
          * @param time 花费时间
@@ -4846,9 +4858,7 @@ export module lwg {
          * @param func 完成后的回调
          * @param ease 动画类型
          */
-        export function move_Simple(node, fX, fY, targetX, targetY, time, delayed?: number, func?: Function, ease?: Function,): void {
-            node.x = fX;
-            node.y = fY;
+        export function move(node: Laya.Sprite, targetX: number, targetY: number, time: number, func?: Function, delayed?: number, ease?: Function,): void {
             Laya.Tween.to(node, { x: targetX, y: targetY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
                 if (func) {
                     func()
@@ -7149,14 +7159,14 @@ export module lwg {
                 sp.y = Laya.stage.height / 2;
                 sp.zOrder = 50;
                 if (_ExecutionNode) {
-                    Animation2D.move_Simple(sp, sp.x, sp.y, _ExecutionNode.x, _ExecutionNode.y, 800, 100, f => {
-                        Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
+                    Animation2D.move(sp, _ExecutionNode.x, _ExecutionNode.y, 800, () => {
+                        Animation2D.fadeOut(sp, 1, 0, 200, 0, () => {
                             Animation2D.upDwon_Shake(_ExecutionNode, 10, 80, 0, null);
                             if (func) {
                                 func();
                             }
                         });
-                    });
+                    }, 100);
                 }
             }));
         }

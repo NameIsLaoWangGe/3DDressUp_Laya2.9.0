@@ -1731,6 +1731,8 @@
                 onAwake() {
                     this._Owner[this['__proto__']['constructor'].name] = this;
                     this.ownerSceneName = this._Scene.name;
+                    this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                    this._fRotation = this._Owner.rotation;
                     this.lwgOnAwake();
                     this.lwgAdaptive();
                 }
@@ -2002,7 +2004,7 @@
                         }
                         else {
                             if (Laya.Loader.getRes(arrUrl)) {
-                                this._arr = Laya.Loader.getRes(arrUrl);
+                                this._arr = Tools._ObjArray.arrCopy(Laya.Loader.getRes(arrUrl)['RECORDS']);
                             }
                             else {
                                 console.log(`${arrUrl}数据表不存在！`);
@@ -2164,6 +2166,44 @@
                         }
                     }
                     return bool;
+                }
+                get _pitchClassify() {
+                    return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                }
+                ;
+                set _pitchClassify(str) {
+                    if (this._List) {
+                        this._List.refresh();
+                    }
+                    Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                }
+                ;
+                get _pitchName() {
+                    return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                }
+                ;
+                set _pitchName(str) {
+                    if (this._List) {
+                        this._List.refresh();
+                    }
+                    Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                }
+                ;
+                _setPitch(name) {
+                    let _calssify;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] == name) {
+                            element[this._property.pitch] = true;
+                            _calssify = element[this._property.classify];
+                        }
+                        else {
+                            element[this._property.pitch] = false;
+                        }
+                    }
+                    this._pitchClassify = _calssify;
+                    this._pitchName = name;
+                    this._refreshAndStorage();
                 }
                 _addObject(obj) {
                     let _obj = Tools._ObjArray.objCopy(obj);
@@ -3093,7 +3133,7 @@
                         btnEffect = new _Reduce();
                         break;
                     default:
-                        btnEffect = new _Largen();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -3119,7 +3159,7 @@
                         btnEffect = new _Largen();
                         break;
                     default:
-                        btnEffect = new _Reduce();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target._off(Laya.Event.MOUSE_DOWN, caller, down);
@@ -5772,6 +5812,7 @@
                     case 'MakeUp':
                         break;
                     case 'Start':
+                        _Res._list.scene3D.MakeClothes.Scene.removeSelf();
                         break;
                     default:
                         break;
@@ -6513,9 +6554,8 @@
             _Event["scissorSitu"] = "_MakeTailor_scissorSitu";
         })(_Event = _MakeTailor._Event || (_MakeTailor._Event = {}));
         class DottedLine extends DataAdmin._Table {
-            constructor(Root, LineParent, OwnerScene) {
+            constructor(LineParent, OwnerScene) {
                 super();
-                this.Root = Root;
                 this.LineParent = LineParent;
                 this.OwnerScene = OwnerScene;
                 for (let index = 0; index < this.LineParent.numChildren; index++) {
@@ -6530,23 +6570,18 @@
                     }
                 }
             }
-            removeCloth(name) {
-                let Cloth = this.Root.getChildByName(`Cloth${name.substr(4)}`);
-                if (Cloth) {
-                    let ani = this.OwnerScene[`ani${name.substr(4)}`];
-                    ani.play(0, false);
-                    ani.on(Laya.Event.COMPLETE, this, () => {
-                        Cloth.removeSelf();
-                        console.log('删除节点！');
-                    });
-                }
-                else {
-                    console.log('当前虚线上没有可以裁剪布料，请检查');
-                }
-            }
         }
         _MakeTailor.DottedLine = DottedLine;
-        class Scissor extends Admin._ObjectBase {
+        class _Data extends DataAdmin._Table {
+            static _Ins() {
+                if (!this.ins) {
+                    this.ins = new _Data('DIY_Data', _Res._list.json.Clothes.url);
+                }
+                return this.ins;
+            }
+        }
+        _MakeTailor._Data = _Data;
+        class _Scissor extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
                 this.state = 'none';
@@ -6587,8 +6622,6 @@
                             Animation2D.rotate(this._SceneImg('S2'), this.Ani.range / 3, time);
                         });
                     },
-                    rotate: () => {
-                    },
                     event: () => {
                         this._evReg(_Event.scissorPlay, () => {
                             this.Ani.paly();
@@ -6597,7 +6630,7 @@
                             this.Ani.stop();
                         });
                         this._evReg(_Event.scissorSitu, () => {
-                            Animation2D.move_rotate(this._Owner, this.fRotation + 360, this.fPoint, 600, 0, () => {
+                            Animation2D.move_rotate(this._Owner, this._fRotation + 360, this._fPoint, 600, 0, () => {
                                 this._evNotify(_Event.completeAni);
                             });
                         });
@@ -6616,36 +6649,32 @@
                                 this._Owner.rotation += unit;
                             });
                         });
-                    }
+                    },
                 };
                 this.Move = {
                     touchP: null,
                     diffP: null,
                 };
             }
-            lwgOnAwake() {
-                this.fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
-                this.fRotation = this._Owner.rotation;
-            }
             lwgEvent() {
                 this.Ani.event();
             }
-            lwgOnStageDown(e) {
-                this._evNotify(_Event.scissorPlay);
-                this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
-            }
-            lwgOnStageMove(e) {
-                if (this.Move.touchP) {
-                    this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
-                    this._Owner.x += this.Move.diffP.x;
-                    this._Owner.y += this.Move.diffP.y;
-                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+            lwgButton() {
+                this._btnFour(this._SceneImg('ScissorsMobile'), (e) => {
                     this._evNotify(_Event.scissorPlay);
-                }
-            }
-            lwgOnStageUp() {
-                this._evNotify(_Event.scissorStop);
-                this.Move.touchP = null;
+                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                }, (e) => {
+                    if (this.Move.touchP) {
+                        this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
+                        this._Owner.x += this.Move.diffP.x;
+                        this._Owner.y += this.Move.diffP.y;
+                        this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                        this._evNotify(_Event.scissorPlay);
+                    }
+                }, (e) => {
+                    this._evNotify(_Event.scissorStop);
+                    this.Move.touchP = null;
+                });
             }
             onTriggerEnter(other, _Owner) {
                 if (this.state == 'none' || this.state == other.owner.parent.name) {
@@ -6664,7 +6693,13 @@
                 }
             }
         }
-        _MakeTailor.Scissor = Scissor;
+        class _Item extends Admin._ObjectBase {
+            lwgButton() {
+                this._btnUp(this._Owner, () => {
+                    _Data._Ins()._setPitch(this._Owner['_dataSource'][_Data._Ins()._property.name]);
+                }, null);
+            }
+        }
         class MakeTailor extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
@@ -6755,31 +6790,52 @@
                 };
             }
             lwgOnAwake() {
-                this.DottedLineControl = new DottedLine(this._ImgVar('Root'), this._ImgVar('LineParent'), this._Owner);
-                this.DottedLineControl.BtnCompelet = Tools._Node.createPrefab(_Res._list.prefab2D.BtnCompelet.prefab);
-                this._Owner.addChild(this.DottedLineControl.BtnCompelet);
-                this.DottedLineControl.BtnCompelet.pos(Laya.stage.width - 100, 150);
-                this.DottedLineControl.BtnCompelet.visible = false;
-                this._ImgVar('Scissor').addComponent(Scissor);
+                this.DLineControl = new DottedLine(this._ImgVar('LineParent'), this._Owner);
+                this._ImgVar('Scissor').addComponent(_Scissor);
+                _Data._Ins()._List = this._ListVar('List');
+                _Data._Ins()._List.selectEnable = true;
+                _Data._Ins()._List.vScrollBarSkin = "";
+                _Data._Ins()._List.array = _Data._Ins()._arr;
+                _Data._Ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                    let data = Cell.dataSource;
+                    let Icon = Cell.getChildByName('Icon');
+                    Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
+                    let Board = Cell.getChildByName('Board');
+                    Board.skin = `Lwg/UI/ui_orthogon_green.png`;
+                    if (data[_Data._Ins()._property.pitch]) {
+                        Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
+                    }
+                    else {
+                        Board.skin = `Lwg/UI/ui_orthogon_grass.png`;
+                    }
+                    if (!Cell.getComponent(_Item)) {
+                        Cell.addComponent(_Item);
+                    }
+                });
             }
             lwgAdaptive() {
+                this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
             }
             lwgEvent() {
                 this._evReg(_Event.completeAni, () => {
                     this.completeAni.ani3();
                 });
                 this._evReg(_Event.trigger, (Dotted) => {
-                    let value = this.DottedLineControl._checkCondition(Dotted.parent.name);
+                    let value = this.DLineControl._checkCondition(Dotted.parent.name);
                     Dotted.visible = false;
                     if (value) {
-                        this.DottedLineControl.removeCloth(Dotted.parent.name);
-                        if (this.DottedLineControl._checkAllCompelet()) {
+                        let Cloth = this._ImgVar('Root').getChildByName(`Cloth${Dotted.parent.name.substr(4)}`);
+                        let ani = this._Owner[`ani${Dotted.parent.name.substr(4)}`];
+                        ani.play(0, false);
+                        ani.on(Laya.Event.COMPLETE, this, () => {
+                            Cloth.removeSelf();
+                        });
+                        if (this.DLineControl._checkAllCompelet()) {
                             Tools._Node.removeAllChildren(this._ImgVar('LineParent'));
                             this._evNotify(_Event.scissorSitu);
                         }
                     }
-                    let Parent = Dotted.parent;
-                    let gPos = Parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
+                    let gPos = Dotted.parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
                     if (Dotted.name == 'A') {
                         if (this._ImgVar('Scissor').x <= gPos.x) {
                             this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
@@ -6799,10 +6855,7 @@
                 });
             }
             lwgButton() {
-                this._btnUp(this._ImgVar('BtnNext'), () => {
-                    this._openScene('MakeClothes', true, true);
-                });
-                this._btnUp(this.DottedLineControl.BtnCompelet, () => {
+                this._btnUp(this._ImgVar('BtnComplete'), () => {
                     this._openScene('MakeClothes', true, true);
                 });
             }
@@ -6822,25 +6875,26 @@
                 };
             }
             static _Ins() {
-                if (!this.instance) {
-                    this.instance = new _General('ClothesDIY', _Res._list.json.Clothes.url, true);
+                if (!this.ins) {
+                    this.ins = new _General('ClothesGeneral', _Res._list.json.Clothes.url, true);
                 }
-                return this.instance;
+                return this.ins;
             }
         }
         _DressingRoom._General = _General;
         class _DIY extends DataAdmin._Table {
             static _Ins() {
-                if (!this.instance) {
-                    this.instance = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
+                if (!this.ins) {
+                    this.ins = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
                 }
-                return this.instance;
+                return this.ins;
             }
         }
         _DressingRoom._DIY = _DIY;
         class _Item extends Admin._ObjectBase {
             lwgButton() {
-                this._btnUp(this._Owner, () => {
+                this._btnUp(this._Owner, (e) => {
+                    _DIY._Ins()._setPitch(this._Owner['_dataSource'][_DIY._Ins()._property.name]);
                 }, null);
             }
         }
@@ -6869,10 +6923,14 @@
                 });
                 _DIY._Ins()._Tap = this._ListVar('Tap');
             }
+            lwgAdaptive() {
+                this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
+            }
             lwgOnStart() {
             }
             lwgButton() {
-                this._btnUp(this._ImgVar('BtnOK'), () => {
+                this._btnUp(this._ImgVar('BtnComplete'), () => {
+                    this._openScene('Start', true, true);
                 });
             }
         }

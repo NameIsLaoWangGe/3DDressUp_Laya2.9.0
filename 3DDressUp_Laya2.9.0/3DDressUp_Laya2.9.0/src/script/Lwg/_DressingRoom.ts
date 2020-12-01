@@ -1,14 +1,15 @@
 import { Admin, DataAdmin } from "./Lwg";
 import { _Res } from "./_PreLoad";
+import { _PropTry } from "./_PropTry";
 
 export module _DressingRoom {
     export class _General extends DataAdmin._Table {
-        private static instance: _General;
+        private static ins: _General;
         static _Ins() {
-            if (!this.instance) {
-                this.instance = new _General('ClothesDIY', _Res._list.json.Clothes.url, true);
+            if (!this.ins) {
+                this.ins = new _General('ClothesGeneral', _Res._list.json.Clothes.url, true);
             }
-            return this.instance;
+            return this.ins;
         }
         _classify = {
             Dress: 'Dress',
@@ -18,19 +19,19 @@ export module _DressingRoom {
     }
 
     export class _DIY extends DataAdmin._Table {
-        private static instance: _DIY;
+        private static ins: _DIY;
         static _Ins() {
-            if (!this.instance) {
-                this.instance = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
+            if (!this.ins) {
+                this.ins = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
             }
-            return this.instance;
+            return this.ins;
         }
     }
 
     class _Item extends Admin._ObjectBase {
         lwgButton(): void {
-            this._btnUp(this._Owner, () => {
-                // this._Owner['_dataSource'][_DIY._Ins()._property.pitch]
+            this._btnUp(this._Owner, (e: Laya.Event) => {
+                _DIY._Ins()._setPitch(this._Owner['_dataSource'][_DIY._Ins()._property.name]);
             }, null)
         }
     }
@@ -38,6 +39,7 @@ export module _DressingRoom {
     export class DressingRoom extends Admin._SceneBase {
         lwgOnAwake(): void {
             _General._Ins()._List = this._ListVar('List');
+
             _DIY._Ins()._List = this._ListVar('List');
             _DIY._Ins()._List.selectEnable = true;
             _DIY._Ins()._List.vScrollBarSkin = "";
@@ -57,15 +59,20 @@ export module _DressingRoom {
                     Cell.addComponent(_Item)
                 }
             });
+
             _DIY._Ins()._Tap = this._ListVar('Tap');
         }
 
+        lwgAdaptive(): void {
+            this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
+        }
+        
         lwgOnStart(): void {
         }
 
         lwgButton(): void {
-            this._btnUp(this._ImgVar('BtnOK'), () => {
-
+            this._btnUp(this._ImgVar('BtnComplete'), () => {
+                this._openScene('Start', true, true);
             })
         }
     }
