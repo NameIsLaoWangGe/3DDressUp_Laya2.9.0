@@ -16,7 +16,7 @@ export module _Start {
         // }
 
         lwgOnStart(): void {
-           
+
 
             // let Img2 = new Laya.Image;
             // Img2.width = Laya.stage.height;
@@ -44,7 +44,7 @@ export module _Start {
         }
         lwgButton(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
-                this._openScene('MakeTailor');
+                this._openScene('MakeTailor', true, true);
             })
         }
     }

@@ -14,12 +14,13 @@ export module _MakeTailor {
     }
 
     /**服装数据*/
-    export class _Data extends DataAdmin._Table {
-        private static ins: _Data;
-        static _Ins() {
+    export class _Clothes extends DataAdmin._Table {
+        private static ins: _Clothes;
+        static _ins() {
             if (!this.ins) {
-                this.ins = new _Data('DIY_Data', _Res._list.json.Clothes.url);
-                this.ins._pitchClassify = this.ins._classify.Dress
+                this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                this.ins._pitchClassify = this.ins._classify.Dress;
+                this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
             }
             return this.ins;
         }
@@ -27,6 +28,65 @@ export module _MakeTailor {
             Dress: 'Dress',
             Top: 'Top',
             Bottoms: 'Bottoms',
+        }
+        ClothesArr: Array<Laya.Sprite>;
+        /**当前选中的服装数组*/
+        getClothesArr(): Array<any> {
+            if (!this.ClothesArr) {
+                this.ClothesArr = [];
+                let ClothesArr = _Clothes._ins()._arr;
+                for (let index = 0; index < ClothesArr.length; index++) {
+                    let clo = Tools._Node.createPrefab(_Res._list.prefab2D[`${ClothesArr[index]['name']}`]['prefab']);
+                    this.ClothesArr.push(clo);
+                }
+            }
+            return this.ClothesArr;
+        }
+    }
+
+    /**当前任务服装数据*/
+    export class _Task extends DataAdmin._Table {
+        private static ins: _Task;
+        static _ins() {
+            if (!this.ins) {
+                this.ins = new _Task('DIY_Task');
+            }
+            return this.ins;
+        }
+
+        Clothes: Laya.Box;
+        LineParent: Laya.Image;
+        /**更换服装*/
+        changeClothes(Parent: Laya.Scene): void {
+            let clothesArr = _Clothes._ins().getClothesArr();
+            let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            for (let index = 0; index < clothesArr.length; index++) {
+                const element = clothesArr[index] as Laya.Box;
+                if (element.name == name) {
+                    Parent.addChild(element);
+                    this.Clothes = element;
+                    element.zOrder = 20;
+                    this.LineParent = element.getChildByName('LineParent') as Laya.Image;
+                    this.setData();
+                } else {
+                    element.removeSelf();
+                }
+            }
+        }
+        /**设置单个服装的任务信息*/
+        setData(): void {
+            this._arr = [];
+            for (let index = 0; index < this.LineParent.numChildren; index++) {
+                const Line = this.LineParent.getChildAt(index) as Laya.Image;
+                if (Line.numChildren > 0) {
+                    let data = {};
+                    data['Line'] = Line;
+                    data[this._property.name] = Line.name;
+                    data[this._property.conditionNum] = Line.numChildren;
+                    data[this._property.degreeNum] = 0;
+                    this._arr.push(data);
+                }
+            }
         }
     }
 
@@ -106,6 +166,11 @@ export module _MakeTailor {
                     })
                 })
             },
+            effcts: () => {
+                for (let index = 0; index < 8; index++) {
+                    Effects._Particle._spray(this._Scene, this._point, [0, 0], [10, 10], null, [0, 360], null, null, null, null, null, null, null, this._Owner.zOrder - 1);
+                }
+            }
         }
         lwgEvent(): void {
             this.Ani.event();
@@ -144,6 +209,7 @@ export module _MakeTailor {
                     this._evNotify(_Event.scissorStop);
                     this.state = other.owner.parent.name;
                     EventAdmin._notify(_Event.trigger, [other.owner]);
+                    this.Ani.effcts();
                 }
             }
         }
@@ -157,76 +223,23 @@ export module _MakeTailor {
     class _Item extends Admin._ObjectBase {
         lwgButton(): void {
             this._btnUp(this._Owner, () => {
-                _Data._Ins()._setPitch(this._Owner['_dataSource'][_Data._Ins()._property.name]);
-                this._evNotify(_Event.changeClothes)
+                _Clothes._ins()._setPitch(this._Owner['_dataSource'][_Clothes._ins()._property.name]);
+                this._evNotify(_Event.changeClothes);
             }, null)
         }
     }
 
     export class MakeTailor extends Admin._SceneBase {
-        /**服装控制*/
-        DLine = {
-            Data: new DataAdmin._Table(),
-            getClothesArr: () => {
-                if (!this[`DLCloArr`]) {
-                    this[`DLCloArr`] = [];
-                    let classArr = _Data._Ins()._arr;
-                    for (let index = 0; index < classArr.length; index++) {
-                        let clo = Tools._Node.createPrefab(_Res._list.prefab2D[`${classArr[index]['name']}`]['prefab']);
-                        this[`DLCloArr`].push(clo);
-                    }
-                }
-                return this[`DLCloArr`];
-            },
-            Clothes: null as Laya.Box,
-            LineParent: null as Laya.Image,
-            setData: () => {
-                this.DLine.Data._arr = [];
-                for (let index = 0; index < this.DLine.LineParent.numChildren; index++) {
-                    const Line = this.DLine.LineParent.getChildAt(index) as Laya.Image;
-                    if (Line.numChildren > 0) {
-                        let data = {};
-                        data['Line'] = Line;
-                        data[this.DLine.Data._property.name] = Line.name;
-                        data[this.DLine.Data._property.conditionNum] = Line.numChildren;
-                        data[this.DLine.Data._property.degreeNum] = 0;
-                        this.DLine.Data._arr.push(data);
-                    }
-                }
-            },
-            changeClothes: () => {
-                let clothesArr = this.DLine.getClothesArr();
-                let name = _Data._Ins()._pitchName ? _Data._Ins()._pitchName : clothesArr[0]['name'];
-                for (let index = 0; index < clothesArr.length; index++) {
-                    const element = clothesArr[index] as Laya.Box;
-                    if (element.name == name) {
-                        this._Owner.addChild(element);
-                        this.DLine.Clothes = element;
-                        element.zOrder = 20;
-                        this.DLine.LineParent = element.getChildByName('LineParent') as Laya.Image;
-                        this.DLine.setData();
-                    } else {
-                        element.removeSelf();
-                    }
-                }
-            },
-        };
-
         lwgOnAwake(): void {
             this._ImgVar('Scissor').addComponent(_Scissor);
-
-            _Data._Ins()._List = this._ListVar('List');
-            _Data._Ins()._List.selectEnable = true;
-            _Data._Ins()._List.vScrollBarSkin = "";
-            _Data._Ins()._arr = _Data._Ins()._getArrByClassify(_Data._Ins()._classify.Dress);
-            _Data._Ins()._List.array = _Data._Ins()._arr;
-            _Data._Ins()._List.renderHandler = new Laya.Handler(this, (Cell: Laya.Box, index: number) => {
+            _Clothes._ins()._List = this._ListVar('List');
+            _Clothes._ins()._listrender = (Cell: Laya.Box, index: number) => {
                 let data = Cell.dataSource;
                 let Icon = Cell.getChildByName('Icon') as Laya.Image;
                 Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
                 let Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                if (data[_Data._Ins()._property.pitch]) {
+                if (data[_Clothes._ins()._property.pitch]) {
                     Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
                 } else {
                     Board.skin = `Lwg/UI/ui_orthogon_grass.png`;
@@ -234,7 +247,7 @@ export module _MakeTailor {
                 if (!Cell.getComponent(_Item)) {
                     Cell.addComponent(_Item)
                 }
-            });
+            }
         }
 
         lwgAdaptive(): void {
@@ -249,26 +262,26 @@ export module _MakeTailor {
         }
 
         lwgOnStart(): void {
-            this.DLine.changeClothes();
+            _Task._ins().changeClothes(this._Owner);
         }
 
         lwgEvent(): void {
             this._evReg(_Event.changeClothes, () => {
-                this.DLine.changeClothes();
+                _Task._ins().changeClothes(this._Owner);
             })
 
             this._evReg(_Event.trigger, (Dotted: Laya.Image) => {
-                let value = this.DLine.Data._checkCondition(Dotted.parent.name);
+                let value = _Task._ins()._checkCondition(Dotted.parent.name);
                 Dotted.visible = false;
                 if (value) {
                     // 删除布料
-                    for (let index = 0; index < this.DLine.Clothes.numChildren; index++) {
-                        const element = this.DLine.Clothes.getChildAt(index) as Laya.Image;
+                    for (let index = 0; index < _Task._ins().Clothes.numChildren; index++) {
+                        const element = _Task._ins().Clothes.getChildAt(index) as Laya.Image;
                         if (element.name.substr(5, 2) == Dotted.parent.name.substr(4, 2)) {
                             // element.removeSelf();
                             let time = 2000;
-                            let disX = 2000;
-                            let disY = 2000;
+                            let disX = Tools._Number.randomOneInt(1000) + 1000;
+                            let disY = Tools._Number.randomOneInt(1000) + 1000;
                             switch (element.name.substr(8)) {
                                 case 'U':
                                     disX = 0;
@@ -293,15 +306,19 @@ export module _MakeTailor {
                                 default:
                                     break;
                             }
-                            Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? 50 : -50, new Laya.Point(element.x + disX / 20, element.y + disY / 20), time / 5, 0, () => {
-                                Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? 360 : -360, new Laya.Point(element.x + disX, element.y + disY), time, 0, () => {
+                            Animation2D.move_rotate(element, 0, new Laya.Point(element.x + disX / 30, element.y + disY / 30), time / 6, 0, () => {
+
+                                let rotate1 = Tools._Number.randomOneBySection(180);
+                                let rotate2 = Tools._Number.randomOneBySection(-180);
+                                Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? rotate1 : rotate2, new Laya.Point(element.x + disX, element.y + disY), time, 0, () => {
+                                    Animation2D.fadeOut(element, 1, 0, 200);
                                 });
                             });
                         }
                     }
                     // 检测是否全部完成
-                    if (this.DLine.Data._checkAllCompelet()) {
-                        Tools._Node.removeAllChildren(this.DLine.LineParent);
+                    if (_Task._ins()._checkAllCompelet()) {
+                        Tools._Node.removeAllChildren(_Task._ins().LineParent);
                         this._evNotify(_Event.scissorSitu);
                         TimerAdmin._frameOnce(60, this, () => {
                             this._evNotify(_Event.completeEffc);

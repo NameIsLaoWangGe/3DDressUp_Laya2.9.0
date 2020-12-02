@@ -783,6 +783,25 @@ export module lwg {
                 afterMethod();
             }, args, coverBefore)
         }
+        /**
+         * 同时执行很多次的单次的计时器，基于帧，用于一些类似于爆炸特效等
+         * @param delay 延时
+         * @param num 个数
+         * @param afterMethod 结束回调函数
+         * @param beforeMethod 开始之前的函数
+         * @param args 回调参数[]
+         * @param coverBefore 是否覆盖之前的延迟执行，默认为 true 。
+         */
+        export function _frameNumOnce(delay: number, num: number, caller: any, afterMethod: Function, beforeMethod?: Function, args?: any[], coverBefore?: boolean): void {
+            for (let index = 0; index < num; index++) {
+                if (beforeMethod) {
+                    beforeMethod();
+                }
+                Laya.timer.frameOnce(delay, caller, () => {
+                    afterMethod();
+                }, args, coverBefore)
+            }
+        }
 
         /**
          * 普通无限循环，基于时间
@@ -1353,7 +1372,7 @@ export module lwg {
             let time: number = 700;
             let delay: number = 100;
             if (Scene.getChildByName('Background')) {
-                Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
+                Animation2D.fadeOut(Scene.getChildByName('Background') as Laya.Sprite, 0, 1, time);
             }
             let stickInLeftArr = Tools._Node.zOrderByY(Scene, false);
             for (let index = 0; index < stickInLeftArr.length; index++) {
@@ -1551,7 +1570,7 @@ export module lwg {
             static _openZOderUp(): void {
 
             };
-            /**当前打开场景放在最上面*/
+            /**当前打开场景放在最上面,如果使用了关闭动画，必然关闭场景在上面*/
             static _closeZOderUP(CloseScene: Laya.Scene): void {
                 if (SceneAnimation._closeSwitch) {
                     let num = 0;
@@ -2007,6 +2026,10 @@ export module lwg {
             _fPoint: Laya.Point;
             /**初始角度*/
             _fRotation: number;
+            /**获取坐标*/
+            get _point(): Laya.Point {
+                return new Laya.Point(this._Owner.x, this._Owner.y);
+            }
             /**所属场景*/
             get _Scene(): Laya.Sprite {
                 return this.owner.scene as Laya.Scene;
@@ -2402,8 +2425,21 @@ export module lwg {
             _lastArr: Array<any> = [];
             /**是否启用本地存储*/
             _localStorage: boolean = false;
-            /**表格中的List*/
-            _List: Laya.List;
+            /**表格中的List,会有一些默认设置*/
+            get _List(): Laya.List {
+                return this[`${this._tableName}_List`];
+            }
+            /**表格中的List,会有一些默认设置*/
+            set _List(list: Laya.List) {
+                this[`${this._tableName}_List`] = list;
+                this[`${this._tableName}_List`].array = this._arr;
+                this[`${this._tableName}_List`].selectEnable = true;
+                this[`${this._tableName}_List`].vScrollBarSkin = "";
+                this[`${this._tableName}_List`].renderHandler = new Laya.Handler(this, (Cell: Laya.Box, index: number) => {
+                    this._listrender && this._listrender(Cell, index);
+                });
+            }
+            _listrender: Function;
             /**表格中的Tap*/
             _Tap: Laya.List;
             /**
@@ -2427,7 +2463,7 @@ export module lwg {
                         if (Laya.Loader.getRes(arrUrl)) {
                             this._arr = Tools._ObjArray.arrCopy(Laya.Loader.getRes(arrUrl)['RECORDS']);
                         } else {
-                            console.log(`${arrUrl}数据表不存在！`);
+                            // console.log(`${arrUrl}数据表不存在！`);
                         }
                     }
                 }
@@ -3057,7 +3093,7 @@ export module lwg {
                  * @param rotation 角度区间[a,b]
                  * @param urlArr 图片地址集合，默认为框架中随机的样式
                  * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
-                 * @param zOrder 层级，默认为0
+                 * @param zOrder 层级，默认为1000
                  */
                 constructor(parent: Laya.Sprite, centerPoint: Laya.Point, sectionWH: [number, number], width: [number, number], height: [number, number], rotation: [number, number], urlArr: Array<string>, colorRGBA: [[number, number, number, number], [number, number, number, number]], zOrder: number) {
                     super();
@@ -3075,7 +3111,7 @@ export module lwg {
                     this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
                     this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                     this.alpha = 0;
-                    this.zOrder = zOrder ? zOrder : 0;
+                    this.zOrder = zOrder ? zOrder : 1000;
                     let RGBA = [];
                     RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
                     RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
@@ -3331,9 +3367,9 @@ export module lwg {
                * @param rotationSpeed 旋转速度
                * @param speed  速度区间[a,b]
                * @param accelerated 加速度区间[a,b] 
-               * @param zOrder 层级，默认为0
+               * @param zOrder 层级，默认为1000,在最上层
                */
-            export function _spray(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: [], colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, moveAngle?: [number, number], distance?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
+            export function _spray(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: [], colorRGBA?: [[number, number, number, number], [number, number, number, number]], moveAngle?: [number, number], distance?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number], zOrder?: number): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
@@ -3597,7 +3633,7 @@ export module lwg {
             }
         }
 
-        /**闪光*/
+        /**闪烁*/
         export module _Glitter {
             export class _GlitterImage extends Laya.Image {
                 constructor(parent: Laya.Sprite, centerPos: Laya.Point, radiusXY: Array<number>, urlArr: Array<string>, colorRGBA: Array<Array<number>>, width: Array<number>, height: Array<number>) {
@@ -4352,7 +4388,7 @@ export module lwg {
          * @param func 回调函数
          * @param  stageLock 场景锁
          */
-        export function fadeOut(node, alpha1, alpha2, time, delayed?: number, func?: Function, stageClick?: boolean): void {
+        export function fadeOut(node: Laya.Sprite, alpha1: number, alpha2: number, time: number, delayed?: number, func?: Function, stageClick?: boolean): void {
             node.alpha = alpha1;
             if (stageClick) {
                 Click._switch = false
@@ -6829,13 +6865,8 @@ export module lwg {
                         Admin._SceneControl[_loadType] = this._Owner;
                         // 页面前
                         if (_loadType !== Admin._SceneName.PreLoad) {
-                            if (Admin._PreLoadCutIn.openScene) {
-                                console.log('预加载完毕开始打开界面！')
-                                Admin._openScene(Admin._PreLoadCutIn.openScene, Admin._PreLoadCutIn.closeName, () => {
-                                    Admin._PreLoadCutIn.func;
-                                    Admin._closeScene(_loadType);
-                                }, Admin._PreLoadCutIn.zOrder);
-                            }
+                            Admin._PreLoadCutIn.openScene && this._openScene(Admin._PreLoadCutIn.openScene)
+                            // console.log('预加载完毕开始打开界面！')
                         } else {
                             //游戏开始前
                             for (const key in Admin._Moudel) {
