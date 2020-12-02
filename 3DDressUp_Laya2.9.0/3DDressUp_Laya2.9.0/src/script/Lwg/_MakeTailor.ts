@@ -20,8 +20,12 @@ export module _MakeTailor {
         static _ins() {
             if (!this.ins) {
                 this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                //设置初始值
                 this.ins._pitchClassify = this.ins._classify.Dress;
                 this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
+                if (!this.ins._pitchName) {
+                    this.ins._pitchName = this.ins._arr[this.ins._property.name];
+                }
             }
             return this.ins;
         }
@@ -31,21 +35,22 @@ export module _MakeTailor {
             Bottoms: 'Bottoms',
         }
         ClothesArr: Array<Laya.Sprite>;
-        /**当前选中的服装数组*/
+        /**当前选中的类别中所有的服装*/
         getClothesArr(): Array<any> {
             if (!this.ClothesArr) {
                 this.ClothesArr = [];
-                let ClothesArr = _Clothes._ins()._arr;
-                for (let index = 0; index < ClothesArr.length; index++) {
-                    let CloBox = this.createClothes(`${ClothesArr[index]['name']}`);
+                const dataArr = _Clothes._ins()._arr;
+                for (let index = 0; index < dataArr.length; index++) {
+                    let CloBox = this.createClothes(`${dataArr[index]['name']}`);
                     this.ClothesArr.push(CloBox);
                 }
             }
             return this.ClothesArr;
         }
-        createClothes(name: string): Laya.Sprite {
-            let Cloth = Tools._Node.createPrefab(_Res._list.prefab2D[name]['prefab']);
-            let CloBox = new Laya.Sprite;
+        createClothes(name: string, Scene?: Laya.Scene): Laya.Sprite {
+            const Cloth = Tools._Node.createPrefab(_Res._list.prefab2D[name]['prefab']);
+            // 增加一个和舞台一样大小的父节点方便移动
+            const CloBox = new Laya.Sprite;
             CloBox.width = Laya.stage.width;
             CloBox.height = Laya.stage.height;
             CloBox.pivotX = CloBox.width / 2;
@@ -54,32 +59,44 @@ export module _MakeTailor {
             CloBox.y = Laya.stage.height / 2;
             CloBox.addChild(Cloth);
             CloBox.name = Cloth.name;
+            if (Scene) {
+                Scene.addChild(CloBox);
+                CloBox.zOrder = 20;
+            }
             return CloBox;
         }
     }
 
     /**当前任务服装数据*/
-    export class _Task extends DataAdmin._Table {
-        private static ins: _Task;
+    export class _TaskClothes extends DataAdmin._Table {
+        private static ins: _TaskClothes;
         static _ins() {
             if (!this.ins) {
-                this.ins = new _Task('DIY_Task');
+                this.ins = new _TaskClothes('DIY_Task');
             }
             return this.ins;
         }
 
         /**本关重来*/
-        again(): void {
-            let clothesArr = _Clothes._ins().getClothesArr();
-            let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+        again(Scene: Laya.Scene): void {
+            const clothesArr = _Clothes._ins().getClothesArr();
+            const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            let CloBoxOld: Laya.Sprite;
+            let CloBoxNew: Laya.Sprite;
             for (let index = 0; index < clothesArr.length; index++) {
-                const element = clothesArr[index] as Laya.Box;
+                const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
-                    element.removeSelf();
-                    let CloBox = _Clothes._ins().createClothes(name);
-                    clothesArr[index] = CloBox;
+                    CloBoxOld = element;
+                    clothesArr[index] = CloBoxNew = _Clothes._ins().createClothes(name, Scene);
                 }
             }
+            const time = 500;
+            CloBoxNew.pos(0, -Laya.stage.height);
+            CloBoxNew && Animation2D.move_rotate(CloBoxNew, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+
+            Animation2D.move_rotate(CloBoxOld, 0, new Laya.Point(Laya.stage.width, Laya.stage.height), time, 0, () => {
+                CloBoxOld.removeSelf();
+            })
         }
 
         Clothes: Laya.Sprite;
@@ -87,16 +104,17 @@ export module _MakeTailor {
         LineParent: Laya.Image;
         /**更换服装*/
         changeClothes(Scene: Laya.Scene): void {
-            let time = 500;
-            let clothesArr = _Clothes._ins().getClothesArr();
-            let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
-            let lastName = _Clothes._ins()._lastPitchName;
+            const time = 500;
+            const clothesArr = _Clothes._ins().getClothesArr();
+            const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            const lastName = _Clothes._ins()._lastPitchName;
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
-                    this.Clothes = element;
-                    element.zOrder = 20;
-                    this.LineParent = element.getChildAt(0).getChildByName('LineParent') as Laya.Image;
+                    element.removeSelf();
+                    // 重新创建一个，否则可能会导致碰撞框位置不正确
+                    this.Clothes = clothesArr[index] = _Clothes._ins().createClothes(name, Scene);
+                    this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
                     this.setData();
                 } else if (element.name == lastName) {
                     this.LastClothes = element;
@@ -104,11 +122,10 @@ export module _MakeTailor {
                     element.removeSelf();
                 }
             }
-            Scene.addChild(this.Clothes);
-            this.Clothes.pos(0, -Laya.stage.height);
-            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
-
             if (this.LastClothes) {
+                this.Clothes.pos(0, -Laya.stage.height);
+                this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+
                 Animation2D.move_rotate(this.LastClothes, 0, new Laya.Point(Laya.stage.width, -Laya.stage.height), time, 0, () => {
                     this.LastClothes.removeSelf();
                 })
@@ -211,14 +228,13 @@ export module _MakeTailor {
 
                 this._evReg(_Event.scissorAgain, () => {
                     Animation2D.move_rotate(this._Owner, this._fRotation, this._fPoint, 600, 100, () => {
-                        _Task._ins().again();
-                        _Task._ins().changeClothes(this._Scene);
+                        _TaskClothes._ins().again(this._Scene);
                     });
                 })
 
                 this._evReg(_Event.scissorRotation, (rotate: number) => {
                     TimerAdmin._clearAll([this._Owner]);
-                    let time = 10;
+                    const time = 10;
                     let angle: number;
                     if (Math.abs(rotate - this._Owner.rotation) < 180) {
                         angle = rotate - this._Owner.rotation;
@@ -292,9 +308,11 @@ export module _MakeTailor {
     class _Item extends Admin._ObjectBase {
         lwgButton(): void {
             this._btnUp(this._Owner, () => {
-                _Clothes._ins()._setPitch(this._Owner['_dataSource'][_Clothes._ins()._property.name]);
-                this._evNotify(_Event.changeClothes);
-            }, null)
+                if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
+                    _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
+                    this._evNotify(_Event.changeClothes);
+                }
+            }, 'no')
         }
     }
 
@@ -303,10 +321,10 @@ export module _MakeTailor {
             this._ImgVar('Scissor').addComponent(_Scissor);
             _Clothes._ins()._List = this._ListVar('List');
             _Clothes._ins()._listrender = (Cell: Laya.Box, index: number) => {
-                let data = Cell.dataSource;
-                let Icon = Cell.getChildByName('Icon') as Laya.Image;
+                const data = Cell.dataSource;
+                const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
-                let Board = Cell.getChildByName('Board') as Laya.Image;
+                const Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                 if (data[_Clothes._ins()._property.pitch]) {
                     Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
@@ -331,21 +349,22 @@ export module _MakeTailor {
         }
 
         lwgOnStart(): void {
-            _Task._ins().changeClothes(this._Owner);
+            _TaskClothes._ins().changeClothes(this._Owner);
         }
 
         lwgEvent(): void {
             this._evReg(_Event.changeClothes, () => {
-                _Task._ins().changeClothes(this._Owner);
+                _TaskClothes._ins().changeClothes(this._Owner);
             })
 
             this._evReg(_Event.scissorTrigger, (Dotted: Laya.Image) => {
-                let value = _Task._ins()._checkCondition(Dotted.parent.name);
+                const value = _TaskClothes._ins()._checkCondition(Dotted.parent.name);
                 Dotted.visible = false;
                 if (value) {
                     // 删除布料
-                    for (let index = 0; index < _Task._ins().Clothes.numChildren; index++) {
-                        const element = _Task._ins().Clothes.getChildAt(index) as Laya.Image;
+                    for (let index = 0; index < _TaskClothes._ins().Clothes.getChildAt(0).numChildren; index++) {
+                        const element = _TaskClothes._ins().Clothes.getChildAt(0).getChildAt(index) as Laya.Image;
+                        // 比对索引值
                         if (element.name.substr(5, 2) == Dotted.parent.name.substr(4, 2)) {
                             let time = 1500;
                             let disX = Tools._Number.randomOneInt(1000) + 1000;
@@ -384,8 +403,8 @@ export module _MakeTailor {
                         }
                     }
                     // 检测是否全部完成
-                    if (_Task._ins()._checkAllCompelet()) {
-                        Tools._Node.removeAllChildren(_Task._ins().LineParent);
+                    if (_TaskClothes._ins()._checkAllCompelet()) {
+                        Tools._Node.removeAllChildren(_TaskClothes._ins().LineParent);
                         this._evNotify(_Event.scissorRemove);
                         TimerAdmin._frameOnce(100, this, () => {
                             this._evNotify(_Event.completeEffc);
@@ -435,8 +454,7 @@ export module _MakeTailor {
                     this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
                     this._btnUp(this.Navi.BtnAgain, () => {
                         this._evNotify(_Event.scissorRemove, [() => {
-                            _Task._ins().again();
-                            _Task._ins().changeClothes(this._Owner);
+                            _TaskClothes._ins().again(this._Owner);
                         }]);
                         this.Navi.appear(this.Navi.appearType.again);
                     })

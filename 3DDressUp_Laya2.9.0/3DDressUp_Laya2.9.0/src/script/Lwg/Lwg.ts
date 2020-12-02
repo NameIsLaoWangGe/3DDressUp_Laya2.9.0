@@ -1801,9 +1801,6 @@ export module lwg {
              * @param effect 效果类型输入null则没有效果
            */
             _btnUp(target: Laya.Node, up: Function, effect?: string): void {
-                if (effect == null) {
-                    effect = Click._Type.no;
-                }
                 Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e: Laya.Event) => {
                     Click._switch && up && up(e);
                 }, null);

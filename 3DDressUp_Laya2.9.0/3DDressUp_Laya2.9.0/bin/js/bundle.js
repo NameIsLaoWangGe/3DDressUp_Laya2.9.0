@@ -1449,9 +1449,6 @@
                     }, null, null);
                 }
                 _btnUp(target, up, effect) {
-                    if (effect == null) {
-                        effect = Click._Type.no;
-                    }
                     Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e) => {
                         Click._switch && up && up(e);
                     }, null);
@@ -5938,23 +5935,26 @@
                     this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
                     this.ins._pitchClassify = this.ins._classify.Dress;
                     this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
+                    if (!this.ins._pitchName) {
+                        this.ins._pitchName = this.ins._arr[this.ins._property.name];
+                    }
                 }
                 return this.ins;
             }
             getClothesArr() {
                 if (!this.ClothesArr) {
                     this.ClothesArr = [];
-                    let ClothesArr = _Clothes._ins()._arr;
-                    for (let index = 0; index < ClothesArr.length; index++) {
-                        let CloBox = this.createClothes(`${ClothesArr[index]['name']}`);
+                    const dataArr = _Clothes._ins()._arr;
+                    for (let index = 0; index < dataArr.length; index++) {
+                        let CloBox = this.createClothes(`${dataArr[index]['name']}`);
                         this.ClothesArr.push(CloBox);
                     }
                 }
                 return this.ClothesArr;
             }
-            createClothes(name) {
-                let Cloth = Tools._Node.createPrefab(_Res._list.prefab2D[name]['prefab']);
-                let CloBox = new Laya.Sprite;
+            createClothes(name, Scene) {
+                const Cloth = Tools._Node.createPrefab(_Res._list.prefab2D[name]['prefab']);
+                const CloBox = new Laya.Sprite;
                 CloBox.width = Laya.stage.width;
                 CloBox.height = Laya.stage.height;
                 CloBox.pivotX = CloBox.width / 2;
@@ -5963,40 +5963,51 @@
                 CloBox.y = Laya.stage.height / 2;
                 CloBox.addChild(Cloth);
                 CloBox.name = Cloth.name;
+                if (Scene) {
+                    Scene.addChild(CloBox);
+                    CloBox.zOrder = 20;
+                }
                 return CloBox;
             }
         }
         _MakeTailor._Clothes = _Clothes;
-        class _Task extends DataAdmin._Table {
+        class _TaskClothes extends DataAdmin._Table {
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _Task('DIY_Task');
+                    this.ins = new _TaskClothes('DIY_Task');
                 }
                 return this.ins;
             }
-            again() {
-                let clothesArr = _Clothes._ins().getClothesArr();
-                let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            again(Scene) {
+                const clothesArr = _Clothes._ins().getClothesArr();
+                const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+                let CloBoxOld;
+                let CloBoxNew;
+                for (let index = 0; index < clothesArr.length; index++) {
+                    const element = clothesArr[index];
+                    if (element.name == name) {
+                        CloBoxOld = element;
+                        clothesArr[index] = CloBoxNew = _Clothes._ins().createClothes(name, Scene);
+                    }
+                }
+                const time = 500;
+                CloBoxNew.pos(0, -Laya.stage.height);
+                CloBoxNew && Animation2D.move_rotate(CloBoxNew, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time);
+                Animation2D.move_rotate(CloBoxOld, 0, new Laya.Point(Laya.stage.width, Laya.stage.height), time, 0, () => {
+                    CloBoxOld.removeSelf();
+                });
+            }
+            changeClothes(Scene) {
+                const time = 500;
+                const clothesArr = _Clothes._ins().getClothesArr();
+                const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+                const lastName = _Clothes._ins()._lastPitchName;
                 for (let index = 0; index < clothesArr.length; index++) {
                     const element = clothesArr[index];
                     if (element.name == name) {
                         element.removeSelf();
-                        let CloBox = _Clothes._ins().createClothes(name);
-                        clothesArr[index] = CloBox;
-                    }
-                }
-            }
-            changeClothes(Scene) {
-                let time = 500;
-                let clothesArr = _Clothes._ins().getClothesArr();
-                let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
-                let lastName = _Clothes._ins()._lastPitchName;
-                for (let index = 0; index < clothesArr.length; index++) {
-                    const element = clothesArr[index];
-                    if (element.name == name) {
-                        this.Clothes = element;
-                        element.zOrder = 20;
-                        this.LineParent = element.getChildAt(0).getChildByName('LineParent');
+                        this.Clothes = clothesArr[index] = _Clothes._ins().createClothes(name, Scene);
+                        this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent');
                         this.setData();
                     }
                     else if (element.name == lastName) {
@@ -6006,10 +6017,9 @@
                         element.removeSelf();
                     }
                 }
-                Scene.addChild(this.Clothes);
-                this.Clothes.pos(0, -Laya.stage.height);
-                this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time);
                 if (this.LastClothes) {
+                    this.Clothes.pos(0, -Laya.stage.height);
+                    this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time);
                     Animation2D.move_rotate(this.LastClothes, 0, new Laya.Point(Laya.stage.width, -Laya.stage.height), time, 0, () => {
                         this.LastClothes.removeSelf();
                     });
@@ -6030,7 +6040,7 @@
                 }
             }
         }
-        _MakeTailor._Task = _Task;
+        _MakeTailor._TaskClothes = _TaskClothes;
         class _Scissor extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
@@ -6105,13 +6115,12 @@
                         });
                         this._evReg(_Event.scissorAgain, () => {
                             Animation2D.move_rotate(this._Owner, this._fRotation, this._fPoint, 600, 100, () => {
-                                _Task._ins().again();
-                                _Task._ins().changeClothes(this._Scene);
+                                _TaskClothes._ins().again(this._Scene);
                             });
                         });
                         this._evReg(_Event.scissorRotation, (rotate) => {
                             TimerAdmin._clearAll([this._Owner]);
-                            let time = 10;
+                            const time = 10;
                             let angle;
                             if (Math.abs(rotate - this._Owner.rotation) < 180) {
                                 angle = rotate - this._Owner.rotation;
@@ -6184,9 +6193,11 @@
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 this._btnUp(this._Owner, () => {
-                    _Clothes._ins()._setPitch(this._Owner['_dataSource'][_Clothes._ins()._property.name]);
-                    this._evNotify(_Event.changeClothes);
-                }, null);
+                    if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
+                        _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
+                        this._evNotify(_Event.changeClothes);
+                    }
+                }, 'no');
             }
         }
         class MakeTailor extends Admin._SceneBase {
@@ -6203,8 +6214,7 @@
                             this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]);
                             this._btnUp(this.Navi.BtnAgain, () => {
                                 this._evNotify(_Event.scissorRemove, [() => {
-                                        _Task._ins().again();
-                                        _Task._ins().changeClothes(this._Owner);
+                                        _TaskClothes._ins().again(this._Owner);
                                     }]);
                                 this.Navi.appear(this.Navi.appearType.again);
                             });
@@ -6350,10 +6360,10 @@
                 this._ImgVar('Scissor').addComponent(_Scissor);
                 _Clothes._ins()._List = this._ListVar('List');
                 _Clothes._ins()._listrender = (Cell, index) => {
-                    let data = Cell.dataSource;
-                    let Icon = Cell.getChildByName('Icon');
+                    const data = Cell.dataSource;
+                    const Icon = Cell.getChildByName('Icon');
                     Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
-                    let Board = Cell.getChildByName('Board');
+                    const Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                     if (data[_Clothes._ins()._property.pitch]) {
                         Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
@@ -6374,18 +6384,18 @@
                 this.Navi.appear(this.Navi.appearType.first);
             }
             lwgOnStart() {
-                _Task._ins().changeClothes(this._Owner);
+                _TaskClothes._ins().changeClothes(this._Owner);
             }
             lwgEvent() {
                 this._evReg(_Event.changeClothes, () => {
-                    _Task._ins().changeClothes(this._Owner);
+                    _TaskClothes._ins().changeClothes(this._Owner);
                 });
                 this._evReg(_Event.scissorTrigger, (Dotted) => {
-                    let value = _Task._ins()._checkCondition(Dotted.parent.name);
+                    const value = _TaskClothes._ins()._checkCondition(Dotted.parent.name);
                     Dotted.visible = false;
                     if (value) {
-                        for (let index = 0; index < _Task._ins().Clothes.numChildren; index++) {
-                            const element = _Task._ins().Clothes.getChildAt(index);
+                        for (let index = 0; index < _TaskClothes._ins().Clothes.getChildAt(0).numChildren; index++) {
+                            const element = _TaskClothes._ins().Clothes.getChildAt(0).getChildAt(index);
                             if (element.name.substr(5, 2) == Dotted.parent.name.substr(4, 2)) {
                                 let time = 1500;
                                 let disX = Tools._Number.randomOneInt(1000) + 1000;
@@ -6422,8 +6432,8 @@
                                 });
                             }
                         }
-                        if (_Task._ins()._checkAllCompelet()) {
-                            Tools._Node.removeAllChildren(_Task._ins().LineParent);
+                        if (_TaskClothes._ins()._checkAllCompelet()) {
+                            Tools._Node.removeAllChildren(_TaskClothes._ins().LineParent);
                             this._evNotify(_Event.scissorRemove);
                             TimerAdmin._frameOnce(100, this, () => {
                                 this._evNotify(_Event.completeEffc);
