@@ -1,4 +1,4 @@
-import { Admin, EventAdmin, TimerAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
+import { Admin, EventAdmin, SceneAnimation, TimerAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
 import { _MakeClothes } from "./_MakeClothes";
 import { _MakeTailor } from "./_MakeTailor";
 import { _Res } from "./_PreLoad";
@@ -38,7 +38,7 @@ export module _PreLoadCutIn {
                     time++;
                     this._LabelVar('Schedule').text = `${time}`;
                 }, () => {
-                    switch (Admin._PreLoadCutIn.openScene) {
+                    switch (Admin._PreLoadCutIn.openName) {
                         case 'MakeClothes':
                             Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                             break;
@@ -47,7 +47,7 @@ export module _PreLoadCutIn {
                             _MakeTailor._Clothes._ins().getClothesArr();
                             break;
                         case 'Start':
-                            _Res._list.scene3D.MakeClothes.Scene.removeSelf();
+                            this.backStart();
                             break;
                         default:
                             break;
@@ -55,6 +55,13 @@ export module _PreLoadCutIn {
                     EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
                 })
             })
+        }
+        backStart(): void {
+            if (Admin._PreLoadCutIn.closeName == 'DressingRoom') {
+                _Res._list.scene3D.MakeClothes.Scene.removeSelf();
+            } else if (Admin._PreLoadCutIn.closeName == 'MakeTailor') {
+                // SceneAnimation._closeSwitch = true;
+            }
         }
         // lwgOpenAniAfter(): void {
         // }

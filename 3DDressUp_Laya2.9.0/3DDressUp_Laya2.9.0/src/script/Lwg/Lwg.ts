@@ -1538,7 +1538,7 @@ export module lwg {
         }
         /**预加载完毕后，需要打开的场景信息*/
         export let _PreLoadCutIn = {
-            openScene: null as string,
+            openName: null as string,
             closeName: null as string,
             func: null as Function,
             zOrder: null as number,
@@ -1552,7 +1552,7 @@ export module lwg {
          */
         export function _preLoadOpenScene(openName: string, closeName: string, func?: Function, zOrder?: number) {
             _openScene(_SceneName.PreLoadCutIn, closeName);
-            _PreLoadCutIn.openScene = openName;
+            _PreLoadCutIn.openName = openName;
             _PreLoadCutIn.closeName = closeName;
             _PreLoadCutIn.func = func;
             _PreLoadCutIn.zOrder = zOrder;
@@ -1776,7 +1776,6 @@ export module lwg {
              * @param caller 执行域
              * @param down 按下回调
              * @param effect 效果类型输入null则没有效果
-             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
             */
             _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
                 Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e: Laya.Event) => {
@@ -1788,7 +1787,6 @@ export module lwg {
               * @param target 节点
               * @param move 移动回调
               * @param effect 效果类型输入null则没有效果
-               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnMove(target: Laya.Node, move: Function, effect?: string): void {
                 Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e: Laya.Event) => {
@@ -1801,9 +1799,11 @@ export module lwg {
              * @param target 节点
              * @param up 抬起回调
              * @param effect 效果类型输入null则没有效果
-           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
            */
             _btnUp(target: Laya.Node, up: Function, effect?: string): void {
+                if (effect == null) {
+                    effect = Click._Type.no;
+                }
                 Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e: Laya.Event) => {
                     Click._switch && up && up(e);
                 }, null);
@@ -1813,7 +1813,6 @@ export module lwg {
               * @param target 节点
               * @param out 移出回调
               * @param effect 效果类型输入null则没有效果
-               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnOut(target: Laya.Node, out: Function, effect?: string): void {
                 Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e: Laya.Event) => { Click._switch && out && out(e) });
@@ -1826,7 +1825,6 @@ export module lwg {
               * @param move 移动回调
               * @param up 抬起回调
               * @param out 移出回调
-              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
                 Click._on(effect == null ? effect : Click._Use.value, target, this,
@@ -2031,7 +2029,7 @@ export module lwg {
                 return new Laya.Point(this._Owner.x, this._Owner.y);
             }
             /**所属场景*/
-            get _Scene(): Laya.Sprite {
+            get _Scene(): Laya.Scene {
                 return this.owner.scene as Laya.Scene;
             }
             /**父节点*/
@@ -2704,6 +2702,7 @@ export module lwg {
                 if (this._List) {
                     this._List.refresh();
                 }
+                this._lastPitchClassify = this[`${this._tableName}/pitchClassify`];
                 this[`${this._tableName}/pitchClassify`] = str;
                 if (this._localStorage) {
                     Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
@@ -2711,7 +2710,6 @@ export module lwg {
             };
             /**设置选中名称*/
             get _pitchName(): string {
-
                 if (!this[`${this._tableName}/_pitchName`]) {
                     if (this._localStorage) {
                         return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
@@ -2726,9 +2724,51 @@ export module lwg {
                 if (this._List) {
                     this._List.refresh();
                 }
+                this._lastPitchName = this[`${this._tableName}/_pitchName`];
                 this[`${this._tableName}/_pitchName`] = str;
                 if (this._localStorage) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                }
+            };
+
+            /**上一次选中类别*/
+            get _lastPitchClassify(): string {
+                if (!this[`${this._tableName}/_lastPitchClassify`]) {
+                    if (this._localStorage) {
+                        return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) : null;
+                    } else {
+                        return this[`${this._tableName}/_lastPitchClassify`] = null;
+                    }
+                } else {
+                    return this[`${this._tableName}/_lastPitchClassify`];
+                }
+            };
+            set _lastPitchClassify(str: string) {
+                if (this._List) {
+                    this._List.refresh();
+                }
+                this[`${this._tableName}/_lastPitchClassify`] = str;
+                if (this._localStorage) {
+                    Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
+                }
+            };
+
+            /**上一次选中的名称*/
+            get _lastPitchName(): string {
+                if (!this[`${this._tableName}/_lastPitchName`]) {
+                    if (this._localStorage) {
+                        return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) : null;
+                    } else {
+                        return this[`${this._tableName}/_lastPitchName`] = null;
+                    }
+                } else {
+                    return this[`${this._tableName}/_lastPitchName`];
+                }
+            }
+            set _lastPitchName(str: string) {
+                this[`${this._tableName}/_lastPitchName`] = str;
+                if (this._localStorage) {
+                    Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`, str.toString());
                 }
             };
 
@@ -2990,6 +3030,8 @@ export module lwg {
             圆形1 = "Lwg/Effects/yuan1.png",
             光圈1 = "Lwg/Effects/guangquan1.png",
             光圈2 = "Lwg/Effects/guangquan2.png",
+            三角形1 = "Lwg/Effects/triangle1.png",
+            三角形2 = "Lwg/Effects/triangle2.png",
         }
 
         /**
@@ -3355,21 +3397,20 @@ export module lwg {
             /**
                * 单个，四周，喷射，旋转爆炸
                * @param parent 父节点
-               * @param centerPoint 中心点
-               * @param sectionWH 以中心点为中心的矩形生成范围[w,h]
+               * @param centerPoint 发射点默认(0,0);
                * @param width 粒子的宽度区间[a,b]
                * @param height 粒子的高度区间[a,b],如果为空，这高度和宽度一样
-               * @param rotation 旋转角度
-               * @param moveAngle 角度区间，默认为360
+               * @param rotation 初始角度默认[0,360]
+               * @param moveAngle 移动方向角度区间，默认为[0，360]
                * @param urlArr 图片地址集合，默认为框架中随机的样式
                * @param colorRGBA 上色色值区间[[R,G,B,A],[R,G,B,A]]
-               * @param distance 移动距离区间[a,b]
-               * @param rotationSpeed 旋转速度
-               * @param speed  速度区间[a,b]
-               * @param accelerated 加速度区间[a,b] 
+               * @param distance 移动距离区间[a,b]，默认为[100, 200]
+               * @param rotationSpeed 旋转速度，默认为[0, 20]
+               * @param speed  速度区间[a,b]，默认为[3, 10]
+               * @param accelerated 加速度区间[a,b]，默认为[0.25, 0.45]
                * @param zOrder 层级，默认为1000,在最上层
                */
-            export function _spray(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: [], colorRGBA?: [[number, number, number, number], [number, number, number, number]], moveAngle?: [number, number], distance?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number], zOrder?: number): Laya.Image {
+            export function _spray(parent: Laya.Sprite, centerPoint?: Laya.Point, width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], distance?: [number, number], moveAngle?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number], zOrder?: number): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
@@ -3385,6 +3426,7 @@ export module lwg {
                 let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
                 let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
                 let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                rotationSpeed0 = Tools._Number.randomOneHalf() == 0 ? rotationSpeed0 : -rotationSpeed0;
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     Img.rotation += rotationSpeed0;
                     if (Img.alpha < 1 && moveCaller.alpha) {
@@ -3912,7 +3954,6 @@ export module lwg {
          * @param move 移动函数
          * @param up 抬起函数
          * @param out 出屏幕函数
-         * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
         export function _on(effect: string, target: Laya.Node, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
             let btnEffect: any;
@@ -3949,7 +3990,6 @@ export module lwg {
          * @param move 移动函数
          * @param up 抬起函数
          * @param out 出屏幕函数
-         * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
         export function _off(effect: string, target: any, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
             let btnEffect: any;
@@ -4003,7 +4043,6 @@ export module lwg {
                 event.currentTarget.scale(1, 1);
             }
         }
-
 
         /**
         * 点击放大的按钮点击效果,每个类是一种效果，和点击的声音一一对应
@@ -4525,7 +4564,7 @@ export module lwg {
          * @param {Function} [func] 回调函数
          */
         export function move_rotate(Node: Laya.Sprite, tRotate: number, tPoint: Laya.Point, time: number, delayed?: number, func?: Function): void {
-            Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+            Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node, () => {
                 if (func) {
                     func();
                 }
@@ -5737,14 +5776,19 @@ export module lwg {
                 }
             }
             /**
-             *通prefab过prefab创建一个实例
+             *通过prefab创建一个实例
              * @param {Laya.Prefab} prefab 预制体
              * @param {string} [name] 名称
              * @return {*}  {Laya.Sprite}
              */
-            export function createPrefab(prefab: Laya.Prefab, name?: string): Laya.Sprite {
-                let sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
-                return sp;
+            export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], zOrder?: number, name?: string): Laya.Sprite {
+                let Sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
+                Parent && Parent.addChild(Sp);
+                point && Sp.pos(point[0], point[1]);
+                if (zOrder) {
+                    Sp.zOrder = zOrder;
+                }
+                return Sp;
             }
             /**
              *2D隐藏或者打开所有子节点
@@ -6865,7 +6909,7 @@ export module lwg {
                         Admin._SceneControl[_loadType] = this._Owner;
                         // 页面前
                         if (_loadType !== Admin._SceneName.PreLoad) {
-                            Admin._PreLoadCutIn.openScene && this._openScene(Admin._PreLoadCutIn.openScene)
+                            Admin._PreLoadCutIn.openName && this._openScene(Admin._PreLoadCutIn.openName)
                             // console.log('预加载完毕开始打开界面！')
                         } else {
                             //游戏开始前

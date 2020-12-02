@@ -1,1 +1,38 @@
-{"type":"Image","searchKey":"Image,BtnBack","props":{"y":0,"x":0,"width":110,"skin":"Lwg/UI/ui_l_orthogon_blue.png","sizeGrid":"16,9,9,15","name":"BtnBack","height":110,"pivotX":55,"pivotY":55,"preset":"laya/pages/prefab/BtnBack.prefab","presetID":1,"isPresetRoot":true},"nodeParent":2,"label":"BtnBack","isOpen":true,"isDirectory":true,"isAniNode":true,"hasChild":true,"child":[{"type":"Label","searchKey":"Label","props":{"width":87,"valign":"middle","text":"返回","height":66,"fontSize":30,"centerY":0,"centerX":0,"align":"center","preset":"laya/pages/prefab/BtnBack.prefab","presetID":2},"nodeParent":789,"label":"Label","isDirectory":false,"isAniNode":true,"hasChild":false,"child":[],"compId":790,"x":30},{"type":"Image","searchKey":"Image,BtnChoose","props":{"y":0,"x":121,"width":110,"skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"16,9,9,15","name":"BtnChoose","height":110,"preset":"laya/pages/prefab/BtnBack.prefab","presetID":3},"nodeParent":789,"label":"BtnChoose","isOpen":true,"isDirectory":true,"isAniNode":true,"hasChild":true,"child":[{"type":"Label","searchKey":"Label","props":{"width":87,"valign":"middle","text":"重来","height":66,"fontSize":30,"centerY":0,"centerX":0,"align":"center","preset":"laya/pages/prefab/BtnBack.prefab","presetID":4},"nodeParent":791,"label":"Label","isDirectory":false,"isAniNode":true,"hasChild":false,"child":[],"compId":792,"x":45}],"compId":791,"x":30}],"compId":789,"x":15}
+{
+    "x":0,
+    "type":"Image",
+    "selectedBox":789,
+    "searchKey":"Image,BtnBack",
+    "props":{"y":0,"x":0,"width":110,"skin":"Lwg/UI/ui_l_orthogon_blue.png","sizeGrid":"16,9,9,15","presetID":1,"preset":"laya/pages/Prefab/BtnBack.prefab","pivotY":55,"pivotX":55,"name":"BtnBack","isPresetRoot":true,"height":110},
+    "nodeParent":-1,
+    "maxID":791,
+    "label":"BtnBack",
+    "isOpen":false,
+    "isDirectory":true,
+    "isAniNode":true,
+    "hasChild":true,
+    "compId":789,
+    "child":[
+        {
+            "type":"Label",
+            "searchKey":"Label",
+            "props":{"width":87,"valign":"middle","text":"返回","presetID":2,"preset":"laya/pages/Prefab/BtnBack.prefab","height":66,"fontSize":30,"centerY":0,"centerX":0,"align":"center"},
+            "nodeParent":789,
+            "label":"Label(BtnBack)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":790,
+            "child":[
+                ]
+        }],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }]
+}

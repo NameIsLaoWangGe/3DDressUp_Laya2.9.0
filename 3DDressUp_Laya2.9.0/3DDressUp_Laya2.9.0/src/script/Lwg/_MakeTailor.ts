@@ -1,16 +1,17 @@
-import lwg, { Admin, Animation2D, DataAdmin, Effects, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import lwg, { Admin, Animation2D, DataAdmin, Effects, EventAdmin, SceneAnimation, TimerAdmin, Tools, _SceneName } from "./Lwg";
 import { _Res } from "./_PreLoad";
 
 export module _MakeTailor {
     export enum _Event {
-        trigger = '_MakeTailor_trigger',
+        scissorTrigger = '_MakeTailor_ scissorTrigger',
         completeEffc = '_MakeTailor_completeAni',
         changeClothes = '_MakeTailor_changeClothes',
         scissorAppear = '_MakeTailor_scissorAppear',
         scissorPlay = '_MakeTailor_scissorPlay',
         scissorStop = '_MakeTailor_scissorStop',
         scissorRotation = '_MakeTailor_scissorRotation',
-        scissorSitu = '_MakeTailor_scissorSitu',
+        scissorAgain = '_MakeTailor_scissorSitu',
+        scissorRemove = '_MakeTailor_scissorRemove',
     }
 
     /**服装数据*/
@@ -36,11 +37,24 @@ export module _MakeTailor {
                 this.ClothesArr = [];
                 let ClothesArr = _Clothes._ins()._arr;
                 for (let index = 0; index < ClothesArr.length; index++) {
-                    let clo = Tools._Node.createPrefab(_Res._list.prefab2D[`${ClothesArr[index]['name']}`]['prefab']);
-                    this.ClothesArr.push(clo);
+                    let CloBox = this.createClothes(`${ClothesArr[index]['name']}`);
+                    this.ClothesArr.push(CloBox);
                 }
             }
             return this.ClothesArr;
+        }
+        createClothes(name: string): Laya.Sprite {
+            let Cloth = Tools._Node.createPrefab(_Res._list.prefab2D[name]['prefab']);
+            let CloBox = new Laya.Sprite;
+            CloBox.width = Laya.stage.width;
+            CloBox.height = Laya.stage.height;
+            CloBox.pivotX = CloBox.width / 2;
+            CloBox.pivotY = CloBox.height / 2;
+            CloBox.x = Laya.stage.width / 2;
+            CloBox.y = Laya.stage.height / 2;
+            CloBox.addChild(Cloth);
+            CloBox.name = Cloth.name;
+            return CloBox;
         }
     }
 
@@ -54,25 +68,54 @@ export module _MakeTailor {
             return this.ins;
         }
 
-        Clothes: Laya.Box;
-        LineParent: Laya.Image;
-        /**更换服装*/
-        changeClothes(Parent: Laya.Scene): void {
+        /**本关重来*/
+        again(): void {
             let clothesArr = _Clothes._ins().getClothesArr();
             let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Box;
                 if (element.name == name) {
-                    Parent.addChild(element);
+                    element.removeSelf();
+                    let CloBox = _Clothes._ins().createClothes(name);
+                    clothesArr[index] = CloBox;
+                }
+            }
+        }
+
+        Clothes: Laya.Sprite;
+        LastClothes: Laya.Sprite;
+        LineParent: Laya.Image;
+        /**更换服装*/
+        changeClothes(Scene: Laya.Scene): void {
+            let time = 500;
+            let clothesArr = _Clothes._ins().getClothesArr();
+            let name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            let lastName = _Clothes._ins()._lastPitchName;
+            for (let index = 0; index < clothesArr.length; index++) {
+                const element = clothesArr[index] as Laya.Sprite;
+                if (element.name == name) {
                     this.Clothes = element;
                     element.zOrder = 20;
-                    this.LineParent = element.getChildByName('LineParent') as Laya.Image;
+                    this.LineParent = element.getChildAt(0).getChildByName('LineParent') as Laya.Image;
                     this.setData();
+                } else if (element.name == lastName) {
+                    this.LastClothes = element;
                 } else {
                     element.removeSelf();
                 }
             }
+            Scene.addChild(this.Clothes);
+            this.Clothes.pos(0, -Laya.stage.height);
+            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+
+            if (this.LastClothes) {
+                Animation2D.move_rotate(this.LastClothes, 0, new Laya.Point(Laya.stage.width, -Laya.stage.height), time, 0, () => {
+                    this.LastClothes.removeSelf();
+                })
+            }
+
         }
+
         /**设置单个服装的任务信息*/
         setData(): void {
             this._arr = [];
@@ -93,23 +136,19 @@ export module _MakeTailor {
     /**剪刀*/
     class _Scissor extends Admin._ObjectBase {
         lwgOnAwake(): void {
-            this._Owner.x = Laya.stage.width + 500;
+            this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
         }
         /**动画控制*/
         Ani = {
-            shearSpeed: 4,
+            vnishP: new Laya.Point(Laya.stage.width + 500, 0),
+            shearSpeed: 3,
             range: 40,
             dir: 'up',
             dirType: {
                 up: 'up',
                 down: 'down',
             },
-            appear: () => {
-                let time = 500;
-                Animation2D.move_rotate(this._Owner, 720, this._fPoint, time, 0, () => {
-                    this._Owner.rotation = 0;
-                })
-            },
+
             paly: () => {
                 TimerAdmin._clearAll([this.Ani]);
                 Animation2D._clearAll([this.Ani]);
@@ -120,11 +159,11 @@ export module _MakeTailor {
                         this.Ani.dir = 'down';
                     }
                     if (this.Ani.dir == 'up') {
-                        this._SceneImg('S2').rotation -= this.Ani.shearSpeed * 2;
-                        this._SceneImg('S1').rotation += this.Ani.shearSpeed * 2;
+                        this._SceneImg('S1').rotation += this.Ani.shearSpeed * 4;
+                        this._SceneImg('S2').rotation -= this.Ani.shearSpeed * 4;
                     } else if (this.Ani.dir == 'down') {
-                        this._SceneImg('S2').rotation += this.Ani.shearSpeed;
                         this._SceneImg('S1').rotation -= this.Ani.shearSpeed;
+                        this._SceneImg('S2').rotation += this.Ani.shearSpeed;
                     }
                 });
             },
@@ -140,7 +179,11 @@ export module _MakeTailor {
 
             event: () => {
                 this._evReg(_Event.scissorAppear, () => {
-                    this.Ani.appear();
+                    let time = 800;
+                    Animation2D.move_rotate(this._Owner, this._fRotation + 360, this._fPoint, time, 0, () => {
+                        this._Owner.rotation = this._fRotation;
+                        this.Move.switch = true;
+                    })
                 })
                 this._evReg(_Event.scissorPlay, () => {
                     this.Ani.paly();
@@ -148,9 +191,31 @@ export module _MakeTailor {
                 this._evReg(_Event.scissorStop, () => {
                     this.Ani.stop();
                 })
-                this._evReg(_Event.scissorSitu, () => {
-                    Animation2D.move_rotate(this._Owner, this._fRotation + 360, this._fPoint, 600, 0);
+                this._evReg(_Event.scissorRemove, (func?: Function) => {
+                    this.Move.switch = false;
+                    let disX = 1500;
+                    let disY = -600;
+                    let time = 600;
+                    let delay = 100;
+                    Animation2D.move_rotate(this._Owner, this._Owner.rotation + 360, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time / 2, delay, () => {
+                        this._Owner.rotation = 0;
+                        Animation2D.move_rotate(this._Owner, -30, new Laya.Point(this._Owner.x - disX / 6, this._Owner.y - disY / 5), time / 2, delay * 1.5, () => {
+                            Animation2D.move_rotate(this._Owner, Tools._Number.randomOneHalf() == 0 ? 720 : -720, new Laya.Point(this._Owner.x + disX, this._Owner.y + disY), time, delay, () => {
+                                func && func();
+                                this._Owner.rotation = 0;
+                                this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
+                            });
+                        });
+                    })
                 })
+
+                this._evReg(_Event.scissorAgain, () => {
+                    Animation2D.move_rotate(this._Owner, this._fRotation, this._fPoint, 600, 100, () => {
+                        _Task._ins().again();
+                        _Task._ins().changeClothes(this._Scene);
+                    });
+                })
+
                 this._evReg(_Event.scissorRotation, (rotate: number) => {
                     TimerAdmin._clearAll([this._Owner]);
                     let time = 10;
@@ -167,26 +232,30 @@ export module _MakeTailor {
                 })
             },
             effcts: () => {
-                for (let index = 0; index < 8; index++) {
-                    Effects._Particle._spray(this._Scene, this._point, [0, 0], [10, 10], null, [0, 360], null, null, null, null, null, null, null, this._Owner.zOrder - 1);
+                for (let index = 0; index < 5; index++) {
+                    Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], null, [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
                 }
             }
         }
         lwgEvent(): void {
             this.Ani.event();
         }
+
         Move = {
+            switch: true,
             touchP: null as Laya.Point,
             diffP: null as Laya.Point,
         }
         lwgButton(): void {
             this._btnFour(this._SceneImg('ScissorsMobile'),
                 (e: Laya.Event) => {
-                    this._evNotify(_Event.scissorPlay);
-                    this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                    if (this.Move.switch) {
+                        this._evNotify(_Event.scissorPlay);
+                        this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
+                    }
                 },
                 (e: Laya.Event) => {
-                    if (this.Move.touchP) {
+                    if (this.Move.touchP && this.Move.switch) {
                         this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
                         this._Owner.x += this.Move.diffP.x;
                         this._Owner.y += this.Move.diffP.y;
@@ -203,12 +272,12 @@ export module _MakeTailor {
         state: string = 'none';//约束当前每次裁剪只裁剪一个线条
         onTriggerEnter(other: Laya.CircleCollider, _Owner: Laya.CircleCollider): void {
             if (this.state == 'none' || this.state == other.owner.parent.name) {
-                if (!other['cut']) {
+                if (!other['cut'] && this.Move.switch) {
                     other['cut'] = true;
                     this._evNotify(_Event.scissorPlay);
                     this._evNotify(_Event.scissorStop);
                     this.state = other.owner.parent.name;
-                    EventAdmin._notify(_Event.trigger, [other.owner]);
+                    EventAdmin._notify(_Event.scissorTrigger, [other.owner]);
                     this.Ani.effcts();
                 }
             }
@@ -251,14 +320,14 @@ export module _MakeTailor {
         }
 
         lwgAdaptive(): void {
-            this._ImgVar('Navigation').x = Laya.stage.width + 500;
+            this._ImgVar('Navi').x = Laya.stage.width + 500;
             this._ImgVar('BtnChoose').visible = false;
         }
         // lwgOpenAni(): number {
         //     return 200;
         // }
         lwgOpenAniAfter(): void {
-            this.Navigation.appear();
+            this.Navi.appear(this.Navi.appearType.first);
         }
 
         lwgOnStart(): void {
@@ -270,7 +339,7 @@ export module _MakeTailor {
                 _Task._ins().changeClothes(this._Owner);
             })
 
-            this._evReg(_Event.trigger, (Dotted: Laya.Image) => {
+            this._evReg(_Event.scissorTrigger, (Dotted: Laya.Image) => {
                 let value = _Task._ins()._checkCondition(Dotted.parent.name);
                 Dotted.visible = false;
                 if (value) {
@@ -278,8 +347,7 @@ export module _MakeTailor {
                     for (let index = 0; index < _Task._ins().Clothes.numChildren; index++) {
                         const element = _Task._ins().Clothes.getChildAt(index) as Laya.Image;
                         if (element.name.substr(5, 2) == Dotted.parent.name.substr(4, 2)) {
-                            // element.removeSelf();
-                            let time = 2000;
+                            let time = 1500;
                             let disX = Tools._Number.randomOneInt(1000) + 1000;
                             let disY = Tools._Number.randomOneInt(1000) + 1000;
                             switch (element.name.substr(8)) {
@@ -307,7 +375,6 @@ export module _MakeTailor {
                                     break;
                             }
                             Animation2D.move_rotate(element, 0, new Laya.Point(element.x + disX / 30, element.y + disY / 30), time / 6, 0, () => {
-
                                 let rotate1 = Tools._Number.randomOneBySection(180);
                                 let rotate2 = Tools._Number.randomOneBySection(-180);
                                 Animation2D.move_rotate(element, Tools._Number.randomOneHalf() == 0 ? rotate1 : rotate2, new Laya.Point(element.x + disX, element.y + disY), time, 0, () => {
@@ -319,11 +386,11 @@ export module _MakeTailor {
                     // 检测是否全部完成
                     if (_Task._ins()._checkAllCompelet()) {
                         Tools._Node.removeAllChildren(_Task._ins().LineParent);
-                        this._evNotify(_Event.scissorSitu);
-                        TimerAdmin._frameOnce(60, this, () => {
+                        this._evNotify(_Event.scissorRemove);
+                        TimerAdmin._frameOnce(100, this, () => {
                             this._evNotify(_Event.completeEffc);
                         })
-                        TimerAdmin._frameOnce(240, this, () => {
+                        TimerAdmin._frameOnce(280, this, () => {
                             this._openScene('MakeClothes', true, true);
                         })
                     }
@@ -346,40 +413,87 @@ export module _MakeTailor {
             })
 
             this._evReg(_Event.completeEffc, () => {
+                this.Navi.btnBackVinish();
+                this.Navi.btnAgainVinish();
                 this.completeEffc.ani3();
             })
         }
 
         lwgButton(): void {
-            this.Navigation.btn();
+            this.Navi.btn();
         }
 
-        Navigation = {
-            appear: () => {
-                let time = 500;
-                let delay = 800;
-                Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width - this._ImgVar('Navigation').width - 80, 0, time, () => {
-                    Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width - this._ImgVar('Navigation').width, 0, time / 3, () => {
-                        this._ImgVar('BtnChoose').visible = true;
-                        Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, 1.1, 0, time / 5, time / 5 / 2)
+        /**操作区域*/
+        Navi = {
+            BtnAgain: null as Laya.Image,
+            BtnBack: null as Laya.Image,
+            time: 500,
+            delay: 800,
+            scale: 1.4,
+            BtnAgainAppear: () => {
+                if (!this.Navi.BtnAgain) {
+                    this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
+                    this._btnUp(this.Navi.BtnAgain, () => {
+                        this._evNotify(_Event.scissorRemove, [() => {
+                            _Task._ins().again();
+                            _Task._ins().changeClothes(this._Owner);
+                        }]);
+                        this.Navi.appear(this.Navi.appearType.again);
                     })
-                }, delay)
+                }
+                Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0,)
             },
+            btnAgainVinish: () => {
+                this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5)
+            },
+            btnBackVinish: () => {
+                Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5)
+            },
+            btnBackAppear: () => {
+                if (!this.Navi.BtnBack) {
+                    this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]) as Laya.Image;
+                    this._btnUp(this.Navi.BtnBack, () => {
+                        this._openScene('Start', true, true);
+                    })
+                }
+                Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4)
+            },
+            appearType: {
+                first: 'first',
+                again: 'again',
+            },
+            appear: (type: string) => {
+                this.Navi.btnAgainVinish();
+                Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width - 100, 0, this.Navi.time, () => {
+                    Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width, 0, this.Navi.time / 4, () => {
+                        this._ImgVar('BtnChoose').visible = true;
+                        Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
+                            if (type == this.Navi.appearType.first) {
+                                this.Navi.btnBackAppear();
+                            } else {
+
+                            }
+                        })
+                    })
+                }, this.Navi.delay)
+            },
+
             vinish: () => {
-                let time = 400;
-                let delay = 100;
-                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, time / 2, delay, () => {
+                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 700, () => {
                     this._evNotify(_Event.scissorAppear);
-                    Animation2D.move(this._ImgVar('Navigation'), Laya.stage.width + 500, 0, time);
+                    Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
+                        this.Navi.BtnAgainAppear();
+                        Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
+                    });
                 })
             },
+
             btn: () => {
                 this._btnUp(this._ImgVar('BtnChoose'), () => {
-                    this.Navigation.vinish();
+                    this.Navi.vinish();
                 })
             }
         }
-
 
         completeEffc = {
             ani1: () => {

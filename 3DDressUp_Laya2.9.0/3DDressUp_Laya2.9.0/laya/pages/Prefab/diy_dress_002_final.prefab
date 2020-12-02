@@ -2,7 +2,6 @@
     "x":0,
     "type":"Box",
     "selectedBox":1447,
-    "selecteID":801,
     "searchKey":"Box,diy_dress_002_final",
     "props":{"y":0,"x":0,"presetID":1,"preset":"laya/pages/Prefab/diy_dress_002_final.prefab","name":"diy_dress_002_final","isPresetRoot":true,"centerY":0,"centerX":0},
     "nodeParent":-1,

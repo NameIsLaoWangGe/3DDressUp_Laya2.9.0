@@ -25,6 +25,10 @@ export module _Res {
         // mesh3D: {},
         // material: {},
         prefab2D: {
+            BtnAgain: {
+                url: 'Prefab/BtnAgain.json',
+                prefab: new Laya.Prefab,
+            },
             BtnBack: {
                 url: 'Prefab/BtnBack.json',
                 prefab: new Laya.Prefab,
