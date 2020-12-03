@@ -309,6 +309,7 @@ export module _MakeTailor {
     class _Item extends Admin._ObjectBase {
         lwgButton(): void {
             this._btnUp(this._Owner, () => {
+                console.log('换装！')
                 if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
                     _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
                     this._evNotify(_Event.changeClothes);

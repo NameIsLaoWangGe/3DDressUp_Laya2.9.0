@@ -12,6 +12,7 @@ export module _MakePattern {
         resetTex = '_MakePattern_resetTex',
         changeDir = '_MakePattern_resetTex',
         remake = '_MakePattern_remake',
+        createImg = '_MakePattern_createImg',
     }
 
     class _Pattern extends DataAdmin._Table {
@@ -31,16 +32,12 @@ export module _MakePattern {
     }
 
     export class _Item extends Admin._ObjectBase {
-
         lwgButton(): void {
-            this._btnFour(this._Owner,
-                () => {
-                },
-                () => {
-                },
-                () => {
-                },
-                () => {
+            const Icon = this._Owner.getChildByName('Icon');
+            Icon && this._btnUp(Icon,
+                (e: Laya.Event) => {
+                    console.log(this._Owner);
+                    this._evNotify(_Event.createImg, [this._Owner]);
                 })
         }
     }
@@ -52,15 +49,12 @@ export module _MakePattern {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 if (data['name']) {
-                    Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}.png`;
+                    Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}_icon.png`;
                 } else {
                     Icon.skin = null;
                 }
                 const Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                if (!Cell.getComponent(_Item)) {
-                    Cell.addComponent(_Item)
-                }
             }
         }
 
@@ -70,6 +64,12 @@ export module _MakePattern {
         }
 
         lwgOnStart(): void {
+            for (let index = 0; index < _Pattern._ins()._List.cells.length; index++) {
+                let Cell = _Pattern._ins()._List.cells[index];
+                if (!Cell.getComponent(_Item)) {
+                    Cell.addComponent(_Item)
+                }
+            }
             // console.log(Laya.stage['_children'])
             _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
             if (!_Scene3D.getComponent(MakeClothes3D)) {
@@ -81,7 +81,10 @@ export module _MakePattern {
             EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
         }
         lwgEvent(): void {
-
+            this._evReg(_Event.createImg, (Box: Laya.Box) => {
+                this.Tex.state = this.Tex.stateType.move;
+                this.Tex.createImg(Box);
+            })
         }
         /**图片移动控制*/
         Tex = {
@@ -103,19 +106,23 @@ export module _MakePattern {
                 rotate: 'rotate',
                 addTex: 'addTex',
             },
-            createImg: (element: Laya.Image) => {
+            createImg: (Box: Laya.Box) => {
                 this.Tex.DisImg && this.Tex.DisImg.destroy();
+                let element = Box.getChildByName('Icon') as Laya.Image;
                 this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('Ultimately'));
+                let gPoint = Box['_Item']['_gPoint'] as Laya.Point;
+                let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint)
+                // console.log(gPoint, lPoint);
+                // let lPoint = Tools._Point.getOtherLocal(Box, this._SpriteVar('Ultimately'));
                 this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
-                this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
-
-                this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 4)}.png`;
                 this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                 this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                 this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
                 this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                 this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
+                this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                console.log(this.Tex.DisImg, this._SpriteVar('Dispaly'));
                 this._SpriteVar('Dispaly').visible = true;
                 this.Tex.restore();
             },
@@ -204,7 +211,6 @@ export module _MakePattern {
                     this.Tex.Img.y = ratio * _height;
 
                     // console.log(this.Tex.Img.x, this.Tex.Img.y);
-
                     return true;
                 } else {
                     return false;
@@ -340,13 +346,13 @@ export module _MakePattern {
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             },
             btn: () => {
-                for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                    const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
-                    this._btnDown(element, (e: Laya.Event) => {
-                        this.Tex.state = this.Tex.stateType.move;
-                        this.Tex.createImg(element);
-                    })
-                }
+                // for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
+                //     const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
+                //     this._btnDown(element, (e: Laya.Event) => {
+                //         this.Tex.state = this.Tex.stateType.move;
+                //         this.Tex.createImg(element);
+                //     })
+                // }
                 this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
                     this.Tex.state = this.Tex.stateType.scale;
                 }, null, (e: Laya.Event) => {
@@ -401,43 +407,37 @@ export module _MakePattern {
                 this._openScene('DressingRoom', true, true);
             })
 
-            this._btnFour(this._ImgVar('ListS'),
-                (e: Laya.Event) => {
-                    e.stopPropagation();
-                    if (!this.ListS.fY) {
-                        this.ListS.fY = e.stageY;
-                    }
-                },
-                (e: Laya.Event) => {
-                    e.stopPropagation();
-                    if (this.ListS.fY) {
-                        this.ListS.diffY = e.stageY - this.ListS.fY;
-                        if (Math.abs(this.ListS.diffY) > 30) {
-                            const index = _Pattern._ins()._List.startIndex;
-                            if (this.ListS.diffY > 30) {
-                                if (index > 0) {
-                                    _Pattern._ins()._List.tweenTo(index - 1, 200);
-                                }
-                            }
-                            if (this.ListS.diffY < 30) {
-                                if (index < _Pattern._ins()._arr.length - 1) {
-                                    _Pattern._ins()._List.tweenTo(index + 1, 200);
-                                }
-                                console.log(_Pattern._ins()._arr)
-                                console.log(_Pattern._ins()._List.array)
-                            }
-                            this.ListS.fY = null;
-                        }
-                    }
-                },
-                (e: Laya.Event) => {
-                    e.stopPropagation();
-                    this.ListS.fY = null;
-                },
-                (e: Laya.Event) => {
-                    e.stopPropagation();
-                    this.ListS.fY = null;
-                })
+            // this._btnFour(this._ImgVar('ListS'),
+            //     (e: Laya.Event) => {
+            //         if (!this.ListS.fY) {
+            //             this.ListS.fY = e.stageY;
+            //         }
+            //     },
+            //     (e: Laya.Event) => {
+            //         if (this.ListS.fY) {
+            //             this.ListS.diffY = e.stageY - this.ListS.fY;
+            //             if (Math.abs(this.ListS.diffY) > 30) {
+            //                 const index = _Pattern._ins()._List.startIndex;
+            //                 if (this.ListS.diffY > 30) {
+            //                     if (index > 0) {
+            //                         _Pattern._ins()._List.tweenTo(index - 1, 200);
+            //                     }
+            //                 }
+            //                 if (this.ListS.diffY < 30) {
+            //                     if (index < _Pattern._ins()._arr.length - 1) {
+            //                         _Pattern._ins()._List.tweenTo(index + 1, 200);
+            //                     }
+            //                 }
+            //                 this.ListS.fY = e.stageY;
+            //             }
+            //         }
+            //     },
+            //     (e: Laya.Event) => {
+            //         this.ListS.fY = null;
+            //     },
+            //     (e: Laya.Event) => {
+            //         this.ListS.fY = null;
+            //     })
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);

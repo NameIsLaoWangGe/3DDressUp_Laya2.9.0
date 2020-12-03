@@ -5531,6 +5531,8 @@ export module lwg {
                 Img.skewX = Target.skewX;
                 Img.skewY = Target.skewY;
                 Img.rotation = Target.rotation;
+                Img.x = Target.x;
+                Img.y = Target.y;
                 return Img;
             }
             /**

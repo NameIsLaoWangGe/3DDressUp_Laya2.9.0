@@ -4247,6 +4247,8 @@
                     Img.skewX = Target.skewX;
                     Img.skewY = Target.skewY;
                     Img.rotation = Target.rotation;
+                    Img.x = Target.x;
+                    Img.y = Target.y;
                     return Img;
                 }
                 _Node.simpleCopyImg = simpleCopyImg;
@@ -6200,6 +6202,7 @@
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 this._btnUp(this._Owner, () => {
+                    console.log('换装！');
                     if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
                         _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
                         this._evNotify(_Event.changeClothes);
@@ -7000,6 +7003,7 @@
             _Event["resetTex"] = "_MakePattern_resetTex";
             _Event["changeDir"] = "_MakePattern_resetTex";
             _Event["remake"] = "_MakePattern_remake";
+            _Event["createImg"] = "_MakePattern_createImg";
         })(_Event = _MakePattern._Event || (_MakePattern._Event = {}));
         class _Pattern extends DataAdmin._Table {
             constructor() {
@@ -7012,17 +7016,17 @@
                 if (!this.ins) {
                     this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.url);
                     this.ins._pitchClassify = this.ins._classify.general;
-                    this.ins._arr.push({}, {}, {});
+                    this.ins._arr.push({}, {}, {}, {});
                 }
                 return this.ins;
             }
         }
         class _Item extends Admin._ObjectBase {
             lwgButton() {
-                this._btnFour(this._Owner, () => {
-                }, () => {
-                }, () => {
-                }, () => {
+                const Icon = this._Owner.getChildByName('Icon');
+                Icon && this._btnUp(Icon, (e) => {
+                    console.log(this._Owner);
+                    this._evNotify(_Event.createImg, [this._Owner]);
                 });
             }
         }
@@ -7049,18 +7053,21 @@
                         rotate: 'rotate',
                         addTex: 'addTex',
                     },
-                    createImg: (element) => {
+                    createImg: (Box) => {
                         this.Tex.DisImg && this.Tex.DisImg.destroy();
+                        let element = Box.getChildByName('Icon');
                         this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                        let lPoint = Tools._Point.getOtherLocal(element, this._SpriteVar('Ultimately'));
+                        let gPoint = Box['_Item']['_gPoint'];
+                        let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
                         this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
-                        this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
-                        this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 7)}.png`;
+                        this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 4)}.png`;
                         this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                         this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                         this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
                         this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                         this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
+                        this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                        console.log(this.Tex.DisImg, this._SpriteVar('Dispaly'));
                         this._SpriteVar('Dispaly').visible = true;
                         this.Tex.restore();
                     },
@@ -7273,13 +7280,6 @@
                         EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                     },
                     btn: () => {
-                        for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                            const element = this._ImgVar('Figure').getChildAt(index);
-                            this._btnDown(element, (e) => {
-                                this.Tex.state = this.Tex.stateType.move;
-                                this.Tex.createImg(element);
-                            });
-                        }
                         this._btnFour(this._ImgVar('WConversion'), (e) => {
                             this.Tex.state = this.Tex.stateType.scale;
                         }, null, (e) => {
@@ -7325,22 +7325,25 @@
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
                     if (data['name']) {
-                        Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}.png`;
+                        Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}_icon.png`;
                     }
                     else {
                         Icon.skin = null;
                     }
                     const Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                    if (!Cell.getComponent(_Item)) {
-                        Cell.addComponent(_Item);
-                    }
                 };
             }
             lwgAdaptive() {
                 this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
             }
             lwgOnStart() {
+                for (let index = 0; index < _Pattern._ins()._List.cells.length; index++) {
+                    let Cell = _Pattern._ins()._List.cells[index];
+                    if (!Cell.getComponent(_Item)) {
+                        Cell.addComponent(_Item);
+                    }
+                }
                 _MakePattern._Scene3D = _Res._list.scene3D.MakeClothes.Scene;
                 if (!_MakePattern._Scene3D.getComponent(MakeClothes3D)) {
                     _MakePattern._Scene3D.addComponent(MakeClothes3D);
@@ -7352,44 +7355,15 @@
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
             lwgEvent() {
+                this._evReg(_Event.createImg, (Box) => {
+                    this.Tex.state = this.Tex.stateType.move;
+                    this.Tex.createImg(Box);
+                });
             }
             lwgButton() {
                 this.Tex.btn();
                 this._btnUp(this._ImgVar('BtnComplete'), () => {
                     this._openScene('DressingRoom', true, true);
-                });
-                this._btnFour(this._ImgVar('ListS'), (e) => {
-                    e.stopPropagation();
-                    if (!this.ListS.fY) {
-                        this.ListS.fY = e.stageY;
-                    }
-                }, (e) => {
-                    e.stopPropagation();
-                    if (this.ListS.fY) {
-                        this.ListS.diffY = e.stageY - this.ListS.fY;
-                        if (Math.abs(this.ListS.diffY) > 30) {
-                            const index = _Pattern._ins()._List.startIndex;
-                            if (this.ListS.diffY > 30) {
-                                if (index > 0) {
-                                    _Pattern._ins()._List.tweenTo(index - 1, 200);
-                                }
-                            }
-                            if (this.ListS.diffY < 30) {
-                                if (index < _Pattern._ins()._arr.length - 1) {
-                                    _Pattern._ins()._List.tweenTo(index + 1, 200);
-                                }
-                                console.log(_Pattern._ins()._arr);
-                                console.log(_Pattern._ins()._List.array);
-                            }
-                            this.ListS.fY = null;
-                        }
-                    }
-                }, (e) => {
-                    e.stopPropagation();
-                    this.ListS.fY = null;
-                }, (e) => {
-                    e.stopPropagation();
-                    this.ListS.fY = null;
                 });
             }
             onStageMouseDown(e) {

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":3,
+    "selectedBox":52,
+    "selecteID":54,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -52,7 +52,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Figure,Figure",
-            "props":{"y":0,"width":204,"var":"Figure","skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"6,12,16,8","right":0,"name":"Figure","height":722},
+            "props":{"y":-2,"width":204,"var":"Figure","skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"6,12,16,8","right":-318,"name":"Figure","height":722},
             "nodeParent":2,
             "label":"Figure",
             "isOpen":false,
@@ -325,16 +325,17 @@
             "x":15,
             "type":"List",
             "searchKey":"List,List,List",
-            "props":{"y":0,"x":859,"width":197,"var":"List","spaceY":0,"rotation":0,"repeatY":4,"name":"List","height":672},
+            "props":{"y":-9,"x":1090,"width":197,"var":"List","spaceY":0,"rotation":0,"repeatY":4,"name":"List","height":672},
             "nodeParent":2,
             "label":"List",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":51,
             "child":[
                 {
+                    "x":30,
                     "type":"Box",
                     "searchKey":"Box",
                     "props":{"y":0,"x":0,"width":197,"renderType":"render","height":198},
@@ -347,6 +348,7 @@
                     "compId":52,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Board",
                             "props":{"width":180,"skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"9,12,14,13","name":"Board","height":180,"centerY":0,"centerX":0},
@@ -360,9 +362,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Icon",
-                            "props":{"skin":"Game/UI/MakeClothes/figure_03Btn.png","name":"Icon","centerY":0,"centerX":0},
+                            "props":{"width":200,"skin":"Game/UI/MakeClothes/figure_03Btn.png","name":"Icon","height":146,"centerY":0,"centerX":0},
                             "nodeParent":52,
                             "label":"Icon",
                             "isDirectory":false,
@@ -378,9 +381,10 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,ListS,ListS",
-            "props":{"y":9,"x":864,"width":180,"var":"ListS","name":"ListS","height":720},
+            "props":{"y":0,"x":1095,"width":180,"var":"ListS","name":"ListS","height":720},
             "nodeParent":2,
             "label":"ListS",
+            "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
