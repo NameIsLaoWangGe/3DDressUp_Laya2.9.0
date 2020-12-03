@@ -1,16 +1,15 @@
 import { Admin, EventAdmin, SceneAnimation, TimerAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
-import { _MakeClothes } from "./_MakeClothes";
 import { _MakeTailor } from "./_MakeTailor";
 import { _Res } from "./_PreLoad";
 export module _CutInRes {
-    // export let MakeClothes = {
-    //     scene3D: {
-    //         MakeScene: {
-    //             url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeClothes.ls`,
-    //             Scene: null as Laya.Scene3D,
-    //         },
-    //     },
-    // }
+    export let MakePattern = {
+        scene3D: {
+            MakeScene: {
+                url: `_Lwg3D/_Scene/LayaScene_MakeScene/Conventional/MakeClothes.ls`,
+                Scene: null as Laya.Scene3D,
+            },
+        },
+    }
     // export let MakeUp = {
     //     MakeUp: {
     //         url: `_Lwg3D/_Scene/LayaScene_MakeUp/Conventional/MakeUp.ls`,
@@ -39,7 +38,7 @@ export module _PreLoadCutIn {
                     this._LabelVar('Schedule').text = `${time}`;
                 }, () => {
                     switch (Admin._PreLoadCutIn.openName) {
-                        case 'MakeClothes':
+                        case 'MakePattern':
                             Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                             break;
                         case 'MakeTailor':

@@ -106,8 +106,6 @@ export module lwg3D {
         _findTrans(name: string): Laya.Transform3D {
             return this.getFindComponent(name, 'transform');
         }
-        /**重置场景内容*/
-        lwgReset(): void { }
         lwgOnAwake(): void {
         }
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
@@ -223,7 +221,6 @@ export module lwg3D {
             this.lwgOnUpdate();
         }
         onDisable(): void {
-            this.lwgReset();
             this.lwgOnDisable();
             Laya.Tween.clearAll(this);
             Laya.timer.clearAll(this);

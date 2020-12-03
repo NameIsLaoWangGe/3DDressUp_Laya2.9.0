@@ -67,7 +67,7 @@ export module _Res {
             Start: `Scene/${_SceneName.Start}.json`,
             Guide: `Scene/${_SceneName.Guide}.json`,
             PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
-            _MakeClothes: `Scene/${'MakeClothes'}.json`,
+            MakePattern: `Scene/${'MakePattern'}.json`,
             // AdsHint: `Scene/${_SceneName.AdsHint}.json`,
             // Special: `Scene/${_SceneName.Special}.json`,
             // Victory: `Scene/${_SceneName.Victory}.json`,

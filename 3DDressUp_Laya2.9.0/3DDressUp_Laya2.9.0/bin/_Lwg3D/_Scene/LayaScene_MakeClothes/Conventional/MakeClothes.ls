@@ -68,135 +68,8 @@
 				"child":[]
 			},
 			{
-				"type":"Sprite3D",
-				"instanceID":1,
-				"props":{
-					"name":"Hanger",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						-0.013,
-						0.21,
-						-0.182
-					],
-					"rotation":[
-						0,
-						1,
-						0,
-						0
-					],
-					"scale":[
-						1,
-						1,
-						1
-					]
-				},
-				"components":[],
-				"child":[
-					{
-						"type":"MeshSprite3D",
-						"instanceID":2,
-						"props":{
-							"name":"Front",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0.7071068,
-								0,
-								0,
-								-0.7071068
-							],
-							"scale":[
-								1,
-								1,
-								1
-							],
-							"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_0.lm",
-							"enableRender":true,
-							"materials":[
-								{
-									"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
-								}
-							]
-						},
-						"components":[
-							{
-								"type":"PhysicsCollider",
-								"restitution":0,
-								"friction":0.5,
-								"rollingFriction":0,
-								"shapes":[
-									{
-										"type":"MeshColliderShape",
-										"mesh":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_0.lm"
-									}
-								],
-								"isTrigger":false
-							}
-						],
-						"child":[]
-					},
-					{
-						"type":"MeshSprite3D",
-						"instanceID":3,
-						"props":{
-							"name":"Reverse",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0.7071068,
-								0,
-								0,
-								-0.7071068
-							],
-							"scale":[
-								1,
-								1,
-								1
-							],
-							"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_1.lm",
-							"enableRender":true,
-							"materials":[
-								{
-									"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
-								}
-							]
-						},
-						"components":[
-							{
-								"type":"PhysicsCollider",
-								"restitution":0,
-								"friction":0.5,
-								"rollingFriction":0,
-								"shapes":[
-									{
-										"type":"MeshColliderShape",
-										"mesh":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_1.lm"
-									}
-								],
-								"isTrigger":false
-							}
-						],
-						"child":[]
-					}
-				]
-			},
-			{
 				"type":"DirectionLight",
-				"instanceID":4,
+				"instanceID":1,
 				"props":{
 					"name":"Directional Light",
 					"active":true,
@@ -231,7 +104,7 @@
 			},
 			{
 				"type":"MeshSprite3D",
-				"instanceID":5,
+				"instanceID":2,
 				"props":{
 					"name":"HangerP",
 					"active":true,
@@ -290,16 +163,16 @@
 			},
 			{
 				"type":"Sprite3D",
-				"instanceID":6,
+				"instanceID":3,
 				"props":{
-					"name":"Dress",
+					"name":"Role",
 					"active":true,
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.013,
-						1.062502,
-						-0.1946584
+						0,
+						0.98,
+						0
 					],
 					"rotation":[
 						0,
@@ -317,22 +190,22 @@
 				"child":[
 					{
 						"type":"Sprite3D",
-						"instanceID":7,
+						"instanceID":4,
 						"props":{
-							"name":"diy_dress_008_final",
+							"name":"Dress",
 							"active":true,
 							"isStatic":false,
 							"layer":0,
 							"position":[
-								0.233,
-								-0.412,
+								0,
+								0,
 								0
 							],
 							"rotation":[
 								0,
-								1,
 								0,
-								0
+								0,
+								-1
 							],
 							"scale":[
 								1,
@@ -343,703 +216,833 @@
 						"components":[],
 						"child":[
 							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
+								"instanceID":5,
+								"props":{
+									"name":"diy_dress_008_final",
+									"active":true,
+									"isStatic":false,
+									"layer":0,
+									"position":[
+										-2.25,
+										-0.412,
+										0
+									],
+									"rotation":[
+										0,
+										1,
+										0,
+										0
+									],
+									"scale":[
+										1,
+										1,
+										1
+									]
+								},
+								"components":[],
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":6,
+										"props":{
+											"name":"diy_dress_008_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												-2.24,
+												-0.65,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_008_final-diy_dress_008_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_008_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":7,
+										"props":{
+											"name":"diy_dress_008_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												-2.24,
+												-0.65,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_008_final-diy_dress_008_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_008_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
+							},
+							{
+								"type":"Sprite3D",
 								"instanceID":8,
 								"props":{
-									"name":"diy_dress_008_final_0",
+									"name":"diy_dress_007_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
-										-2.24,
-										-0.65,
+										0,
+										-1.12,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_008_final-diy_dress_008_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_008_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":9,
+										"props":{
+											"name":"diy_dress_007_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_007_final-diy_dress_007_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_007_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":10,
+										"props":{
+											"name":"diy_dress_007_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_007_final-diy_dress_007_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_007_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":9,
-								"props":{
-									"name":"diy_dress_008_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										-2.24,
-										-0.65,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_008_final-diy_dress_008_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_008_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":10,
-						"props":{
-							"name":"diy_dress_007_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								1.92566,
-								-1.12,
-								-0.039
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":11,
 								"props":{
-									"name":"diy_dress_007_final_0",
+									"name":"diy_dress_006_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
+										-0.988,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_007_final-diy_dress_007_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_007_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":12,
+										"props":{
+											"name":"diy_dress_006_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_006_final-diy_dress_006_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_006_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":13,
+										"props":{
+											"name":"diy_dress_006_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_006_final-diy_dress_006_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_006_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":12,
-								"props":{
-									"name":"diy_dress_007_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_007_final-diy_dress_007_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_007_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":13,
-						"props":{
-							"name":"diy_dress_006_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								1.388,
-								-0.988,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":14,
 								"props":{
-									"name":"diy_dress_006_final_0",
+									"name":"diy_dress_005_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
+										-0.858,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_006_final-diy_dress_006_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_006_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":15,
+										"props":{
+											"name":"diy_dress_005_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_005_final-diy_dress_005_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_005_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":16,
+										"props":{
+											"name":"diy_dress_005_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_005_final-diy_dress_005_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_005_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":15,
-								"props":{
-									"name":"diy_dress_006_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_006_final-diy_dress_006_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_006_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":16,
-						"props":{
-							"name":"diy_dress_005_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-1.841,
-								-0.858,
-								-0.12
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":17,
 								"props":{
-									"name":"diy_dress_005_final_0",
+									"name":"diy_dress_004_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
+										-0.206,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_005_final-diy_dress_005_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_005_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":18,
+										"props":{
+											"name":"diy_dress_004_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_004_final-diy_dress_004_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_004_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":19,
+										"props":{
+											"name":"diy_dress_004_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_004_final-diy_dress_004_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_004_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":18,
-								"props":{
-									"name":"diy_dress_005_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_005_final-diy_dress_005_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_005_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":19,
-						"props":{
-							"name":"diy_dress_004_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.846,
-								-0.206,
-								0.059
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":20,
 								"props":{
-									"name":"diy_dress_004_final_0",
+									"name":"diy_dress_003_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
+										-0.968,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_004_final-diy_dress_004_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_004_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":21,
+										"props":{
+											"name":"diy_dress_003_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_003_final-diy_dress_003_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_003_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":22,
+										"props":{
+											"name":"diy_dress_003_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_003_final-diy_dress_003_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_003_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":21,
-								"props":{
-									"name":"diy_dress_004_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_004_final-diy_dress_004_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_004_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":22,
-						"props":{
-							"name":"diy_dress_003_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-1.086,
-								-0.968,
-								-0.044
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":23,
 								"props":{
-									"name":"diy_dress_003_final_0",
+									"name":"diy_dress_001_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
-										0
+										0.441,
+										0.671
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_003_final-diy_dress_003_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_003_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":24,
+										"props":{
+											"name":"diy_dress_001_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												-1.335,
+												0.706
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":25,
+										"props":{
+											"name":"diy_dress_001_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												-1.335,
+												0.708
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":24,
-								"props":{
-									"name":"diy_dress_003_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_003_final-diy_dress_003_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_003_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":25,
-						"props":{
-							"name":"diy_dress_001_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.403,
-								0.327,
-								0.761
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":26,
 								"props":{
-									"name":"diy_dress_001_final_0",
+									"name":"diy_dress_002_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										-1.335,
-										0.706
+										0.197,
+										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":27,
-								"props":{
-									"name":"diy_dress_001_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										-1.335,
-										0.708
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":27,
+										"props":{
+											"name":"diy_dress_002_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												-1.194,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_002_final-diy_dress_002_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":28,
+										"props":{
+											"name":"diy_dress_002_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												-1.194,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_002_final-diy_dress_002_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							}
 						]
 					},
 					{
 						"type":"Sprite3D",
-						"instanceID":28,
+						"instanceID":29,
 						"props":{
-							"name":"diy_dress_002_final",
+							"name":"Top",
 							"active":true,
 							"isStatic":false,
 							"layer":0,
 							"position":[
-								-0.506,
-								0.197,
-								0
+								0,
+								0,
+								0.009518713
 							],
 							"rotation":[
 								0,
-								1,
 								0,
-								0
+								0,
+								-1
 							],
 							"scale":[
 								1,
@@ -1050,140 +1053,111 @@
 						"components":[],
 						"child":[
 							{
-								"type":"MeshSprite3D",
-								"instanceID":29,
-								"props":{
-									"name":"diy_dress_002_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										-1.194,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_002_final-diy_dress_002_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_002_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":30,
 								"props":{
-									"name":"diy_dress_002_final_1",
+									"name":"diy_top_008_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										-1.194,
+										0,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_002_final-diy_dress_002_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_002_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
-							}
-						]
-					}
-				]
-			},
-			{
-				"type":"Sprite3D",
-				"instanceID":31,
-				"props":{
-					"name":"Top",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0.21,
-						0.68,
-						-0.08224717
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						1,
-						1,
-						1
-					]
-				},
-				"components":[],
-				"child":[
-					{
-						"type":"Sprite3D",
-						"instanceID":32,
-						"props":{
-							"name":"diy_top_008_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								1.776,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":31,
+										"props":{
+											"name":"diy_top_008_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_008_final-diy_top_008_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_008_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":32,
+										"props":{
+											"name":"diy_top_008_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_008_final-diy_top_008_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_008_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
+							},
 							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":33,
 								"props":{
-									"name":"diy_top_008_final_0",
+									"name":"diy_top_005_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1193,98 +1167,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_008_final-diy_top_008_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_008_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":34,
+										"props":{
+											"name":"diy_top_005_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_005_final-diy_top_005_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_005_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":35,
+										"props":{
+											"name":"diy_top_005_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_005_final-diy_top_005_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_005_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":34,
-								"props":{
-									"name":"diy_top_008_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_008_final-diy_top_008_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_008_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":35,
-						"props":{
-							"name":"diy_top_005_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-0.846,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":36,
 								"props":{
-									"name":"diy_top_005_final_0",
+									"name":"diy_top_001_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1294,98 +1268,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_005_final-diy_top_005_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_005_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":37,
+										"props":{
+											"name":"diy_top_001_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_001_final-diy_top_001_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":38,
+										"props":{
+											"name":"diy_top_001_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_001_final-diy_top_001_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":37,
-								"props":{
-									"name":"diy_top_005_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_005_final-diy_top_005_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_005_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":38,
-						"props":{
-							"name":"diy_top_001_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":39,
 								"props":{
-									"name":"diy_top_001_final_0",
+									"name":"diy_top_002_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1395,98 +1369,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_001_final-diy_top_001_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_001_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":40,
+										"props":{
+											"name":"diy_top_002_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_002_final-diy_top_002_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":41,
+										"props":{
+											"name":"diy_top_002_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_002_final-diy_top_002_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":40,
-								"props":{
-									"name":"diy_top_001_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_001_final-diy_top_001_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_001_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":41,
-						"props":{
-							"name":"diy_top_002_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.32,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":42,
 								"props":{
-									"name":"diy_top_002_final_0",
+									"name":"diy_top_003_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1496,98 +1470,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_002_final-diy_top_002_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_002_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":43,
+										"props":{
+											"name":"diy_top_003_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_003_final-diy_top_003_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_003_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":44,
+										"props":{
+											"name":"diy_top_003_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_003_final-diy_top_003_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_003_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":43,
-								"props":{
-									"name":"diy_top_002_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_002_final-diy_top_002_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_002_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":44,
-						"props":{
-							"name":"diy_top_003_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-0.43,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":45,
 								"props":{
-									"name":"diy_top_003_final_0",
+									"name":"diy_top_004_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1597,98 +1571,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_003_final-diy_top_003_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_003_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":46,
+										"props":{
+											"name":"diy_top_004_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_004_final-diy_top_004_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_004_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":47,
+										"props":{
+											"name":"diy_top_004_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_004_final-diy_top_004_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_004_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":46,
-								"props":{
-									"name":"diy_top_003_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_003_final-diy_top_003_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_003_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":47,
-						"props":{
-							"name":"diy_top_004_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.692,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":48,
 								"props":{
-									"name":"diy_top_004_final_0",
+									"name":"diy_top_006_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1698,98 +1672,98 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_004_final-diy_top_004_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_004_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":49,
+										"props":{
+											"name":"diy_top_006_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_006_final-diy_top_006_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_006_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":50,
+										"props":{
+											"name":"diy_top_006_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_006_final-diy_top_006_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_006_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							},
 							{
-								"type":"MeshSprite3D",
-								"instanceID":49,
-								"props":{
-									"name":"diy_top_004_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_004_final-diy_top_004_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_004_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":50,
-						"props":{
-							"name":"diy_top_006_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-1.172,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":51,
 								"props":{
-									"name":"diy_top_006_final_0",
+									"name":"diy_top_007_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1799,76 +1773,105 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
 										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_006_final-diy_top_006_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_006_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":52,
-								"props":{
-									"name":"diy_top_006_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
 										0,
 										0
 									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_006_final-diy_top_006_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_006_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":52,
+										"props":{
+											"name":"diy_top_007_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_007_final-diy_top_007_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_007_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":53,
+										"props":{
+											"name":"diy_top_007_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_007_final-diy_top_007_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_007_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							}
 						]
 					},
 					{
 						"type":"Sprite3D",
-						"instanceID":53,
+						"instanceID":54,
 						"props":{
-							"name":"diy_top_007_final",
+							"name":"Bottoms",
 							"active":true,
 							"isStatic":false,
 							"layer":0,
 							"position":[
-								1.152,
+								0,
 								0,
 								0
 							],
@@ -1887,46 +1890,10 @@
 						"components":[],
 						"child":[
 							{
-								"type":"MeshSprite3D",
-								"instanceID":54,
-								"props":{
-									"name":"diy_top_007_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_007_final-diy_top_007_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_007_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":55,
 								"props":{
-									"name":"diy_top_007_final_1",
+									"name":"diy_bottom_001_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
@@ -1936,862 +1903,191 @@
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Top/diy_top_007_final-diy_top_007_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Top/Materials/diy_top_007_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
-							}
-						]
-					}
-				]
-			},
-			{
-				"type":"Sprite3D",
-				"instanceID":56,
-				"props":{
-					"name":"Bottoms",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0.153,
-						1.987,
-						-0.09176588
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						1,
-						1,
-						1
-					]
-				},
-				"components":[],
-				"child":[
-					{
-						"type":"Sprite3D",
-						"instanceID":57,
-						"props":{
-							"name":"diy_bottom_007_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								1.199,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":56,
+										"props":{
+											"name":"diy_bottom_001_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0,
+												0.7071068,
+												0.7071068,
+												0
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":57,
+										"props":{
+											"name":"diy_bottom_001_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0,
+												0.7071068,
+												0.7071068,
+												0
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
+							},
 							{
-								"type":"MeshSprite3D",
+								"type":"Sprite3D",
 								"instanceID":58,
 								"props":{
-									"name":"diy_bottom_007_final_0",
+									"name":"diy_bottom_002_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
 										0,
-										0,
+										-0.024,
 										0
 									],
 									"rotation":[
-										0.7071068,
 										0,
+										1,
 										0,
-										-0.7071068
+										0
 									],
 									"scale":[
 										1,
 										1,
 										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_007_final-diy_bottom_007_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_007_basic.lmat"
-										}
 									]
 								},
 								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":59,
-								"props":{
-									"name":"diy_bottom_007_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_007_final-diy_bottom_007_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_007_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":60,
-						"props":{
-							"name":"diy_bottom_005_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-1.112,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":61,
-								"props":{
-									"name":"diy_bottom_005_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_005_final-diy_bottom_005_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_005_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":62,
-								"props":{
-									"name":"diy_bottom_005_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_005_final-diy_bottom_005_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_005_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":63,
-						"props":{
-							"name":"diy_bottom_001_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":64,
-								"props":{
-									"name":"diy_bottom_001_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":65,
-								"props":{
-									"name":"diy_bottom_001_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_001_final-diy_bottom_001_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_001_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":66,
-						"props":{
-							"name":"diy_bottom_002_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.498,
-								-0.024,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":67,
-								"props":{
-									"name":"diy_bottom_002_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_002_final-diy_bottom_002_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_002_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":68,
-								"props":{
-									"name":"diy_bottom_002_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_002_final-diy_bottom_002_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_002_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":69,
-						"props":{
-							"name":"diy_bottom_003_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-0.387,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":70,
-								"props":{
-									"name":"diy_bottom_003_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_003_final-diy_bottom_003_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_003_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":71,
-								"props":{
-									"name":"diy_bottom_003_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_003_final-diy_bottom_003_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_003_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":72,
-						"props":{
-							"name":"diy_bottom_004_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								-0.761,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":73,
-								"props":{
-									"name":"diy_bottom_004_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_004_final-diy_bottom_004_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_004_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":74,
-								"props":{
-									"name":"diy_bottom_004_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_004_final-diy_bottom_004_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_004_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":75,
-						"props":{
-							"name":"diy_bottom_006_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0.867,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":76,
-								"props":{
-									"name":"diy_bottom_006_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_006_final-diy_bottom_006_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_006_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":77,
-								"props":{
-									"name":"diy_bottom_006_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_006_final-diy_bottom_006_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_006_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					},
-					{
-						"type":"Sprite3D",
-						"instanceID":78,
-						"props":{
-							"name":"diy_bottom_008_final",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								1.632,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								1,
-								0,
-								0
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":79,
-								"props":{
-									"name":"diy_bottom_008_final_0",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_008_final-diy_bottom_008_final_0.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_008_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"MeshSprite3D",
-								"instanceID":80,
-								"props":{
-									"name":"diy_bottom_008_final_1",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_008_final-diy_bottom_008_final_1.lm",
-									"enableRender":true,
-									"materials":[
-										{
-											"type":"Laya.BlinnPhongMaterial",
-											"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_008_basic.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":59,
+										"props":{
+											"name":"diy_bottom_002_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0,
+												0.7071068,
+												0.7071068,
+												0
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_002_final-diy_bottom_002_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":60,
+										"props":{
+											"name":"diy_bottom_002_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0,
+												0.7071068,
+												0.7071068,
+												0
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Bottoms/diy_bottom_002_final-diy_bottom_002_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"type":"Laya.BlinnPhongMaterial",
+													"path":"Assets/Game/Mesh/DIY/DIY_Bottoms/Materials/diy_bottom_002_basic.lmat"
+												}
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
 							}
 						]
 					}

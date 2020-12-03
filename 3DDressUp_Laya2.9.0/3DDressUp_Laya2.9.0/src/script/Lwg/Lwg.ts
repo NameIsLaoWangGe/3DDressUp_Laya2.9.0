@@ -385,7 +385,7 @@ export module lwg {
                     parent.addChild(Gold);
 
                     Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                        Audio._playSound(Audio._voiceUrl.huodejinbi);
+                        AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
                         if (index === number - 1) {
 
                             Laya.timer.once(200, this, () => {
@@ -429,7 +429,7 @@ export module lwg {
                 // Gold.rotation = Math.random() * 360;
                 Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
                     Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                        Audio._playSound(Audio._voiceUrl.huodejinbi);
+                        AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
                         if (index === number - 1) {
 
                             Laya.timer.once(200, this, () => {
@@ -4030,7 +4030,7 @@ export module lwg {
         export class _Largen {
             down(event: Laya.Event): void {
                 event.currentTarget.scale(1.1, 1.1);
-                Audio._playSound(Click._audioUrl);
+                AudioAdmin._playSound(Click._audioUrl);
             }
             move(): void { }
             up(event: Laya.Event): void {
@@ -4048,7 +4048,7 @@ export module lwg {
 
             down(event: Laya.Event): void {
                 event.currentTarget.scale(0.9, 0.9);
-                Audio._playSound(Click._audioUrl);
+                AudioAdmin._playSound(Click._audioUrl);
             }
             move(): void { }
             up(event: Laya.Event): void {
@@ -4323,9 +4323,9 @@ export module lwg {
                 Click._switch = false
             }
             Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
-                // Audio._playSound(Enum.AudioName.commonShake, 1);
+                // AudioAdmin._playSound(Enum.AudioName.commonShake, 1);
                 Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
-                    // Audio._playSound(Enum.AudioName.commonShake, 1);
+                    // AudioAdmin._playSound(Enum.AudioName.commonShake, 1);
                     Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                         if (func) {
                             func();
@@ -4951,7 +4951,7 @@ export module lwg {
          * @param func 完成后的回调
          */
         export function swell_shrink(node, firstScale, scale1, time, delayed?: number, func?: Function): void {
-            // Audio._playSound(Enum.AudioName.commonPopup, 1);
+            // AudioAdmin._playSound(Enum.AudioName.commonPopup, 1);
             if (!delayed) {
                 delayed = 0;
             }
@@ -5252,11 +5252,11 @@ export module lwg {
                 if (value) {
                     val = 1;
                     Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                    Audio._playMusic();
+                    AudioAdmin._playMusic();
                 } else {
                     val = 0;
                     Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                    Audio._stopMusic();
+                    AudioAdmin._stopMusic();
                 }
             }
         };
@@ -5360,7 +5360,7 @@ export module lwg {
     /**
      * 2.音乐播放模块
      */
-    export module Audio {
+    export module AudioAdmin {
         /**音效地址*/
         export enum _voiceUrl {
             btn = 'Lwg/Voice/btn.wav',
@@ -6920,7 +6920,7 @@ export module lwg {
                                     }
                                 }
                             }
-                            // Audio._playMusic();
+                            AudioAdmin._playMusic();
                             // 有新手引导则进入新手引导，没有
                             if (Admin._GuideControl.switch) {
                                 this._openScene(_SceneName.Guide, true, false, () => {
@@ -7412,7 +7412,7 @@ export let TimerAdmin = lwg.TimerAdmin;
 export let Execution = lwg.Execution;
 export let Gold = lwg.Gold;
 export let Setting = lwg.Setting;
-export let AudioAdmin = lwg.Audio;
+export let AudioAdmin = lwg.AudioAdmin;
 export let Click = lwg.Click;
 export let Color = lwg.Color;
 export let Effects = lwg.Effects;

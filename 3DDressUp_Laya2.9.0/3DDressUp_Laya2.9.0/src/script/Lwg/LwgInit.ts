@@ -4,10 +4,10 @@ import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
-import { _MakeClothes } from "./_MakeClothes";
 import { _MakeUp } from "./_MakeUp";
 import { _MakeTailor } from "./_MakeTailor";
 import { _DressingRoom } from "./_DressingRoom";
+import { _MakePattern } from "./_MakePattern";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
 
@@ -33,7 +33,7 @@ export default class LwgInit extends _LwgInitScene {
             _Start: _Start,
             _Game: _Game,
             _MakeTailor: _MakeTailor,
-            _MakeClothes: _MakeClothes,
+            _MakePattern: _MakePattern,
             _MakeUp: _MakeUp,
             _DressingRoom: _DressingRoom,
 

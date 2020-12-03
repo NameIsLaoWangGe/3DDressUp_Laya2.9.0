@@ -1,17 +1,19 @@
 import { TaT } from "../TJ/Admanager";
 import { Admin, EventAdmin, TimerAdmin, Tools } from "./Lwg";
 import { lwg3D } from "./Lwg3D";
+import { _MakeTailor } from "./_MakeTailor";
 import { _MakeUp } from "./_MakeUp";
 import { _Res } from "./_PreLoad";
-export module _MakeClothes {
+export module _MakePattern {
     export enum _Event {
         addTexture2D = '_MakeClothes_addTexture2D',
         rotateHanger = '_MakeClothes_rotateHanger',
         moveUltimately = '_MakeClothes_moveUltimately',
         resetTex = '_MakeClothes_resetTex',
         changeDir = '_MakeClothes_resetTex',
+        remake = '_MakeClothes_remake',
     }
-    export class MakeClothes extends Admin._SceneBase {
+    export class MakePattern extends Admin._SceneBase {
         lwgOnAwake(): void {
         }
 
@@ -19,7 +21,7 @@ export module _MakeClothes {
             // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
             this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
         }
-    
+
         lwgOnStart(): void {
             // console.log(Laya.stage['_children'])
             _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
@@ -349,38 +351,52 @@ export module _MakeClothes {
         }
     }
     export let _Scene3D: Laya.Scene3D;
+    export let _Role: Laya.MeshSprite3D;
     export let _MainCamara: Laya.Camera;
-    /**模型的角度*/
     export let _Hanger: Laya.MeshSprite3D;
+    export let _Front: Laya.MeshSprite3D;
+    export let _Reverse: Laya.MeshSprite3D;
     export let _HangerP: Laya.MeshSprite3D;
+    /**模型的角度*/
     export let _HangerSimRY = 90;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
-            _Hanger = this._Child('Hanger');
+
+            _Role = _Scene3D.getChildByName('Role') as Laya.MeshSprite3D;
+            const Classify = _Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify) as Laya.MeshSprite3D;
+            Tools._Node.showExcludedChild3D(_Role, [Classify.name]);
+
+            _Hanger = Classify.getChildByName(_MakeTailor._Clothes._ins()._pitchName) as Laya.MeshSprite3D;
+            Tools._Node.showExcludedChild3D(Classify, [_Hanger.name]);
+
+            _Front = _Hanger.getChildByName(`${_Hanger.name}_0`) as Laya.MeshSprite3D;
+            _Reverse = _Hanger.getChildByName(`${_Hanger.name}_1`) as Laya.MeshSprite3D;
+
             _HangerP = this._Child('HangerP');
             _MainCamara = this._MainCamera;
+
+            console.log(_MakeTailor._Clothes._ins()._pitchClassify, _MakeTailor._Clothes._ins()._pitchName);
         }
         lwgEvent(): void {
-            EventAdmin._register(_Event.addTexture2D, this, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {
-                let bMaterialR = this._findMRenderer('Reverse').material as Laya.BlinnPhongMaterial;
-                bMaterialR.albedoTexture.destroy();
-                bMaterialR.albedoTexture = Text2DR;
+            this._evReg(_Event.addTexture2D, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {
+                const bMF = _Front.meshRenderer.material as Laya.BlinnPhongMaterial;
+                bMF.albedoTexture.destroy();
+                bMF.albedoTexture = Text2DF;
 
-                let bMaterialF = this._findMRenderer('Front').material as Laya.BlinnPhongMaterial;
-                bMaterialF.albedoTexture.destroy();
-                bMaterialF.albedoTexture = Text2DF;
-
+                const bMR = _Reverse.meshRenderer.material as Laya.BlinnPhongMaterial;
+                bMR.albedoTexture.destroy();
+                bMR.albedoTexture = Text2DR;
             })
 
-            EventAdmin._register(_Event.rotateHanger, this, (num: number) => {
+            this._evReg(_Event.rotateHanger, (num: number) => {
                 if (num == 1) {
-                    this._childTrans('Hanger').localRotationEulerY++;
+                    _Hanger.transform.localRotationEulerY++;
                     _HangerSimRY++;
                     if (_HangerSimRY > 360) {
                         _HangerSimRY = 0;
                     }
                 } else {
-                    this._childTrans('Hanger').localRotationEulerY--;
+                    _Hanger.transform.localRotationEulerY--;
                     _HangerSimRY--;
                     if (_HangerSimRY < 0) {
                         _HangerSimRY = 359;
@@ -390,4 +406,4 @@ export module _MakeClothes {
         }
     }
 }
-export default _MakeClothes.MakeClothes;
+export default _MakePattern.MakePattern;

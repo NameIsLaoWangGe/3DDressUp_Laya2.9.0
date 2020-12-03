@@ -1,4 +1,4 @@
-import lwg, { Admin, Animation2D, DataAdmin, Effects, EventAdmin, SceneAnimation, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import lwg, { Admin, Animation2D, AudioAdmin, Click, DataAdmin, Effects, EventAdmin, SceneAnimation, TimerAdmin, Tools, _SceneName } from "./Lwg";
 import { _Res } from "./_PreLoad";
 
 export module _MakeTailor {
@@ -24,7 +24,7 @@ export module _MakeTailor {
                 this.ins._pitchClassify = this.ins._classify.Dress;
                 this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
                 if (!this.ins._pitchName) {
-                    this.ins._pitchName = this.ins._arr[this.ins._property.name];
+                    this.ins._pitchName = this.ins._arr[0][this.ins._property.name];
                 }
             }
             return this.ins;
@@ -82,17 +82,18 @@ export module _MakeTailor {
             const clothesArr = _Clothes._ins().getClothesArr();
             const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
             let CloBoxOld: Laya.Sprite;
-            let CloBoxNew: Laya.Sprite;
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
                     CloBoxOld = element;
-                    clothesArr[index] = CloBoxNew = _Clothes._ins().createClothes(name, Scene);
+                    clothesArr[index] = this.Clothes = _Clothes._ins().createClothes(name, Scene);
+                    this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
+                    this.setData();
                 }
             }
             const time = 500;
-            CloBoxNew.pos(0, -Laya.stage.height);
-            CloBoxNew && Animation2D.move_rotate(CloBoxNew, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+            this.Clothes.pos(0, -Laya.stage.height);
+            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
 
             Animation2D.move_rotate(CloBoxOld, 0, new Laya.Point(Laya.stage.width, Laya.stage.height), time, 0, () => {
                 CloBoxOld.removeSelf();
@@ -122,15 +123,14 @@ export module _MakeTailor {
                     element.removeSelf();
                 }
             }
-            if (this.LastClothes) {
-                this.Clothes.pos(0, -Laya.stage.height);
-                this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+            this.Clothes.pos(0, -Laya.stage.height);
+            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
 
+            if (this.LastClothes) {
                 Animation2D.move_rotate(this.LastClothes, 0, new Laya.Point(Laya.stage.width, -Laya.stage.height), time, 0, () => {
                     this.LastClothes.removeSelf();
                 })
             }
-
         }
 
         /**设置单个服装的任务信息*/
@@ -248,7 +248,8 @@ export module _MakeTailor {
                 })
             },
             effcts: () => {
-                for (let index = 0; index < 5; index++) {
+                let num = Tools._Number.randomOneInt(3, 6);
+                for (let index = 0; index < num; index++) {
                     Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], null, [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
                 }
             }
@@ -349,7 +350,9 @@ export module _MakeTailor {
         }
 
         lwgOnStart(): void {
-            _TaskClothes._ins().changeClothes(this._Owner);
+            TimerAdmin._frameOnce(30, this, () => {
+                _TaskClothes._ins().changeClothes(this._Owner);
+            })
         }
 
         lwgEvent(): void {
@@ -410,7 +413,7 @@ export module _MakeTailor {
                             this._evNotify(_Event.completeEffc);
                         })
                         TimerAdmin._frameOnce(280, this, () => {
-                            this._openScene('MakeClothes', true, true);
+                            this._openScene('MakePattern', true, true);
                         })
                     }
                 }
@@ -418,15 +421,15 @@ export module _MakeTailor {
                 let gPos = (Dotted.parent as Laya.Image).localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
                 if (Dotted.name == 'A') {
                     if (this._ImgVar('Scissor').x <= gPos.x) {
-                        this._evNotify(_Event.scissorRotation, [Dotted.rotation])
+                        this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
                     } else {
-                        this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation])
+                        this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation]);
                     }
                 } else {
                     if (this._ImgVar('Scissor').y >= gPos.y) {
-                        this._evNotify(_Event.scissorRotation, [Dotted.rotation])
+                        this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
                     } else {
-                        this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation])
+                        this._evNotify(_Event.scissorRotation, [180 + Dotted.rotation]);
                     }
                 }
             })
@@ -434,6 +437,7 @@ export module _MakeTailor {
             this._evReg(_Event.completeEffc, () => {
                 this.Navi.btnBackVinish();
                 this.Navi.btnAgainVinish();
+                AudioAdmin._playVictorySound();
                 this.completeEffc.ani3();
             })
         }
@@ -449,32 +453,36 @@ export module _MakeTailor {
             time: 500,
             delay: 800,
             scale: 1.4,
-            BtnAgainAppear: () => {
+            btnAgainAppear: () => {
                 if (!this.Navi.BtnAgain) {
                     this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
                     this._btnUp(this.Navi.BtnAgain, () => {
                         this._evNotify(_Event.scissorRemove, [() => {
                             _TaskClothes._ins().again(this._Owner);
                         }]);
-                        this.Navi.appear(this.Navi.appearType.again);
+                        Click._switch = false;
+                        TimerAdmin._frameOnce(30, this, () => {
+                            this.Navi.appear(this.Navi.appearType.again);
+                            Click._switch = true;
+                        })
                     })
                 }
-                Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0,)
+                Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0,);
             },
             btnAgainVinish: () => {
-                this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5)
+                this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5);
             },
             btnBackVinish: () => {
-                Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5)
+                Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5);
             },
             btnBackAppear: () => {
                 if (!this.Navi.BtnBack) {
                     this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]) as Laya.Image;
                     this._btnUp(this.Navi.BtnBack, () => {
                         this._openScene('Start', true, true);
-                    })
+                    });
                 }
-                Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4)
+                Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4);
             },
             appearType: {
                 first: 'first',
@@ -488,8 +496,6 @@ export module _MakeTailor {
                         Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
                             if (type == this.Navi.appearType.first) {
                                 this.Navi.btnBackAppear();
-                            } else {
-
                             }
                         })
                     })
@@ -497,10 +503,10 @@ export module _MakeTailor {
             },
 
             vinish: () => {
-                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 700, () => {
+                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 600, () => {
                     this._evNotify(_Event.scissorAppear);
                     Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
-                        this.Navi.BtnAgainAppear();
+                        this.Navi.btnAgainAppear();
                         Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
                     });
                 })
