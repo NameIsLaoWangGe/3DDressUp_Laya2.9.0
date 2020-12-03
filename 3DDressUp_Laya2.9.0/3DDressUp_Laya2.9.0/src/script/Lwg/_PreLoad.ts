@@ -68,7 +68,7 @@ export module _Res {
             Guide: `Scene/${_SceneName.Guide}.json`,
             PreLoadStep: `Scene/${_SceneName.PreLoadCutIn}.json`,
             MakePattern: `Scene/${'MakePattern'}.json`,
-            // AdsHint: `Scene/${_SceneName.AdsHint}.json`,
+            // AdsHint: `Scene/${_SceneName.AdsHint}.json`, 
             // Special: `Scene/${_SceneName.Special}.json`,
             // Victory: `Scene/${_SceneName.Victory}.json`,
             // SelectLevel: `Scene/${_SceneName.SelectLevel}.json`,
@@ -80,6 +80,10 @@ export module _Res {
         json: {
             Clothes: {
                 url: `_LwgData/_DressingRoom/Clothes.json`,
+                data: new Array,
+            },
+            MakePattern: {
+                url: `_LwgData/_MakePattern/MakePattern.json`,
                 data: new Array,
             }
         },

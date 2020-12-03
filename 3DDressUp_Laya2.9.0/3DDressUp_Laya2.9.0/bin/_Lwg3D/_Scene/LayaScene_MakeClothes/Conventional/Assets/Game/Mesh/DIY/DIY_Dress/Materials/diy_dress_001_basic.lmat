@@ -13,16 +13,13 @@
 				"depthTest":515
 			}
 		],
+		"enableVertexColor":false,
 		"alphaTest":false,
 		"alphaTestValue":0.5,
 		"renderQueue":2000,
-		"metallic":0,
-		"smoothness":0.5,
-		"smoothnessTextureScale":1,
-		"smoothnessSource":0,
-		"normalTextureScale":1,
-		"parallaxTextureScale":0.02,
-		"occlusionTextureStrength":1,
+		"albedoIntensity":1.63,
+		"enableLighting":true,
+		"shininess":0.078125,
 		"textures":[
 			{
 				"name":"albedoTexture",
@@ -52,20 +49,20 @@
 				]
 			},
 			{
+				"name":"specularColor",
+				"value":[
+					0,
+					0,
+					0,
+					1
+				]
+			},
+			{
 				"name":"albedoColor",
 				"value":[
 					1,
 					1,
 					1,
-					1
-				]
-			},
-			{
-				"name":"emissionColor",
-				"value":[
-					0,
-					0,
-					0,
 					1
 				]
 			}

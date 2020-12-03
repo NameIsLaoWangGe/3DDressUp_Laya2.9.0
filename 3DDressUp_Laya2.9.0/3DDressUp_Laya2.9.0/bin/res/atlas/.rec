@@ -233,6 +233,7 @@ P 5BE85F42 tailor5.png
 P E4AD4E79 tailor6.png
 P 9A13CF9E tailor7.png
 R 3B312ECD ultimately.png
+D Game/UI/MakePattern
 D Game/UI/MakeUp
 P BE0A7AAD detailnormal_003_n.png
 D Game/UI/PreLoad
@@ -286,3 +287,10 @@ P F7C4DDEA diy_top_004_final.png
 P E2351576 diy_top_005_final.png
 P 2299F5DF diy_top_006_final.png
 P 72ABC1D3 diy_top_007_final.png
+D Game/UI/MakePattern/general
+P 14810733 pattern1.png
+P 764CE028 pattern2.png
+P 0EC648AF pattern3.png
+P 14810733 pattern4.png
+P 0EC648AF pattern5.png
+P 764CE028 pattern6.png

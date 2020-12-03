@@ -409,7 +409,7 @@ export module _MakeTailor {
                     if (_TaskClothes._ins()._checkAllCompelet()) {
                         Tools._Node.removeAllChildren(_TaskClothes._ins().LineParent);
                         this._evNotify(_Event.scissorRemove);
-                        TimerAdmin._frameOnce(100, this, () => {
+                        TimerAdmin._frameOnce(80, this, () => {
                             this._evNotify(_Event.completeEffc);
                         })
                         TimerAdmin._frameOnce(280, this, () => {

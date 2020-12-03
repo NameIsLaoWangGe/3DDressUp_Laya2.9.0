@@ -3785,7 +3785,7 @@
                 node.alpha = firstAlpha;
                 Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) / 3, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                             Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                                 if (func) {
                                     func();
@@ -5403,7 +5403,7 @@
                         case _json:
                             Laya.loader.load(_json[index]['url'], Laya.Handler.create(this, (data) => {
                                 if (data == null) {
-                                    console.log('XXXXXXXXXXX数据表' + _json[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                    console.log('XXXXXXXXXXX数据表' + _json[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
                                     _json[index]['data'] = data["RECORDS"];
@@ -5884,6 +5884,10 @@
             json: {
                 Clothes: {
                     url: `_LwgData/_DressingRoom/Clothes.json`,
+                    data: new Array,
+                },
+                MakePattern: {
+                    url: `_LwgData/_MakePattern/MakePattern.json`,
                     data: new Array,
                 }
             },
@@ -6442,7 +6446,7 @@
                         if (_TaskClothes._ins()._checkAllCompelet()) {
                             Tools._Node.removeAllChildren(_TaskClothes._ins().LineParent);
                             this._evNotify(_Event.scissorRemove);
-                            TimerAdmin._frameOnce(100, this, () => {
+                            TimerAdmin._frameOnce(80, this, () => {
                                 this._evNotify(_Event.completeEffc);
                             });
                             TimerAdmin._frameOnce(280, this, () => {
@@ -6922,7 +6926,7 @@
                     Bottoms: 'Bottoms',
                 };
             }
-            static _Ins() {
+            static _ins() {
                 if (!this.ins) {
                     this.ins = new _General('ClothesGeneral', _Res._list.json.Clothes.url, true);
                 }
@@ -6931,7 +6935,7 @@
         }
         _DressingRoom._General = _General;
         class _DIY extends DataAdmin._Table {
-            static _Ins() {
+            static _ins() {
                 if (!this.ins) {
                     this.ins = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
                 }
@@ -6942,24 +6946,24 @@
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 this._btnUp(this._Owner, (e) => {
-                    _DIY._Ins()._setPitch(this._Owner['_dataSource'][_DIY._Ins()._property.name]);
+                    _DIY._ins()._setPitch(this._Owner['_dataSource'][_DIY._ins()._property.name]);
                 }, null);
             }
         }
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
-                _General._Ins()._List = this._ListVar('List');
-                _DIY._Ins()._List = this._ListVar('List');
-                _DIY._Ins()._List.selectEnable = true;
-                _DIY._Ins()._List.vScrollBarSkin = "";
-                _DIY._Ins()._List.array = _DIY._Ins()._arr;
-                _DIY._Ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                _General._ins()._List = this._ListVar('List');
+                _DIY._ins()._List = this._ListVar('List');
+                _DIY._ins()._List.selectEnable = true;
+                _DIY._ins()._List.vScrollBarSkin = "";
+                _DIY._ins()._List.array = _DIY._ins()._arr;
+                _DIY._ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
                     let data = Cell.dataSource;
                     let Icon = Cell.getChildByName('Icon');
                     Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
                     let Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                    if (data[_DIY._Ins()._property.pitch]) {
+                    if (data[_DIY._ins()._property.pitch]) {
                         Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
                     }
                     else {
@@ -6969,7 +6973,7 @@
                         Cell.addComponent(_Item);
                     }
                 });
-                _DIY._Ins()._Tap = this._ListVar('Tap');
+                _DIY._ins()._Tap = this._ListVar('Tap');
             }
             lwgAdaptive() {
                 this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
@@ -6990,13 +6994,39 @@
     (function (_MakePattern) {
         let _Event;
         (function (_Event) {
-            _Event["addTexture2D"] = "_MakeClothes_addTexture2D";
-            _Event["rotateHanger"] = "_MakeClothes_rotateHanger";
-            _Event["moveUltimately"] = "_MakeClothes_moveUltimately";
-            _Event["resetTex"] = "_MakeClothes_resetTex";
-            _Event["changeDir"] = "_MakeClothes_resetTex";
-            _Event["remake"] = "_MakeClothes_remake";
+            _Event["addTexture2D"] = "_MakePattern_addTexture2D";
+            _Event["rotateHanger"] = "_MakePattern_rotateHanger";
+            _Event["moveUltimately"] = "_MakePattern_moveUltimately";
+            _Event["resetTex"] = "_MakePattern_resetTex";
+            _Event["changeDir"] = "_MakePattern_resetTex";
+            _Event["remake"] = "_MakePattern_remake";
         })(_Event = _MakePattern._Event || (_MakePattern._Event = {}));
+        class _Pattern extends DataAdmin._Table {
+            constructor() {
+                super(...arguments);
+                this._classify = {
+                    general: 'general',
+                };
+            }
+            static _ins() {
+                if (!this.ins) {
+                    this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.url);
+                    this.ins._pitchClassify = this.ins._classify.general;
+                    this.ins._arr.push({}, {}, {});
+                }
+                return this.ins;
+            }
+        }
+        class _Item extends Admin._ObjectBase {
+            lwgButton() {
+                this._btnFour(this._Owner, () => {
+                }, () => {
+                }, () => {
+                }, () => {
+                });
+            }
+        }
+        _MakePattern._Item = _Item;
         class MakePattern extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
@@ -7058,12 +7088,26 @@
                         let rOutArr = [];
                         for (let index = 0; index < posArr.length; index++) {
                             let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index].x, posArr[index].y));
-                            let _outF = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Front);
+                            let _outF = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _MakePattern._Front.name);
                             _outF && fOutArr.push(_outF);
-                            let _outR = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Reverse);
+                            let _outR = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _MakePattern._Reverse.name);
                             _outR && rOutArr.push(_outR);
                             if (_outF || _outR) {
                                 indexArr.push(posArr[index]);
+                                let Img = this._Owner.getChildByName(`Img${index}`);
+                                if (!Img) {
+                                    let Img = new Laya.Image;
+                                    Img.skin = `Lwg/UI/ui_circle_004.png`;
+                                    this._Owner.addChild(Img);
+                                    Img.name = `Img${index}`;
+                                    Img.width = 20;
+                                    Img.height = 20;
+                                    Img.pivotX = Img.width / 2;
+                                    Img.pivotY = Img.height / 2;
+                                }
+                                else {
+                                    Img.pos(gPoint.x, gPoint.y);
+                                }
                             }
                         }
                         if (indexArr.length !== 0) {
@@ -7097,7 +7141,7 @@
                             }
                             this.Tex.Img.x = _width - _width / 180 * (_angleY);
                             let pH = out.point.y - _MakePattern._HangerP.transform.position.y;
-                            let _DirHeight = Tools._3D.getMeshSize(_MakePattern._Hanger.getChildByName(this.Tex.dir)).y;
+                            let _DirHeight = Tools._3D.getMeshSize(this.Tex.dir == this.Tex.dirType.Front ? _MakePattern._Front : _MakePattern._Reverse).y;
                             let ratio = 1 - pH / _DirHeight;
                             this.Tex.Img.y = ratio * _height;
                             return true;
@@ -7112,15 +7156,19 @@
                         let _width = this._ImgVar('Frame').width;
                         let _height = this._ImgVar('Frame').height;
                         return [
-                            new Laya.Point(x, y),
-                            new Laya.Point(x + _width, y),
+                            new Laya.Point(0, 0),
+                            new Laya.Point(0, _height / 2),
+                            new Laya.Point(_width, _height / 2),
+                            new Laya.Point(_width, 0),
+                            new Laya.Point(_width / 2, 0),
+                            new Laya.Point(_width / 2, _height),
                             new Laya.Point(_width * 1 / 4, _height * 3 / 4),
                             new Laya.Point(_width * 3 / 4, _height * 1 / 4),
-                            new Laya.Point(x + _width / 2, y + _height / 2),
+                            new Laya.Point(_width / 2, _height / 2),
                             new Laya.Point(_width * 1 / 4, _height * 1 / 4),
                             new Laya.Point(_width * 3 / 4, _height * 3 / 4),
-                            new Laya.Point(x, y + _height),
-                            new Laya.Point(x + _width, y + _height),
+                            new Laya.Point(x, _height),
+                            new Laya.Point(_width, _height),
                         ];
                     },
                     crashType: {
@@ -7135,9 +7183,9 @@
                         let rOutArr = [];
                         for (let index = 0; index < posArr.length; index++) {
                             let gPoint = this._SpriteVar('Wireframe').localToGlobal(new Laya.Point(posArr[index].x, posArr[index].y));
-                            let _outF = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Front);
+                            let _outF = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _MakePattern._Front.name);
                             _outF && fOutArr.push(_outF);
-                            let _outR = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), this.Tex.dirType.Reverse);
+                            let _outR = Tools._3D.rayScanning(_MakePattern._MainCamara, _MakePattern._Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _MakePattern._Reverse.name);
                             _outR && rOutArr.push(_outR);
                         }
                         if (fOutArr.length !== 0 || rOutArr.length !== 0) {
@@ -7202,9 +7250,11 @@
                         return;
                     },
                     operation: (e) => {
-                        this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
-                        this.Tex[this.Tex.state](e);
-                        this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
+                        if (this.Tex.touchP) {
+                            this.Tex.diffP = new Laya.Point(e.stageX - this.Tex.touchP.x, e.stageY - this.Tex.touchP.y);
+                            this.Tex[this.Tex.state](e);
+                            this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
+                        }
                     },
                     restore: () => {
                         this._ImgVar('Wireframe').rotation = 0;
@@ -7264,8 +7314,28 @@
                         });
                     }
                 };
+                this.ListS = {
+                    fY: null,
+                    diffY: 0,
+                };
             }
             lwgOnAwake() {
+                _Pattern._ins()._List = this._ListVar('List');
+                _Pattern._ins()._listrender = (Cell, index) => {
+                    const data = Cell.dataSource;
+                    const Icon = Cell.getChildByName('Icon');
+                    if (data['name']) {
+                        Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}.png`;
+                    }
+                    else {
+                        Icon.skin = null;
+                    }
+                    const Board = Cell.getChildByName('Board');
+                    Board.skin = `Lwg/UI/ui_orthogon_green.png`;
+                    if (!Cell.getComponent(_Item)) {
+                        Cell.addComponent(_Item);
+                    }
+                };
             }
             lwgAdaptive() {
                 this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
@@ -7278,14 +7348,48 @@
                 else {
                     _MakePattern._Scene3D.getComponent(MakeClothes3D).lwgOnStart();
                 }
+                EventAdmin._notify(_Event.remake, this.Tex.getTex());
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
             lwgEvent() {
             }
             lwgButton() {
                 this.Tex.btn();
-                this._btnUp(this._ImgVar('BtnNext'), () => {
+                this._btnUp(this._ImgVar('BtnComplete'), () => {
                     this._openScene('DressingRoom', true, true);
+                });
+                this._btnFour(this._ImgVar('ListS'), (e) => {
+                    e.stopPropagation();
+                    if (!this.ListS.fY) {
+                        this.ListS.fY = e.stageY;
+                    }
+                }, (e) => {
+                    e.stopPropagation();
+                    if (this.ListS.fY) {
+                        this.ListS.diffY = e.stageY - this.ListS.fY;
+                        if (Math.abs(this.ListS.diffY) > 30) {
+                            const index = _Pattern._ins()._List.startIndex;
+                            if (this.ListS.diffY > 30) {
+                                if (index > 0) {
+                                    _Pattern._ins()._List.tweenTo(index - 1, 200);
+                                }
+                            }
+                            if (this.ListS.diffY < 30) {
+                                if (index < _Pattern._ins()._arr.length - 1) {
+                                    _Pattern._ins()._List.tweenTo(index + 1, 200);
+                                }
+                                console.log(_Pattern._ins()._arr);
+                                console.log(_Pattern._ins()._List.array);
+                            }
+                            this.ListS.fY = null;
+                        }
+                    }
+                }, (e) => {
+                    e.stopPropagation();
+                    this.ListS.fY = null;
+                }, (e) => {
+                    e.stopPropagation();
+                    this.ListS.fY = null;
                 });
             }
             onStageMouseDown(e) {
@@ -7305,18 +7409,22 @@
         _MakePattern._HangerSimRY = 90;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
-                _MakePattern._Role = _MakePattern._Scene3D.getChildByName('Role');
-                const Classify = _MakePattern._Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify);
-                Tools._Node.showExcludedChild3D(_MakePattern._Role, [Classify.name]);
-                _MakePattern._Hanger = Classify.getChildByName(_MakeTailor._Clothes._ins()._pitchName);
-                Tools._Node.showExcludedChild3D(Classify, [_MakePattern._Hanger.name]);
-                _MakePattern._Front = _MakePattern._Hanger.getChildByName(`${_MakePattern._Hanger.name}_0`);
-                _MakePattern._Reverse = _MakePattern._Hanger.getChildByName(`${_MakePattern._Hanger.name}_1`);
                 _MakePattern._HangerP = this._Child('HangerP');
                 _MakePattern._MainCamara = this._MainCamera;
-                console.log(_MakeTailor._Clothes._ins()._pitchClassify, _MakeTailor._Clothes._ins()._pitchName);
+            }
+            lwgOnStart() {
             }
             lwgEvent() {
+                this._evReg(_Event.remake, () => {
+                    _MakePattern._Role = _MakePattern._Scene3D.getChildByName('Role');
+                    const Classify = _MakePattern._Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify);
+                    Tools._Node.showExcludedChild3D(_MakePattern._Role, [Classify.name]);
+                    _MakePattern._Hanger = Classify.getChildByName(_MakeTailor._Clothes._ins()._pitchName);
+                    Tools._Node.showExcludedChild3D(Classify, [_MakePattern._Hanger.name]);
+                    _MakePattern._Hanger.transform.localRotationEulerY = 180;
+                    _MakePattern._Front = _MakePattern._Hanger.getChildByName(`${_MakePattern._Hanger.name}_0`);
+                    _MakePattern._Reverse = _MakePattern._Hanger.getChildByName(`${_MakePattern._Hanger.name}_1`);
+                });
                 this._evReg(_Event.addTexture2D, (Text2DF, Text2DR) => {
                     const bMF = _MakePattern._Front.meshRenderer.material;
                     bMF.albedoTexture.destroy();
@@ -7456,7 +7564,7 @@
     GameConfig.startScene = "Scene/LwgInit.scene";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
-    GameConfig.stat = true;
+    GameConfig.stat = false;
     GameConfig.physicsDebug = true;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
