@@ -44,7 +44,7 @@ export module _Start {
         }
         lwgButton(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
-                this._openScene('MakeTailor', true, true);
+                this._openScene('MakePattern', true, true);
             })
         }
     }

@@ -4,7 +4,7 @@ import { _Res } from "./_PreLoad";
 export module _MakeTailor {
     export enum _Event {
         scissorTrigger = '_MakeTailor_ scissorTrigger',
-        completeEffc = '_MakeTailor_completeAni',
+        completeEffcet = '_MakeTailor_completeAni',
         changeClothes = '_MakeTailor_changeClothes',
         scissorAppear = '_MakeTailor_scissorAppear',
         scissorPlay = '_MakeTailor_scissorPlay',
@@ -14,7 +14,7 @@ export module _MakeTailor {
         scissorRemove = '_MakeTailor_scissorRemove',
     }
 
-    /**服装数据*/
+    /**服装总数据数据*/
     export class _Clothes extends DataAdmin._Table {
         private static ins: _Clothes;
         static _ins() {
@@ -81,31 +81,32 @@ export module _MakeTailor {
         again(Scene: Laya.Scene): void {
             const clothesArr = _Clothes._ins().getClothesArr();
             const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
-            let CloBoxOld: Laya.Sprite;
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
-                    CloBoxOld = element;
+                    this.LastClothes = element;
                     clothesArr[index] = this.Clothes = _Clothes._ins().createClothes(name, Scene);
                     this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
                     this.setData();
                 }
             }
-            const time = 500;
-            this.Clothes.pos(0, -Laya.stage.height);
-            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
-
-            Animation2D.move_rotate(CloBoxOld, 0, new Laya.Point(Laya.stage.width, Laya.stage.height), time, 0, () => {
-                CloBoxOld.removeSelf();
+            this.clothesMove();
+            Animation2D.move_rotate(this.LastClothes, 45, new Laya.Point(Laya.stage.width * 1.5, Laya.stage.height * 1.5), this.moveTime, 0, () => {
+                this.LastClothes.removeSelf();
             })
         }
-
         Clothes: Laya.Sprite;
+        moveTime = 600;
+        clothesMove(): void {
+            const time = 700;
+            this.Clothes.pos(0, -Laya.stage.height * 1.5);
+            this.Clothes.rotation = 45;
+            Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+        }
         LastClothes: Laya.Sprite;
         LineParent: Laya.Image;
         /**更换服装*/
         changeClothes(Scene: Laya.Scene): void {
-            const time = 500;
             const clothesArr = _Clothes._ins().getClothesArr();
             const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
             const lastName = _Clothes._ins()._lastPitchName;
@@ -123,14 +124,10 @@ export module _MakeTailor {
                     element.removeSelf();
                 }
             }
-            this.Clothes.pos(0, -Laya.stage.height);
-            this.Clothes && Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
-
-            if (this.LastClothes) {
-                Animation2D.move_rotate(this.LastClothes, 0, new Laya.Point(Laya.stage.width, -Laya.stage.height), time, 0, () => {
-                    this.LastClothes.removeSelf();
-                })
-            }
+            this.clothesMove();
+            this.LastClothes && Animation2D.move_rotate(this.LastClothes, -45, new Laya.Point(Laya.stage.width * 1.5, -Laya.stage.height * 1.5), this.moveTime, 0, () => {
+                this.LastClothes.removeSelf();
+            })
         }
 
         /**设置单个服装的任务信息*/
@@ -150,78 +147,108 @@ export module _MakeTailor {
         }
     }
 
-    export class _Operation {
-        constructor(_Scene: Laya.Scene, _Operation?: Laya.Image, _BtnAgain?: Laya.Image, _BtnBack?: Laya.Image, _BtnComplete?: Laya.Image) {
-            this.Scene = _Scene ? _Scene : null;
-            this.Operation = _Operation ? _Operation : null;
+    export class _UI {
+        constructor(_Scene: Laya.Scene) {
+            this.Scene = _Scene;
+            this.Operation = _Scene['Operation'];
 
-            this.BtnAgain = _BtnAgain ? _BtnAgain : null;
-            this.BtnAgain && Click._on(Click._Use.value, this.BtnAgain, _Scene[_Scene.name], () => {
-                Click._on(Click._Use.value, this.BtnAgain, () => {
-                    this.BtnAgainClick && this.BtnAgainClick();
-                });
+            this.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, _Scene, [200, 79]) as Laya.Image;
+            Click._on(Click._Use.value, this.BtnAgain, this, null, null, () => {
+                this.btnAgainClick && this.btnAgainClick();
             })
 
-            this.BtnComplete = _BtnComplete ? _BtnComplete : null;
-            this.BtnComplete && Click._on(Click._Use.value, this.BtnComplete, _Scene[_Scene.name], () => {
-                this.OperationVinish();
+            this.BtnComplete = _Scene['BtnComplete'];
+            Click._on(Click._Use.value, this.BtnComplete, this, null, null, () => {
+                this.btnCompleteClick && this.btnCompleteClick();
             })
 
-            this.BtnBack = _BtnBack ? _BtnBack : null;
-            this.BtnBack && Click._on(Click._Use.value, this.BtnBack, _Scene[_Scene.name], () => {
-                Click._on(Click._Use.value, this.BtnBack, () => {
-                    _Scene[_Scene.name]._openScene('Start', true, true);
-                });
+            this.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, _Scene, [77, 79]) as Laya.Image;
+            Click._on(Click._Use.value, this.BtnBack, this, null, null, () => {
+                _Scene[_Scene.name]._openScene('Start', true, true);
             })
+
+            this.BtnRollback = Tools._Node.createPrefab(_Res._list.prefab2D.BtnRollback.prefab, _Scene, [200, 79]) as Laya.Image;
+            Click._on(Click._Use.value, this.BtnRollback, this, null, null, () => {
+                this.btnRollbackClick && this.btnRollbackClick();
+            })
+
+            this.Operation.pos(Laya.stage.width + 500, 0);
+            this.BtnComplete.scale(0, 0);
+            this.BtnBack.scale(0, 0);
+            this.BtnAgain.scale(0, 0);
+            this.BtnRollback.scale(0, 0);
         }
 
-        BtnAgainClick: Function;
+        btnAgainClick: Function;
+        btnCompleteClick: Function;
+        btnRollbackClick: Function;
 
         Scene: Laya.Scene;
         Operation: Laya.Image;
+        BtnRollback: Laya.Image;
         BtnAgain: Laya.Image;
         BtnBack: Laya.Image;
         BtnComplete: Laya.Image;
-        time: 500;
-        delay: 800;
-        scale: 1.4;
-        btnAgainAppear(): void {
-            Animation2D.bombs_Appear(this.BtnAgain, 0, 1, this.scale, 0, this.time / 3, this.time / 4, 0,);
+
+        time: number = 100;
+        delay: number = 100;
+        scale: number = 1.4;
+        btnRollbackAppear(func?: Function, delay?: number): void {
+            Animation2D.bombs_Appear(this.BtnRollback, 0, 1, this.scale, 0, this.time * 2, () => {
+                func && func();
+            }, delay ? delay : 0);
         };
-        btnAgainVinish(): void {
-            Animation2D.bombs_Vanish(this.BtnAgain, 0, 0, 0, this.time / 1.5);
+        btnRollbackVinish(func?: Function, delay?: number): void {
+            Animation2D.bombs_Vanish(this.BtnRollback, 0, 0, 0, this.time * 4, () => {
+                func && func();
+            }, delay ? delay : 0);
         };
-        btnBackVinish(): void {
-            Animation2D.bombs_Vanish(this.BtnBack, 0, 0, 0, this.time / 1.5);
+        btnAgainAppear(func?: Function, delay?: number): void {
+            Animation2D.bombs_Appear(this.BtnAgain, 0, 1, this.scale, 0, this.time * 2, () => {
+                func && func();
+            }, delay ? delay : 0);
         };
-        btnBackAppear(): void {
-            Animation2D.bombs_Appear(this.BtnBack, 0, 1, this.scale, 0, this.time / 3, this.time / 4);
+        btnAgainVinish(func?: Function, delay?: number): void {
+            Animation2D.bombs_Vanish(this.BtnAgain, 0, 0, 0, this.time * 4, () => {
+                func && func();
+            }, delay ? delay : 0);
         };
-        appearType: {
-            first: 'first',
-            again: 'again',
+        btnBackAppear(func?: Function, delay?: number): void {
+            Animation2D.bombs_Appear(this.BtnBack, 0, 1, this.scale, 0, this.time * 2, () => {
+                func && func();
+            }, delay ? delay : 0);
         };
-        OperationAppear(type: string): void {
-            this.btnAgainVinish();
-            Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width - 100, 0, this.time, () => {
-                Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width, 0, this.time / 4, () => {
-                    this.BtnComplete.visible = true;
-                    Animation2D.bombs_Appear(this.BtnComplete, 0, 1, this.scale, 0, this.time / 3, this.time / 4, this.delay / 4, () => {
-                        if (type == this.appearType.first) {
-                            this.btnBackAppear();
-                        }
-                    })
+        btnBackVinish(func?: Function, delay?: number): void {
+            Animation2D.bombs_Vanish(this.BtnBack, 0, 0, 0, this.time * 4, () => {
+                func && func();
+            }, delay ? delay : 0);
+        };
+        btnCompleteAppear(func?: Function, delay?: number): void {
+            Animation2D.bombs_Appear(this.BtnComplete, 0, 1, this.scale, 0, this.time * 2, () => {
+                func && func();
+            }, delay ? delay : 0);
+        }
+        btnCompleteVinish(func?: Function, delay?: number): void {
+            Animation2D.bombs_Vanish(this.BtnComplete, 0, 0, 0, this.time * 4, () => {
+                func && func();
+            }, delay ? delay : 0);
+        };
+        operationAppear(func?: Function, delay?: number): void {
+            Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width - 100, 0, this.time * 4, () => {
+                Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width, 0, this.time, () => {
+                    func && func();
                 })
-            }, this.delay)
+            }, delay ? delay : 0)
         };
-        OperationVinish(): void {
-            Animation2D.bombs_Vanish(this.BtnComplete, 0, 0, 0, this.time / 1.5, this.delay - 600, () => {
-                Animation2D.move(this.Operation, this.Operation.x - 80, 0, this.time / 2, () => {
-                    this.btnAgainAppear();
-                    Animation2D.move(this.Operation, Laya.stage.width + 500, 0, this.time);
+        operationVinish(func?: Function, delay?: number): void {
+            Animation2D.bombs_Vanish(this.BtnComplete, 0, 0, 0, this.time * 4, () => {
+                Animation2D.move(this.Operation, this.Operation.x - 80, 0, this.time, () => {
+                    Animation2D.move(this.Operation, Laya.stage.width + 500, 0, this.time * 4, () => {
+                        func && func();
+                    });
                 });
-            })
-        };
+            }, delay ? delay : 0)
+        }
     }
 
     /**剪刀*/
@@ -359,23 +386,13 @@ export module _MakeTailor {
                     this.Move.touchP = null;
                 })
         }
-
-        state: string = 'none';//约束当前每次裁剪只裁剪一个线条
         onTriggerEnter(other: Laya.CircleCollider, _Owner: Laya.CircleCollider): void {
-            if (this.state == 'none' || this.state == other.owner.parent.name) {
-                if (!other['cut'] && this.Move.switch) {
-                    other['cut'] = true;
-                    this._evNotify(_Event.scissorPlay);
-                    this._evNotify(_Event.scissorStop);
-                    this.state = other.owner.parent.name;
-                    EventAdmin._notify(_Event.scissorTrigger, [other.owner]);
-                    this.Ani.effcts();
-                }
-            }
-        }
-        onTriggerExit(other: Laya.CircleCollider, _Owner: Laya.CircleCollider): void {
-            if (this.state == other.owner.parent.name) {
-                this.state = 'none';
+            if (!other['cut'] && this.Move.switch) {
+                other['cut'] = true;
+                this._evNotify(_Event.scissorPlay);
+                this._evNotify(_Event.scissorStop);
+                EventAdmin._notify(_Event.scissorTrigger, [other.owner]);
+                this.Ani.effcts();
             }
         }
     }
@@ -412,23 +429,42 @@ export module _MakeTailor {
                 }
             }
         }
-
-        lwgAdaptive(): void {
-            this._ImgVar('Operation').x = Laya.stage.width + 500;
-            this._ImgVar('BtnComplete').visible = false;
-        }
-        // lwgOpenAni(): number {
-        //     return 200;
-        // }
-        lwgOpenAniAfter(): void {
-            this.Operation.appear(this.Operation.appearType.first);
-        }
-
+        UI: _UI;
         lwgOnStart(): void {
+            this.UI = new _UI(this._Owner);
+            TimerAdmin._frameOnce(40, this, () => {
+                this.UI.operationAppear(() => {
+                    this.UI.btnAgainVinish(null, 200);
+                    this.UI.btnCompleteAppear();
+                });
+                this.UI.btnBackAppear();
+            })
+            this.UI.BtnRollback.visible = false;
+            this.UI.btnCompleteClick = () => {
+                this.UI.operationVinish(() => {
+                    this.UI.btnAgainAppear();
+                }, 200);
+                TimerAdmin._frameOnce(30, this, () => {
+                    this._evNotify(_Event.scissorAppear);
+                })
+            }
+            this.UI.btnAgainClick = () => {
+                this._evNotify(_Event.scissorRemove, [() => {
+                    _TaskClothes._ins().again(this._Owner);
+                }]);
+                Click._switch = false;
+                TimerAdmin._frameOnce(60, this, () => {
+                    this.UI.operationAppear(() => {
+                        this.UI.btnAgainVinish(null, 200);
+                        this.UI.btnCompleteAppear();
+                    });
+                    Click._switch = true;
+                })
+            }
+
             TimerAdmin._frameOnce(30, this, () => {
                 _TaskClothes._ins().changeClothes(this._Owner);
             })
-
         }
 
         lwgEvent(): void {
@@ -486,7 +522,7 @@ export module _MakeTailor {
                         Tools._Node.removeAllChildren(_TaskClothes._ins().LineParent);
                         this._evNotify(_Event.scissorRemove);
                         TimerAdmin._frameOnce(80, this, () => {
-                            this._evNotify(_Event.completeEffc);
+                            this._evNotify(_Event.completeEffcet);
                         })
                         TimerAdmin._frameOnce(280, this, () => {
                             this._openScene('MakePattern', true, true);
@@ -510,91 +546,15 @@ export module _MakeTailor {
                 }
             })
 
-            this._evReg(_Event.completeEffc, () => {
-                this.Operation.btnBackVinish();
-                this.Operation.btnAgainVinish();
+            this._evReg(_Event.completeEffcet, () => {
+                this.UI.btnBackVinish();
+                this.UI.btnAgainVinish();
                 AudioAdmin._playVictorySound();
-                this.completeEffc.ani3();
+                this.effcet.ani3();
             })
         }
 
-        lwgButton(): void {
-
-        }
-
-        /**操作区域*/
-        Operation = {
-            BtnAgain: null as Laya.Image,
-            BtnBack: null as Laya.Image,
-            time: 500,
-            delay: 800,
-            scale: 1.4,
-            btnAgainAppear: () => {
-                if (!this.Operation.BtnAgain) {
-                    this.Operation.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
-                    this._btnUp(this.Operation.BtnAgain, () => {
-                        this._evNotify(_Event.scissorRemove, [() => {
-                            _TaskClothes._ins().again(this._Owner);
-                        }]);
-                        Click._switch = false;
-                        TimerAdmin._frameOnce(30, this, () => {
-                            this.Operation.appear(this.Operation.appearType.again);
-                            Click._switch = true;
-                        })
-                    })
-                }
-                Animation2D.bombs_Appear(this.Operation.BtnAgain, 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4, 0,);
-                console.log(this.Operation.BtnAgain);
-            },
-            btnAgainVinish: () => {
-                this.Operation.BtnAgain && Animation2D.bombs_Vanish(this.Operation.BtnAgain, 0, 0, 0, this.Operation.time / 1.5);
-            },
-            btnBackVinish: () => {
-                Animation2D.bombs_Vanish(this.Operation.BtnBack, 0, 0, 0, this.Operation.time / 1.5);
-            },
-            btnBackAppear: () => {
-                if (!this.Operation.BtnBack) {
-                    this.Operation.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]) as Laya.Image;
-                    this._btnUp(this.Operation.BtnBack, () => {
-                        this._openScene('Start', true, true);
-                    });
-                }
-                Animation2D.bombs_Appear(this.Operation.BtnBack, 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4);
-
-                this._btnUp(this._ImgVar('BtnComplete'), () => {
-                    this.Operation.vinish();
-                })
-            },
-            appearType: {
-                first: 'first',
-                again: 'again',
-            },
-            appear: (type: string) => {
-                this.Operation.btnAgainVinish();
-                Animation2D.move(this._ImgVar('Operation'), Laya.stage.width - this._ImgVar('Operation').width - 100, 0, this.Operation.time, () => {
-                    Animation2D.move(this._ImgVar('Operation'), Laya.stage.width - this._ImgVar('Operation').width, 0, this.Operation.time / 4, () => {
-                        this._ImgVar('BtnComplete').visible = true;
-                        Animation2D.bombs_Appear(this._ImgVar('BtnComplete'), 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4, 200, () => {
-                            if (type == this.Operation.appearType.first) {
-                                this.Operation.btnBackAppear();
-                            }
-                        })
-                    })
-                }, this.Operation.delay)
-            },
-
-            vinish: () => {
-                Animation2D.bombs_Vanish(this._ImgVar('BtnComplete'), 0, 0, 0, this.Operation.time / 1.5, this.Operation.delay - 600, () => {
-                    this._evNotify(_Event.scissorAppear);
-                    Animation2D.move(this._ImgVar('Operation'), this._ImgVar('Operation').x - 80, 0, this.Operation.time / 2, () => {
-                        this.Operation.btnAgainAppear();
-                        Animation2D.move(this._ImgVar('Operation'), Laya.stage.width + 500, 0, this.Operation.time);
-                    });
-                })
-            },
-        }
-
-        completeEffc = {
+        effcet = {
             ani1: () => {
                 this._AniVar('complete').play(0, false);
                 let _caller = {};

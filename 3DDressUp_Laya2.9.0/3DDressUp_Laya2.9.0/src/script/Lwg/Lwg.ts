@@ -1697,7 +1697,7 @@ export module lwg {
         /**
          * 脚本通用类
          * */
-        class _ScriptBase extends Laya.Script {
+        export class _ScriptBase extends Laya.Script {
 
             private getFind(name: string, type: string): any {
                 if (!this[`_Scene${type}${name}`]) {
@@ -4843,18 +4843,16 @@ export module lwg {
          * @param maxScale 最大放大比例
          * @param rotation 第一阶段角度 
          * @param time1 第一阶段花费时间
-         * @param time2 第二阶段花费时间
          * @param delayed 延时时间
          * @param func 完成后的回调
          */
-        export function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation, time1, time2, delayed?: number, func?: Function): void {
+        export function bombs_Appear(node: Laya.Sprite, firstAlpha: number, endScale: number, maxScale: number, rotation: number, time: number, func?: Function, delayed?: number): void {
             node.scale(0, 0);
             node.alpha = firstAlpha;
-            Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
-                Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                    Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) / 3, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-
-                        Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 2, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) / 3, scaleY: endScale + (maxScale - endScale) / 3, rotation: 0 }, time / 3, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 4, null, Laya.Handler.create(this, function () {
                             if (func) {
                                 func()
                             }
@@ -4877,7 +4875,7 @@ export module lwg {
          * @param func 完成回调
          * @param audioType 音效类型
          */
-        export function bombs_AppearAllChild(node: Laya.Sprite, firstAlpha, endScale, scale1, rotation1, time1, time2, interval?: number, func?: Function, audioType?: String): void {
+        export function bombs_AppearAllChild(node: Laya.Sprite, firstAlpha, endScale, scale1, rotation1, time1, interval?: number, func?: Function, audioType?: String): void {
             let de1 = 0;
             if (!interval) {
                 interval = 100;
@@ -4890,7 +4888,7 @@ export module lwg {
                     if (index !== node.numChildren - 1) {
                         func == null;
                     }
-                    bombs_Appear(Child, firstAlpha, endScale, scale1, rotation1, time1, time2, null, func);
+                    bombs_Appear(Child, firstAlpha, endScale, scale1, rotation1, time1, func);
                 })
                 de1 += interval;
             }
@@ -4917,7 +4915,7 @@ export module lwg {
                     if (index !== node.numChildren - 1) {
                         func == null;
                     }
-                    bombs_Vanish(node, endScale, alpha, rotation, time, 0, func);
+                    bombs_Vanish(node, endScale, alpha, rotation, time, func);
                 })
                 de1 += interval;
             }
@@ -4933,8 +4931,9 @@ export module lwg {
          * @param delayed 延时时间
          * @param func 完成后的回调
          */
-        export function bombs_Vanish(node, scale, alpha, rotation, time, delayed?: number, func?: Function): void {
+        export function bombs_Vanish(node: Laya.Node, scale: number, alpha: number, rotation: number, time: number, func?: Function, delayed?: number): void {
             Laya.Tween.to(node, { scaleX: scale, scaleY: scale, alpha: alpha, rotation: rotation }, time, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                console.log('完成！')
                 if (func) {
                     func()
                 }

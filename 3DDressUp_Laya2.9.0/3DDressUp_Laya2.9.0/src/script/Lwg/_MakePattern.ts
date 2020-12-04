@@ -32,11 +32,32 @@ export module _MakePattern {
     }
 
     export class _Item extends Admin._ObjectBase {
+        fX: number;
+        diffX: number = 0;
+        create: boolean = false;
         lwgButton(): void {
             const Icon = this._Owner.getChildByName('Icon');
-            this._btnUp(Icon,
+            this._btnFour(Icon,
                 (e: Laya.Event) => {
-                    Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
+                    this.create = false;
+                    this.diffX = 0;
+                    this.fX = e.stageX;
+                },
+                (e: Laya.Event) => {
+                    if (!this.create) {
+                        this.diffX = this.fX - e.stageX;
+                        if (this.diffX >= 30) {
+                            Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
+                            this.create = true;
+                        }
+                    }
+                    console.log(!this.create, this.diffX);
+                },
+                () => {
+                    this.create = true;
+                },
+                () => {
+                    this.create = true;
                 })
         }
     }
@@ -60,6 +81,7 @@ export module _MakePattern {
             // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
             this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
         }
+
         lwgOnStart(): void {
             for (let index = 0; index < _Pattern._ins()._List.cells.length; index++) {
                 let Cell = _Pattern._ins()._List.cells[index];
@@ -345,7 +367,6 @@ export module _MakePattern {
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             },
             btn: () => {
-
                 this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
                     this.Tex.state = this.Tex.stateType.scale;
                 }, null, (e: Laya.Event) => {
@@ -389,84 +410,30 @@ export module _MakePattern {
                 })
             }
         }
-
-        /**操作区域*/
-        Navi = {
-            BtnAgain: null as Laya.Image,
-            BtnBack: null as Laya.Image,
-            time: 500,
-            delay: 800,
-            scale: 1.4,
-            btnAgainAppear: () => {
-                if (!this.Navi.BtnAgain) {
-                    this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
-                    this._btnUp(this.Navi.BtnAgain, () => {
-                        // this._evNotify(_Event.scissorRemove, [() => {
-                        //     _TaskClothes._ins().again(this._Owner);
-                        // }]);
-                        Click._switch = false;
-                        TimerAdmin._frameOnce(30, this, () => {
-                            this.Navi.appear(this.Navi.appearType.again);
-                            Click._switch = true;
-                        })
-                    })
-                }
-                Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0,);
-            },
-            btnAgainVinish: () => {
-                this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5);
-            },
-            btnBackVinish: () => {
-                Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5);
-            },
-            btnBackAppear: () => {
-                if (!this.Navi.BtnBack) {
-                    this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]) as Laya.Image;
-                    this._btnUp(this.Navi.BtnBack, () => {
-                        this._openScene('Start', true, true);
-                    });
-                }
-                Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4);
-            },
-            appearType: {
-                first: 'first',
-                again: 'again',
-            },
-            appear: (type: string) => {
-                this.Navi.btnAgainVinish();
-                Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width - 100, 0, this.Navi.time, () => {
-                    Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width, 0, this.Navi.time / 4, () => {
-                        this._ImgVar('BtnChoose').visible = true;
-                        Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
-                            if (type == this.Navi.appearType.first) {
-                                this.Navi.btnBackAppear();
-                            }
-                        })
-                    })
-                }, this.Navi.delay)
-            },
-
-            vinish: () => {
-                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 600, () => {
-                    // this._evNotify(_Event.scissorAppear);
-                    Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
-                        this.Navi.btnAgainAppear();
-                        Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
-                    });
-                })
-            },
-
-            btn: () => {
-                this._btnUp(this._ImgVar('BtnChoose'), () => {
-                    this.Navi.vinish();
-                })
-            }
-        }
+        UI: _MakeTailor._UI;
         lwgButton(): void {
-            this.Tex.btn();
-            this._btnUp(this._ImgVar('BtnComplete'), () => {
-                this._openScene('DressingRoom', true, true);
+            this.UI = new _MakeTailor._UI(this._Owner);
+            this.UI.BtnAgain.pos(86, 630);
+            TimerAdmin._frameOnce(10, this, () => {
+                this.UI.operationAppear();
+                this.UI.btnBackAppear(null, 200);
+                this.UI.btnCompleteAppear(null, 400);
+                this.UI.btnRollbackAppear(null, 600);
+                this.UI.btnAgainAppear(null, 800);
             })
+            this.UI.btnCompleteClick = () => {
+                this.UI.operationVinish(() => {
+                    this.UI.btnBackVinish();
+                    this.UI.btnRollbackVinish();
+                    this.UI.btnAgainVinish(() => {
+                        this._openScene('DressingRoom', true, true);
+                    });
+                }, 200);
+            }
+            this.UI.btnRollbackClick = () => {
+                this._openScene('MakeTailor', true, true);
+            }
+            this.Tex.btn();
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);

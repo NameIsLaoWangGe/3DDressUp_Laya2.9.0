@@ -61,9 +61,10 @@ export module _PreLoadCutIn {
             } else if (Admin._PreLoadCutIn.closeName == 'MakeTailor') {
                 // SceneAnimation._closeSwitch = true;
             }
+            else if (Admin._PreLoadCutIn.closeName == 'MakePattern') {
+                _Res._list.scene3D.MakeClothes.Scene.removeSelf();
+            }
         }
-        // lwgOpenAniAfter(): void {
-        // }
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {
