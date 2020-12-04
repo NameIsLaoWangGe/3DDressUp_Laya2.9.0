@@ -26,11 +26,15 @@ export module _Res {
         // material: {},
         prefab2D: {
             BtnAgain: {
-                url: 'Prefab/BtnAgain.json',
+                url: 'Prefab/BtnaGain.json',
                 prefab: new Laya.Prefab,
             },
             BtnBack: {
                 url: 'Prefab/BtnBack.json',
+                prefab: new Laya.Prefab,
+            },
+            BtnRollback: {
+                url: 'Prefab/BtnRollback.json',
                 prefab: new Laya.Prefab,
             },
             diy_dress_001_final: {

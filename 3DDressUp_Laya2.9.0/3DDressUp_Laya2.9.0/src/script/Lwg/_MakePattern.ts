@@ -1,5 +1,5 @@
 import { TaT } from "../TJ/Admanager";
-import { Admin, DataAdmin, EventAdmin, TimerAdmin, Tools } from "./Lwg";
+import { Admin, Animation2D, Click, DataAdmin, EventAdmin, TimerAdmin, Tools } from "./Lwg";
 import { lwg3D } from "./Lwg3D";
 import { _MakeTailor } from "./_MakeTailor";
 import { _MakeUp } from "./_MakeUp";
@@ -34,10 +34,9 @@ export module _MakePattern {
     export class _Item extends Admin._ObjectBase {
         lwgButton(): void {
             const Icon = this._Owner.getChildByName('Icon');
-            Icon && this._btnUp(Icon,
+            this._btnUp(Icon,
                 (e: Laya.Event) => {
-                    console.log(this._Owner);
-                    this._evNotify(_Event.createImg, [this._Owner]);
+                    Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
                 })
         }
     }
@@ -57,12 +56,10 @@ export module _MakePattern {
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
             }
         }
-
         lwgAdaptive(): void {
             // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
             this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
         }
-
         lwgOnStart(): void {
             for (let index = 0; index < _Pattern._ins()._List.cells.length; index++) {
                 let Cell = _Pattern._ins()._List.cells[index];
@@ -81,9 +78,9 @@ export module _MakePattern {
             EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
         }
         lwgEvent(): void {
-            this._evReg(_Event.createImg, (Box: Laya.Box) => {
+            this._evReg(_Event.createImg, (name: string, gPoint: Laya.Point) => {
                 this.Tex.state = this.Tex.stateType.move;
-                this.Tex.createImg(Box);
+                this.Tex.createImg(name, gPoint);
             })
         }
         /**图片移动控制*/
@@ -106,22 +103,24 @@ export module _MakePattern {
                 rotate: 'rotate',
                 addTex: 'addTex',
             },
-            createImg: (Box: Laya.Box) => {
+            createImg: (name: string, gPoint: Laya.Point) => {
                 this.Tex.DisImg && this.Tex.DisImg.destroy();
-                let element = Box.getChildByName('Icon') as Laya.Image;
-                this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                let gPoint = Box['_Item']['_gPoint'] as Laya.Point;
-                let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint)
-                // console.log(gPoint, lPoint);
+                // let element = Box.getChildByName('Icon') as Laya.Image;
+                // this.Tex.Img = Tools._Node.simpleCopyImg(element);
+                // let gPoint = Box['_Item']['_gPoint'] as Laya.Point;
+                this.Tex.DisImg = new Laya.Image;
+                this.Tex.Img = new Laya.Image;
+                let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
                 // let lPoint = Tools._Point.getOtherLocal(Box, this._SpriteVar('Ultimately'));
-                this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
-                this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 4)}.png`;
+                // this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
+                this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/general/${name}.png`;
                 this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                 this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                 this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
                 this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                 this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
                 this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                console.log(gPoint, lPoint);
                 console.log(this.Tex.DisImg, this._SpriteVar('Dispaly'));
                 this._SpriteVar('Dispaly').visible = true;
                 this.Tex.restore();
@@ -346,13 +345,7 @@ export module _MakePattern {
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             },
             btn: () => {
-                // for (let index = 0; index < this._ImgVar('Figure').numChildren; index++) {
-                //     const element = this._ImgVar('Figure').getChildAt(index) as Laya.Image;
-                //     this._btnDown(element, (e: Laya.Event) => {
-                //         this.Tex.state = this.Tex.stateType.move;
-                //         this.Tex.createImg(element);
-                //     })
-                // }
+
                 this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
                     this.Tex.state = this.Tex.stateType.scale;
                 }, null, (e: Laya.Event) => {
@@ -397,47 +390,83 @@ export module _MakePattern {
             }
         }
 
-        ListS = {
-            fY: null as number,
-            diffY: 0 as number,
+        /**操作区域*/
+        Navi = {
+            BtnAgain: null as Laya.Image,
+            BtnBack: null as Laya.Image,
+            time: 500,
+            delay: 800,
+            scale: 1.4,
+            btnAgainAppear: () => {
+                if (!this.Navi.BtnAgain) {
+                    this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]) as Laya.Image;
+                    this._btnUp(this.Navi.BtnAgain, () => {
+                        // this._evNotify(_Event.scissorRemove, [() => {
+                        //     _TaskClothes._ins().again(this._Owner);
+                        // }]);
+                        Click._switch = false;
+                        TimerAdmin._frameOnce(30, this, () => {
+                            this.Navi.appear(this.Navi.appearType.again);
+                            Click._switch = true;
+                        })
+                    })
+                }
+                Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0,);
+            },
+            btnAgainVinish: () => {
+                this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5);
+            },
+            btnBackVinish: () => {
+                Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5);
+            },
+            btnBackAppear: () => {
+                if (!this.Navi.BtnBack) {
+                    this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]) as Laya.Image;
+                    this._btnUp(this.Navi.BtnBack, () => {
+                        this._openScene('Start', true, true);
+                    });
+                }
+                Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4);
+            },
+            appearType: {
+                first: 'first',
+                again: 'again',
+            },
+            appear: (type: string) => {
+                this.Navi.btnAgainVinish();
+                Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width - 100, 0, this.Navi.time, () => {
+                    Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width, 0, this.Navi.time / 4, () => {
+                        this._ImgVar('BtnChoose').visible = true;
+                        Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
+                            if (type == this.Navi.appearType.first) {
+                                this.Navi.btnBackAppear();
+                            }
+                        })
+                    })
+                }, this.Navi.delay)
+            },
+
+            vinish: () => {
+                Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 600, () => {
+                    // this._evNotify(_Event.scissorAppear);
+                    Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
+                        this.Navi.btnAgainAppear();
+                        Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
+                    });
+                })
+            },
+
+            btn: () => {
+                this._btnUp(this._ImgVar('BtnChoose'), () => {
+                    this.Navi.vinish();
+                })
+            }
         }
         lwgButton(): void {
             this.Tex.btn();
             this._btnUp(this._ImgVar('BtnComplete'), () => {
                 this._openScene('DressingRoom', true, true);
             })
-
-            // this._btnFour(this._ImgVar('ListS'),
-            //     (e: Laya.Event) => {
-            //         if (!this.ListS.fY) {
-            //             this.ListS.fY = e.stageY;
-            //         }
-            //     },
-            //     (e: Laya.Event) => {
-            //         if (this.ListS.fY) {
-            //             this.ListS.diffY = e.stageY - this.ListS.fY;
-            //             if (Math.abs(this.ListS.diffY) > 30) {
-            //                 const index = _Pattern._ins()._List.startIndex;
-            //                 if (this.ListS.diffY > 30) {
-            //                     if (index > 0) {
-            //                         _Pattern._ins()._List.tweenTo(index - 1, 200);
-            //                     }
-            //                 }
-            //                 if (this.ListS.diffY < 30) {
-            //                     if (index < _Pattern._ins()._arr.length - 1) {
-            //                         _Pattern._ins()._List.tweenTo(index + 1, 200);
-            //                     }
-            //                 }
-            //                 this.ListS.fY = e.stageY;
-            //             }
-            //         }
-            //     },
-            //     (e: Laya.Event) => {
-            //         this.ListS.fY = null;
-            //     },
-            //     (e: Laya.Event) => {
-            //         this.ListS.fY = null;
-            //     })
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -446,7 +475,7 @@ export module _MakePattern {
             this.Tex.operation(e);
         }
         onStageMouseUp() {
-            !this.Tex.chekInside() && this.Tex.close();
+            !this.Tex.chekInside();
         }
         lwgCloseAni(): number {
             return 10;

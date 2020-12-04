@@ -5861,6 +5861,10 @@
                     url: 'Prefab/BtnBack.json',
                     prefab: new Laya.Prefab,
                 },
+                BtnRollback: {
+                    url: 'Prefab/BtnRollback.json',
+                    prefab: new Laya.Prefab,
+                },
                 diy_dress_001_final: {
                     url: 'Prefab/diy_dress_001_final.json',
                     prefab: new Laya.Prefab,
@@ -6049,6 +6053,68 @@
             }
         }
         _MakeTailor._TaskClothes = _TaskClothes;
+        class _Operation {
+            constructor(_Scene, _Operation, _BtnAgain, _BtnBack, _BtnComplete) {
+                this.Scene = _Scene ? _Scene : null;
+                this.Operation = _Operation ? _Operation : null;
+                this.BtnAgain = _BtnAgain ? _BtnAgain : null;
+                this.BtnAgain && Click._on(Click._Use.value, this.BtnAgain, _Scene[_Scene.name], () => {
+                    Click._on(Click._Use.value, this.BtnAgain, () => {
+                        this.BtnAgainClick && this.BtnAgainClick();
+                    });
+                });
+                this.BtnComplete = _BtnComplete ? _BtnComplete : null;
+                this.BtnComplete && Click._on(Click._Use.value, this.BtnComplete, _Scene[_Scene.name], () => {
+                    this.OperationVinish();
+                });
+                this.BtnBack = _BtnBack ? _BtnBack : null;
+                this.BtnBack && Click._on(Click._Use.value, this.BtnBack, _Scene[_Scene.name], () => {
+                    Click._on(Click._Use.value, this.BtnBack, () => {
+                        _Scene[_Scene.name]._openScene('Start', true, true);
+                    });
+                });
+            }
+            btnAgainAppear() {
+                Animation2D.bombs_Appear(this.BtnAgain, 0, 1, this.scale, 0, this.time / 3, this.time / 4, 0);
+            }
+            ;
+            btnAgainVinish() {
+                Animation2D.bombs_Vanish(this.BtnAgain, 0, 0, 0, this.time / 1.5);
+            }
+            ;
+            btnBackVinish() {
+                Animation2D.bombs_Vanish(this.BtnBack, 0, 0, 0, this.time / 1.5);
+            }
+            ;
+            btnBackAppear() {
+                Animation2D.bombs_Appear(this.BtnBack, 0, 1, this.scale, 0, this.time / 3, this.time / 4);
+            }
+            ;
+            OperationAppear(type) {
+                this.btnAgainVinish();
+                Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width - 100, 0, this.time, () => {
+                    Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width, 0, this.time / 4, () => {
+                        this.BtnComplete.visible = true;
+                        Animation2D.bombs_Appear(this.BtnComplete, 0, 1, this.scale, 0, this.time / 3, this.time / 4, this.delay / 4, () => {
+                            if (type == this.appearType.first) {
+                                this.btnBackAppear();
+                            }
+                        });
+                    });
+                }, this.delay);
+            }
+            ;
+            OperationVinish() {
+                Animation2D.bombs_Vanish(this.BtnComplete, 0, 0, 0, this.time / 1.5, this.delay - 600, () => {
+                    Animation2D.move(this.Operation, this.Operation.x - 80, 0, this.time / 2, () => {
+                        this.btnAgainAppear();
+                        Animation2D.move(this.Operation, Laya.stage.width + 500, 0, this.time);
+                    });
+                });
+            }
+            ;
+        }
+        _MakeTailor._Operation = _Operation;
         class _Scissor extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
@@ -6213,74 +6279,73 @@
         class MakeTailor extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.Navi = {
+                this.Operation = {
                     BtnAgain: null,
                     BtnBack: null,
                     time: 500,
                     delay: 800,
                     scale: 1.4,
                     btnAgainAppear: () => {
-                        if (!this.Navi.BtnAgain) {
-                            this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]);
-                            this._btnUp(this.Navi.BtnAgain, () => {
+                        if (!this.Operation.BtnAgain) {
+                            this.Operation.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnRollback.prefab, this._Owner, [200, 79]);
+                            this._btnUp(this.Operation.BtnAgain, () => {
                                 this._evNotify(_Event.scissorRemove, [() => {
                                         _TaskClothes._ins().again(this._Owner);
                                     }]);
                                 Click._switch = false;
                                 TimerAdmin._frameOnce(30, this, () => {
-                                    this.Navi.appear(this.Navi.appearType.again);
+                                    this.Operation.appear(this.Operation.appearType.again);
                                     Click._switch = true;
                                 });
                             });
                         }
-                        Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0);
+                        Animation2D.bombs_Appear(this.Operation.BtnAgain, 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4, 0);
+                        console.log(this.Operation.BtnAgain);
                     },
                     btnAgainVinish: () => {
-                        this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5);
+                        this.Operation.BtnAgain && Animation2D.bombs_Vanish(this.Operation.BtnAgain, 0, 0, 0, this.Operation.time / 1.5);
                     },
                     btnBackVinish: () => {
-                        Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5);
+                        Animation2D.bombs_Vanish(this.Operation.BtnBack, 0, 0, 0, this.Operation.time / 1.5);
                     },
                     btnBackAppear: () => {
-                        if (!this.Navi.BtnBack) {
-                            this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]);
-                            this._btnUp(this.Navi.BtnBack, () => {
+                        if (!this.Operation.BtnBack) {
+                            this.Operation.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]);
+                            this._btnUp(this.Operation.BtnBack, () => {
                                 this._openScene('Start', true, true);
                             });
                         }
-                        Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4);
+                        Animation2D.bombs_Appear(this.Operation.BtnBack, 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4);
+                        this._btnUp(this._ImgVar('BtnComplete'), () => {
+                            this.Operation.vinish();
+                        });
                     },
                     appearType: {
                         first: 'first',
                         again: 'again',
                     },
                     appear: (type) => {
-                        this.Navi.btnAgainVinish();
-                        Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width - 100, 0, this.Navi.time, () => {
-                            Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width, 0, this.Navi.time / 4, () => {
-                                this._ImgVar('BtnChoose').visible = true;
-                                Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
-                                    if (type == this.Navi.appearType.first) {
-                                        this.Navi.btnBackAppear();
+                        this.Operation.btnAgainVinish();
+                        Animation2D.move(this._ImgVar('Operation'), Laya.stage.width - this._ImgVar('Operation').width - 100, 0, this.Operation.time, () => {
+                            Animation2D.move(this._ImgVar('Operation'), Laya.stage.width - this._ImgVar('Operation').width, 0, this.Operation.time / 4, () => {
+                                this._ImgVar('BtnComplete').visible = true;
+                                Animation2D.bombs_Appear(this._ImgVar('BtnComplete'), 0, 1, this.Operation.scale, 0, this.Operation.time / 3, this.Operation.time / 4, 200, () => {
+                                    if (type == this.Operation.appearType.first) {
+                                        this.Operation.btnBackAppear();
                                     }
                                 });
                             });
-                        }, this.Navi.delay);
+                        }, this.Operation.delay);
                     },
                     vinish: () => {
-                        Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 600, () => {
+                        Animation2D.bombs_Vanish(this._ImgVar('BtnComplete'), 0, 0, 0, this.Operation.time / 1.5, this.Operation.delay - 600, () => {
                             this._evNotify(_Event.scissorAppear);
-                            Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
-                                this.Navi.btnAgainAppear();
-                                Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
+                            Animation2D.move(this._ImgVar('Operation'), this._ImgVar('Operation').x - 80, 0, this.Operation.time / 2, () => {
+                                this.Operation.btnAgainAppear();
+                                Animation2D.move(this._ImgVar('Operation'), Laya.stage.width + 500, 0, this.Operation.time);
                             });
                         });
                     },
-                    btn: () => {
-                        this._btnUp(this._ImgVar('BtnChoose'), () => {
-                            this.Navi.vinish();
-                        });
-                    }
                 };
                 this.completeEffc = {
                     ani1: () => {
@@ -6389,11 +6454,11 @@
                 };
             }
             lwgAdaptive() {
-                this._ImgVar('Navi').x = Laya.stage.width + 500;
-                this._ImgVar('BtnChoose').visible = false;
+                this._ImgVar('Operation').x = Laya.stage.width + 500;
+                this._ImgVar('BtnComplete').visible = false;
             }
             lwgOpenAniAfter() {
-                this.Navi.appear(this.Navi.appearType.first);
+                this.Operation.appear(this.Operation.appearType.first);
             }
             lwgOnStart() {
                 TimerAdmin._frameOnce(30, this, () => {
@@ -6476,14 +6541,13 @@
                     }
                 });
                 this._evReg(_Event.completeEffc, () => {
-                    this.Navi.btnBackVinish();
-                    this.Navi.btnAgainVinish();
+                    this.Operation.btnBackVinish();
+                    this.Operation.btnAgainVinish();
                     AudioAdmin._playVictorySound();
                     this.completeEffc.ani3();
                 });
             }
             lwgButton() {
-                this.Navi.btn();
             }
         }
         _MakeTailor.MakeTailor = MakeTailor;
@@ -7024,9 +7088,8 @@
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 const Icon = this._Owner.getChildByName('Icon');
-                Icon && this._btnUp(Icon, (e) => {
-                    console.log(this._Owner);
-                    this._evNotify(_Event.createImg, [this._Owner]);
+                this._btnUp(Icon, (e) => {
+                    Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
                 });
             }
         }
@@ -7053,20 +7116,19 @@
                         rotate: 'rotate',
                         addTex: 'addTex',
                     },
-                    createImg: (Box) => {
+                    createImg: (name, gPoint) => {
                         this.Tex.DisImg && this.Tex.DisImg.destroy();
-                        let element = Box.getChildByName('Icon');
-                        this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                        let gPoint = Box['_Item']['_gPoint'];
+                        this.Tex.DisImg = new Laya.Image;
+                        this.Tex.Img = new Laya.Image;
                         let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
-                        this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
-                        this.Tex.Img.skin = this.Tex.DisImg.skin = `${element.skin.substr(0, element.skin.length - 4)}.png`;
+                        this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/general/${name}.png`;
                         this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                         this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                         this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
                         this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                         this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
                         this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
+                        console.log(gPoint, lPoint);
                         console.log(this.Tex.DisImg, this._SpriteVar('Dispaly'));
                         this._SpriteVar('Dispaly').visible = true;
                         this.Tex.restore();
@@ -7314,9 +7376,70 @@
                         });
                     }
                 };
-                this.ListS = {
-                    fY: null,
-                    diffY: 0,
+                this.Navi = {
+                    BtnAgain: null,
+                    BtnBack: null,
+                    time: 500,
+                    delay: 800,
+                    scale: 1.4,
+                    btnAgainAppear: () => {
+                        if (!this.Navi.BtnAgain) {
+                            this.Navi.BtnAgain = Tools._Node.createPrefab(_Res._list.prefab2D.BtnAgain.prefab, this._Owner, [200, 79]);
+                            this._btnUp(this.Navi.BtnAgain, () => {
+                                Click._switch = false;
+                                TimerAdmin._frameOnce(30, this, () => {
+                                    this.Navi.appear(this.Navi.appearType.again);
+                                    Click._switch = true;
+                                });
+                            });
+                        }
+                        Animation2D.bombs_Appear(this.Navi.BtnAgain, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 0);
+                    },
+                    btnAgainVinish: () => {
+                        this.Navi.BtnAgain && Animation2D.bombs_Vanish(this.Navi.BtnAgain, 0, 0, 0, this.Navi.time / 1.5);
+                    },
+                    btnBackVinish: () => {
+                        Animation2D.bombs_Vanish(this.Navi.BtnBack, 0, 0, 0, this.Navi.time / 1.5);
+                    },
+                    btnBackAppear: () => {
+                        if (!this.Navi.BtnBack) {
+                            this.Navi.BtnBack = Tools._Node.createPrefab(_Res._list.prefab2D.BtnBack.prefab, this._Owner, [77, 79]);
+                            this._btnUp(this.Navi.BtnBack, () => {
+                                this._openScene('Start', true, true);
+                            });
+                        }
+                        Animation2D.bombs_Appear(this.Navi.BtnBack, 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4);
+                    },
+                    appearType: {
+                        first: 'first',
+                        again: 'again',
+                    },
+                    appear: (type) => {
+                        this.Navi.btnAgainVinish();
+                        Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width - 100, 0, this.Navi.time, () => {
+                            Animation2D.move(this._ImgVar('Navi'), Laya.stage.width - this._ImgVar('Navi').width, 0, this.Navi.time / 4, () => {
+                                this._ImgVar('BtnChoose').visible = true;
+                                Animation2D.bombs_Appear(this._ImgVar('BtnChoose'), 0, 1, this.Navi.scale, 0, this.Navi.time / 3, this.Navi.time / 4, 200, () => {
+                                    if (type == this.Navi.appearType.first) {
+                                        this.Navi.btnBackAppear();
+                                    }
+                                });
+                            });
+                        }, this.Navi.delay);
+                    },
+                    vinish: () => {
+                        Animation2D.bombs_Vanish(this._ImgVar('BtnChoose'), 0, 0, 0, this.Navi.time / 1.5, this.Navi.delay - 600, () => {
+                            Animation2D.move(this._ImgVar('Navi'), this._ImgVar('Navi').x - 80, 0, this.Navi.time / 2, () => {
+                                this.Navi.btnAgainAppear();
+                                Animation2D.move(this._ImgVar('Navi'), Laya.stage.width + 500, 0, this.Navi.time);
+                            });
+                        });
+                    },
+                    btn: () => {
+                        this._btnUp(this._ImgVar('BtnChoose'), () => {
+                            this.Navi.vinish();
+                        });
+                    }
                 };
             }
             lwgOnAwake() {
@@ -7355,9 +7478,9 @@
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
             lwgEvent() {
-                this._evReg(_Event.createImg, (Box) => {
+                this._evReg(_Event.createImg, (name, gPoint) => {
                     this.Tex.state = this.Tex.stateType.move;
-                    this.Tex.createImg(Box);
+                    this.Tex.createImg(name, gPoint);
                 });
             }
             lwgButton() {
@@ -7373,7 +7496,7 @@
                 this.Tex.operation(e);
             }
             onStageMouseUp() {
-                !this.Tex.chekInside() && this.Tex.close();
+                !this.Tex.chekInside();
             }
             lwgCloseAni() {
                 return 10;
