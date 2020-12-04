@@ -12,6 +12,7 @@ export module _MakePattern {
         resetTex = '_MakePattern_resetTex',
         changeDir = '_MakePattern_resetTex',
         remake = '_MakePattern_remake',
+        close = '_MakePattern_close',
         createImg = '_MakePattern_createImg',
     }
 
@@ -42,11 +43,13 @@ export module _MakePattern {
                     this.create = false;
                     this.diffX = 0;
                     this.fX = e.stageX;
+                    this._evNotify(_Event.close);
                 },
                 (e: Laya.Event) => {
+                    _Pattern._ins()._List.scrollBar.touchScrollEnable = false;
                     if (!this.create) {
                         this.diffX = this.fX - e.stageX;
-                        if (this.diffX >= 30) {
+                        if (this.diffX >= 5) {
                             Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
                             this.create = true;
                         }
@@ -54,6 +57,7 @@ export module _MakePattern {
                     console.log(!this.create, this.diffX);
                 },
                 () => {
+
                     this.create = true;
                 },
                 () => {
@@ -65,7 +69,7 @@ export module _MakePattern {
     export class MakePattern extends Admin._SceneBase {
         lwgOnAwake(): void {
             _Pattern._ins()._List = this._ListVar('List');
-            _Pattern._ins()._listrender = (Cell: Laya.Box, index: number) => {
+            _Pattern._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 if (data['name']) {
@@ -103,6 +107,10 @@ export module _MakePattern {
             this._evReg(_Event.createImg, (name: string, gPoint: Laya.Point) => {
                 this.Tex.state = this.Tex.stateType.move;
                 this.Tex.createImg(name, gPoint);
+            })
+
+            this._evReg(_Event.close, () => {
+                !this.Tex.chekInside() && this.Tex.close();
             })
         }
         /**图片移动控制*/
@@ -176,19 +184,19 @@ export module _MakePattern {
                     _outR && rOutArr.push(_outR)
                     if (_outF || _outR) {
                         indexArr.push(posArr[index]);
-                        let Img = this._Owner.getChildByName(`Img${index}`) as Laya.Image;
-                        if (!Img) {
-                            let Img = new Laya.Image;
-                            Img.skin = `Lwg/UI/ui_circle_004.png`;
-                            this._Owner.addChild(Img);
-                            Img.name = `Img${index}`;
-                            Img.width = 20;
-                            Img.height = 20;
-                            Img.pivotX = Img.width / 2;
-                            Img.pivotY = Img.height / 2;
-                        } else {
-                            Img.pos(gPoint.x, gPoint.y);
-                        }
+                        // let Img = this._Owner.getChildByName(`Img${index}`) as Laya.Image;
+                        // if (!Img) {
+                        //     let Img = new Laya.Image;
+                        //     Img.skin = `Lwg/UI/ui_circle_004.png`;
+                        //     this._Owner.addChild(Img);
+                        //     Img.name = `Img${index}`;
+                        //     Img.width = 20;
+                        //     Img.height = 20;
+                        //     Img.pivotX = Img.width / 2;
+                        //     Img.pivotY = Img.height / 2;
+                        // } else {
+                        //     Img.pos(gPoint.x, gPoint.y);
+                        // }
                     }
                 }
                 if (indexArr.length !== 0) {
@@ -434,6 +442,39 @@ export module _MakePattern {
                 this._openScene('MakeTailor', true, true);
             }
             this.Tex.btn();
+
+            this._btnFour(_Pattern._ins()._List,
+                (e: Laya.Event) => {
+                    this['_ListFY'] = e.stageY;
+                    this.Tex.state = this.Tex.stateType.none;
+                    this._ImgVar('Wireframe').visible = false;
+                },
+                (e: Laya.Event) => {
+                    if (this['_ListFY']) {
+                        if (this['_ListFY'] - e.stageY > 50) {
+                            this._evNotify(_Event.close);
+                            console.log('上移关闭！')
+                            this['_ListFY'] = false;
+                        }
+                    }
+                },
+                (e: Laya.Event) => {
+                    this['_ListFY'] = null;
+                },
+                (e: Laya.Event) => {
+                    this['_ListFY'] = null;
+                })
+
+            // this._btnFour(this._ImgVar('OperationLoc'),
+            // ()=>{
+
+            // },
+            // ()=>{
+
+            // },
+            // ()=>{
+
+            // },)
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -442,7 +483,8 @@ export module _MakePattern {
             this.Tex.operation(e);
         }
         onStageMouseUp() {
-            !this.Tex.chekInside();
+            _Pattern._ins()._List.scrollBar.touchScrollEnable = true;
+            this._evNotify(_Event.close);
         }
         lwgCloseAni(): number {
             return 10;

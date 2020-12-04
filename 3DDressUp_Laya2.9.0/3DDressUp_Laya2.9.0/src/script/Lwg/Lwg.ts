@@ -2427,14 +2427,20 @@ export module lwg {
             /**表格中的List,会有一些默认设置*/
             set _List(list: Laya.List) {
                 this[`${this._tableName}_List`] = list;
-                this[`${this._tableName}_List`].array = this._arr;
-                this[`${this._tableName}_List`].selectEnable = true;
-                this[`${this._tableName}_List`].vScrollBarSkin = "";
-                this[`${this._tableName}_List`].renderHandler = new Laya.Handler(this, (Cell: Laya.Box, index: number) => {
-                    this._listrender && this._listrender(Cell, index);
+                list.array = this._arr;
+                list.selectEnable = false;
+                list.vScrollBarSkin = "";
+                list.renderHandler = new Laya.Handler(this, (Cell: Laya.Box, index: number) => {
+                    this._listRender && this._listRender(Cell, index);
+                });
+                list.selectHandler = new Laya.Handler(this, (index: number) => {
+                    this._listSelect && this._listSelect(index);
                 });
             }
-            _listrender: Function;
+            /**渲染函数*/
+            _listRender: Function;
+            /**选中触发*/
+            _listSelect: Function;
             /**表格中的Tap*/
             _Tap: Laya.List;
             /**

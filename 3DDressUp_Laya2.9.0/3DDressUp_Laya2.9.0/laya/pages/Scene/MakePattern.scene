@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":11,
+    "selecteID":797,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -17,7 +17,7 @@
         }],
     "props":{"width":1280,"sceneColor":"#a4a4a4","height":720},
     "nodeParent":-1,
-    "maxID":796,
+    "maxID":798,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -123,34 +123,6 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,BtnR,BtnR",
-            "props":{"y":386,"x":957.5,"width":108,"var":"BtnR","skin":"Lwg/UI/icon_cuspR.png","pivotY":53,"pivotX":54,"name":"BtnR","height":105},
-            "nodeParent":2,
-            "label":"BtnR",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":25,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,BtnL,BtnL",
-            "props":{"y":386,"x":262,"width":108,"var":"BtnL","skin":"Lwg/UI/icon_cuspLpng.png","scaleX":1,"pivotY":53,"pivotX":54,"name":"BtnL","height":105},
-            "nodeParent":2,
-            "label":"BtnL",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":26,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
             "searchKey":"Image,BtnBack",
             "props":{"y":79,"x":77,"width":110,"visible":false,"skin":"Lwg/UI/ui_l_orthogon_blue.png","sizeGrid":"16,9,9,15","pivotY":55,"pivotX":55,"name":"BtnBack","height":110},
             "nodeParent":2,
@@ -189,7 +161,6 @@
             "compId":10,
             "child":[
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Front,Front",
                     "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Front","height":512},
@@ -204,7 +175,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Reverse,Reverse",
                     "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Reverse","height":512},
@@ -223,7 +193,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Operation,Operation",
-            "props":{"zOrder":30,"y":0,"x":1057,"width":224,"var":"Operation","name":"Operation","height":720},
+            "props":{"zOrder":30,"y":0,"x":1057,"width":224,"var":"Operation","name":"Operation","mouseThrough":true,"height":720},
             "nodeParent":2,
             "label":"Operation",
             "isOpen":false,
@@ -233,7 +203,6 @@
             "compId":56,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,BtnComplete,BtnComplete",
                     "props":{"y":94,"x":-61,"width":110,"var":"BtnComplete","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"16,9,9,15","pivotY":55,"pivotX":55,"name":"BtnComplete","height":110},
@@ -246,7 +215,6 @@
                     "compId":57,
                     "child":[
                         {
-                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"width":87,"valign":"middle","text":"完成","height":66,"fontSize":30,"centerY":0,"centerX":0,"align":"center"},
@@ -261,7 +229,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"List",
                     "searchKey":"List,List,List",
                     "props":{"y":19,"x":-2.5,"width":197,"var":"List","spaceY":0,"rotation":0,"repeatY":4,"name":"List","height":672},
@@ -274,7 +241,6 @@
                     "compId":59,
                     "child":[
                         {
-                            "x":45,
                             "type":"Box",
                             "searchKey":"Box",
                             "props":{"y":0,"x":0,"width":197,"renderType":"render","height":198},
@@ -287,7 +253,6 @@
                             "compId":60,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Board",
                                     "props":{"width":180,"skin":"Lwg/UI/ui_orthogon_grass.png","sizeGrid":"9,12,14,13","name":"Board","height":180,"centerY":0,"centerX":0},
@@ -301,7 +266,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Icon",
                                     "props":{"width":128,"skin":"Game/UI/Clothes/Icon/diy_bottom_008_final.png","name":"Icon","height":128,"centerY":0,"centerX":0},
@@ -393,6 +357,62 @@
                     "frameRate":24,
                     "action":0
                 }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,OperationLoc,OperationLoc",
+            "props":{"zOrder":0,"var":"OperationLoc","top":0,"right":0,"name":"OperationLoc","left":0,"bottom":0},
+            "nodeParent":2,
+            "label":"OperationLoc",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":796,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,BtnL,BtnL",
+            "props":{"zOrder":40,"y":386,"x":262,"width":108,"var":"BtnL","skin":"Lwg/UI/icon_cuspLpng.png","scaleX":1,"pivotY":53,"pivotX":54,"name":"BtnL","mouseThrough":true,"height":105},
+            "nodeParent":2,
+            "label":"BtnL",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":26,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,BtnR,BtnR",
+            "props":{"zOrder":40,"y":386,"x":958,"width":108,"var":"BtnR","skin":"Lwg/UI/icon_cuspR.png","pivotY":53,"pivotX":54,"name":"BtnR","mouseThrough":true,"height":105},
+            "nodeParent":2,
+            "label":"BtnR",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":25,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"VScrollBar",
+            "searchKey":"VScrollBar",
+            "props":{"skin":"comp/vscroll.png"},
+            "nodeParent":2,
+            "label":"VScrollBar",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":797,
+            "child":[
+                ]
         }],
     "animations":[
         {

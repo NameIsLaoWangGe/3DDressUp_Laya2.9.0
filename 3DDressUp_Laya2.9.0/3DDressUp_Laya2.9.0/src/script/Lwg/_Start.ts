@@ -16,8 +16,6 @@ export module _Start {
         // }
 
         lwgOnStart(): void {
-
-
             // let Img2 = new Laya.Image;
             // Img2.width = Laya.stage.height;
             // Img2.height = Laya.stage.width;

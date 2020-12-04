@@ -2031,11 +2031,14 @@
                 }
                 set _List(list) {
                     this[`${this._tableName}_List`] = list;
-                    this[`${this._tableName}_List`].array = this._arr;
-                    this[`${this._tableName}_List`].selectEnable = true;
-                    this[`${this._tableName}_List`].vScrollBarSkin = "";
-                    this[`${this._tableName}_List`].renderHandler = new Laya.Handler(this, (Cell, index) => {
-                        this._listrender && this._listrender(Cell, index);
+                    list.array = this._arr;
+                    list.selectEnable = false;
+                    list.vScrollBarSkin = "";
+                    list.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                        this._listRender && this._listRender(Cell, index);
+                    });
+                    list.selectHandler = new Laya.Handler(this, (index) => {
+                        this._listSelect && this._listSelect(index);
                     });
                 }
                 _refreshAndStorage() {
@@ -7052,6 +7055,7 @@
             _Event["resetTex"] = "_MakePattern_resetTex";
             _Event["changeDir"] = "_MakePattern_resetTex";
             _Event["remake"] = "_MakePattern_remake";
+            _Event["close"] = "_MakePattern_close";
             _Event["createImg"] = "_MakePattern_createImg";
         })(_Event = _MakePattern._Event || (_MakePattern._Event = {}));
         class _Pattern extends DataAdmin._Table {
@@ -7082,10 +7086,12 @@
                     this.create = false;
                     this.diffX = 0;
                     this.fX = e.stageX;
+                    this._evNotify(_Event.close);
+                    _Pattern._ins()._List.scrollBar.touchScrollEnable = false;
                 }, (e) => {
                     if (!this.create) {
                         this.diffX = this.fX - e.stageX;
-                        if (this.diffX >= 30) {
+                        if (this.diffX >= 5) {
                             Icon && this._evNotify(_Event.createImg, [this._Owner['_dataSource']['name'], this._gPoint]);
                             this.create = true;
                         }
@@ -7168,20 +7174,6 @@
                             _outR && rOutArr.push(_outR);
                             if (_outF || _outR) {
                                 indexArr.push(posArr[index]);
-                                let Img = this._Owner.getChildByName(`Img${index}`);
-                                if (!Img) {
-                                    let Img = new Laya.Image;
-                                    Img.skin = `Lwg/UI/ui_circle_004.png`;
-                                    this._Owner.addChild(Img);
-                                    Img.name = `Img${index}`;
-                                    Img.width = 20;
-                                    Img.height = 20;
-                                    Img.pivotX = Img.width / 2;
-                                    Img.pivotY = Img.height / 2;
-                                }
-                                else {
-                                    Img.pos(gPoint.x, gPoint.y);
-                                }
                             }
                         }
                         if (indexArr.length !== 0) {
@@ -7384,7 +7376,7 @@
             }
             lwgOnAwake() {
                 _Pattern._ins()._List = this._ListVar('List');
-                _Pattern._ins()._listrender = (Cell, index) => {
+                _Pattern._ins()._listRender = (Cell, index) => {
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
                     if (data['name']) {
@@ -7422,6 +7414,9 @@
                     this.Tex.state = this.Tex.stateType.move;
                     this.Tex.createImg(name, gPoint);
                 });
+                this._evReg(_Event.close, () => {
+                    !this.Tex.chekInside() && this.Tex.close();
+                });
             }
             lwgButton() {
                 this.UI = new _MakeTailor._UI(this._Owner);
@@ -7446,6 +7441,23 @@
                     this._openScene('MakeTailor', true, true);
                 };
                 this.Tex.btn();
+                this._btnFour(_Pattern._ins()._List, (e) => {
+                    this['_ListFY'] = e.stageY;
+                    this.Tex.state = this.Tex.stateType.none;
+                    this._ImgVar('Wireframe').visible = false;
+                }, (e) => {
+                    if (this['_ListFY']) {
+                        if (this['_ListFY'] - e.stageY > 50) {
+                            this._evNotify(_Event.close);
+                            console.log('上移关闭！');
+                            this['_ListFY'] = false;
+                        }
+                    }
+                }, (e) => {
+                    this['_ListFY'] = null;
+                }, (e) => {
+                    this['_ListFY'] = null;
+                });
             }
             onStageMouseDown(e) {
                 this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -7454,7 +7466,8 @@
                 this.Tex.operation(e);
             }
             onStageMouseUp() {
-                !this.Tex.chekInside();
+                _Pattern._ins()._List.scrollBar.touchScrollEnable = true;
+                this._evNotify(_Event.close);
             }
             lwgCloseAni() {
                 return 10;
