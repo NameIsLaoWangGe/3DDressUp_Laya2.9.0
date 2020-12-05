@@ -31906,7 +31906,6 @@ declare module laya.resource {
 	 * <code>Texture</code> 是一个纹理处理类。
 	 */
 	class Texture extends laya.events.EventDispatcher  {
-
 		/**
 		 * @private 默认 UV 信息。
 		 */

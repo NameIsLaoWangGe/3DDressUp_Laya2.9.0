@@ -2320,6 +2320,16 @@
                     this._pitchName = name;
                     this._refreshAndStorage();
                 }
+                _getPitchObj() {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] === this._pitchName) {
+                                return element;
+                            }
+                        }
+                    }
+                }
                 _addObject(obj) {
                     let _obj = Tools._ObjArray.objCopy(obj);
                     this._arr.push(_obj);
@@ -4240,6 +4250,41 @@
             })(_Format = Tools._Format || (Tools._Format = {}));
             let _Node;
             (function (_Node) {
+                function tieByParent(Node) {
+                    const Parent = Node.parent;
+                    if (Node.x > Parent.width - Node.width / 2) {
+                        Node.x = Parent.width - Node.width / 2;
+                    }
+                    if (Node.x < Node.width / 2) {
+                        Node.x = Node.width / 2;
+                    }
+                    if (Node.y > Parent.height - Node.height / 2) {
+                        Node.y = Parent.height - Node.height / 2;
+                    }
+                    if (Node.y < Node.height / 2) {
+                        Node.y = Node.height / 2;
+                    }
+                }
+                _Node.tieByParent = tieByParent;
+                function tieByStage(Node) {
+                    const Parent = Node.parent;
+                    const gPoint = Parent.localToGlobal(new Laya.Point(Node.x, Node.y));
+                    if (gPoint.x > Laya.stage.width - Node.width / 2) {
+                        gPoint.x = Laya.stage.width - Node.width / 2;
+                    }
+                    if (gPoint.x < Node.width / 2) {
+                        gPoint.x = Node.width / 2;
+                    }
+                    if (gPoint.y > Laya.stage.height - Node.height / 2) {
+                        gPoint.y = Laya.stage.height - Node.height / 2;
+                    }
+                    if (gPoint.y < Node.height / 2) {
+                        gPoint.y = Node.height / 2;
+                    }
+                    const lPoint = Parent.globalToLocal(gPoint);
+                    Node.pos(lPoint.x, lPoint.y);
+                }
+                _Node.tieByStage = tieByStage;
                 function simpleCopyImg(Target) {
                     let Img = new Laya.Image;
                     Img.skin = Target.skin;
@@ -5945,6 +5990,9 @@
                     Top: 'Top',
                     Bottoms: 'Bottoms',
                 };
+                this._otherPro = {
+                    color: 'color',
+                };
             }
             static _ins() {
                 if (!this.ins) {
@@ -5956,6 +6004,11 @@
                     }
                 }
                 return this.ins;
+            }
+            ;
+            _getColor() {
+                let obj = this._getPitchObj();
+                return [obj[`${this._otherPro.color}1`], obj[`${this._otherPro.color}2`]];
             }
             getClothesArr() {
                 if (!this.ClothesArr) {
@@ -6250,14 +6303,17 @@
                         });
                     },
                     effcts: () => {
-                        let num = Tools._Number.randomOneInt(3, 6);
+                        const num = Tools._Number.randomOneInt(3, 6);
+                        const color1 = _Clothes._ins()._getColor()[0];
+                        const color2 = _Clothes._ins()._getColor()[1];
+                        const color = Tools._Number.randomOneHalf() === 0 ? color1 : color2;
                         for (let index = 0; index < num; index++) {
-                            Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], null, [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
+                            Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], [color1, color2], [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
                         }
                     }
                 };
                 this.Move = {
-                    switch: true,
+                    switch: false,
                     touchP: null,
                     diffP: null,
                 };
@@ -6269,7 +6325,7 @@
                 this.Ani.event();
             }
             lwgButton() {
-                this._btnFour(this._SceneImg('ScissorsMobile'), (e) => {
+                this._btnFour(Laya.stage, (e) => {
                     if (this.Move.switch) {
                         this._evNotify(_Event.scissorPlay);
                         this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -6279,6 +6335,7 @@
                         this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
                         this._Owner.x += this.Move.diffP.x;
                         this._Owner.y += this.Move.diffP.y;
+                        Tools._Node.tieByStage(this._Owner);
                         this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
                         this._evNotify(_Event.scissorPlay);
                     }
@@ -6457,8 +6514,17 @@
                     _TaskClothes._ins().changeClothes(this._Owner);
                 });
                 this._evReg(_Event.scissorTrigger, (Dotted) => {
-                    const value = _TaskClothes._ins()._checkCondition(Dotted.parent.name);
+                    const Parent = Dotted.parent;
+                    const value = _TaskClothes._ins()._checkCondition(Parent.name);
                     Dotted.visible = false;
+                    let Eraser = Parent.getChildByName('Eraser');
+                    if (!Eraser) {
+                        Eraser = new Laya.Sprite;
+                        Parent.addChild(Eraser);
+                    }
+                    Eraser.blendMode = "destination-out";
+                    Parent.cacheAs = "bitmap";
+                    Eraser.graphics.drawCircle(Dotted.x, Dotted.y, 15, '#000000');
                     if (value) {
                         for (let index = 0; index < _TaskClothes._ins().Clothes.getChildAt(0).numChildren; index++) {
                             const element = _TaskClothes._ins().Clothes.getChildAt(0).getChildAt(index);
@@ -6474,6 +6540,14 @@
                                     case 'LU':
                                         disX = -disX;
                                         disY = -disY;
+                                        break;
+                                    case 'L':
+                                        disX = -disX;
+                                        disY = 0;
+                                        break;
+                                    case 'R':
+                                        disX = disX;
+                                        disY = 0;
                                         break;
                                     case 'RU':
                                         disY = -disY;
@@ -6509,7 +6583,7 @@
                             });
                         }
                     }
-                    let gPos = Dotted.parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
+                    const gPos = Dotted.parent.localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
                     if (Dotted.name == 'A') {
                         if (this._ImgVar('Scissor').x <= gPos.x) {
                             this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
@@ -6531,7 +6605,7 @@
                     this.UI.btnBackVinish();
                     this.UI.btnAgainVinish();
                     AudioAdmin._playVictorySound();
-                    this.effcet.ani3();
+                    this.effcet.ani1();
                 });
             }
         }
@@ -7340,13 +7414,14 @@
                     },
                     btn: () => {
                         this._btnFour(this._ImgVar('WConversion'), (e) => {
+                            e.stopPropagation();
                             this.Tex.state = this.Tex.stateType.scale;
                         }, null, (e) => {
-                            this.Tex.state = this.Tex.stateType.addTex;
-                        }, (e) => {
+                            e.stopPropagation();
                             this.Tex.state = this.Tex.stateType.addTex;
                         });
                         this._btnUp(this._ImgVar('WClose'), (e) => {
+                            e.stopPropagation();
                             this.Tex.close();
                         });
                         this._btnFour(this._ImgVar('BtnL'), (e) => {
@@ -7522,7 +7597,7 @@
                     let point1 = Tools._3D.posToScreen(p1, _MakePattern._MainCamara);
                     let point2 = Tools._3D.posToScreen(p2, _MakePattern._MainCamara);
                     this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
-                    console.log(point2.y - point1.y);
+                    console.log(_MakePattern._Front);
                 });
                 this._evReg(_Event.addTexture2D, (Text2DF, Text2DR) => {
                     const bMF = _MakePattern._Front.meshRenderer.material;
@@ -7535,14 +7610,14 @@
                 this._evReg(_Event.rotateHanger, (num) => {
                     if (num == 1) {
                         _MakePattern._Hanger.transform.localRotationEulerY++;
-                        _MakePattern._HangerSimRY++;
+                        _MakePattern._HangerSimRY += 2;
                         if (_MakePattern._HangerSimRY > 360) {
                             _MakePattern._HangerSimRY = 0;
                         }
                     }
                     else {
                         _MakePattern._Hanger.transform.localRotationEulerY--;
-                        _MakePattern._HangerSimRY--;
+                        _MakePattern._HangerSimRY -= 2;
                         if (_MakePattern._HangerSimRY < 0) {
                             _MakePattern._HangerSimRY = 359;
                         }
@@ -7663,7 +7738,7 @@
     GameConfig.startScene = "Scene/LwgInit.scene";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
-    GameConfig.stat = false;
+    GameConfig.stat = true;
     GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();

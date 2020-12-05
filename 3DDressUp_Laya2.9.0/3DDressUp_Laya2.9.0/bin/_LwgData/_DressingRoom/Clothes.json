@@ -6,8 +6,20 @@
     "classify": "Dress",
     "name": "diy_dress_001_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": true,
     "reach": true
   },
@@ -16,8 +28,20 @@
     "classify": "Dress",
     "name": "diy_dress_002_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": false,
     "reach": true
   },
@@ -26,8 +50,20 @@
     "classify": "Top",
     "name": "diy_top_001_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": false,
     "reach": true
   },
@@ -36,8 +72,20 @@
     "classify": "Top",
     "name": "diy_top_002_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": false,
     "reach": true
   },
@@ -46,8 +94,20 @@
     "classify": "Bottoms",
     "name": "diy_bottom_001_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": false,
     "reach": true
   },
@@ -56,8 +116,20 @@
     "classify": "Bottoms",
     "name": "diy_bottom_002_final",
     "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
+    "conditionNum": 10,
+    "degreeNum": 10,
+    "color1": [
+      184,
+      30,
+      136,
+      1
+    ],
+    "color2": [
+      218,
+      204,
+      198,
+      1
+    ],
     "pitch": false,
     "reach": true
   }

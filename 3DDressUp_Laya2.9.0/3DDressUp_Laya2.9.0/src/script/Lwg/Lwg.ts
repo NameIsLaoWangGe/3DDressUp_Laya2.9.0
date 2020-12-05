@@ -2648,7 +2648,7 @@ export module lwg {
             }
 
             /**
-              * 通过degreeNum/conditionNum,设置完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
+              * 在单个对象上degreeNum>=conditionNum为完成，通过degreeNum/conditionNum,设置degreeNum++，设置后返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
               * @param classify 商品种类
               * @param name 商品名称
               * @param number 完成几次，不传则默认为1次
@@ -2789,6 +2789,21 @@ export module lwg {
                 this._pitchClassify = _calssify;
                 this._pitchName = name;
                 this._refreshAndStorage();
+            }
+
+            /**
+             * 获取选中对象
+             * @memberof _Table
+             */
+            _getPitchObj(): any {
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.name] === this._pitchName) {
+                            return element;
+                        }
+                    }
+                }
             }
 
             /**
@@ -5518,6 +5533,50 @@ export module lwg {
         }
         /**节点相关*/
         export module _Node {
+
+
+            /**
+             * 一个节点不会超出他的父节点
+             * @param Node 节点
+             * */
+            export function tieByParent(Node: Laya.Sprite): void {
+                const Parent = Node.parent as Laya.Sprite;
+                if (Node.x > Parent.width - Node.width / 2) {
+                    Node.x = Parent.width - Node.width / 2;
+                }
+                if (Node.x < Node.width / 2) {
+                    Node.x = Node.width / 2;
+                }
+                if (Node.y > Parent.height - Node.height / 2) {
+                    Node.y = Parent.height - Node.height / 2;
+                }
+                if (Node.y < Node.height / 2) {
+                    Node.y = Node.height / 2;
+                }
+            }
+
+            /**
+              * 一个节点不会超出舞台
+              * @param Node 节点
+              * */
+            export function tieByStage(Node: Laya.Sprite): void {
+                const Parent = Node.parent as Laya.Sprite;
+                const gPoint = Parent.localToGlobal(new Laya.Point(Node.x, Node.y));
+                if (gPoint.x > Laya.stage.width - Node.width / 2) {
+                    gPoint.x = Laya.stage.width - Node.width / 2;
+                }
+                if (gPoint.x < Node.width / 2) {
+                    gPoint.x = Node.width / 2;
+                }
+                if (gPoint.y > Laya.stage.height - Node.height / 2) {
+                    gPoint.y = Laya.stage.height - Node.height / 2;
+                }
+                if (gPoint.y < Node.height / 2) {
+                    gPoint.y = Node.height / 2;
+                }
+                const lPoint = Parent.globalToLocal(gPoint);
+                Node.pos(lPoint.x, lPoint.y);
+            }
 
             /**
              * @export 简单拷贝一张img，只拷贝通用属性，深度拷贝可以借鉴通过对象的深度copy

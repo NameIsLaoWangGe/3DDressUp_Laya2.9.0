@@ -380,13 +380,15 @@ export module _MakePattern {
             },
             btn: () => {
                 this._btnFour(this._ImgVar('WConversion'), (e: Laya.Event) => {
+                    e.stopPropagation();
                     this.Tex.state = this.Tex.stateType.scale;
-                }, null, (e: Laya.Event) => {
-                    this.Tex.state = this.Tex.stateType.addTex;
-                }, (e: Laya.Event) => {
-                    this.Tex.state = this.Tex.stateType.addTex;
-                })
+                }, null
+                    , (e: Laya.Event) => {
+                        e.stopPropagation();
+                        this.Tex.state = this.Tex.stateType.addTex;
+                    })
                 this._btnUp(this._ImgVar('WClose'), (e: Laya.Event) => {
+                    e.stopPropagation();
                     this.Tex.close();
                 })
                 this._btnFour(this._ImgVar('BtnL'), (e: Laya.Event) => {
@@ -401,15 +403,6 @@ export module _MakePattern {
                     Laya.timer.clearAll(this._ImgVar('BtnL'));
                 })
                 this._btnFour(this._ImgVar('BtnR'), (e: Laya.Event) => {
-                    // var htmlCanvas1: Laya.HTMLCanvas =_Scene3D.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
-                    // let base641 = htmlCanvas1.toBase64("image/png", 1);
-                    // this._ImgVar('TestImg').skin = base641;
-                    // console.log(base641);
-                    // var htmlCanvas1: Laya.HTMLCanvas = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
-                    // let base641 = htmlCanvas1.toBase64("image/png", 1);
-                    // let tex = _Scene3D.drawToTexture(this._ImgVar('TestSp').x, this._ImgVar('TestSp').y, 0, 0) as Laya.Texture;
-                    // this._ImgVar('TestSp').texture = tex;
-
                     this._ImgVar('Wireframe').visible = false;
                     this.Tex.state = this.Tex.stateType.rotate;
                     TimerAdmin._frameLoop(1, this._ImgVar('BtnR'), () => {
@@ -446,46 +439,16 @@ export module _MakePattern {
                 this._openScene('MakeTailor', true, true);
             }
             this.Tex.btn();
-
-            // this._btnFour(_Pattern._ins()._List,
-            //     (e: Laya.Event) => {
-            //         this['_ListFY'] = e.stageY;
-            //         this.Tex.state = this.Tex.stateType.none;
-            //         this._ImgVar('Wireframe').visible = false;
-            //     },
-            //     (e: Laya.Event) => {
-            //         if (this['_ListFY']) {
-            //             if (this['_ListFY'] - e.stageY > 50) {
-            //                 this._evNotify(_Event.close);
-            //                 console.log('上移关闭！')
-            //                 this['_ListFY'] = false;
-            //             }
-            //         }
-            //     },
-            //     (e: Laya.Event) => {
-            //         this['_ListFY'] = null;
-            //     },
-            //     (e: Laya.Event) => {
-            //         this['_ListFY'] = null;
-            //     })
-
-            // this._btnFour(this._ImgVar('OperationLoc'),
-            // ()=>{
-
-            // },
-            // ()=>{
-
-            // },
-            // ()=>{
-
-            // },)
         }
         onStageMouseDown(e: Laya.Event): void {
+            // if (this.Tex.chekInside()) {
+            //     this._ImgVar('Wireframe').visible = false;
+            //     this.Tex.state = this.Tex.stateType.rotate;
+            // }
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
                 this['slideFY'] = e.stageY;
             }
-            // console.log('触摸', e.stageY, this['slideFY'])
         }
 
         onStageMouseMove(e: Laya.Event) {
@@ -517,6 +480,8 @@ export module _MakePattern {
             } else {
                 if (!this.Tex.chekInside()) {
                     this.Tex.close()
+                } else {
+
                 }
             }
         }
@@ -564,7 +529,7 @@ export module _MakePattern {
                 let point1 = Tools._3D.posToScreen(p1, _MainCamara);
                 let point2 = Tools._3D.posToScreen(p2, _MainCamara);
                 this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
-                console.log(point2.y - point1.y);
+                console.log(_Front);
             })
 
             this._evReg(_Event.addTexture2D, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {
@@ -580,13 +545,13 @@ export module _MakePattern {
             this._evReg(_Event.rotateHanger, (num: number) => {
                 if (num == 1) {
                     _Hanger.transform.localRotationEulerY++;
-                    _HangerSimRY++;
+                    _HangerSimRY += 2;
                     if (_HangerSimRY > 360) {
                         _HangerSimRY = 0;
                     }
                 } else {
                     _Hanger.transform.localRotationEulerY--;
-                    _HangerSimRY--;
+                    _HangerSimRY -= 2;
                     if (_HangerSimRY < 0) {
                         _HangerSimRY = 359;
                     }

@@ -28,12 +28,20 @@ export module _MakeTailor {
                 }
             }
             return this.ins;
-        }
+        };
         _classify = {
             Dress: 'Dress',
             Top: 'Top',
             Bottoms: 'Bottoms',
+        };
+        _otherPro = {
+            color: 'color',
+        };
+        _getColor(): Array<any> {
+            let obj = this._getPitchObj();
+            return [obj[`${this._otherPro.color}1`], obj[`${this._otherPro.color}2`]]
         }
+
         ClothesArr: Array<Laya.Sprite>;
         /**当前选中的类别中所有的服装*/
         getClothesArr(): Array<any> {
@@ -349,23 +357,25 @@ export module _MakeTailor {
                 })
             },
             effcts: () => {
-                let num = Tools._Number.randomOneInt(3, 6);
+                const num = Tools._Number.randomOneInt(3, 6);
+                const color1 = _Clothes._ins()._getColor()[0];
+                const color2 = _Clothes._ins()._getColor()[1];
+                const color = Tools._Number.randomOneHalf() === 0 ? color1 : color2;
                 for (let index = 0; index < num; index++) {
-                    Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], null, [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
+                    Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], [color1, color2], [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
                 }
             }
         }
         lwgEvent(): void {
             this.Ani.event();
         }
-
         Move = {
-            switch: true,
+            switch: false,
             touchP: null as Laya.Point,
             diffP: null as Laya.Point,
         }
         lwgButton(): void {
-            this._btnFour(this._SceneImg('ScissorsMobile'),
+            this._btnFour(Laya.stage,
                 (e: Laya.Event) => {
                     if (this.Move.switch) {
                         this._evNotify(_Event.scissorPlay);
@@ -377,6 +387,7 @@ export module _MakeTailor {
                         this.Move.diffP = new Laya.Point(e.stageX - this.Move.touchP.x, e.stageY - this.Move.touchP.y);
                         this._Owner.x += this.Move.diffP.x;
                         this._Owner.y += this.Move.diffP.y;
+                        Tools._Node.tieByStage(this._Owner);
                         this.Move.touchP = new Laya.Point(e.stageX, e.stageY);
                         this._evNotify(_Event.scissorPlay);
                     }
@@ -473,8 +484,19 @@ export module _MakeTailor {
             })
 
             this._evReg(_Event.scissorTrigger, (Dotted: Laya.Image) => {
-                const value = _TaskClothes._ins()._checkCondition(Dotted.parent.name);
+                const Parent = Dotted.parent as Laya.Sprite;
+                const value = _TaskClothes._ins()._checkCondition(Parent.name);
                 Dotted.visible = false;
+                // 将底下线擦掉
+                let Eraser = Parent.getChildByName('Eraser') as Laya.Sprite;
+                if (!Eraser) {
+                    Eraser = new Laya.Sprite;
+                    Parent.addChild(Eraser);
+                }
+                Eraser.blendMode = "destination-out";
+                Parent.cacheAs = "bitmap";
+                Eraser.graphics.drawCircle(Dotted.x, Dotted.y, 15, '#000000');
+
                 if (value) {
                     // 删除布料
                     for (let index = 0; index < _TaskClothes._ins().Clothes.getChildAt(0).numChildren; index++) {
@@ -492,6 +514,14 @@ export module _MakeTailor {
                                 case 'LU':
                                     disX = -disX;
                                     disY = -disY;
+                                    break;
+                                case 'L':
+                                    disX = -disX;
+                                    disY = 0;
+                                    break;
+                                case 'R':
+                                    disX = disX;
+                                    disY = 0;
                                     break;
                                 case 'RU':
                                     disY = -disY;
@@ -530,7 +560,7 @@ export module _MakeTailor {
                     }
                 }
                 // 剪刀转向
-                let gPos = (Dotted.parent as Laya.Image).localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
+                const gPos = (Dotted.parent as Laya.Image).localToGlobal(new Laya.Point(Dotted.x, Dotted.y));
                 if (Dotted.name == 'A') {
                     if (this._ImgVar('Scissor').x <= gPos.x) {
                         this._evNotify(_Event.scissorRotation, [Dotted.rotation]);
@@ -550,7 +580,7 @@ export module _MakeTailor {
                 this.UI.btnBackVinish();
                 this.UI.btnAgainVinish();
                 AudioAdmin._playVictorySound();
-                this.effcet.ani3();
+                this.effcet.ani1();
             })
         }
 
