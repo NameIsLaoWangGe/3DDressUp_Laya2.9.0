@@ -14,6 +14,7 @@ export module _MakePattern {
         remake = '_MakePattern_remake',
         close = '_MakePattern_close',
         createImg = '_MakePattern_createImg',
+        setTexSize = '_MakePattern_texSize',
     }
 
     class _Pattern extends DataAdmin._Table {
@@ -23,7 +24,7 @@ export module _MakePattern {
                 this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.url);
                 this.ins._pitchClassify = this.ins._classify.general;
                 //空位置用于站位 
-                this.ins._arr.push({}, {}, {}, {});
+                this.ins._arr.push({}, {});
             }
             return this.ins;
         }
@@ -46,7 +47,6 @@ export module _MakePattern {
                     this._evNotify(_Event.close);
                 },
                 (e: Laya.Event) => {
-                    _Pattern._ins()._List.scrollBar.touchScrollEnable = false;
                     if (!this.create) {
                         this.diffX = this.fX - e.stageX;
                         if (this.diffX >= 5) {
@@ -54,10 +54,8 @@ export module _MakePattern {
                             this.create = true;
                         }
                     }
-                    console.log(!this.create, this.diffX);
                 },
                 () => {
-
                     this.create = true;
                 },
                 () => {
@@ -65,10 +63,11 @@ export module _MakePattern {
                 })
         }
     }
-
     export class MakePattern extends Admin._SceneBase {
         lwgOnAwake(): void {
             _Pattern._ins()._List = this._ListVar('List');
+            _Pattern._ins()._List.scrollBar.touchScrollEnable = false;
+            _Pattern._ins()._List.scrollBar.autoHide = true;
             _Pattern._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
@@ -93,7 +92,6 @@ export module _MakePattern {
                     Cell.addComponent(_Item)
                 }
             }
-            // console.log(Laya.stage['_children'])
             _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
             if (!_Scene3D.getComponent(MakeClothes3D)) {
                 _Scene3D.addComponent(MakeClothes3D);
@@ -110,7 +108,17 @@ export module _MakePattern {
             })
 
             this._evReg(_Event.close, () => {
-                !this.Tex.chekInside() && this.Tex.close();
+                if (this.Tex.chekInside()) {
+                    this.Tex.restore()
+                } else {
+                    this.Tex.close();
+                }
+                this.Tex.state = this.Tex.stateType.none;
+            })
+
+            this._evReg(_Event.setTexSize, (_height: number) => {
+                this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _height;
+                this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _height;
             })
         }
         /**图片移动控制*/
@@ -135,14 +143,9 @@ export module _MakePattern {
             },
             createImg: (name: string, gPoint: Laya.Point) => {
                 this.Tex.DisImg && this.Tex.DisImg.destroy();
-                // let element = Box.getChildByName('Icon') as Laya.Image;
-                // this.Tex.Img = Tools._Node.simpleCopyImg(element);
-                // let gPoint = Box['_Item']['_gPoint'] as Laya.Point;
                 this.Tex.DisImg = new Laya.Image;
                 this.Tex.Img = new Laya.Image;
                 let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
-                // let lPoint = Tools._Point.getOtherLocal(Box, this._SpriteVar('Ultimately'));
-                // this.Tex.DisImg = Tools._Node.simpleCopyImg(element);
                 this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/general/${name}.png`;
                 this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                 this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
@@ -150,8 +153,6 @@ export module _MakePattern {
                 this.Tex.Img.height = this.Tex.DisImg.height = this.Tex.imgWH[1];
                 this.Tex.Img.pivotX = this.Tex.Img.pivotY = this.Tex.DisImg.pivotX = this.Tex.DisImg.pivotY = 64;
                 this._SpriteVar('Dispaly').addChild(this.Tex.DisImg);
-                console.log(gPoint, lPoint);
-                console.log(this.Tex.DisImg, this._SpriteVar('Dispaly'));
                 this._SpriteVar('Dispaly').visible = true;
                 this.Tex.restore();
             },
@@ -237,7 +238,7 @@ export module _MakePattern {
                     let pH = out.point.y - _HangerP.transform.position.y;//扫描点位置
                     let _DirHeight = Tools._3D.getMeshSize(this.Tex.dir == this.Tex.dirType.Front ? _Front : _Reverse).y;
                     let ratio = 1 - pH / _DirHeight;//比例
-                    this.Tex.Img.y = ratio * _height;
+                    this.Tex.Img.y = ratio * _height + this._ImgVar('Wireframe').height / 2 * ratio;
 
                     // console.log(this.Tex.Img.x, this.Tex.Img.y);
                     return true;
@@ -292,10 +293,13 @@ export module _MakePattern {
                     return false;
                 }
             },
+            getDisGP: (): Laya.Point => {
+                return this.Tex.DisImg ? this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y)) : null
+            },
             disMove: () => {
                 this.Tex.DisImg.x += this.Tex.diffP.x;
                 this.Tex.DisImg.y += this.Tex.diffP.y;
-                let gPoint = this._SpriteVar('Dispaly').localToGlobal(new Laya.Point(this.Tex.DisImg.x, this.Tex.DisImg.y))
+                let gPoint = this.Tex.getDisGP();
                 this._ImgVar('Wireframe').pos(gPoint.x, gPoint.y);
             },
             move: (e: Laya.Event) => {
@@ -443,27 +447,27 @@ export module _MakePattern {
             }
             this.Tex.btn();
 
-            this._btnFour(_Pattern._ins()._List,
-                (e: Laya.Event) => {
-                    this['_ListFY'] = e.stageY;
-                    this.Tex.state = this.Tex.stateType.none;
-                    this._ImgVar('Wireframe').visible = false;
-                },
-                (e: Laya.Event) => {
-                    if (this['_ListFY']) {
-                        if (this['_ListFY'] - e.stageY > 50) {
-                            this._evNotify(_Event.close);
-                            console.log('上移关闭！')
-                            this['_ListFY'] = false;
-                        }
-                    }
-                },
-                (e: Laya.Event) => {
-                    this['_ListFY'] = null;
-                },
-                (e: Laya.Event) => {
-                    this['_ListFY'] = null;
-                })
+            // this._btnFour(_Pattern._ins()._List,
+            //     (e: Laya.Event) => {
+            //         this['_ListFY'] = e.stageY;
+            //         this.Tex.state = this.Tex.stateType.none;
+            //         this._ImgVar('Wireframe').visible = false;
+            //     },
+            //     (e: Laya.Event) => {
+            //         if (this['_ListFY']) {
+            //             if (this['_ListFY'] - e.stageY > 50) {
+            //                 this._evNotify(_Event.close);
+            //                 console.log('上移关闭！')
+            //                 this['_ListFY'] = false;
+            //             }
+            //         }
+            //     },
+            //     (e: Laya.Event) => {
+            //         this['_ListFY'] = null;
+            //     },
+            //     (e: Laya.Event) => {
+            //         this['_ListFY'] = null;
+            //     })
 
             // this._btnFour(this._ImgVar('OperationLoc'),
             // ()=>{
@@ -478,13 +482,43 @@ export module _MakePattern {
         }
         onStageMouseDown(e: Laya.Event): void {
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
+            if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
+                this['slideFY'] = e.stageY;
+            }
+            // console.log('触摸', e.stageY, this['slideFY'])
         }
+
         onStageMouseMove(e: Laya.Event) {
             this.Tex.operation(e);
+            if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
+                if (this['slideFY']) {
+                    let diffY = this['slideFY'] - e.stageY;
+                    let index = _Pattern._ins()._List.startIndex;
+                    if (Math.abs(diffY) > 25) {
+                        if (diffY > 0) {
+                            _Pattern._ins()._List.tweenTo(index + 1, 100);
+                        }
+                        if (diffY < 0) {
+                            _Pattern._ins()._List.tweenTo(index - 1, 100);
+
+                        }
+                        this['slideFY'] = null;
+                    }
+                }
+            }
+            else {
+                this['slideFY'] = null;
+            }
         }
-        onStageMouseUp() {
-            _Pattern._ins()._List.scrollBar.touchScrollEnable = true;
-            this._evNotify(_Event.close);
+        onStageMouseUp(e: Laya.Event) {
+            this['slideFY'] = null;
+            if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
+                this._evNotify(_Event.close);
+            } else {
+                if (!this.Tex.chekInside()) {
+                    this.Tex.close()
+                }
+            }
         }
         lwgCloseAni(): number {
             return 10;
@@ -501,15 +535,14 @@ export module _MakePattern {
     export let _HangerSimRY = 90;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
-            _HangerP = this._Child('HangerP');
             _MainCamara = this._MainCamera;
         }
         lwgOnStart(): void {
 
         }
         lwgEvent(): void {
-
             this._evReg(_Event.remake, () => {
+                _HangerP = this._Child('HangerP');
                 _Role = _Scene3D.getChildByName('Role') as Laya.MeshSprite3D;
                 const Classify = _Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify) as Laya.MeshSprite3D;
                 Tools._Node.showExcludedChild3D(_Role, [Classify.name]);
@@ -522,6 +555,16 @@ export module _MakePattern {
                 _Front = _Hanger.getChildByName(`${_Hanger.name}_0`) as Laya.MeshSprite3D;
                 _Reverse = _Hanger.getChildByName(`${_Hanger.name}_1`) as Laya.MeshSprite3D;
 
+                let center = _Front.meshRenderer.bounds.getCenter();
+                let extent = _Front.meshRenderer.bounds.getExtent();
+
+                //映射图片宽度 
+                let p1 = new Laya.Vector3(center.x, center.y + extent.y, center.z);
+                let p2 = new Laya.Vector3(center.x, center.y - extent.y, center.z);
+                let point1 = Tools._3D.posToScreen(p1, _MainCamara);
+                let point2 = Tools._3D.posToScreen(p2, _MainCamara);
+                this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
+                console.log(point2.y - point1.y);
             })
 
             this._evReg(_Event.addTexture2D, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {

@@ -413,7 +413,7 @@ export module _MakeTailor {
         lwgOnAwake(): void {
             this._ImgVar('Scissor').addComponent(_Scissor);
             _Clothes._ins()._List = this._ListVar('List');
-            _Clothes._ins()._listrender = (Cell: Laya.Box, index: number) => {
+            _Clothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;

@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":797,
+    "selectedBox":10,
+    "selecteID":7,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -151,19 +151,20 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,Ultimately,Ultimately",
-            "props":{"zOrder":35,"y":0,"x":0,"width":512,"visible":false,"var":"Ultimately","scaleY":1,"scaleX":1,"name":"Ultimately","height":512},
+            "props":{"zOrder":35,"y":0,"x":0,"width":512,"visible":true,"var":"Ultimately","scaleY":1,"scaleX":1,"name":"Ultimately","height":512},
             "nodeParent":2,
             "label":"Ultimately",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":10,
             "child":[
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Front,Front",
-                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Front","height":512},
+                    "props":{"y":632,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Front","height":512},
                     "nodeParent":10,
                     "label":"Front",
                     "isOpen":true,
@@ -175,9 +176,10 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Reverse,Reverse",
-                    "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Reverse","height":512},
+                    "props":{"y":632,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Reverse","height":512},
                     "nodeParent":10,
                     "label":"Reverse",
                     "isOpen":true,
@@ -397,20 +399,6 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":25,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"VScrollBar",
-            "searchKey":"VScrollBar",
-            "props":{"skin":"comp/vscroll.png"},
-            "nodeParent":2,
-            "label":"VScrollBar",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":797,
             "child":[
                 ]
         }],
