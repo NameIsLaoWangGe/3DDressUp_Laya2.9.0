@@ -1082,6 +1082,9 @@ export module lwg {
                 case _Type.fadeOut:
                     sumDelay = _fadeOut_Open(Scene);
                     break;
+                case _Type.stickIn.randomstickIn:
+                    sumDelay = _stickIn(Scene, _Type.stickIn.randomstickIn)
+                    break;
                 case _Type.stickIn.upLeftDownLeft:
                     sumDelay = _stickIn(Scene, _Type.stickIn.upLeftDownLeft)
                     break;
@@ -1093,6 +1096,7 @@ export module lwg {
                 case _Type.shutters.lSideling:
                     sumDelay = _shutters_Open(Scene, _Type.shutters.lSideling);
                 default:
+                    sumDelay = _fadeOut_Open(Scene);
                     break;
             }
             Laya.timer.once(sumDelay, this, () => {
@@ -1603,10 +1607,10 @@ export module lwg {
                                 this._openScene.addComponent(_Moudel[`_${this._openScene.name}`][this._openScene.name]);
                             }
                         }
-                        this._openFunc();
                     } else {
                         console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                     }
+                    this._openFunc();
                 }
             };
             static _close(): void {

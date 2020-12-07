@@ -7565,6 +7565,8 @@
                     if (!this.Tex.chekInside()) {
                         this.Tex.close();
                     }
+                    else {
+                    }
                 }
             }
             lwgCloseAni() {

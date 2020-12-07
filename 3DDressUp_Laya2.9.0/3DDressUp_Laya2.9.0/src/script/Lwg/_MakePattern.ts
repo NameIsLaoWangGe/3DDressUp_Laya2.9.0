@@ -108,7 +108,7 @@ export module _MakePattern {
             })
 
             this._evReg(_Event.close, () => {
-                if (this.Tex.chekInside()) {
+                if (this.Tex.checkInside()) {
                     this.Tex.restore()
                 } else {
                     this.Tex.close();
@@ -275,7 +275,7 @@ export module _MakePattern {
             /**
              * 检测是不是在模型中
              * */
-            chekInside: (): any => {
+            checkInside: (): any => {
                 this.Tex.checkDir();
                 let posArr = this.Tex.setPosArr()
                 let fOutArr: Array<Laya.HitResult> = [];
@@ -305,7 +305,7 @@ export module _MakePattern {
             move: (e: Laya.Event) => {
                 this.Tex.disMove();
                 this._ImgVar('Wireframe').visible = false;
-                if (this.Tex.chekInside()) {
+                if (this.Tex.checkInside()) {
                     this.Tex.setImgPos();
                     this._ImgVar('Wireframe').visible = true;
                     this.Tex.state = this.Tex.stateType.addTex;
@@ -441,7 +441,7 @@ export module _MakePattern {
             this.Tex.btn();
         }
         onStageMouseDown(e: Laya.Event): void {
-            // if (this.Tex.chekInside()) {
+            // if (this.Tex.checkInside()) {
             //     this._ImgVar('Wireframe').visible = false;
             //     this.Tex.state = this.Tex.stateType.rotate;
             // }
@@ -478,7 +478,7 @@ export module _MakePattern {
             if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
                 this._evNotify(_Event.close);
             } else {
-                if (!this.Tex.chekInside()) {
+                if (!this.Tex.checkInside()) {
                     this.Tex.close()
                 } else {
 
