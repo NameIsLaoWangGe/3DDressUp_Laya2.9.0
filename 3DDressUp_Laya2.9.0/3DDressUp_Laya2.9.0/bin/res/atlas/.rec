@@ -346,6 +346,31 @@ P AE8BA501 x3.png
 P 5222D989 x4.png
 P A9AF380E x5.png
 P 343BD2C8 x6.png
+D Game/UI/MakePattern/basic
+P 52EBDA90 diy_bottom_001_basic.png
+P 98CA3111 diy_bottom_002_basic.png
+P D1AC8B15 diy_bottom_003_basic.png
+P 3A890C47 diy_bottom_004_basic.png
+P 59F36249 diy_bottom_005_basic.png
+P 8D45A446 diy_bottom_006_basic.png
+P 3FD1527B diy_bottom_007_basic.png
+P 9AAA99DE diy_bottom_008_basic.png
+P 4BBCCF00 diy_dress_001_basic.png
+P 042EF193 diy_dress_002_basic.png
+P C0B457D8 diy_dress_003_basic.png
+P EEB63165 diy_dress_004_basic.png
+P 20694BB4 diy_dress_005_basic.png
+P E1C7C9E6 diy_dress_006_basic.png
+P A5F52C08 diy_dress_007_basic.png
+P D51D2836 diy_dress_008_basic.png
+P 1EDAFF57 diy_top_001_basic.png
+P 3025A463 diy_top_002_basic.png
+P 78D2CA8D diy_top_003_basic.png
+P DB9F8DA9 diy_top_004_basic.png
+P 30797EC5 diy_top_005_basic.png
+P 4390B4F3 diy_top_006_basic.png
+P 9DF3CB8E diy_top_007_basic.png
+P 29A45970 diy_top_008_basic.png
 D Game/UI/MakePattern/general
 P 14810733 pattern1.png
 P 14810733 pattern1_icon.png

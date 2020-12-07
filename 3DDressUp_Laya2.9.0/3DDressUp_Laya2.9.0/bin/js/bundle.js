@@ -7516,8 +7516,26 @@
                 else {
                     _MakePattern._Scene3D.getComponent(MakeClothes3D).lwgOnStart();
                 }
-                EventAdmin._notify(_Event.remake, this.Tex.getTex());
-                EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+                let clothesName = _MakeTailor._Clothes._ins()._pitchName;
+                const name0 = clothesName.substr(0, clothesName.length - 5);
+                this._ImgVar('Front').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
+                    this._ImgVar('Reverse').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
+                        EventAdmin._notify(_Event.remake, this.Tex.getTex());
+                        EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+                        this.photo();
+                    }));
+                }));
+            }
+            photo() {
+                this.EndCamera = _MakePattern._MainCamara.clone();
+                _MakePattern._Scene3D.addChild(this.EndCamera);
+                this.EndCamera.transform.position = _MakePattern._MainCamara.transform.position;
+                this.EndCamera.transform.localRotationEuler = _MakePattern._MainCamara.transform.localRotationEuler;
+                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('Test').width, this._SpriteVar('Test').height);
+                this.EndCamera.renderingOrder = -1;
+                this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
+                var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
+                this._SpriteVar('Test').graphics.drawTexture(rtex);
             }
             lwgEvent() {
                 this._evReg(_Event.createImg, (name, gPoint) => {
@@ -7632,7 +7650,6 @@
                     let point1 = Tools._3D.posToScreen(p1, _MakePattern._MainCamara);
                     let point2 = Tools._3D.posToScreen(p2, _MakePattern._MainCamara);
                     this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
-                    console.log(_MakePattern._Front);
                 });
                 this._evReg(_Event.addTexture2D, (Text2DF, Text2DR) => {
                     const bMF = _MakePattern._Front.meshRenderer.material;

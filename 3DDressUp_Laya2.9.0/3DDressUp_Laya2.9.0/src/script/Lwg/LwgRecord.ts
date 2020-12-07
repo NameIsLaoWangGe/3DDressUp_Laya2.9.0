@@ -177,22 +177,25 @@ export module record {
         '资源加载不出来——02' = '上传平台是，如果还有写资源包括文件夹，因为大小写对不上而加载不出来，但是在浏览器中可能会忽略大小写',
     }
 
-    /**语法*/
-    export enum TypeScript {
+    export enum TS {
         " if(0)" = 'false',
         " if(1)" = 'true',
         '单例模式' = '防止当前类出现多个对象，故称之为单例模式，单例过后和模块差不多，是唯一的，如下：'
         // export class Img extends Laya.Image {
         //     private static _instance: Img;
         //     public static getInstance(): Img {
-        //         if (this._instance == null) {
-        //             this._instance = new Img(Posx, 0);
+        //         if (！this._instance ) {
+        //             this._instance = new Img();
         //         }
         //         return this._instance;
         //     }
         // }
         ,
         'obj={}和obj：{}的区别' = 'obj={}是属于赋值阶段，里面的任何属性都是一个值，obj：{}是声明阶段，可以不赋值，可以只有类型声明,最好用obj={}',
+    }
+    export enum JS {
+        '优化变量内存1' = '最佳办法是将相对来说是全局变量的值初始化为null，很多类和对象也是全局的或者是一直存在的，里面的属性都可以为null，用过之后也为null，节点，变量都可以这么做，接触引用关系',
+        '优化变量内存2' = 'let,const是局部变量声明，会加快内存处理机制介入，var有时候是垮作用于的，所以某种意义上来说，相对清理较晚',
     }
 
     export enum ObjArray {
