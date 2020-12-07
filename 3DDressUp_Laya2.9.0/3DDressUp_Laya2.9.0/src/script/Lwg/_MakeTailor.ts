@@ -20,6 +20,7 @@ export module _MakeTailor {
         static _ins() {
             if (!this.ins) {
                 this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                console.log(this.ins._arr);
                 //设置初始值
                 this.ins._pitchClassify = this.ins._classify.Dress;
                 this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
@@ -66,7 +67,7 @@ export module _MakeTailor {
             CloBox.x = Laya.stage.width / 2;
             CloBox.y = Laya.stage.height / 2;
             CloBox.addChild(Cloth);
-            CloBox.name = Cloth.name;
+            CloBox.name = name;
             if (Scene) {
                 Scene.addChild(CloBox);
                 CloBox.zOrder = 20;

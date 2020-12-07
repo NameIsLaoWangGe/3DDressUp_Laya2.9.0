@@ -5849,7 +5849,7 @@ export module lwg {
              * @return {*}  {Laya.Sprite}
              */
             export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], zOrder?: number, name?: string): Laya.Sprite {
-                let Sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
+                let Sp: Laya.Video = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                 Parent && Parent.addChild(Sp);
                 point && Sp.pos(point[0], point[1]);
                 if (zOrder) {

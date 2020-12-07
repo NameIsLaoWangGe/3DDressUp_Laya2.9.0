@@ -37,12 +37,44 @@ export module _Res {
                 url: 'Prefab/BtnRollback.json',
                 prefab: new Laya.Prefab,
             },
+
+
+            diy_bottom_003_final: {
+                url: 'Prefab/diy_bottom_003_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_bottom_006_final: {
+                url: 'Prefab/diy_bottom_006_final.json',
+                prefab: new Laya.Prefab,
+            },
+
             diy_dress_001_final: {
                 url: 'Prefab/diy_dress_001_final.json',
                 prefab: new Laya.Prefab,
             },
-            diy_dress_002_final: {
-                url: 'Prefab/diy_dress_002_final.json',
+            diy_dress_003_final: {
+                url: 'Prefab/diy_dress_003_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_dress_006_final: {
+                url: 'Prefab/diy_dress_006_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_dress_008_final: {
+                url: 'Prefab/diy_dress_008_final.json',
+                prefab: new Laya.Prefab,
+            },
+
+            diy_top_005_final: {
+                url: 'Prefab/diy_top_005_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_top_006_final: {
+                url: 'Prefab/diy_top_006_final.json',
+                prefab: new Laya.Prefab,
+            },
+            diy_top_007_final: {
+                url: 'Prefab/diy_top_007_final.json',
                 prefab: new Laya.Prefab,
             },
         },

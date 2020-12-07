@@ -810,6 +810,9 @@
                     case SceneAnimation._Type.fadeOut:
                         sumDelay = _fadeOut_Open(Scene);
                         break;
+                    case SceneAnimation._Type.stickIn.randomstickIn:
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.randomstickIn);
+                        break;
                     case SceneAnimation._Type.stickIn.upLeftDownLeft:
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
                         break;
@@ -820,6 +823,7 @@
                     case SceneAnimation._Type.shutters.lSideling:
                         sumDelay = _shutters_Open(Scene, SceneAnimation._Type.shutters.lSideling);
                     default:
+                        sumDelay = _fadeOut_Open(Scene);
                         break;
                 }
                 Laya.timer.once(sumDelay, this, () => {
@@ -1284,11 +1288,11 @@
                                     this._openScene.addComponent(Admin._Moudel[`_${this._openScene.name}`][this._openScene.name]);
                                 }
                             }
-                            this._openFunc();
                         }
                         else {
                             console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                         }
+                        this._openFunc();
                     }
                 }
                 ;
@@ -5915,12 +5919,40 @@
                     url: 'Prefab/BtnRollback.json',
                     prefab: new Laya.Prefab,
                 },
+                diy_bottom_003_final: {
+                    url: 'Prefab/diy_bottom_003_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_bottom_006_final: {
+                    url: 'Prefab/diy_bottom_006_final.json',
+                    prefab: new Laya.Prefab,
+                },
                 diy_dress_001_final: {
                     url: 'Prefab/diy_dress_001_final.json',
                     prefab: new Laya.Prefab,
                 },
-                diy_dress_002_final: {
-                    url: 'Prefab/diy_dress_002_final.json',
+                diy_dress_003_final: {
+                    url: 'Prefab/diy_dress_003_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_dress_006_final: {
+                    url: 'Prefab/diy_dress_006_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_dress_008_final: {
+                    url: 'Prefab/diy_dress_008_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_top_005_final: {
+                    url: 'Prefab/diy_top_005_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_top_006_final: {
+                    url: 'Prefab/diy_top_006_final.json',
+                    prefab: new Laya.Prefab,
+                },
+                diy_top_007_final: {
+                    url: 'Prefab/diy_top_007_final.json',
                     prefab: new Laya.Prefab,
                 },
             },
@@ -5997,6 +6029,7 @@
             static _ins() {
                 if (!this.ins) {
                     this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                    console.log(this.ins._arr);
                     this.ins._pitchClassify = this.ins._classify.Dress;
                     this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
                     if (!this.ins._pitchName) {
@@ -6031,7 +6064,7 @@
                 CloBox.x = Laya.stage.width / 2;
                 CloBox.y = Laya.stage.height / 2;
                 CloBox.addChild(Cloth);
-                CloBox.name = Cloth.name;
+                CloBox.name = name;
                 if (Scene) {
                     Scene.addChild(CloBox);
                     CloBox.zOrder = 20;
@@ -7313,7 +7346,7 @@
                         enter: 'enter',
                         inside: 'inside',
                     },
-                    chekInside: () => {
+                    checkInside: () => {
                         this.Tex.checkDir();
                         let posArr = this.Tex.setPosArr();
                         let fOutArr = [];
@@ -7344,7 +7377,7 @@
                     move: (e) => {
                         this.Tex.disMove();
                         this._ImgVar('Wireframe').visible = false;
-                        if (this.Tex.chekInside()) {
+                        if (this.Tex.checkInside()) {
                             this.Tex.setImgPos();
                             this._ImgVar('Wireframe').visible = true;
                             this.Tex.state = this.Tex.stateType.addTex;
@@ -7492,7 +7525,7 @@
                     this.Tex.createImg(name, gPoint);
                 });
                 this._evReg(_Event.close, () => {
-                    if (this.Tex.chekInside()) {
+                    if (this.Tex.checkInside()) {
                         this.Tex.restore();
                     }
                     else {
@@ -7562,7 +7595,7 @@
                     this._evNotify(_Event.close);
                 }
                 else {
-                    if (!this.Tex.chekInside()) {
+                    if (!this.Tex.checkInside()) {
                         this.Tex.close();
                     }
                     else {

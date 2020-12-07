@@ -10,7 +10,6 @@ export module record {
 
         'atlas' = '当图集不在索引中，或者无法更新打包时，可以在bin文件夹下手动添加需要用到的图片和文件夹，这样的用以就是不打包，直接用',
 
-        
         '修改文件夹名字' = '在左边修改文件夹名称不会导致图片资源丢失，会直接映射到游戏中，所以增删改查都在左边进入，下面制作展示和拖入',
 
         'spine_01(骨骼动画)' = '不知道为什么添加了spine(骨骼动画)，然后骨骼动画的图片设置成不打包之后，fileconfig.json文件就不更新打包信息了',
@@ -45,9 +44,9 @@ export module record {
 
         'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可',
 
-        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉'='destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图',
+        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉' = 'destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图',
 
-        'texture/texture2D的引用属性'='贴图如果不new出一个的话，多个sprite用同一个贴图的时候，销毁其中一个贴图必然会引发其他贴图消失，因为是引用关系',
+        'texture/texture2D的引用属性' = '贴图如果不new出一个的话，多个sprite用同一个贴图的时候，销毁其中一个贴图必然会引发其他贴图消失，因为是引用关系',
 
     }
     /**
@@ -239,5 +238,9 @@ export module record {
 
         '发布OPPO和VIVO包调试' = '网上教程可以用eclipse连接手机进行调试，如果控制面板中的安卓连接出现问题，可能是没有驱动，可以通过豌豆荚app，他会自动安装连接的驱动',
 
+    }
+
+    export enum Table {
+        'wps表格数字输入逗号自动消失' = '右键单元格设置，数字设置为文本'
     }
 }
