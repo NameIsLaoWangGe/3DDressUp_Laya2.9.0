@@ -105,7 +105,7 @@ export module _MakeTailor {
             const time = 700;
             this.Clothes.pos(0, -Laya.stage.height * 1.5);
             this.Clothes.rotation = 45;
-            Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time)
+            Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time);
         }
         LastClothes: Laya.Sprite;
         LineParent: Laya.Image;
@@ -176,12 +176,15 @@ export module _MakeTailor {
                 this.btnRollbackClick && this.btnRollbackClick();
             })
 
-            this.Operation.pos(Laya.stage.width + 500, 0);
+            this.Operation.pos(Laya.stage.width + 500, 20);
             this.BtnComplete.scale(0, 0);
             this.BtnBack.scale(0, 0);
             this.BtnAgain.scale(0, 0);
             this.BtnRollback.scale(0, 0);
+
+            this.moveTargetX = Laya.stage.width - this.Operation.width + 50;
         }
+        moveTargetX: number;
 
         btnAgainClick: Function;
         btnCompleteClick: Function;
@@ -237,17 +240,18 @@ export module _MakeTailor {
                 func && func();
             }, delay ? delay : 0);
         };
+
         operationAppear(func?: Function, delay?: number): void {
-            Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width - 100, 0, this.time * 4, () => {
-                Animation2D.move(this.Operation, Laya.stage.width - this.Operation.width, 0, this.time, () => {
+            Animation2D.move(this.Operation, this.moveTargetX - 40, this.Operation.y, this.time * 4, () => {
+                Animation2D.move(this.Operation, this.moveTargetX, this.Operation.y, this.time, () => {
                     func && func();
                 })
             }, delay ? delay : 0)
         };
         operationVinish(func?: Function, delay?: number): void {
             Animation2D.bombs_Vanish(this.BtnComplete, 0, 0, 0, this.time * 4, () => {
-                Animation2D.move(this.Operation, this.Operation.x - 80, 0, this.time, () => {
-                    Animation2D.move(this.Operation, Laya.stage.width + 500, 0, this.time * 4, () => {
+                Animation2D.move(this.Operation, this.moveTargetX - 40, this.Operation.y, this.time, () => {
+                    Animation2D.move(this.Operation, Laya.stage.width + 500, this.Operation.y, this.time * 4, () => {
                         func && func();
                     });
                 });
@@ -407,12 +411,11 @@ export module _MakeTailor {
     class _Item extends Admin._ObjectBase {
         lwgButton(): void {
             this._btnUp(this._Owner, () => {
-                console.log('换装！')
                 if (this._Owner['_dataSource']['name'] !== _DIYClothes._ins()._pitchName) {
                     _DIYClothes._ins()._setPitch(this._Owner['_dataSource']['name']);
                     this._evNotify(_Event.changeClothes);
                 }
-            }, 'no')
+            })
         }
     }
 
@@ -429,14 +432,15 @@ export module _MakeTailor {
                 const Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                 if (data[_DIYClothes._ins()._property.pitch]) {
-                    Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
+                    Board.skin = `Game/UI/Common/xuanzhong.png`;
                 } else {
-                    Board.skin = `Lwg/UI/ui_orthogon_grass.png`;
+                    Board.skin = null;
                 }
                 if (!Cell.getComponent(_Item)) {
                     Cell.addComponent(_Item)
                 }
             }
+            _DIYClothes._ins()._List.refresh();
         }
         UI: _UI;
         lwgOnStart(): void {
@@ -471,7 +475,7 @@ export module _MakeTailor {
                 })
             }
 
-            TimerAdmin._frameOnce(30, this, () => {
+            TimerAdmin._frameOnce(20, this, () => {
                 _TaskClothes._ins().changeClothes(this._Owner);
             })
         }

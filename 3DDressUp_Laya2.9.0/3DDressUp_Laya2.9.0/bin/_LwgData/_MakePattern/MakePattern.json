@@ -22,7 +22,7 @@
     "reach": true
   },
   {
-    "index": 1,
+    "index": 3,
     "classify": "general",
     "name": "pattern3",
     "unlockWay": "free",
@@ -32,7 +32,7 @@
     "reach": true
   },
   {
-    "index": 2,
+    "index": 4,
     "classify": "general",
     "name": "pattern4",
     "unlockWay": "free",
@@ -42,19 +42,9 @@
     "reach": true
   },
   {
-    "index": 1,
+    "index": 5,
     "classify": "general",
     "name": "pattern5",
-    "unlockWay": "free",
-    "conditionNum": 5,
-    "degreeNum": 5,
-    "pitch": false,
-    "reach": true
-  },
-  {
-    "index": 2,
-    "classify": "general",
-    "name": "pattern6",
     "unlockWay": "free",
     "conditionNum": 5,
     "degreeNum": 5,

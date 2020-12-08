@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":26,
+    "selecteID":13,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -56,13 +56,14 @@
             "props":{"y":505,"x":881,"width":123,"visible":false,"var":"Wireframe","sizeGrid":"13,20,21,25","rotation":0,"name":"Wireframe","height":157},
             "nodeParent":2,
             "label":"Wireframe",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":13,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Frame,Frame",
                     "props":{"y":0,"x":0,"width":123,"visible":true,"var":"Frame","skin":"Lwg/UI/wireframeBlack2.png","sizeGrid":"13,20,21,25","rotation":0,"name":"Frame","height":157},
@@ -77,9 +78,10 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WClose,WClose",
-                    "props":{"y":0,"x":1.5,"width":60,"var":"WClose","skin":"Lwg/UI/icon_close.png","pivotY":30,"pivotX":30,"name":"WClose","height":60},
+                    "props":{"y":0,"x":0,"width":49,"var":"WClose","skin":"Game/UI/MakePattern/close.png","pivotY":24,"pivotX":25,"name":"WClose","height":48},
                     "nodeParent":13,
                     "label":"WClose",
                     "isDirectory":false,
@@ -90,43 +92,19 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WConversion,WConversion",
-                    "props":{"y":146,"x":119,"width":60,"var":"WConversion","skin":"Lwg/UI/ui_circle_c_001.png","pivotY":30,"pivotX":30,"name":"WConversion","height":60},
+                    "props":{"y":149,"x":114,"width":48,"var":"WConversion","skin":"Game/UI/MakePattern/lashen.png","pivotY":24,"pivotX":24,"name":"WConversion","height":48},
                     "nodeParent":13,
                     "label":"WConversion",
                     "isOpen":true,
-                    "isDirectory":true,
+                    "isDirectory":false,
                     "isAniNode":true,
-                    "hasChild":true,
+                    "hasChild":false,
                     "compId":17,
                     "child":[
-                        {
-                            "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":40,"x":34,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":68,"pivotY":8,"pivotX":8,"height":15},
-                            "nodeParent":17,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":18,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":24,"x":27,"width":15,"skin":"Lwg/UI/icon_cuspR.png","rotation":605,"pivotY":8,"pivotX":8,"height":15},
-                            "nodeParent":17,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":19,
-                            "child":[
-                                ]
-                        }]
+                        ]
                 }]
         },
         {
@@ -205,7 +183,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Operation,Operation",
-            "props":{"zOrder":150,"y":20,"x":1095,"width":185,"var":"Operation","skin":"Game/UI/Common/di.png","sizeGrid":"0,62,0,96","name":"Operation","height":682},
+            "props":{"zOrder":150,"y":20,"x":1095,"var":"Operation","skin":"Game/UI/Common/di.png","name":"Operation"},
             "nodeParent":2,
             "label":"Operation",
             "isOpen":true,

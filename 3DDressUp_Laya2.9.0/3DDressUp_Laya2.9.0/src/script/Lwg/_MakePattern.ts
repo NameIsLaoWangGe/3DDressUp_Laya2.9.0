@@ -73,7 +73,7 @@ export module _MakePattern {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 if (data['name']) {
-                    Icon.skin = `Game/UI/MakePattern/${_Pattern._ins()._pitchClassify}/${data['name']}_icon.png`;
+                    Icon.skin = `Game/UI/MakePattern/PatternIcon/${_Pattern._ins()._pitchClassify}/${data['name']}.png`;
                 } else {
                     Icon.skin = null;
                 }
@@ -92,18 +92,12 @@ export module _MakePattern {
                     Cell.addComponent(_Item)
                 }
             }
-            _Scene3D = _Res._list.scene3D.MakeClothes.Scene;
-            if (!_Scene3D.getComponent(MakeClothes3D)) {
-                _Scene3D.addComponent(MakeClothes3D);
-            } else {
-                _Scene3D.getComponent(MakeClothes3D).lwgOnStart();
-            }
 
+            // 设置皮肤
             let clothesName = _MakeTailor._DIYClothes._ins()._pitchName;
             const name0 = clothesName.substr(0, clothesName.length - 5);
             this._ImgVar('Front').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
                 this._ImgVar('Reverse').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
-                    EventAdmin._notify(_Event.remake, this.Tex.getTex());
                     EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                 }));
             }));
@@ -460,12 +454,12 @@ export module _MakePattern {
                 this.UI.btnAgainAppear(null, 800);
             })
             this.UI.btnCompleteClick = () => {
+                this.Tex.restore();
                 this.UI.operationVinish(() => {
                     this.UI.btnBackVinish();
                     this.UI.btnRollbackVinish();
                     this.UI.btnAgainVinish(() => {
                         this.photo();
-
                     });
                 }, 200);
             }
@@ -535,9 +529,6 @@ export module _MakePattern {
     export class MakeClothes3D extends lwg3D._Scene3DBase {
         lwgOnAwake(): void {
             _MainCamara = this._MainCamera;
-        }
-        lwgOnStart(): void {
-
         }
         lwgEvent(): void {
             this._evReg(_Event.remake, () => {

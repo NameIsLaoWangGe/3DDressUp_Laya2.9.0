@@ -1,4 +1,5 @@
 import { Admin, EventAdmin, SceneAnimation, TimerAdmin, _LwgPreLoad, _SceneName } from "./Lwg";
+import { _MakePattern } from "./_MakePattern";
 import { _MakeTailor } from "./_MakeTailor";
 import { _Res } from "./_PreLoad";
 export module _CutInRes {
@@ -39,7 +40,7 @@ export module _PreLoadCutIn {
                 }, () => {
                     switch (Admin._PreLoadCutIn.openName) {
                         case 'MakePattern':
-                            Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+                            this.intoMakePattern();
                             break;
                         case 'MakeTailor':
                             _MakeTailor._DIYClothes._ins().ClothesArr = null;
@@ -51,7 +52,9 @@ export module _PreLoadCutIn {
                         default:
                             break;
                     }
-                    EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
+                    TimerAdmin._frameOnce(20, this, () => {
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
+                    })
                 })
             })
         }
@@ -65,6 +68,16 @@ export module _PreLoadCutIn {
                 _Res._list.scene3D.MakeClothes.Scene.removeSelf();
             }
         }
+
+        intoMakePattern(): void {
+            _MakePattern._Scene3D = _Res._list.scene3D.MakeClothes.Scene;
+            Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
+            if (!_MakePattern._Scene3D.getComponent(_MakePattern.MakeClothes3D)) {
+                _MakePattern._Scene3D.addComponent(_MakePattern.MakeClothes3D);
+            }
+            EventAdmin._notify(_MakePattern._Event.remake);
+        }
+
         lwgStepComplete(): void {
         }
         lwgAllComplete(): number {
