@@ -30,7 +30,7 @@ export module _Res {
                 prefab: new Laya.Prefab,
             },
             BtnBack: {
-                url: 'Prefab/BtnBack.json',
+                url: 'Prefab/BtnBack3.json',
                 prefab: new Laya.Prefab,
             },
             BtnRollback: {

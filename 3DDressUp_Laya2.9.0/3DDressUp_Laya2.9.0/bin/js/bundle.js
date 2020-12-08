@@ -1243,7 +1243,7 @@
                 zOrder: null,
             };
             function _preLoadOpenScene(openName, closeName, func, zOrder) {
-                _openScene(_SceneName.PreLoadCutIn, closeName);
+                _openScene(_SceneName.PreLoadCutIn, closeName, func);
                 Admin._PreLoadCutIn.openName = openName;
                 Admin._PreLoadCutIn.closeName = closeName;
                 Admin._PreLoadCutIn.func = func;
@@ -1252,6 +1252,30 @@
             Admin._preLoadOpenScene = _preLoadOpenScene;
             class _SceneChange {
                 static _openZOderUp() {
+                    if (SceneAnimation._closeSwitch) {
+                        let num = 0;
+                        for (const key in Admin._SceneControl) {
+                            if (Object.prototype.hasOwnProperty.call(Admin._SceneControl, key)) {
+                                const Scene = Admin._SceneControl[key];
+                                if (Scene.parent) {
+                                    num++;
+                                }
+                            }
+                        }
+                        if (this._openScene) {
+                            this._openScene.zOrder = num;
+                            for (let index = 0; index < this._closeScene.length; index++) {
+                                const element = this._closeScene[index];
+                                if (element) {
+                                    element.zOrder = --num;
+                                }
+                                else {
+                                    this._closeScene.splice(index, 1);
+                                    index--;
+                                }
+                            }
+                        }
+                    }
                 }
                 ;
                 static _closeZOderUP(CloseScene) {
@@ -1292,6 +1316,7 @@
                         else {
                             console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                         }
+                        this._openZOderUp();
                         this._openFunc();
                     }
                 }
@@ -2158,6 +2183,20 @@
                         }
                     }
                     return this[`${classify}Arr`];
+                }
+                _getArrByPitchClassify() {
+                    if (!this[`${this._pitchClassify}Arr`]) {
+                        this[`${this._pitchClassify}Arr`] = [];
+                        for (const key in this._arr) {
+                            if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                                const element = this._arr[key];
+                                if (element[this._property.classify] == this._pitchClassify) {
+                                    this[`${this._pitchClassify}Arr`].push(element);
+                                }
+                            }
+                        }
+                    }
+                    return this[`${this._pitchClassify}Arr`];
                 }
                 _getPropertyArr(proName, value) {
                     let arr = [];
@@ -5931,7 +5970,7 @@
                     prefab: new Laya.Prefab,
                 },
                 BtnBack: {
-                    url: 'Prefab/BtnBack.json',
+                    url: 'Prefab/BtnBack3.json',
                     prefab: new Laya.Prefab,
                 },
                 BtnRollback: {
@@ -6053,12 +6092,6 @@
             static _ins() {
                 if (!this.ins) {
                     this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
-                    console.log(this.ins._arr);
-                    this.ins._pitchClassify = this.ins._classify.Dress;
-                    this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
-                    if (!this.ins._pitchName) {
-                        this.ins._pitchName = this.ins._arr[0][this.ins._property.name];
-                    }
                 }
                 return this.ins;
             }
@@ -6270,7 +6303,7 @@
             constructor() {
                 super(...arguments);
                 this.Ani = {
-                    vnishP: new Laya.Point(Laya.stage.width + 500, 0),
+                    vanishP: new Laya.Point(Laya.stage.width + 500, 0),
                     shearSpeed: 3,
                     range: 40,
                     dir: 'up',
@@ -6333,7 +6366,7 @@
                                     Animation2D.move_rotate(this._Owner, Tools._Number.randomOneHalf() == 0 ? 720 : -720, new Laya.Point(this._Owner.x + disX, this._Owner.y + disY), time, delay, () => {
                                         func && func();
                                         this._Owner.rotation = 0;
-                                        this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
+                                        this._Owner.pos(this.Ani.vanishP.x, this.Ani.vanishP.y);
                                     });
                                 });
                             });
@@ -6376,7 +6409,7 @@
                 };
             }
             lwgOnAwake() {
-                this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
+                this._Owner.pos(this.Ani.vanishP.x, this.Ani.vanishP.y);
             }
             lwgEvent() {
                 this.Ani.event();
@@ -6514,6 +6547,8 @@
             lwgOnAwake() {
                 this._ImgVar('Scissor').addComponent(_Scissor);
                 _DIYClothes._ins()._List = this._ListVar('List');
+                _DIYClothes._ins()._List.array = _DIYClothes._ins()._getArrByPitchClassify();
+                _DIYClothes._ins()._pitchName = _DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name];
                 _DIYClothes._ins()._listRender = (Cell, index) => {
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
@@ -6750,8 +6785,26 @@
             lwgOnStart() {
             }
             lwgButton() {
-                this._btnUp(this._ImgVar('BtnStart'), () => {
+                const Clothes = _MakeTailor._DIYClothes._ins();
+                this._btnUp(this._ImgVar('BtnTop'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Top;
                     this._openScene('MakeTailor', true, true);
+                });
+                this._btnUp(this._ImgVar('BtnDress'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Dress;
+                    this._openScene('MakeTailor', true, true);
+                });
+                this._btnUp(this._ImgVar('BtnBottoms'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Bottoms;
+                    this._openScene('MakeTailor', true, true);
+                });
+                this._btnUp(this._ImgVar('BtnPersonalInfo'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Bottoms;
+                    this._openScene('PersonalInfo', false);
+                });
+                this._btnUp(this._ImgVar('BtnRanking'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Bottoms;
+                    this._openScene('Ranking', false);
                 });
             }
         }
@@ -7130,15 +7183,13 @@
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
                 _General._ins()._List = this._ListVar('List');
-                let arr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
+                let completeArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
                 _MakeTailor._DIYClothes._ins()._List = this._ListVar('List');
-                _MakeTailor._DIYClothes._ins()._List.selectEnable = true;
-                _MakeTailor._DIYClothes._ins()._List.vScrollBarSkin = "";
-                _MakeTailor._DIYClothes._ins()._List.array = arr;
-                _MakeTailor._DIYClothes._ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                _MakeTailor._DIYClothes._ins()._List.array = completeArr;
+                _MakeTailor._DIYClothes._ins()._listRender = (Cell) => {
                     let data = Cell.dataSource;
                     let Icon = Cell.getChildByName('Icon');
-                    Icon.skin = arr[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
+                    Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
                     let Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                     if (data[_MakeTailor._DIYClothes._ins()._property.pitch]) {
@@ -7150,7 +7201,7 @@
                     if (!Cell.getComponent(_Item)) {
                         Cell.addComponent(_Item);
                     }
-                });
+                };
                 _MakeTailor._DIYClothes._ins()._Tap = this._ListVar('Tap');
             }
             lwgAdaptive() {
@@ -7542,19 +7593,21 @@
                 }));
             }
             photo() {
+                _MakePattern._Hanger.transform.localRotationEulerY = 180;
                 this.EndCamera = _MakePattern._MainCamara.clone();
                 _MakePattern._Scene3D.addChild(this.EndCamera);
                 this.EndCamera.transform.position = _MakePattern._MainCamara.transform.position;
                 this.EndCamera.transform.localRotationEuler = _MakePattern._MainCamara.transform.localRotationEuler;
-                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('Test').width, this._SpriteVar('Test').height);
+                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
                 this.EndCamera.renderingOrder = -1;
                 this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
                 var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
-                this._SpriteVar('Test').graphics.drawTexture(rtex);
+                this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
                 TimerAdmin._frameOnce(10, this, () => {
-                    const htmlCanvas1 = this._SpriteVar('Test').drawToCanvas(this._SpriteVar('Test').width, this._SpriteVar('Test').height, this._SpriteVar('Test').x, this._SpriteVar('Test').y);
+                    const htmlCanvas1 = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
                     let base64 = htmlCanvas1.toBase64("image/png", 1);
                     _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                    this.EndCamera.destroy();
                     this._openScene('DressingRoom', true, true);
                 });
             }
@@ -7702,6 +7755,31 @@
     })(_MakePattern || (_MakePattern = {}));
     var _MakePattern$1 = _MakePattern.MakePattern;
 
+    var _PersonalInfo;
+    (function (_PersonalInfo) {
+        class PersonalInfo extends Admin._SceneBase {
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnClose'), () => {
+                    this._closeScene();
+                });
+            }
+        }
+        _PersonalInfo.PersonalInfo = PersonalInfo;
+    })(_PersonalInfo || (_PersonalInfo = {}));
+
+    var _Ranking;
+    (function (_Ranking) {
+        class Ranking extends Admin._SceneBase {
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnClose'), () => {
+                    this._closeScene();
+                });
+            }
+        }
+        _Ranking.Ranking = Ranking;
+    })(_Ranking || (_Ranking = {}));
+    var _Ranking$1 = _Ranking.Ranking;
+
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
@@ -7722,6 +7800,8 @@
                 _MakePattern: _MakePattern,
                 _MakeUp: _MakeUp,
                 _DressingRoom: _DressingRoom,
+                _PersonalInfo: _PersonalInfo,
+                _Ranking: _Ranking,
             };
         }
     }

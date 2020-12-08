@@ -108,26 +108,28 @@ export module _MakePattern {
                 }));
             }));
         }
+
         EndCamera: Laya.Camera;
         /**渲染到大照片上*/
         photo(): void {
+            _Hanger.transform.localRotationEulerY = 180;
             this.EndCamera = _MainCamara.clone() as Laya.Camera;
             _Scene3D.addChild(this.EndCamera);
             this.EndCamera.transform.position = _MainCamara.transform.position;
             this.EndCamera.transform.localRotationEuler = _MainCamara.transform.localRotationEuler;
             //选择渲染目标为纹理
-            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('Test').width, this._SpriteVar('Test').height);
+            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
             //渲染顺序
             this.EndCamera.renderingOrder = -1;
             //清除标记
             this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
             var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
-            this._SpriteVar('Test').graphics.drawTexture(rtex);
-
+            this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
             TimerAdmin._frameOnce(10, this, () => {
-                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('Test').drawToCanvas(this._SpriteVar('Test').width, this._SpriteVar('Test').height, this._SpriteVar('Test').x, this._SpriteVar('Test').y);
+                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
                 let base64 = htmlCanvas1.toBase64("image/png", 1);
                 _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                this.EndCamera.destroy();
                 this._openScene('DressingRoom', true, true);
             })
         }

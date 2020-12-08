@@ -1555,7 +1555,7 @@ export module lwg {
          * @param {number} [zOrder] 指定层级，默认为最上层
          */
         export function _preLoadOpenScene(openName: string, closeName: string, func?: Function, zOrder?: number) {
-            _openScene(_SceneName.PreLoadCutIn, closeName);
+            _openScene(_SceneName.PreLoadCutIn, closeName, func);
             _PreLoadCutIn.openName = openName;
             _PreLoadCutIn.closeName = closeName;
             _PreLoadCutIn.func = func;
@@ -1572,7 +1572,29 @@ export module lwg {
             static _sceneNum: number = 1;
             /**当前打开场景放在最上面*/
             static _openZOderUp(): void {
-
+                if (SceneAnimation._closeSwitch) {
+                    let num = 0;
+                    for (const key in _SceneControl) {
+                        if (Object.prototype.hasOwnProperty.call(_SceneControl, key)) {
+                            const Scene = _SceneControl[key] as Laya.Scene;
+                            if (Scene.parent) {
+                                num++;
+                            }
+                        }
+                    }
+                    if (this._openScene) {
+                        this._openScene.zOrder = num;
+                        for (let index = 0; index < this._closeScene.length; index++) {
+                            const element = this._closeScene[index] as Laya.Scene;
+                            if (element) {
+                                element.zOrder = --num;
+                            } else {
+                                this._closeScene.splice(index, 1);
+                                index--;
+                            }
+                        }
+                    }
+                }
             };
             /**当前打开场景放在最上面,如果使用了关闭动画，必然关闭场景在上面*/
             static _closeZOderUP(CloseScene: Laya.Scene): void {
@@ -1610,6 +1632,7 @@ export module lwg {
                     } else {
                         console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                     }
+                    this._openZOderUp();
                     this._openFunc();
                 }
             };
@@ -2622,6 +2645,26 @@ export module lwg {
                     }
                 }
                 return this[`${classify}Arr`];
+            }
+
+            /**
+           * 获取某种品类中所有的对象
+           * @param {string} classify
+           * @memberof _Table
+           */
+            _getArrByPitchClassify(): Array<any> {
+                if (!this[`${this._pitchClassify}Arr`]) {
+                    this[`${this._pitchClassify}Arr`] = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == this._pitchClassify) {
+                                this[`${this._pitchClassify}Arr`].push(element);
+                            }
+                        }
+                    }
+                }
+                return this[`${this._pitchClassify}Arr`];
             }
 
             /**

@@ -31,16 +31,13 @@ export module _DressingRoom {
         lwgOnAwake(): void {
             _General._ins()._List = this._ListVar('List');
 
-            let arr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
-
+            let completeArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
             _MakeTailor._DIYClothes._ins()._List = this._ListVar('List');
-            _MakeTailor._DIYClothes._ins()._List.selectEnable = true;
-            _MakeTailor._DIYClothes._ins()._List.vScrollBarSkin = "";
-            _MakeTailor._DIYClothes._ins()._List.array = arr;
-            _MakeTailor._DIYClothes._ins()._List.renderHandler = new Laya.Handler(this, (Cell: Laya.Box, index: number) => {
+            _MakeTailor._DIYClothes._ins()._List.array = completeArr;
+            _MakeTailor._DIYClothes._ins()._listRender = (Cell: Laya.Box,) => {
                 let data = Cell.dataSource;
                 let Icon = Cell.getChildByName('Icon') as Laya.Image;
-                Icon.skin = arr[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
+                Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
                 let Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                 if (data[_MakeTailor._DIYClothes._ins()._property.pitch]) {
@@ -51,16 +48,15 @@ export module _DressingRoom {
                 if (!Cell.getComponent(_Item)) {
                     Cell.addComponent(_Item)
                 }
-            });
-
+            }
             _MakeTailor._DIYClothes._ins()._Tap = this._ListVar('Tap');
         }
-
         lwgAdaptive(): void {
             this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
         }
 
         lwgOnStart(): void {
+            
         }
 
         lwgButton(): void {

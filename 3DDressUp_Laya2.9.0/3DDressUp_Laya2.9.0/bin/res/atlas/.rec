@@ -163,58 +163,128 @@ R 9B501DC8 chijinbi.wav
 R E23D09D2 guoguan.wav
 R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
-D Game/UI/01_Repertory
+D Game/UI/01Repertory
 D Game/UI/Clothes
 D Game/UI/Common
+P E2CF8689 anniu_fen.png
+P 7CF45948 anniu_huang.png
+P AED86253 anniu_lan.png
+P C3D29617 anniu_lv.png
+P AA944232 chongzhi.png
+R D4AC3F2C di.png
+P 39362E37 dibuzhezhao.png
+R 255CF98B dikuang.png
+P BA88A1FE duihao.png
+P 01BB0212 fanhuiL.png
+P CA7B7BF1 fanhuiR.png
+P 6F9D23B6 guanbi.png
+R D7DFF281 kuang.png
+P 4B7D562D kuang_bai.png
+P 09B84E03 kuang_fen.png
+P CD4C3CFC shouye.png
+P 543D5896 xuanzhong.png
+P F9C91A64 zan.png
 D Game/UI/Design
-R FD466C26 星星路径特效路径.png
-D Game/UI/MakeClothes
-P 52EBDA90 diy_bottom_.png
-P 128C1138 dotted1.png
-P C1672203 dotted2.png
-R 0EC648AF figure_01.png
-P EECEFDEC figure_01Btn.png
-R 14810733 figure_02.png
-P 8A5E76E4 figure_02Btn.png
-R 764CE028 figure_03.png
-P 250B376A figure_03Btn.png
-P 55073C7A Front01.png
-P 3B8831C6 Front02.png
-P 15FC383B qunzi22.png
-P D705687D Reverse01.png
-P DBE43370 Reverse02.png
+R FD466C26 aixinlujing.png
+R 52B9AFC7 Draw.png
+R 106FA300 PersonalInfo.png
+R 5285B5BA ranking.png
+R 4CF40459 zhujiem.png
+R 39955A95 选择衣服.png
+D Game/UI/Draw
+P E3FBDD3B w_cheng.png
+P 40B77733 w_fen.png
+P 60F67D9B w_hong.png
+P 5A98AB51 w_huang.png
+P 6E68A7A0 w_meihong.png
+P 0C35C883 w_qing.png
+P 70AB88B3 w_zi.png
+P ABF67071 x_cheng.png
+P 3C5EECE1 x_fen.png
+P 48DAC4EC x_hong.png
+P A393CC87 x_huang.png
+P 1A1AC48A x_meihong.png
+P 2EE0A095 x_qing.png
+P 25109400 x_zi.png
+P E996F255 you.png
+P 91745C3A zuo.png
+D Game/UI/DressingRoom
+D Game/UI/MakePattern
+P E996F255 you.png
+P 91745C3A zuo.png
+D Game/UI/MakeTailor
+P 511CC254 dotted1.png
 P 82029C53 scissors_01.png
 P 9131BB5C scissors_02.png
-D Game/UI/MakePattern
 D Game/UI/MakeUp
 P BE0A7AAD detailnormal_003_n.png
+D Game/UI/PersonalInfo
+P 5A529E09 bianji.png
+P E7A4BBB1 ding.png
+P 138652A9 gerenziliao.png
+P C710F8C0 neikuang.png
+P 449CEC73 paihangbang.png
+P C895322D touxiangdi.png
+P 866D1416 touxiangkuang.png
+P AF04FD72 xingming.png
+P CDB2F1EF zan.png
+R 080867C2 zhi.png
 D Game/UI/PreLoad
+D Game/UI/Ranking
+P 350815D6 choudai.png
+R 95EFBA66 dibuzhezhao.png
+R 265AFECD juxing.png
+R F360B741 kuang2.png
+P 901E5357 paihangbang.png
+P EE8C00C6 paiming.png
+P 590A2762 renqizhi.png
+P 116FBB7F touxiang.png
+R 5D2BE64E w_di.png
+R 08D0EECE x_di.png
+P D96724AA zuozhe.png
 D Game/UI/Start
-D Game/UI/01_Repertory/AdsHint
-D Game/UI/01_Repertory/Card
-D Game/UI/01_Repertory/CheckIn
-D Game/UI/01_Repertory/Common
-D Game/UI/01_Repertory/Compound
-D Game/UI/01_Repertory/Defeated
-D Game/UI/01_Repertory/DesignPic
-D Game/UI/01_Repertory/DrawCard
-D Game/UI/01_Repertory/Game
-D Game/UI/01_Repertory/MakeClothes
-D Game/UI/01_Repertory/PreLoad
-D Game/UI/01_Repertory/PropTry
-D Game/UI/01_Repertory/Resurgence
-D Game/UI/01_Repertory/SelectLevel
-D Game/UI/01_Repertory/Set
-D Game/UI/01_Repertory/Settle
-D Game/UI/01_Repertory/Share
-D Game/UI/01_Repertory/Shop
-D Game/UI/01_Repertory/Skin
-D Game/UI/01_Repertory/SkinQualified
-D Game/UI/01_Repertory/Special
-D Game/UI/01_Repertory/Start
-D Game/UI/01_Repertory/Task
-D Game/UI/01_Repertory/Victory
-D Game/UI/01_Repertory/VictoryBox
+P 6D159C0F hudong.png
+P 84BC9469 jiantou.png
+P B9D144A7 jiantoufa.png
+P 3AD2C5AB kuang.png
+P 114D5F98 lianyiqun.png
+P 2C31AD34 paihangbang.png
+P 4924C244 qipao_fen.png
+P ADBE972B qipao_lan.png
+P 1400CDD9 shiyifu.png
+P 15A0C390 touxiang_shang.png
+P 1209F5A9 touxiang_xia.png
+P 2C8FC459 touxiangkuang.png
+P 435B2DB3 w_biankuang.png
+P 566B10AF wangye.png
+P C6F8FE16 x_biankuang.png
+P 8A1A4460 xiazhuang.png
+P B9D54275 yifu.png
+D Game/UI/01Repertory/AdsHint
+D Game/UI/01Repertory/Card
+D Game/UI/01Repertory/CheckIn
+D Game/UI/01Repertory/Common
+D Game/UI/01Repertory/Compound
+D Game/UI/01Repertory/Defeated
+D Game/UI/01Repertory/DesignPic
+D Game/UI/01Repertory/DrawCard
+D Game/UI/01Repertory/Game
+D Game/UI/01Repertory/MakeClothes
+D Game/UI/01Repertory/PreLoad
+D Game/UI/01Repertory/PropTry
+D Game/UI/01Repertory/Resurgence
+D Game/UI/01Repertory/SelectLevel
+D Game/UI/01Repertory/Set
+D Game/UI/01Repertory/Settle
+D Game/UI/01Repertory/Share
+D Game/UI/01Repertory/Shop
+D Game/UI/01Repertory/Skin
+D Game/UI/01Repertory/SkinQualified
+D Game/UI/01Repertory/Special
+D Game/UI/01Repertory/Start
+D Game/UI/01Repertory/Task
+D Game/UI/01Repertory/Victory
+D Game/UI/01Repertory/VictoryBox
 D Game/UI/Clothes/Icon
 P B9E46B78 diy_bottom_001_final.png
 P 0542B40D diy_bottom_002_final.png
@@ -239,113 +309,40 @@ P F7C4DDEA diy_top_004_final.png
 P E2351576 diy_top_005_final.png
 P 2299F5DF diy_top_006_final.png
 P 72ABC1D3 diy_top_007_final.png
-D Game/UI/MakeClothes/diy_bottom_003_final
-R 25AD2313 q.png
-R DEFC7498 q1.png
-R 9AC29CEE s1.png
-R DD26E45A x1.png
-D Game/UI/MakeClothes/diy_bottom_006_final
-R EB175528 q.png
-R 5F3A0686 q1.png
-P A6FAA430 s1.png
-P 56FF22C7 s2.png
-P 47942BB5 x1.png
-P EF967B41 x2.png
-D Game/UI/MakeClothes/diy_dress_001_final
-R 97A8E227 1.png
-R 6571108F p.png
-P E0B7B0FC s1.png
-P 75A99747 s2.png
-P 0CA17FF2 s3.png
-P 63204EB8 x1.png
-P 86FE1C66 x2.png
-P A9B958BA x3.png
-D Game/UI/MakeClothes/diy_dress_003_final
-R 954F8541 p.png
-R B8FF0F17 p1.png
-P A5AF9920 s1.png
-P B0B99934 s2.png
-P BA038986 s3.png
-P 7D63D3BA s4.png
-P A4FB908F s5.png
-P EFABC923 s6.png
-P 1835369B s7.png
-P 8B6662DC s8.png
-P 096C2F48 s9.png
-P 21F903AC x1.png
-P E822C004 x2.png
-P 55AF0EC9 x3.png
-P E32BD77F x4.png
-P 05211C39 x5.png
-P D05ECD6C x6.png
-P 5B2F15DC x7.png
-P 49DCAD2B x8.png
-P 5F901462 x9.png
-D Game/UI/MakeClothes/diy_dress_006_final
-R BCD14E4C q.png
-R 18E5162A q1.png
-P 97AC2CE1 s1.png
-P 059C0CD2 s2.png
-P 2BF40B7F s3.png
-P 218636C6 s4.png
-P 26C7D504 x1.png
-P C35D2659 x2.png
-P 06162A1F x3.png
-P DBE7BBA4 x4.png
-D Game/UI/MakeClothes/diy_dress_008_final
-R 2B4161AF p.png
-R 53584E6D p1.png
-P A62240D1 s1.png
-P 1152966E s2.png
-P BFC22727 s3.png
-P 6261E0DF s4.png
-P FDABBDA4 s5.png
-P A2067E7D s6.png
-P 9ED5824F x1.png
-P BD7BB4CC x2.png
-P CEDCC727 x3.png
-P FCBD56F6 x4.png
-P 9C7A824C x5.png
-P 112C87C0 x6.png
-D Game/UI/MakeClothes/diy_top_005_final
-R 01075A84 q.png
-R C892FAC9 q1.png
-P BB2E2225 s1.png
-P FDE8869D s3.png
-P 40D1A9F0 s4.png
-P 33C9ABEA s5-2.png
-P 06FAA49A s5.png
-P 04E2352B x1.png
-P 0C613FF7 x2.png
-P FA458C73 x3.png
-P B17D8C66 x4.png
-P 70B20960 x5.png
-D Game/UI/MakeClothes/diy_top_006_final
-R 7F75C67B q.png
-R BE4C108B q1.png
-P 7327C033 s1.png
-P 880448D4 s2.png
-P 4E6F236A s3.png
-R ABA6FA63 s4.png
-P 067F3CA7 x1.png
-P 3B7503D6 x2.png
-P 7F60E245 x3.png
-P 219742AE x4.png
-D Game/UI/MakeClothes/diy_top_007_final
-R 59FDA200 p.png
-R 9AA529FA p1.png
-P 563FD49B s1.png
-P F5BBCAB0 s2.png
-P E293DBEA s3.png
-P 85455BBE s4.png
-P F21BAF51 s5.png
-P 653CFEEE s6.png
-P 82B912EE x1.png
-P E737881B x2.png
-P AE8BA501 x3.png
-P 5222D989 x4.png
-P A9AF380E x5.png
-P 343BD2C8 x6.png
+D Game/UI/DressingRoom/ClassIcon
+P 56BC7299 w_fengrenji.png
+P BC97B522 w_gaogenxie.png
+P F6EE425F w_hudiejie.png
+P 0A1D0834 w_kouzhao.png
+P 7905DDFA w_lianyiqun.png
+P 55D7C392 w_qunzi.png
+P 4B7FF19A w_yifu.png
+P A0180AD7 x_fengrenji.png
+P 7882721D x_gaogenxie.png
+P D951D364 x_hudiejie.png
+P 9E11AED2 x_kouzhao.png
+P 355E6DBB x_lianyiqun.png
+P FFEFF202 x_qunzi.png
+P 3B711D8D x_yifu.png
+D Game/UI/DressingRoom/Icon
+P 1094274A bottom_001.png
+P 5D36F10B bottom_002.png
+P 5EFAC5B3 bottom_003.png
+P 721F757C bottom_004.png
+P 3E72B1F5 bottom_005.png
+P B650725B bottom_006.png
+P 38E32CE4 dress_001.png
+P 36B157A2 dress_002.png
+P C6640039 dress_003.png
+P 625ABB89 dress_004.png
+P 9811290A dress_005.png
+P 8BA36AF2 dress_006.png
+P 6D5B4D9C top_001.png
+P 18425899 top_002.png
+P AAF4DE71 top_003.png
+P 7B3B27C4 top_004.png
+P 07F5143B top_005.png
+P 07686408 top_006.png
 D Game/UI/MakePattern/basic
 P 52EBDA90 diy_bottom_001_basic.png
 P 98CA3111 diy_bottom_002_basic.png
@@ -384,3 +381,122 @@ P 0EC648AF pattern5.png
 P 0EC648AF pattern5_icon.png
 P 764CE028 pattern6.png
 P 764CE028 pattern6_icon.png
+D Game/UI/MakePattern/Pattern
+P 428D9D49 tuan1.png
+P 3049515E tuan2.png
+P 11FB32F1 tuan3.png
+P 54CBEB13 tuan4.png
+P 14E65103 tuan5.png
+D Game/UI/MakePattern/PatternIcon
+P 428D9D49 tuan1.png
+P 3049515E tuan2.png
+P 11FB32F1 tuan3.png
+P 54CBEB13 tuan4.png
+P 14E65103 tuan5.png
+D Game/UI/MakeTailor/diy_bottom_003_final
+R 25AD2313 q.png
+R DEFC7498 q1.png
+R 9AC29CEE s1.png
+R DD26E45A x1.png
+D Game/UI/MakeTailor/diy_bottom_006_final
+R EB175528 q.png
+R 5F3A0686 q1.png
+P A6FAA430 s1.png
+P 56FF22C7 s2.png
+P 47942BB5 x1.png
+P EF967B41 x2.png
+D Game/UI/MakeTailor/diy_dress_001_final
+R 97A8E227 1.png
+R 6571108F p.png
+P E0B7B0FC s1.png
+P 75A99747 s2.png
+P 0CA17FF2 s3.png
+P 63204EB8 x1.png
+P 86FE1C66 x2.png
+P A9B958BA x3.png
+D Game/UI/MakeTailor/diy_dress_003_final
+R 954F8541 p.png
+R B8FF0F17 p1.png
+P A5AF9920 s1.png
+P B0B99934 s2.png
+P BA038986 s3.png
+P 7D63D3BA s4.png
+P A4FB908F s5.png
+P EFABC923 s6.png
+P 1835369B s7.png
+P 8B6662DC s8.png
+P 096C2F48 s9.png
+P 21F903AC x1.png
+P E822C004 x2.png
+P 55AF0EC9 x3.png
+P E32BD77F x4.png
+P 05211C39 x5.png
+P D05ECD6C x6.png
+P 5B2F15DC x7.png
+P 49DCAD2B x8.png
+P 5F901462 x9.png
+D Game/UI/MakeTailor/diy_dress_006_final
+R BCD14E4C q.png
+R 18E5162A q1.png
+P 97AC2CE1 s1.png
+P 059C0CD2 s2.png
+P 2BF40B7F s3.png
+P 218636C6 s4.png
+P 26C7D504 x1.png
+P C35D2659 x2.png
+P 06162A1F x3.png
+P DBE7BBA4 x4.png
+D Game/UI/MakeTailor/diy_dress_008_final
+R 2B4161AF p.png
+R 53584E6D p1.png
+P A62240D1 s1.png
+P 1152966E s2.png
+P BFC22727 s3.png
+P 6261E0DF s4.png
+P FDABBDA4 s5.png
+P A2067E7D s6.png
+P 9ED5824F x1.png
+P BD7BB4CC x2.png
+P CEDCC727 x3.png
+P FCBD56F6 x4.png
+P 9C7A824C x5.png
+P 112C87C0 x6.png
+D Game/UI/MakeTailor/diy_top_005_final
+R 01075A84 q.png
+R C892FAC9 q1.png
+P BB2E2225 s1.png
+P FDE8869D s3.png
+P 40D1A9F0 s4.png
+P 33C9ABEA s5-2.png
+P 06FAA49A s5.png
+P 04E2352B x1.png
+P 0C613FF7 x2.png
+P FA458C73 x3.png
+P B17D8C66 x4.png
+P 70B20960 x5.png
+D Game/UI/MakeTailor/diy_top_006_final
+R 7F75C67B q.png
+R BE4C108B q1.png
+P 7327C033 s1.png
+P 880448D4 s2.png
+P 4E6F236A s3.png
+R ABA6FA63 s4.png
+P 067F3CA7 x1.png
+P 3B7503D6 x2.png
+P 7F60E245 x3.png
+P 219742AE x4.png
+D Game/UI/MakeTailor/diy_top_007_final
+R 59FDA200 p.png
+R 9AA529FA p1.png
+P 563FD49B s1.png
+P F5BBCAB0 s2.png
+P E293DBEA s3.png
+P 85455BBE s4.png
+P F21BAF51 s5.png
+P 653CFEEE s6.png
+P 82B912EE x1.png
+P E737881B x2.png
+P AE8BA501 x3.png
+P 5222D989 x4.png
+P A9AF380E x5.png
+P 343BD2C8 x6.png

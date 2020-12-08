@@ -20,13 +20,7 @@ export module _MakeTailor {
         static _ins() {
             if (!this.ins) {
                 this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
-                console.log(this.ins._arr);
                 //设置初始值
-                this.ins._pitchClassify = this.ins._classify.Dress;
-                this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
-                if (!this.ins._pitchName) {
-                    this.ins._pitchName = this.ins._arr[0][this.ins._property.name];
-                }
             }
             return this.ins;
         };
@@ -264,11 +258,11 @@ export module _MakeTailor {
     /**剪刀*/
     class _Scissor extends Admin._ObjectBase {
         lwgOnAwake(): void {
-            this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
+            this._Owner.pos(this.Ani.vanishP.x, this.Ani.vanishP.y);
         }
         /**动画控制*/
         Ani = {
-            vnishP: new Laya.Point(Laya.stage.width + 500, 0),
+            vanishP: new Laya.Point(Laya.stage.width + 500, 0),
             shearSpeed: 3,
             range: 40,
             dir: 'up',
@@ -331,7 +325,7 @@ export module _MakeTailor {
                             Animation2D.move_rotate(this._Owner, Tools._Number.randomOneHalf() == 0 ? 720 : -720, new Laya.Point(this._Owner.x + disX, this._Owner.y + disY), time, delay, () => {
                                 func && func();
                                 this._Owner.rotation = 0;
-                                this._Owner.pos(this.Ani.vnishP.x, this.Ani.vnishP.y);
+                                this._Owner.pos(this.Ani.vanishP.x, this.Ani.vanishP.y);
                             });
                         });
                     })
@@ -426,6 +420,8 @@ export module _MakeTailor {
         lwgOnAwake(): void {
             this._ImgVar('Scissor').addComponent(_Scissor);
             _DIYClothes._ins()._List = this._ListVar('List');
+            _DIYClothes._ins()._List.array = _DIYClothes._ins()._getArrByPitchClassify();
+            _DIYClothes._ins()._pitchName = _DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name];
             _DIYClothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
