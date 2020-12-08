@@ -2406,6 +2406,8 @@ export module lwg {
                 getAward: 'getAward',
                 pitch: 'pitch',
             };
+            /**其他属性重写添加*/
+            _otherPro: any;
             /**解锁方式*/
             _unlockWay = {
                 ads: 'ads',
@@ -2450,17 +2452,15 @@ export module lwg {
             /**
              * @param {string} tableName 在本地存储的名称
              * @param {Array<any>} arrUrl 数据表地址
-             * @param addPro 新增的表格属性
              * @param localStorage 是否存储在本地
-             * @param proName 通过这个属性名称，检索一次每个对象，是一个所有对象都存在的属性名称，默认为'name'
              * @param lastVtableName 如果表格发生改变，对比上个版本的数据表将一些成果继承赋值
              */
-            constructor(tableName?: string, arrUrl?: string, localStorage?: boolean, proName?: string, lastVtableName?: string) {
+            constructor(tableName?: string, arrUrl?: string, localStorage?: boolean, lastVtableName?: string) {
                 if (tableName) {
                     this._tableName = tableName;
                     if (localStorage) {
                         this._localStorage = localStorage;
-                        this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
+                        this._arr = _jsonCompare(arrUrl, tableName, this._property.name);
                         if (lastVtableName) {
                             this._compareLastInfor(lastVtableName);
                         }
@@ -2562,6 +2562,19 @@ export module lwg {
             };
 
             /**
+             * 设置被选中的某个属性的值
+             * @param {string} name 名称
+             * @param {string} pro 属性名
+             * @param {any} value 属性值
+            */
+            _setPitchProperty(pro: string, value: any): any {
+                const obj = this._getPitchObj();
+                obj[pro] = value;
+                this._refreshAndStorage();
+                return value;
+            };
+
+            /**
              * 通过一个属性和值随机出一个对象,用于从某个品类中随机获取一个对象
              * @param {string} [pro] 属性名如果不输入则从表中有此属性的对象中盲选一个。
              * @param {*} [value] 属性值默认为null
@@ -2612,7 +2625,7 @@ export module lwg {
             }
 
             /**
-             * 通过某个属性名称和值获取所有复合条件的属性，可以查找出某种品类
+             * 通过某个属性名称和值获取所有复合条件的属性，可以查找出已获得
              * @param {string} proName 属性名
              * @param {*} value 值
              * @memberof _DataTable
@@ -2623,6 +2636,25 @@ export module lwg {
                     if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                         const element = this._arr[key];
                         if (element[proName] && element[proName] == value) {
+                            arr.push(element);
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            /**
+            * 通过某个属性名称和值获取所有不复合条件的属性，可以查找出已获得
+            * @param {string} proName 属性名
+            * @param {*} value 值
+            * @memberof _DataTable
+            */
+            _getNoPropertyArr(proName: string, value: any): Array<any> {
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName] && element[proName] !== value) {
                             arr.push(element);
                         }
                     }
@@ -2709,7 +2741,7 @@ export module lwg {
                 if (this._List) {
                     this._List.refresh();
                 }
-                this._lastPitchClassify = this[`${this._tableName}/pitchClassify`];
+                this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                 this[`${this._tableName}/pitchClassify`] = str;
                 if (this._localStorage) {
                     Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
@@ -2755,7 +2787,7 @@ export module lwg {
                     this._List.refresh();
                 }
                 this[`${this._tableName}/_lastPitchClassify`] = str;
-                if (this._localStorage) {
+                if (this._localStorage && str) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
                 }
             };
@@ -2774,7 +2806,7 @@ export module lwg {
             }
             set _lastPitchName(str: string) {
                 this[`${this._tableName}/_lastPitchName`] = str;
-                if (this._localStorage) {
+                if (this._localStorage && str) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`, str.toString());
                 }
             };

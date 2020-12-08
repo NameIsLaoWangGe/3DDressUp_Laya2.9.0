@@ -114,8 +114,12 @@ export module _Res {
         },
 
         json: {
-            Clothes: {
-                url: `_LwgData/_DressingRoom/Clothes.json`,
+            GeneralClothes: {
+                url: `_LwgData/_DressingRoom/GeneralClothes.json`,
+                data: new Array,
+            },
+            DIYClothes: {
+                url: `_LwgData/_DressingRoom/DIYClothes.json`,
                 data: new Array,
             },
             MakePattern: {

@@ -42,8 +42,8 @@ export module _PreLoadCutIn {
                             Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                             break;
                         case 'MakeTailor':
-                            _MakeTailor._Clothes._ins().ClothesArr = null;
-                            _MakeTailor._Clothes._ins().getClothesArr();
+                            _MakeTailor._DIYClothes._ins().ClothesArr = null;
+                            _MakeTailor._DIYClothes._ins().getClothesArr();
                             break;
                         case 'Start':
                             this.backStart();

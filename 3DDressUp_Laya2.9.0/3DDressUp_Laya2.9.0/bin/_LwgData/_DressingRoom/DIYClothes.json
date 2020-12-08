@@ -21,7 +21,9 @@
       1
     ],
     "pitch": true,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 2,
@@ -43,7 +45,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 3,
@@ -65,7 +69,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 4,
@@ -87,7 +93,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 1,
@@ -109,7 +117,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 2,
@@ -131,7 +141,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 3,
@@ -153,7 +165,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 1,
@@ -175,7 +189,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   },
   {
     "index": 2,
@@ -197,7 +213,9 @@
       1
     ],
     "pitch": false,
-    "reach": true
+    "reach": true,
+    "completeSkin": "",
+    "diffY": 0
   }
 ]
 }

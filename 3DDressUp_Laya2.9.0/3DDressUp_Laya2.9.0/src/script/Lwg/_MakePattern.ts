@@ -99,13 +99,12 @@ export module _MakePattern {
                 _Scene3D.getComponent(MakeClothes3D).lwgOnStart();
             }
 
-            let clothesName = _MakeTailor._Clothes._ins()._pitchName;
+            let clothesName = _MakeTailor._DIYClothes._ins()._pitchName;
             const name0 = clothesName.substr(0, clothesName.length - 5);
             this._ImgVar('Front').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
                 this._ImgVar('Reverse').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
                     EventAdmin._notify(_Event.remake, this.Tex.getTex());
                     EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
-                    this.photo();
                 }));
             }));
         }
@@ -124,9 +123,14 @@ export module _MakePattern {
             this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
             var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
             this._SpriteVar('Test').graphics.drawTexture(rtex);
+
+            TimerAdmin._frameOnce(10, this, () => {
+                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('Test').drawToCanvas(this._SpriteVar('Test').width, this._SpriteVar('Test').height, this._SpriteVar('Test').x, this._SpriteVar('Test').y);
+                let base64 = htmlCanvas1.toBase64("image/png", 1);
+                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                this._openScene('DressingRoom', true, true);
+            })
         }
-
-
 
         lwgEvent(): void {
             this._evReg(_Event.createImg, (name: string, gPoint: Laya.Point) => {
@@ -136,7 +140,7 @@ export module _MakePattern {
 
             this._evReg(_Event.close, () => {
                 if (this.Tex.checkInside()) {
-                    this.Tex.restore()
+                    this.Tex.restore();
                 } else {
                     this.Tex.close();
                 }
@@ -458,7 +462,8 @@ export module _MakePattern {
                     this.UI.btnBackVinish();
                     this.UI.btnRollbackVinish();
                     this.UI.btnAgainVinish(() => {
-                        this._openScene('DressingRoom', true, true);
+                        this.photo();
+
                     });
                 }, 200);
             }
@@ -536,10 +541,10 @@ export module _MakePattern {
             this._evReg(_Event.remake, () => {
                 _HangerP = this._Child('HangerP');
                 _Role = _Scene3D.getChildByName('Role') as Laya.MeshSprite3D;
-                const Classify = _Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify) as Laya.MeshSprite3D;
+                const Classify = _Role.getChildByName(_MakeTailor._DIYClothes._ins()._pitchClassify) as Laya.MeshSprite3D;
                 Tools._Node.showExcludedChild3D(_Role, [Classify.name]);
 
-                _Hanger = Classify.getChildByName(_MakeTailor._Clothes._ins()._pitchName) as Laya.MeshSprite3D;
+                _Hanger = Classify.getChildByName(_MakeTailor._DIYClothes._ins()._pitchName) as Laya.MeshSprite3D;
                 Tools._Node.showExcludedChild3D(Classify, [_Hanger.name]);
 
                 _Hanger.transform.localRotationEulerY = 180;

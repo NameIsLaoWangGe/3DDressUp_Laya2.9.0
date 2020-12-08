@@ -15,11 +15,11 @@ export module _MakeTailor {
     }
 
     /**服装总数据数据*/
-    export class _Clothes extends DataAdmin._Table {
-        private static ins: _Clothes;
+    export class _DIYClothes extends DataAdmin._Table {
+        private static ins: _DIYClothes;
         static _ins() {
             if (!this.ins) {
-                this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
                 console.log(this.ins._arr);
                 //设置初始值
                 this.ins._pitchClassify = this.ins._classify.Dress;
@@ -37,6 +37,7 @@ export module _MakeTailor {
         };
         _otherPro = {
             color: 'color',
+            completeSkin: 'completeSkin'
         };
         _getColor(): Array<any> {
             let obj = this._getPitchObj();
@@ -48,7 +49,7 @@ export module _MakeTailor {
         getClothesArr(): Array<any> {
             if (!this.ClothesArr) {
                 this.ClothesArr = [];
-                const dataArr = _Clothes._ins()._arr;
+                const dataArr = _DIYClothes._ins()._arr;
                 for (let index = 0; index < dataArr.length; index++) {
                     let CloBox = this.createClothes(`${dataArr[index]['name']}`);
                     this.ClothesArr.push(CloBox);
@@ -88,13 +89,13 @@ export module _MakeTailor {
 
         /**本关重来*/
         again(Scene: Laya.Scene): void {
-            const clothesArr = _Clothes._ins().getClothesArr();
-            const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+            const clothesArr = _DIYClothes._ins().getClothesArr();
+            const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
                     this.LastClothes = element;
-                    clothesArr[index] = this.Clothes = _Clothes._ins().createClothes(name, Scene);
+                    clothesArr[index] = this.Clothes = _DIYClothes._ins().createClothes(name, Scene);
                     this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
                     this.setData();
                 }
@@ -116,15 +117,15 @@ export module _MakeTailor {
         LineParent: Laya.Image;
         /**更换服装*/
         changeClothes(Scene: Laya.Scene): void {
-            const clothesArr = _Clothes._ins().getClothesArr();
-            const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
-            const lastName = _Clothes._ins()._lastPitchName;
+            const clothesArr = _DIYClothes._ins().getClothesArr();
+            const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
+            const lastName = _DIYClothes._ins()._lastPitchName;
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
                 if (element.name == name) {
                     element.removeSelf();
                     // 重新创建一个，否则可能会导致碰撞框位置不正确
-                    this.Clothes = clothesArr[index] = _Clothes._ins().createClothes(name, Scene);
+                    this.Clothes = clothesArr[index] = _DIYClothes._ins().createClothes(name, Scene);
                     this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
                     this.setData();
                 } else if (element.name == lastName) {
@@ -359,8 +360,8 @@ export module _MakeTailor {
             },
             effcts: () => {
                 const num = Tools._Number.randomOneInt(3, 6);
-                const color1 = _Clothes._ins()._getColor()[0];
-                const color2 = _Clothes._ins()._getColor()[1];
+                const color1 = _DIYClothes._ins()._getColor()[0];
+                const color2 = _DIYClothes._ins()._getColor()[1];
                 const color = Tools._Number.randomOneHalf() === 0 ? color1 : color2;
                 for (let index = 0; index < num; index++) {
                     Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], [color1, color2], [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
@@ -413,8 +414,8 @@ export module _MakeTailor {
         lwgButton(): void {
             this._btnUp(this._Owner, () => {
                 console.log('换装！')
-                if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
-                    _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
+                if (this._Owner['_dataSource']['name'] !== _DIYClothes._ins()._pitchName) {
+                    _DIYClothes._ins()._setPitch(this._Owner['_dataSource']['name']);
                     this._evNotify(_Event.changeClothes);
                 }
             }, 'no')
@@ -424,14 +425,14 @@ export module _MakeTailor {
     export class MakeTailor extends Admin._SceneBase {
         lwgOnAwake(): void {
             this._ImgVar('Scissor').addComponent(_Scissor);
-            _Clothes._ins()._List = this._ListVar('List');
-            _Clothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
+            _DIYClothes._ins()._List = this._ListVar('List');
+            _DIYClothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
                 Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
                 const Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                if (data[_Clothes._ins()._property.pitch]) {
+                if (data[_DIYClothes._ins()._property.pitch]) {
                     Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
                 } else {
                     Board.skin = `Lwg/UI/ui_orthogon_grass.png`;

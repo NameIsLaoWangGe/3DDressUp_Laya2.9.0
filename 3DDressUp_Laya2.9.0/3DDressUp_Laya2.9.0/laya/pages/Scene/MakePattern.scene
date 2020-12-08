@@ -17,7 +17,7 @@
         }],
     "props":{"width":1280,"sceneColor":"#a4a4a4","height":720},
     "nodeParent":-1,
-    "maxID":800,
+    "maxID":801,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -25,6 +25,20 @@
     "hasChild":true,
     "compId":2,
     "child":[
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,Test,Test",
+            "props":{"zOrder":0,"y":0,"x":0,"width":1280,"visible":false,"var":"Test","name":"Test","height":720},
+            "nodeParent":2,
+            "label":"Test",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":799,
+            "child":[
+                ]
+        },
         {
             "x":15,
             "type":"Sprite",
@@ -154,14 +168,13 @@
             "props":{"zOrder":35,"y":0,"x":0,"width":512,"visible":false,"var":"Ultimately","scaleY":1,"scaleX":1,"name":"Ultimately","height":512},
             "nodeParent":2,
             "label":"Ultimately",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":10,
             "child":[
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Front,Front",
                     "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakeClothes/diy_bottom_.png","scaleY":-1,"name":"Front","height":512},
@@ -176,7 +189,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,Reverse,Reverse",
                     "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakePattern/basic/diy_bottom_001_basic.png","scaleY":-1,"name":"Reverse","height":512},
@@ -399,20 +411,6 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":25,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Sprite",
-            "searchKey":"Sprite,Test,Test",
-            "props":{"zOrder":100,"y":178,"x":26,"width":640,"var":"Test","texture":"Game/UI/MakePattern/basic/diy_bottom_002_basic.png","name":"Test","height":470},
-            "nodeParent":2,
-            "label":"Test",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":799,
             "child":[
                 ]
         }],

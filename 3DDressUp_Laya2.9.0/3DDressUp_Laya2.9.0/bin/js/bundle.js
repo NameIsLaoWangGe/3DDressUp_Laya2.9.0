@@ -1989,7 +1989,7 @@
         let DataAdmin;
         (function (DataAdmin) {
             class _Table {
-                constructor(tableName, arrUrl, localStorage, proName, lastVtableName) {
+                constructor(tableName, arrUrl, localStorage, lastVtableName) {
                     this._property = {
                         name: 'name',
                         chName: 'chName',
@@ -2016,7 +2016,7 @@
                         this._tableName = tableName;
                         if (localStorage) {
                             this._localStorage = localStorage;
-                            this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
+                            this._arr = _jsonCompare(arrUrl, tableName, this._property.name);
                             if (lastVtableName) {
                                 this._compareLastInfor(lastVtableName);
                             }
@@ -2113,6 +2113,13 @@
                     return value;
                 }
                 ;
+                _setPitchProperty(pro, value) {
+                    const obj = this._getPitchObj();
+                    obj[pro] = value;
+                    this._refreshAndStorage();
+                    return value;
+                }
+                ;
                 _randomOne(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
@@ -2158,6 +2165,18 @@
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                             const element = this._arr[key];
                             if (element[proName] && element[proName] == value) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getNoPropertyArr(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] && element[proName] !== value) {
                                 arr.push(element);
                             }
                         }
@@ -2232,7 +2251,7 @@
                     if (this._List) {
                         this._List.refresh();
                     }
-                    this._lastPitchClassify = this[`${this._tableName}/pitchClassify`];
+                    this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                     this[`${this._tableName}/pitchClassify`] = str;
                     if (this._localStorage) {
                         Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
@@ -2283,7 +2302,7 @@
                         this._List.refresh();
                     }
                     this[`${this._tableName}/_lastPitchClassify`] = str;
-                    if (this._localStorage) {
+                    if (this._localStorage && str) {
                         Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
                     }
                 }
@@ -2303,7 +2322,7 @@
                 }
                 set _lastPitchName(str) {
                     this[`${this._tableName}/_lastPitchName`] = str;
-                    if (this._localStorage) {
+                    if (this._localStorage && str) {
                         Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`, str.toString());
                     }
                 }
@@ -5970,8 +5989,12 @@
                 MakePattern: `Scene/${'MakePattern'}.json`,
             },
             json: {
-                Clothes: {
-                    url: `_LwgData/_DressingRoom/Clothes.json`,
+                GeneralClothes: {
+                    url: `_LwgData/_DressingRoom/GeneralClothes.json`,
+                    data: new Array,
+                },
+                DIYClothes: {
+                    url: `_LwgData/_DressingRoom/DIYClothes.json`,
                     data: new Array,
                 },
                 MakePattern: {
@@ -6014,7 +6037,7 @@
             _Event["scissorAgain"] = "_MakeTailor_scissorSitu";
             _Event["scissorRemove"] = "_MakeTailor_scissorRemove";
         })(_Event = _MakeTailor._Event || (_MakeTailor._Event = {}));
-        class _Clothes extends DataAdmin._Table {
+        class _DIYClothes extends DataAdmin._Table {
             constructor() {
                 super(...arguments);
                 this._classify = {
@@ -6024,11 +6047,12 @@
                 };
                 this._otherPro = {
                     color: 'color',
+                    completeSkin: 'completeSkin'
                 };
             }
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _Clothes('DIY_Data', _Res._list.json.Clothes.url);
+                    this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
                     console.log(this.ins._arr);
                     this.ins._pitchClassify = this.ins._classify.Dress;
                     this.ins._arr = this.ins._getArrByClassify(this.ins._pitchClassify);
@@ -6046,7 +6070,7 @@
             getClothesArr() {
                 if (!this.ClothesArr) {
                     this.ClothesArr = [];
-                    const dataArr = _Clothes._ins()._arr;
+                    const dataArr = _DIYClothes._ins()._arr;
                     for (let index = 0; index < dataArr.length; index++) {
                         let CloBox = this.createClothes(`${dataArr[index]['name']}`);
                         this.ClothesArr.push(CloBox);
@@ -6072,7 +6096,7 @@
                 return CloBox;
             }
         }
-        _MakeTailor._Clothes = _Clothes;
+        _MakeTailor._DIYClothes = _DIYClothes;
         class _TaskClothes extends DataAdmin._Table {
             constructor() {
                 super(...arguments);
@@ -6085,13 +6109,13 @@
                 return this.ins;
             }
             again(Scene) {
-                const clothesArr = _Clothes._ins().getClothesArr();
-                const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
+                const clothesArr = _DIYClothes._ins().getClothesArr();
+                const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
                 for (let index = 0; index < clothesArr.length; index++) {
                     const element = clothesArr[index];
                     if (element.name == name) {
                         this.LastClothes = element;
-                        clothesArr[index] = this.Clothes = _Clothes._ins().createClothes(name, Scene);
+                        clothesArr[index] = this.Clothes = _DIYClothes._ins().createClothes(name, Scene);
                         this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent');
                         this.setData();
                     }
@@ -6108,14 +6132,14 @@
                 Animation2D.move_rotate(this.Clothes, 0, new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2), time);
             }
             changeClothes(Scene) {
-                const clothesArr = _Clothes._ins().getClothesArr();
-                const name = _Clothes._ins()._pitchName ? _Clothes._ins()._pitchName : clothesArr[0]['name'];
-                const lastName = _Clothes._ins()._lastPitchName;
+                const clothesArr = _DIYClothes._ins().getClothesArr();
+                const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
+                const lastName = _DIYClothes._ins()._lastPitchName;
                 for (let index = 0; index < clothesArr.length; index++) {
                     const element = clothesArr[index];
                     if (element.name == name) {
                         element.removeSelf();
-                        this.Clothes = clothesArr[index] = _Clothes._ins().createClothes(name, Scene);
+                        this.Clothes = clothesArr[index] = _DIYClothes._ins().createClothes(name, Scene);
                         this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent');
                         this.setData();
                     }
@@ -6337,8 +6361,8 @@
                     },
                     effcts: () => {
                         const num = Tools._Number.randomOneInt(3, 6);
-                        const color1 = _Clothes._ins()._getColor()[0];
-                        const color2 = _Clothes._ins()._getColor()[1];
+                        const color1 = _DIYClothes._ins()._getColor()[0];
+                        const color2 = _DIYClothes._ins()._getColor()[1];
                         const color = Tools._Number.randomOneHalf() === 0 ? color1 : color2;
                         for (let index = 0; index < num; index++) {
                             Effects._Particle._spray(this._Scene, this._point, [10, 30], null, [0, 360], [Effects._SkinUrl.三角形1], [color1, color2], [20, 90], null, null, [1, 5], [0.1, 0.2], this._Owner.zOrder - 1);
@@ -6391,8 +6415,8 @@
             lwgButton() {
                 this._btnUp(this._Owner, () => {
                     console.log('换装！');
-                    if (this._Owner['_dataSource']['name'] !== _Clothes._ins()._pitchName) {
-                        _Clothes._ins()._setPitch(this._Owner['_dataSource']['name']);
+                    if (this._Owner['_dataSource']['name'] !== _DIYClothes._ins()._pitchName) {
+                        _DIYClothes._ins()._setPitch(this._Owner['_dataSource']['name']);
                         this._evNotify(_Event.changeClothes);
                     }
                 }, 'no');
@@ -6489,14 +6513,14 @@
             }
             lwgOnAwake() {
                 this._ImgVar('Scissor').addComponent(_Scissor);
-                _Clothes._ins()._List = this._ListVar('List');
-                _Clothes._ins()._listRender = (Cell, index) => {
+                _DIYClothes._ins()._List = this._ListVar('List');
+                _DIYClothes._ins()._listRender = (Cell, index) => {
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
                     Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
                     const Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                    if (data[_Clothes._ins()._property.pitch]) {
+                    if (data[_DIYClothes._ins()._property.pitch]) {
                         Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
                     }
                     else {
@@ -6682,8 +6706,8 @@
                                 Laya.stage.addChildAt(_Res._list.scene3D.MakeClothes.Scene, 0);
                                 break;
                             case 'MakeTailor':
-                                _MakeTailor._Clothes._ins().ClothesArr = null;
-                                _MakeTailor._Clothes._ins().getClothesArr();
+                                _MakeTailor._DIYClothes._ins().ClothesArr = null;
+                                _MakeTailor._DIYClothes._ins().getClothesArr();
                                 break;
                             case 'Start':
                                 this.backStart();
@@ -7090,42 +7114,34 @@
             }
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _General('ClothesGeneral', _Res._list.json.Clothes.url, true);
+                    this.ins = new _General('ClothesGeneral', _Res._list.json.GeneralClothes.url, true);
                 }
                 return this.ins;
             }
         }
         _DressingRoom._General = _General;
-        class _DIY extends DataAdmin._Table {
-            static _ins() {
-                if (!this.ins) {
-                    this.ins = new _DIY('ClothesDIY', _Res._list.json.Clothes.url, true);
-                }
-                return this.ins;
-            }
-        }
-        _DressingRoom._DIY = _DIY;
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 this._btnUp(this._Owner, (e) => {
-                    _DIY._ins()._setPitch(this._Owner['_dataSource'][_DIY._ins()._property.name]);
+                    _MakeTailor._DIYClothes._ins()._setPitch(this._Owner['_dataSource'][_MakeTailor._DIYClothes._ins()._property.name]);
                 }, null);
             }
         }
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
                 _General._ins()._List = this._ListVar('List');
-                _DIY._ins()._List = this._ListVar('List');
-                _DIY._ins()._List.selectEnable = true;
-                _DIY._ins()._List.vScrollBarSkin = "";
-                _DIY._ins()._List.array = _DIY._ins()._arr;
-                _DIY._ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                let arr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
+                _MakeTailor._DIYClothes._ins()._List = this._ListVar('List');
+                _MakeTailor._DIYClothes._ins()._List.selectEnable = true;
+                _MakeTailor._DIYClothes._ins()._List.vScrollBarSkin = "";
+                _MakeTailor._DIYClothes._ins()._List.array = arr;
+                _MakeTailor._DIYClothes._ins()._List.renderHandler = new Laya.Handler(this, (Cell, index) => {
                     let data = Cell.dataSource;
                     let Icon = Cell.getChildByName('Icon');
-                    Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
+                    Icon.skin = arr[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
                     let Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                    if (data[_DIY._ins()._property.pitch]) {
+                    if (data[_MakeTailor._DIYClothes._ins()._property.pitch]) {
                         Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
                     }
                     else {
@@ -7135,7 +7151,7 @@
                         Cell.addComponent(_Item);
                     }
                 });
-                _DIY._ins()._Tap = this._ListVar('Tap');
+                _MakeTailor._DIYClothes._ins()._Tap = this._ListVar('Tap');
             }
             lwgAdaptive() {
                 this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
@@ -7516,13 +7532,12 @@
                 else {
                     _MakePattern._Scene3D.getComponent(MakeClothes3D).lwgOnStart();
                 }
-                let clothesName = _MakeTailor._Clothes._ins()._pitchName;
+                let clothesName = _MakeTailor._DIYClothes._ins()._pitchName;
                 const name0 = clothesName.substr(0, clothesName.length - 5);
                 this._ImgVar('Front').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
                     this._ImgVar('Reverse').loadImage(`Game/UI/MakePattern/basic/${name0}basic.png`, Laya.Handler.create(this, () => {
                         EventAdmin._notify(_Event.remake, this.Tex.getTex());
                         EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
-                        this.photo();
                     }));
                 }));
             }
@@ -7536,6 +7551,12 @@
                 this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
                 var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
                 this._SpriteVar('Test').graphics.drawTexture(rtex);
+                TimerAdmin._frameOnce(10, this, () => {
+                    const htmlCanvas1 = this._SpriteVar('Test').drawToCanvas(this._SpriteVar('Test').width, this._SpriteVar('Test').height, this._SpriteVar('Test').x, this._SpriteVar('Test').y);
+                    let base64 = htmlCanvas1.toBase64("image/png", 1);
+                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                    this._openScene('DressingRoom', true, true);
+                });
             }
             lwgEvent() {
                 this._evReg(_Event.createImg, (name, gPoint) => {
@@ -7571,7 +7592,7 @@
                         this.UI.btnBackVinish();
                         this.UI.btnRollbackVinish();
                         this.UI.btnAgainVinish(() => {
-                            this._openScene('DressingRoom', true, true);
+                            this.photo();
                         });
                     }, 200);
                 };
@@ -7636,9 +7657,9 @@
                 this._evReg(_Event.remake, () => {
                     _MakePattern._HangerP = this._Child('HangerP');
                     _MakePattern._Role = _MakePattern._Scene3D.getChildByName('Role');
-                    const Classify = _MakePattern._Role.getChildByName(_MakeTailor._Clothes._ins()._pitchClassify);
+                    const Classify = _MakePattern._Role.getChildByName(_MakeTailor._DIYClothes._ins()._pitchClassify);
                     Tools._Node.showExcludedChild3D(_MakePattern._Role, [Classify.name]);
-                    _MakePattern._Hanger = Classify.getChildByName(_MakeTailor._Clothes._ins()._pitchName);
+                    _MakePattern._Hanger = Classify.getChildByName(_MakeTailor._DIYClothes._ins()._pitchName);
                     Tools._Node.showExcludedChild3D(Classify, [_MakePattern._Hanger.name]);
                     _MakePattern._Hanger.transform.localRotationEulerY = 180;
                     _MakePattern._Front = _MakePattern._Hanger.getChildByName(`${_MakePattern._Hanger.name}_0`);
