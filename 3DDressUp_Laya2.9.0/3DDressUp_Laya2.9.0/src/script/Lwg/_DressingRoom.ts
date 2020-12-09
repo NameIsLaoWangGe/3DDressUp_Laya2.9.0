@@ -39,9 +39,10 @@ export module _DressingRoom {
             let copyDIYArr = Tools._ObjArray.arrCopy(DIYArr);
             Tools._ObjArray.modifyProValue(copyDIYArr, 'classify', 'DIY');
             _Clothes._ins()._addObjectArr(copyDIYArr);
+            console.log(copyDIYArr, _Clothes._ins()._arr);
             _Clothes._ins()._List = this._ListVar('List');
             let arr = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
-            console.log(arr);
+            console.log(_Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY), _Clothes._ins()._arr);
             _Clothes._ins()._List.array = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
             _Clothes._ins()._pitchName = _Clothes._ins()._List.array[0]['name'];
 

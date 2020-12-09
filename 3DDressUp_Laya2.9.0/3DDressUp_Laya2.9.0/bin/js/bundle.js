@@ -2391,10 +2391,22 @@
                     this._refreshAndStorage();
                 }
                 _addObjectArr(objArr) {
-                    for (let index = 0; index < objArr.length; index++) {
-                        const obj = objArr[index];
+                    for (let i = 0; i < objArr.length; i++) {
+                        const obj = objArr[i];
                         let _obj = Tools._ObjArray.objCopy(obj);
-                        this._arr.push(_obj);
+                        for (let j = 0; j < this._arr.length; j++) {
+                            const element = this._arr[j];
+                            if (obj[this._property.name] === element[this._property.name]) {
+                                this._arr[j] = _obj;
+                                objArr.splice(i, 1);
+                                i--;
+                                continue;
+                            }
+                        }
+                    }
+                    for (let k = 0; k < objArr.length; k++) {
+                        const element = objArr[k];
+                        this._arr.push(element);
                     }
                     this._refreshAndStorage();
                 }
@@ -7767,9 +7779,10 @@
                 let copyDIYArr = Tools._ObjArray.arrCopy(DIYArr);
                 Tools._ObjArray.modifyProValue(copyDIYArr, 'classify', 'DIY');
                 _Clothes._ins()._addObjectArr(copyDIYArr);
+                console.log(copyDIYArr, _Clothes._ins()._arr);
                 _Clothes._ins()._List = this._ListVar('List');
                 let arr = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
-                console.log(arr);
+                console.log(_Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY), _Clothes._ins()._arr);
                 _Clothes._ins()._List.array = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
                 _Clothes._ins()._pitchName = _Clothes._ins()._List.array[0]['name'];
                 _Clothes._ins()._listRender = (Cell, index) => {
