@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":10,
+    "selecteID":799,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -12,7 +12,7 @@
         }],
     "props":{"width":1280,"sceneColor":"#a4a4a4","height":720},
     "nodeParent":-1,
-    "maxID":4432,
+    "maxID":4441,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -24,7 +24,7 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,IconPhorto,IconPhorto",
-            "props":{"zOrder":0,"y":0,"x":0,"width":128,"visible":false,"var":"IconPhorto","name":"IconPhorto","height":128},
+            "props":{"zOrder":0,"y":0,"x":0,"width":110,"visible":false,"var":"IconPhorto","name":"IconPhorto","height":110},
             "nodeParent":2,
             "label":"IconPhorto",
             "isDirectory":false,
@@ -183,26 +183,40 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Operation,Operation",
-            "props":{"zOrder":150,"y":20,"x":1095,"var":"Operation","skin":"Game/UI/Common/di.png","name":"Operation"},
+            "props":{"zOrder":150,"y":20,"x":1095,"width":240,"var":"Operation","name":"Operation","height":682},
             "nodeParent":2,
             "label":"Operation",
             "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
-            "compId":803,
+            "compId":4432,
             "child":[
                 {
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":5,"x":8,"skin":"Game/UI/Common/kuang.png"},
-                    "nodeParent":803,
+                    "props":{"y":0,"x":0,"skin":"Game/UI/Common/di.png"},
+                    "nodeParent":4432,
                     "label":"Image",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":804,
+                    "compId":4433,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image",
+                    "props":{"y":5,"x":8,"skin":"Game/UI/Common/kuang.png"},
+                    "nodeParent":4432,
+                    "label":"Image",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":4434,
                     "child":[
                         ]
                 },
@@ -210,53 +224,39 @@
                     "x":30,
                     "type":"List",
                     "searchKey":"List,List,List",
-                    "props":{"y":11,"x":14,"width":159,"var":"List","spaceY":0,"rotation":0,"repeatY":4,"name":"List","height":628},
-                    "nodeParent":803,
+                    "props":{"y":11,"x":14,"width":159,"var":"List","spaceY":0,"rotation":0,"repeatY":5,"name":"List","height":628},
+                    "nodeParent":4432,
                     "label":"List",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":805,
+                    "compId":4435,
                     "child":[
                         {
                             "x":45,
                             "type":"Box",
                             "searchKey":"Box",
-                            "props":{"y":0,"x":0,"width":160,"renderType":"render","height":175},
-                            "nodeParent":805,
+                            "props":{"y":64,"x":79,"width":148,"renderType":"render","pivotY":60,"pivotX":74,"height":125},
+                            "nodeParent":4435,
                             "label":"Box",
                             "isOpen":true,
                             "isDirectory":true,
                             "isAniNode":false,
                             "hasChild":true,
-                            "compId":806,
+                            "compId":4436,
                             "child":[
                                 {
                                     "x":60,
                                     "type":"Image",
-                                    "searchKey":"Image,Board",
-                                    "props":{"skin":"Game/UI/Common/xuanzhong.png","sizeGrid":"9,12,14,13","name":"Board","centerY":0,"centerX":0},
-                                    "nodeParent":806,
-                                    "label":"Board",
-                                    "isDirectory":false,
-                                    "isAniNode":false,
-                                    "hasChild":false,
-                                    "compId":807,
-                                    "child":[
-                                        ]
-                                },
-                                {
-                                    "x":60,
-                                    "type":"Image",
                                     "searchKey":"Image,Icon",
-                                    "props":{"width":120,"skin":"Game/UI/Clothes/Icon/diy_bottom_008_final.png","name":"Icon","height":120,"centerY":0,"centerX":0},
-                                    "nodeParent":806,
+                                    "props":{"skin":"Game/UI/MakePattern/PatternIcon/general/pattern1.png","name":"Icon","centerY":0,"centerX":0},
+                                    "nodeParent":4436,
                                     "label":"Icon",
                                     "isDirectory":false,
                                     "isAniNode":false,
                                     "hasChild":false,
-                                    "compId":808,
+                                    "compId":4438,
                                     "child":[
                                         ]
                                 }]
@@ -267,67 +267,28 @@
                     "type":"Image",
                     "searchKey":"Image,BtnComplete,BtnComplete",
                     "props":{"y":48,"x":-60,"width":80,"var":"BtnComplete","skin":"Game/UI/Common/anniu_lv.png","sizeGrid":"16,9,9,15","pivotY":46,"pivotX":40,"name":"BtnComplete","height":92},
-                    "nodeParent":803,
+                    "nodeParent":4432,
                     "label":"BtnComplete",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":809,
+                    "compId":4439,
                     "child":[
                         {
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":22,"x":17.5,"skin":"Game/UI/Common/duihao.png"},
-                            "nodeParent":809,
+                            "nodeParent":4439,
                             "label":"Image",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":810,
+                            "compId":4440,
                             "child":[
                                 ]
                         }]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "selectedBox":789,
-            "searchKey":"Image",
-            "props":{"y":173,"x":799,"presetID":1,"preset":"laya/pages/Prefab/BtnBack.prefab"},
-            "nodeParent":2,
-            "maxID":4432,
-            "label":"Image(BtnBack)",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":811,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"presetID":2,"preset":"laya/pages/Prefab/BtnBack.prefab"},
-                    "nodeParent":811,
-                    "label":"Image(BtnBack)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":4431,
-                    "child":[
-                        ]
-                }],
-            "animations":[
-                {
-                    "nodes":[
-                        ],
-                    "name":"ani1",
-                    "id":1,
-                    "frameRate":24,
-                    "action":0
                 }]
         }],
     "animations":[

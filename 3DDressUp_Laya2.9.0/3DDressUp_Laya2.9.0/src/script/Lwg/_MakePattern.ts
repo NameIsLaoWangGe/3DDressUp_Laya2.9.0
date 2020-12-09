@@ -21,7 +21,7 @@ export module _MakePattern {
         private static ins: _Pattern;
         static _ins(): _Pattern {
             if (!this.ins) {
-                this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.url);
+                this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.dataArr);
                 this.ins._pitchClassify = this.ins._classify.general;
                 //空位置用于站位 
                 this.ins._arr.push({}, {});
@@ -77,14 +77,16 @@ export module _MakePattern {
                 } else {
                     Icon.skin = null;
                 }
-                const Board = Cell.getChildByName('Board') as Laya.Image;
-                Board.skin = `Lwg/UI/ui_orthogon_green.png`;
+                // const Board = Cell.getChildByName('Board') as Laya.Image;
+                // Board.skin = `Lwg/UI/ui_orthogon_green.png`;
             }
         }
         lwgAdaptive(): void {
             // this._adaptiveCenter([this._SpriteVar('Ultimately'), this._SpriteVar('Dispaly')]);
             this._adaWidth([this._ImgVar('BtnR'), this._ImgVar('BtnL')]);
         }
+
+        UI: _MakeTailor._UI;
         lwgOnStart(): void {
             for (let index = 0; index < _Pattern._ins()._List.cells.length; index++) {
                 let Cell = _Pattern._ins()._List.cells[index];
@@ -101,8 +103,40 @@ export module _MakePattern {
                     EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                 }));
             }));
-        }
 
+            Animation2D.fadeOut(this._ImgVar('BtnL'), 0, 1, 200, 200);
+            Animation2D.fadeOut(this._ImgVar('BtnR'), 0, 1, 200, 200);
+
+            this.UI = new _MakeTailor._UI(this._Owner);
+            this.UI.BtnAgain.pos(86, 630);
+            TimerAdmin._frameOnce(10, this, () => {
+                this.UI.operationAppear();
+                this.UI.btnBackAppear(null, 200);
+                this.UI.btnCompleteAppear(null, 400);
+                this.UI.btnRollbackAppear(null, 600);
+                this.UI.btnAgainAppear(null, 800);
+            })
+            this.UI.btnCompleteClick = () => {
+                this.Tex.restore();
+                this.UI.operationVinish(() => {
+                    Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200);
+                    Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200);
+                    this.UI.btnBackVinish();
+                    this.UI.btnRollbackVinish();
+                    this.UI.btnAgainVinish(() => {
+                        this.photo();
+                    });
+                }, 200);
+            }
+            this.UI.btnRollbackClick = () => {
+                this._openScene('MakeTailor', true, true);
+            }
+            this.UI.btnAgainClick = () => {
+                Tools._Node.removeAllChildren(this._SpriteVar('Front'));
+                Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
+                EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+            }
+        }
 
         lwgEvent(): void {
             this._evReg(_Event.createImg, (name: string, gPoint: Laya.Point) => {
@@ -418,41 +452,10 @@ export module _MakePattern {
                 })
             }
         }
-        UI: _MakeTailor._UI;
         lwgButton(): void {
-            this.UI = new _MakeTailor._UI(this._Owner);
-            this.UI.BtnAgain.pos(86, 630);
-            TimerAdmin._frameOnce(10, this, () => {
-
-                this.UI.operationAppear();
-                this.UI.btnBackAppear(null, 200);
-                this.UI.btnCompleteAppear(null, 400);
-                this.UI.btnRollbackAppear(null, 600);
-                this.UI.btnAgainAppear(null, 800);
-            })
-            this.UI.btnCompleteClick = () => {
-                this.Tex.restore();
-                this.UI.operationVinish(() => {
-                    Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200, 0);
-                    Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200, 0);
-                    this.UI.btnBackVinish();
-                    this.UI.btnRollbackVinish();
-                    this.UI.btnAgainVinish(() => {
-                        this.photo();
-                    });
-                }, 200);
-            }
-            this.UI.btnRollbackClick = () => {
-                this._openScene('MakeTailor', true, true);
-            }
-            this.UI.btnAgainClick = () => {
-                Tools._Node.removeAllChildren(this._SpriteVar('Front'));
-                Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
-                EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
-            }
             this.Tex.btn();
         }
-        
+
         EndCamera: Laya.Camera;
         /**渲染到照片上*/
         photo(): void {
@@ -479,10 +482,6 @@ export module _MakePattern {
         }
 
         onStageMouseDown(e: Laya.Event): void {
-            // if (this.Tex.checkInside()) {
-            //     this._ImgVar('Wireframe').visible = false;
-            //     this.Tex.state = this.Tex.stateType.rotate;
-            // }
             this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
             if (e.stageX > Laya.stage.width - this.UI.Operation.width) {
                 this['slideFY'] = e.stageY;

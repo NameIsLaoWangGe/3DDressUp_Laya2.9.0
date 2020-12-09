@@ -11,8 +11,6 @@ export module _Start {
 
     }
     export class Start extends Admin._SceneBase {
-        lwgOnStart(): void {
-        }
         lwgButton(): void {
             const Clothes = _MakeTailor._DIYClothes._ins();
             this._btnUp(this._ImgVar('BtnTop'), () => {

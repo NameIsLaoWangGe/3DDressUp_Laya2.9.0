@@ -180,10 +180,12 @@ P CA7B7BF1 fanhuiR.png
 P 6F9D23B6 guanbi.png
 R D7DFF281 kuang.png
 P 4B7D562D kuang_bai.png
-P 09B84E03 kuang_fen.png
+P 6F289A65 kuang_fen.png
 P CD4C3CFC shouye.png
 P 543D5896 xuanzhong.png
+P E996F255 you.png
 P F9C91A64 zan.png
+P 91745C3A zuo.png
 D Game/UI/Design
 R FD466C26 aixinlujing.png
 R 52B9AFC7 Draw.png
@@ -206,8 +208,6 @@ P A393CC87 x_huang.png
 P 1A1AC48A x_meihong.png
 P 2EE0A095 x_qing.png
 P 25109400 x_zi.png
-P E996F255 you.png
-P 91745C3A zuo.png
 D Game/UI/DressingRoom
 D Game/UI/MakePattern
 P A7EE778F close.png
@@ -217,29 +217,21 @@ P 91745C3A zuo.png
 D Game/UI/MakeTailor
 P 7B7F03ED diy_bottom_001_cut.png
 P EBA39A10 diy_bottom_002_cut.png
-P F56A3981 diy_bottom_003_cut.png
 P B6550C73 diy_bottom_004_cut.png
 P F0183338 diy_bottom_005_cut.png
-P 70121EF0 diy_bottom_006_cut.png
 P 5534F58C diy_bottom_007_cut.png
 P B752F1BC diy_bottom_008_cut.png
+P D643E917 DIY_clothes_select_bg_01.png
 P 620C1F41 DIY_cutting_bg_01.png
-P 1C497BAA diy_dress_001_cut.png
 P F0595826 diy_dress_002_cut.png
-P 7B168678 diy_dress_003_cut.png
 P 3BF6D2C7 diy_dress_004_cut.png
 P D94A2FD7 diy_dress_005_cut.png
-P 30BE361E diy_dress_006_cut.png
 P E4727AAC diy_dress_007_cut.png
-P 2AFA90F8 diy_dress_008_cut.png
 P 7B168678 diy_dress_009_cut.png
 P D1EF665C diy_top_001_cut.png
 P C96A178A diy_top_002_cut.png
 P 0B9924BF diy_top_003_cut.png
 P 8E2F2DEF diy_top_004_cut.png
-P 45F64995 diy_top_005_cut.png
-P D6F65BA4 diy_top_006_cut.png
-P 4C882DAB diy_top_007_cut.png
 P 378635B3 diy_top_008_cut.png
 P 511CC254 dotted1.png
 P 82029C53 scissors_01.png
@@ -338,20 +330,20 @@ P E2351576 diy_top_005_final.png
 P 2299F5DF diy_top_006_final.png
 P 72ABC1D3 diy_top_007_final.png
 D Game/UI/DressingRoom/ClassIcon
-P 56BC7299 w_fengrenji.png
-P BC97B522 w_gaogenxie.png
-P F6EE425F w_hudiejie.png
-P 0A1D0834 w_kouzhao.png
-P 7905DDFA w_lianyiqun.png
-P 55D7C392 w_qunzi.png
-P 4B7FF19A w_yifu.png
-P A0180AD7 x_fengrenji.png
-P 7882721D x_gaogenxie.png
-P D951D364 x_hudiejie.png
-P 9E11AED2 x_kouzhao.png
-P 355E6DBB x_lianyiqun.png
-P FFEFF202 x_qunzi.png
-P 3B711D8D x_yifu.png
+P F6EE425F Accessories.png
+P D951D364 Accessories_s.png
+P 55D7C392 Bottoms.png
+P FFEFF202 Bottoms_s.png
+P 56BC7299 DIY.png
+P A0180AD7 DIY_s.png
+P 7905DDFA Dress.png
+P 355E6DBB Dress_s.png
+P 0A1D0834 FaceMask.png
+P 9E11AED2 FaceMask_s.png
+P BC97B522 Shoe.png
+P 7882721D Shoe_s.png
+P 4B7FF19A Top.png
+P 3B711D8D Top_s.png
 D Game/UI/DressingRoom/Icon
 P 1094274A bottom_001.png
 P 5D36F10B bottom_002.png
@@ -399,11 +391,13 @@ P 29A45970 diy_top_008_basic.png
 D Game/UI/MakePattern/Pattern
 D Game/UI/MakePattern/PatternIcon
 D Game/UI/MakeTailor/diy_bottom_003_final
+P F56A3981 diy_bottom_003_cut.png
 R 25AD2313 q.png
 R DEFC7498 q1.png
 R 9AC29CEE s1.png
 R DD26E45A x1.png
 D Game/UI/MakeTailor/diy_bottom_006_final
+P 70121EF0 diy_bottom_006_cut.png
 R EB175528 q.png
 R 5F3A0686 q1.png
 P A6FAA430 s1.png
@@ -412,6 +406,7 @@ P 47942BB5 x1.png
 P EF967B41 x2.png
 D Game/UI/MakeTailor/diy_dress_001_final
 R 97A8E227 1.png
+P 1C497BAA diy_dress_001_cut.png
 R 6571108F p.png
 P E0B7B0FC s1.png
 P 75A99747 s2.png
@@ -420,6 +415,7 @@ P 63204EB8 x1.png
 P 86FE1C66 x2.png
 P A9B958BA x3.png
 D Game/UI/MakeTailor/diy_dress_003_final
+P 7B168678 diy_dress_003_cut.png
 R 954F8541 p.png
 R B8FF0F17 p1.png
 P A5AF9920 s1.png
@@ -441,6 +437,7 @@ P 5B2F15DC x7.png
 P 49DCAD2B x8.png
 P 5F901462 x9.png
 D Game/UI/MakeTailor/diy_dress_006_final
+P 30BE361E diy_dress_006_cut.png
 R BCD14E4C q.png
 R 18E5162A q1.png
 P 97AC2CE1 s1.png
@@ -452,6 +449,7 @@ P C35D2659 x2.png
 P 06162A1F x3.png
 P DBE7BBA4 x4.png
 D Game/UI/MakeTailor/diy_dress_008_final
+P 2AFA90F8 diy_dress_008_cut.png
 R 2B4161AF p.png
 R 53584E6D p1.png
 P A62240D1 s1.png
@@ -467,6 +465,7 @@ P FCBD56F6 x4.png
 P 9C7A824C x5.png
 P 112C87C0 x6.png
 D Game/UI/MakeTailor/diy_top_005_final
+P 45F64995 diy_top_005_cut.png
 R 01075A84 q.png
 R C892FAC9 q1.png
 P BB2E2225 s1.png
@@ -480,6 +479,7 @@ P FA458C73 x3.png
 P B17D8C66 x4.png
 P 70B20960 x5.png
 D Game/UI/MakeTailor/diy_top_006_final
+P D6F65BA4 diy_top_006_cut.png
 R 7F75C67B q.png
 R BE4C108B q1.png
 P 7327C033 s1.png
@@ -491,6 +491,7 @@ P 3B7503D6 x2.png
 P 7F60E245 x3.png
 P 219742AE x4.png
 D Game/UI/MakeTailor/diy_top_007_final
+P 4C882DAB diy_top_007_cut.png
 R 59FDA200 p.png
 R 9AA529FA p1.png
 P 563FD49B s1.png

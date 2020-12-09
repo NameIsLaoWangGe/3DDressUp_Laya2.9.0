@@ -2413,7 +2413,7 @@ export module lwg {
         /**new出一个通用数据表管理对象，如果属性不能通用，则继承使用*/
         export class _Table {
 
-            /**一些通用的属性名称，可重写*/
+            /**一些通用的属性名称枚举，可重写*/
             _property = {
                 /**名称是必须有的属性，可以是数字,不可以重名*/
                 name: 'name',
@@ -2428,9 +2428,9 @@ export module lwg {
                 getAward: 'getAward',
                 pitch: 'pitch',
             };
-            /**其他属性重写添加*/
+            /**其他属性枚举重写添加*/
             _otherPro: any;
-            /**解锁方式*/
+            /**一般解锁方式枚举*/
             _unlockWay = {
                 ads: 'ads',
                 gold: 'gold',
@@ -2438,12 +2438,18 @@ export module lwg {
                 diamond: 'diamond',
                 free: 'free',
             }
+            /**其他解锁方式枚举*/
+            _otherunlockWay: any;
             /**种类*/
             _classify: any;
             /**数据表名称*/
             _tableName: string = '';
-            /**表格数据数组*/
-            _arr: Array<any> = [];
+            get _arr(): Array<any> {
+                return this[`_${this._tableName}arr`];
+            }
+            set _arr(arr: Array<any>) {
+                this[`_${this._tableName}arr`] = arr;
+            }
             /**上个版本的表格*/
             _lastArr: Array<any> = [];
             /**是否启用本地存储*/
@@ -2465,6 +2471,15 @@ export module lwg {
                     this._listSelect && this._listSelect(index);
                 });
             }
+            // /**列表中的data数组，自动刷新*/ 
+            // get _listArray(): Array<any> {
+            //     this._List.array;
+            //     return
+            // }
+            // set _listArray(arr: Array<any>) {
+            //     this._List.array = arr;
+            //     this._List.refresh();
+            // }
             /**渲染函数*/
             _listRender: Function;
             /**选中触发*/
@@ -2477,25 +2492,22 @@ export module lwg {
              * @param localStorage 是否存储在本地
              * @param lastVtableName 如果表格发生改变，对比上个版本的数据表将一些成果继承赋值
              */
-            constructor(tableName?: string, arrUrl?: string, localStorage?: boolean, lastVtableName?: string) {
+            constructor(tableName?: string, _tableArr?: Array<any>, localStorage?: boolean, lastVtableName?: string) {
                 if (tableName) {
                     this._tableName = tableName;
                     if (localStorage) {
                         this._localStorage = localStorage;
-                        this._arr = _jsonCompare(arrUrl, tableName, this._property.name);
+                        this._arr = addCompare(_tableArr, tableName, this._property.name);
                         if (lastVtableName) {
                             this._compareLastInfor(lastVtableName);
                         }
                     } else {
-                        if (Laya.Loader.getRes(arrUrl)) {
-                            this._arr = Tools._ObjArray.arrCopy(Laya.Loader.getRes(arrUrl)['RECORDS']);
-                        } else {
-                            // console.log(`${arrUrl}数据表不存在！`);
-                        }
+                        this._arr = _tableArr;
                     }
                 }
             }
 
+            /**设置存储*/
             private _refreshAndStorage(): void {
                 if (this._localStorage) {
                     Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
@@ -2602,7 +2614,7 @@ export module lwg {
              * @param {*} [value] 属性值默认为null
              * @memberof _DataTable
              */
-            _randomOne(proName: string, value?: any): any {
+            _randomOneObj(proName: string, value?: any): any {
                 let arr = [];
                 for (const key in this._arr) {
                     if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
@@ -2646,11 +2658,11 @@ export module lwg {
                 return this[`${classify}Arr`];
             }
 
-         /**
-           * 获取某种品类中所有的对象
-           * @param {string} classify
-           * @memberof _Table
-           */
+            /**
+              * 获取某种品类中所有的对象
+              * @param {string} classify
+              * @memberof _Table
+              */
             _getArrByPitchClassify(): Array<any> {
                 if (!this[`${this._pitchClassify}Arr`]) {
                     this[`${this._pitchClassify}Arr`] = [];
@@ -2667,7 +2679,7 @@ export module lwg {
             }
 
             /**
-             * 通过某个属性名称和值获取所有复合条件的属性，可以查找出已获得
+             * 通过某个属性名称和值获取所有复合条件的属性，可以查找出已获得或者未获得
              * @param {string} proName 属性名
              * @param {*} value 值
              * @memberof _DataTable
@@ -2686,7 +2698,7 @@ export module lwg {
             }
 
             /**
-            * 通过某个属性名称和值获取所有不复合条件的属性，可以查找出已获得
+            * 通过某个属性名称和值获取所有不复合当前值的属性，可以反向查找出已获得或者未获得
             * @param {string} proName 属性名
             * @param {*} value 值
             * @memberof _DataTable
@@ -2780,12 +2792,12 @@ export module lwg {
                 }
             };
             set _pitchClassify(str: string) {
-                this._refreshAndStorage();
                 this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                 this[`${this._tableName}/pitchClassify`] = str;
                 if (this._localStorage) {
                     Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
                 }
+                this._refreshAndStorage();
             };
             /**设置选中名称*/
             get _pitchName(): string {
@@ -2800,12 +2812,12 @@ export module lwg {
                 }
             };
             set _pitchName(str: string) {
-                this._refreshAndStorage();
                 this._lastPitchName = this[`${this._tableName}/_pitchName`];
                 this[`${this._tableName}/_pitchName`] = str;
                 if (this._localStorage) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
                 }
+                this._refreshAndStorage();
             };
 
             /**上一次选中类别*/
@@ -2821,7 +2833,6 @@ export module lwg {
                 }
             };
             set _lastPitchClassify(str: string) {
-                this._refreshAndStorage();
                 this[`${this._tableName}/_lastPitchClassify`] = str;
                 if (this._localStorage && str) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
@@ -2847,6 +2858,9 @@ export module lwg {
                 }
             };
 
+            /**
+             * 设置选中名称，自动更新选中类别
+             * */
             _setPitch(name: string): void {
                 let _calssify: string;
                 for (let index = 0; index < this._arr.length; index++) {
@@ -2879,23 +2893,69 @@ export module lwg {
             }
 
             /**
-             * 在表格中增加一个对象
+             * 在表格中临时增加一个对象,会更新本地存储,需谨慎使用
              * @param obj 增加的对象
              * */
             _addObject(obj: any): void {
                 // 必须拷贝
                 let _obj = Tools._ObjArray.objCopy(obj);
                 this._arr.push(_obj);
+                this._refreshAndStorage();
+            }
+
+            /**
+             * 在表格中临时增加一组对象,会更新本地存储,需谨慎使用
+             * @param objArr 增加的对象数组
+             * */
+            _addObjectArr(objArr: Array<any>): void {
+                for (let index = 0; index < objArr.length; index++) {
+                    const obj = objArr[index];
+                    // 必须拷贝
+                    let _obj = Tools._ObjArray.objCopy(obj);
+                    this._arr.push(_obj);
+                }
+                this._refreshAndStorage();
             }
         }
 
         /**
-          * 获取本地存储数据并且和文件中数据表对比,对比后会上传
+         *获取本地存储数组和文件中数据表对比，本地没有的数据添加到本地
+         * @param url 本地数据表地址
+         * @param storageName 本地存储中的json名称
+         * @param propertyName 数组中每个对象中同一个属性名，通过这个名称进行对比
+         */
+        function addCompare(tableArr: Array<any>, storageName: string, propertyName: string): Array<any> {
+            // 第一步，先尝试从本地缓存获取数据，
+            // 第二步，如果本地缓存有，把本地没有的新增对象复制进去
+            // 第三步，如果本地缓存没有，那么直接从数据表获取
+
+            // 部分平台在没有上传的情况下获取可能会报错，所以报错后直接上传
+            try {
+                Laya.LocalStorage.getJSON(storageName);
+            } catch (error) {
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
+                return tableArr;
+            }
+            let storeArr: any;
+            if (Laya.LocalStorage.getJSON(storageName)) {
+                storeArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                let diffArray = Tools._ObjArray.diffProByTwo(tableArr, storeArr, propertyName);
+                console.log(`${storageName}新添加对象`, diffArray);
+                Tools._Array.addToarray(storeArr, diffArray);
+            } else {
+                storeArr = tableArr;
+            }
+            Laya.LocalStorage.setJSON(storageName, JSON.stringify(storeArr));
+            return storeArr;
+        }
+
+        /**
+          * 获取本地存储数据并且和文件中数据表对比,对比后会上传,此方法必须本地数据表不小于本地存储，属于保守型
           * @param url 本地数据表地址
           * @param storageName 本地存储中的json名称
           * @param propertyName 数组中每个对象中同一个属性名，通过这个名称进行对比
           */
-        export function _jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
+        function _jsonCompare(url: string, storageName: string, propertyName: string): Array<any> {
             // 第一步，先尝试从本地缓存获取数据，
             // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
             // 第三步，如果本地缓存没有，那么直接从数据表获取
@@ -2915,9 +2975,9 @@ export module lwg {
                     let dataArr_0: Array<any> = Laya.loader.getRes(url)['RECORDS'];
                     // 如果本地数据条数大于json条数，说明json减东西了，不会对比，json只能增加不能删减
                     if (dataArr_0.length >= dataArr.length) {
-                        let diffArray = Tools._ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                        let diffArray = Tools._ObjArray.diffProByTwo(dataArr_0, dataArr, propertyName);
                         console.log('两个数据的差值为：', diffArray);
-                        Tools._Array.oneAddToarray(dataArr, diffArray);
+                        Tools._Array.addToarray(dataArr, diffArray);
                     } else {
                         console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
                     }
@@ -6554,7 +6614,7 @@ export module lwg {
               * @param property 对象中一个相同的属性名称
               */
             export function onPropertySort(array: Array<any>, property: string): Array<any> {
-                var compare = function (obj1, obj2) {
+                var compare = function (obj1: any, obj2: any) {
                     var val1 = obj1[property];
                     var val2 = obj2[property];
                     if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
@@ -6574,12 +6634,12 @@ export module lwg {
             }
 
             /**
-              * 对比两个对象数组中的某个对象属性，返回相对第一个数组中有的这个property属性，第二个数组中没有这个属性的对象数组，例如两张数据表，通过名字查找，objArr2有8个不同的名字，objArr1也有（也可以没有）这个8个名字，并且objArr1还多了其他两个名字，那么返回objArr1中这两个个名字
+              * 对比两个对象数组中的某个对象属性，返回相对第一个数组中有的这个property属性，第二个数组中没有这个属性的对象数组，例如两张数据表，通过名字查找，objArr2有8个不同的名字，objArr1也有（也可以没有）这个8个名字，并且objArr1还多了其他两个名字，那么返回objArr1中这两个名字的数组,为复制出的新数组
               * @param objArr1 对象数组1
               * @param objArr2 对象数组2
               * @param property 需要对比的属性名称
              */
-            export function differentPropertyTwo(objArr1: Array<any>, objArr2: Array<any>, property: string): Array<any> {
+            export function diffProByTwo(objArr1: Array<any>, objArr2: Array<any>, property: string): Array<any> {
                 var result = [];
                 for (var i = 0; i < objArr1.length; i++) {
                     var obj1 = objArr1[i];
@@ -6595,7 +6655,8 @@ export module lwg {
                         }
                     }
                     if (!isExist) {
-                        result.push(obj1);
+                        let _obj1 = _ObjArray.objCopy(obj1);
+                        result.push(_obj1);
                     }
                 }
                 return result;
@@ -6674,6 +6735,22 @@ export module lwg {
                 }
                 return sourceCopy;
             }
+
+            /**
+             * 批量修改对象数组中的某个属性值
+             * @param objArr 对象数组
+             * */
+            export function modifyProValue(objArr: Array<any>, pro: string, value: any): void {
+                for (const key in objArr) {
+                    if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                        const element = objArr[key];
+                        if (element[pro]) {
+                            element[pro] = value;
+                        }
+                    }
+                }
+            }
+
             /**
               * 对象的拷贝
               * @param obj 需要拷贝的对象
@@ -6707,7 +6784,7 @@ export module lwg {
               * @param array1 
               * @param array2
               */
-            export function oneAddToarray(array1, array2): Array<any> {
+            export function addToarray(array1: Array<any>, array2: Array<any>): Array<any> {
                 for (let index = 0; index < array2.length; index++) {
                     const element = array2[index];
                     array1.push(element);
@@ -7202,7 +7279,7 @@ export module lwg {
                             if (data == null) {
                                 console.log('XXXXXXXXXXX数据表' + _json[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _json[index]['data'] = data["RECORDS"];
+                                _json[index]['dataArr'] = data["RECORDS"];
                                 console.log('数据表' + _json[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);

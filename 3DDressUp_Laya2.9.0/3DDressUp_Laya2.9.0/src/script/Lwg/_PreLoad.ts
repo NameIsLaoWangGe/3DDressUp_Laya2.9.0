@@ -116,15 +116,15 @@ export module _Res {
         json: {
             GeneralClothes: {
                 url: `_LwgData/_DressingRoom/GeneralClothes.json`,
-                data: new Array,
+                dataArr: new Array,
             },
             DIYClothes: {
                 url: `_LwgData/_DressingRoom/DIYClothes.json`,
-                data: new Array,
+                dataArr: new Array,
             },
             MakePattern: {
                 url: `_LwgData/_MakePattern/MakePattern.json`,
-                data: new Array,
+                dataArr: new Array,
             }
         },
         // skeleton: {

@@ -19,7 +19,7 @@ export module _MakeTailor {
         private static ins: _DIYClothes;
         static _ins() {
             if (!this.ins) {
-                this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
+                this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.dataArr, true);
                 //设置初始值
             }
             return this.ins;
@@ -87,7 +87,7 @@ export module _MakeTailor {
             const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
             for (let index = 0; index < clothesArr.length; index++) {
                 const element = clothesArr[index] as Laya.Sprite;
-                if (element.name == name) {
+                if (element.name === name) {
                     this.LastClothes = element;
                     clothesArr[index] = this.Clothes = _DIYClothes._ins().createClothes(name, Scene);
                     this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent') as Laya.Image;
@@ -428,7 +428,8 @@ export module _MakeTailor {
             _DIYClothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
-                Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
+                let name = data['name'] as string;
+                Icon.skin = `Game/UI/MakeTailor/${name}/${name.substr(0, name.length - 5)}cut.png`;
                 const Board = Cell.getChildByName('Board') as Laya.Image;
                 Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                 if (data[_DIYClothes._ins()._property.pitch]) {

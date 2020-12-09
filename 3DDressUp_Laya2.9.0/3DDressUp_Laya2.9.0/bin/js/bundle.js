@@ -2013,7 +2013,7 @@
         let DataAdmin;
         (function (DataAdmin) {
             class _Table {
-                constructor(tableName, arrUrl, localStorage, lastVtableName) {
+                constructor(tableName, _tableArr, localStorage, lastVtableName) {
                     this._property = {
                         name: 'name',
                         chName: 'chName',
@@ -2033,26 +2033,27 @@
                         free: 'free',
                     };
                     this._tableName = '';
-                    this._arr = [];
                     this._lastArr = [];
                     this._localStorage = false;
                     if (tableName) {
                         this._tableName = tableName;
                         if (localStorage) {
                             this._localStorage = localStorage;
-                            this._arr = _jsonCompare(arrUrl, tableName, this._property.name);
+                            this._arr = addCompare(_tableArr, tableName, this._property.name);
                             if (lastVtableName) {
                                 this._compareLastInfor(lastVtableName);
                             }
                         }
                         else {
-                            if (Laya.Loader.getRes(arrUrl)) {
-                                this._arr = Tools._ObjArray.arrCopy(Laya.Loader.getRes(arrUrl)['RECORDS']);
-                            }
-                            else {
-                            }
+                            this._arr = _tableArr;
                         }
                     }
+                }
+                get _arr() {
+                    return this[`_${this._tableName}arr`];
+                }
+                set _arr(arr) {
+                    this[`_${this._tableName}arr`] = arr;
                 }
                 get _List() {
                     return this[`${this._tableName}_List`];
@@ -2144,7 +2145,7 @@
                     return value;
                 }
                 ;
-                _randomOne(proName, value) {
+                _randomOneObj(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
@@ -2286,12 +2287,12 @@
                 }
                 ;
                 set _pitchClassify(str) {
-                    this._refreshAndStorage();
                     this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                     this[`${this._tableName}/pitchClassify`] = str;
                     if (this._localStorage) {
                         Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
                     }
+                    this._refreshAndStorage();
                 }
                 ;
                 get _pitchName() {
@@ -2309,12 +2310,12 @@
                 }
                 ;
                 set _pitchName(str) {
-                    this._refreshAndStorage();
                     this._lastPitchName = this[`${this._tableName}/_pitchName`];
                     this[`${this._tableName}/_pitchName`] = str;
                     if (this._localStorage) {
                         Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
                     }
+                    this._refreshAndStorage();
                 }
                 ;
                 get _lastPitchClassify() {
@@ -2332,7 +2333,6 @@
                 }
                 ;
                 set _lastPitchClassify(str) {
-                    this._refreshAndStorage();
                     this[`${this._tableName}/_lastPitchClassify`] = str;
                     if (this._localStorage && str) {
                         Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
@@ -2388,9 +2388,39 @@
                 _addObject(obj) {
                     let _obj = Tools._ObjArray.objCopy(obj);
                     this._arr.push(_obj);
+                    this._refreshAndStorage();
+                }
+                _addObjectArr(objArr) {
+                    for (let index = 0; index < objArr.length; index++) {
+                        const obj = objArr[index];
+                        let _obj = Tools._ObjArray.objCopy(obj);
+                        this._arr.push(_obj);
+                    }
+                    this._refreshAndStorage();
                 }
             }
             DataAdmin._Table = _Table;
+            function addCompare(tableArr, storageName, propertyName) {
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
+                    return tableArr;
+                }
+                let storeArr;
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    storeArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    let diffArray = Tools._ObjArray.diffProByTwo(tableArr, storeArr, propertyName);
+                    console.log(`${storageName}新添加对象`, diffArray);
+                    Tools._Array.addToarray(storeArr, diffArray);
+                }
+                else {
+                    storeArr = tableArr;
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storeArr));
+                return storeArr;
+            }
             function _jsonCompare(url, storageName, propertyName) {
                 let dataArr;
                 try {
@@ -2407,9 +2437,9 @@
                     try {
                         let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
                         if (dataArr_0.length >= dataArr.length) {
-                            let diffArray = Tools._ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                            let diffArray = Tools._ObjArray.diffProByTwo(dataArr_0, dataArr, propertyName);
                             console.log('两个数据的差值为：', diffArray);
-                            Tools._Array.oneAddToarray(dataArr, diffArray);
+                            Tools._Array.addToarray(dataArr, diffArray);
                         }
                         else {
                             console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
@@ -2430,7 +2460,6 @@
                 Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
                 return dataArr;
             }
-            DataAdmin._jsonCompare = _jsonCompare;
         })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
@@ -4984,7 +5013,7 @@
                     return array;
                 }
                 _ObjArray.onPropertySort = onPropertySort;
-                function differentPropertyTwo(objArr1, objArr2, property) {
+                function diffProByTwo(objArr1, objArr2, property) {
                     var result = [];
                     for (var i = 0; i < objArr1.length; i++) {
                         var obj1 = objArr1[i];
@@ -4999,12 +5028,13 @@
                             }
                         }
                         if (!isExist) {
-                            result.push(obj1);
+                            let _obj1 = _ObjArray.objCopy(obj1);
+                            result.push(_obj1);
                         }
                     }
                     return result;
                 }
-                _ObjArray.differentPropertyTwo = differentPropertyTwo;
+                _ObjArray.diffProByTwo = diffProByTwo;
                 function identicalPropertyObjArr(data1, data2, property) {
                     var result = [];
                     for (var i = 0; i < data1.length; i++) {
@@ -5057,6 +5087,17 @@
                     return sourceCopy;
                 }
                 _ObjArray.arrCopy = arrCopy;
+                function modifyProValue(objArr, pro, value) {
+                    for (const key in objArr) {
+                        if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                            const element = objArr[key];
+                            if (element[pro]) {
+                                element[pro] = value;
+                            }
+                        }
+                    }
+                }
+                _ObjArray.modifyProValue = modifyProValue;
                 function objCopy(obj) {
                     var _copyObj = {};
                     for (const item in obj) {
@@ -5082,14 +5123,14 @@
             })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
             let _Array;
             (function (_Array) {
-                function oneAddToarray(array1, array2) {
+                function addToarray(array1, array2) {
                     for (let index = 0; index < array2.length; index++) {
                         const element = array2[index];
                         array1.push(element);
                     }
                     return array1;
                 }
-                _Array.oneAddToarray = oneAddToarray;
+                _Array.addToarray = addToarray;
                 function randomGetOut(arr, num) {
                     if (!num) {
                         num = 1;
@@ -5513,7 +5554,7 @@
                                     console.log('XXXXXXXXXXX数据表' + _json[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _json[index]['data'] = data["RECORDS"];
+                                    _json[index]['dataArr'] = data["RECORDS"];
                                     console.log('数据表' + _json[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -6023,15 +6064,15 @@
             json: {
                 GeneralClothes: {
                     url: `_LwgData/_DressingRoom/GeneralClothes.json`,
-                    data: new Array,
+                    dataArr: new Array,
                 },
                 DIYClothes: {
                     url: `_LwgData/_DressingRoom/DIYClothes.json`,
-                    data: new Array,
+                    dataArr: new Array,
                 },
                 MakePattern: {
                     url: `_LwgData/_MakePattern/MakePattern.json`,
-                    data: new Array,
+                    dataArr: new Array,
                 }
             },
         };
@@ -6303,7 +6344,7 @@
             }
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.url, true);
+                    this.ins = new _DIYClothes('DIYClothes', _Res._list.json.DIYClothes.dataArr, true);
                 }
                 return this.ins;
             }
@@ -6358,7 +6399,7 @@
                 const name = _DIYClothes._ins()._pitchName ? _DIYClothes._ins()._pitchName : clothesArr[0]['name'];
                 for (let index = 0; index < clothesArr.length; index++) {
                     const element = clothesArr[index];
-                    if (element.name == name) {
+                    if (element.name === name) {
                         this.LastClothes = element;
                         clothesArr[index] = this.Clothes = _DIYClothes._ins().createClothes(name, Scene);
                         this.LineParent = this.Clothes.getChildAt(0).getChildByName('LineParent');
@@ -6764,7 +6805,8 @@
                 _DIYClothes._ins()._listRender = (Cell, index) => {
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
-                    Icon.skin = `Game/UI/Clothes/Icon/${data['name']}.png`;
+                    let name = data['name'];
+                    Icon.skin = `Game/UI/MakeTailor/${name}/${name.substr(0, name.length - 5)}cut.png`;
                     const Board = Cell.getChildByName('Board');
                     Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                     if (data[_DIYClothes._ins()._property.pitch]) {
@@ -6939,7 +6981,7 @@
             }
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.url);
+                    this.ins = new _Pattern('_Chartlet', _Res._list.json.MakePattern.dataArr);
                     this.ins._pitchClassify = this.ins._classify.general;
                     this.ins._arr.push({}, {});
                 }
@@ -7259,8 +7301,6 @@
                     else {
                         Icon.skin = null;
                     }
-                    const Board = Cell.getChildByName('Board');
-                    Board.skin = `Lwg/UI/ui_orthogon_green.png`;
                 };
             }
             lwgAdaptive() {
@@ -7280,6 +7320,37 @@
                         EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                     }));
                 }));
+                Animation2D.fadeOut(this._ImgVar('BtnL'), 0, 1, 200, 200);
+                Animation2D.fadeOut(this._ImgVar('BtnR'), 0, 1, 200, 200);
+                this.UI = new _MakeTailor._UI(this._Owner);
+                this.UI.BtnAgain.pos(86, 630);
+                TimerAdmin._frameOnce(10, this, () => {
+                    this.UI.operationAppear();
+                    this.UI.btnBackAppear(null, 200);
+                    this.UI.btnCompleteAppear(null, 400);
+                    this.UI.btnRollbackAppear(null, 600);
+                    this.UI.btnAgainAppear(null, 800);
+                });
+                this.UI.btnCompleteClick = () => {
+                    this.Tex.restore();
+                    this.UI.operationVinish(() => {
+                        Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200);
+                        Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200);
+                        this.UI.btnBackVinish();
+                        this.UI.btnRollbackVinish();
+                        this.UI.btnAgainVinish(() => {
+                            this.photo();
+                        });
+                    }, 200);
+                };
+                this.UI.btnRollbackClick = () => {
+                    this._openScene('MakeTailor', true, true);
+                };
+                this.UI.btnAgainClick = () => {
+                    Tools._Node.removeAllChildren(this._SpriteVar('Front'));
+                    Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
+                    EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+                };
             }
             lwgEvent() {
                 this._evReg(_Event.createImg, (name, gPoint) => {
@@ -7301,35 +7372,6 @@
                 });
             }
             lwgButton() {
-                this.UI = new _MakeTailor._UI(this._Owner);
-                this.UI.BtnAgain.pos(86, 630);
-                TimerAdmin._frameOnce(10, this, () => {
-                    this.UI.operationAppear();
-                    this.UI.btnBackAppear(null, 200);
-                    this.UI.btnCompleteAppear(null, 400);
-                    this.UI.btnRollbackAppear(null, 600);
-                    this.UI.btnAgainAppear(null, 800);
-                });
-                this.UI.btnCompleteClick = () => {
-                    this.Tex.restore();
-                    this.UI.operationVinish(() => {
-                        Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200, 0);
-                        Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200, 0);
-                        this.UI.btnBackVinish();
-                        this.UI.btnRollbackVinish();
-                        this.UI.btnAgainVinish(() => {
-                            this.photo();
-                        });
-                    }, 200);
-                };
-                this.UI.btnRollbackClick = () => {
-                    this._openScene('MakeTailor', true, true);
-                };
-                this.UI.btnAgainClick = () => {
-                    Tools._Node.removeAllChildren(this._SpriteVar('Front'));
-                    Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
-                    EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
-                };
                 this.Tex.btn();
             }
             photo() {
@@ -7538,8 +7580,6 @@
         }
         _Start._init = _init;
         class Start extends Admin._SceneBase {
-            lwgOnStart() {
-            }
             lwgButton() {
                 const Clothes = _MakeTailor._DIYClothes._ins();
                 this._btnUp(this._ImgVar('BtnTop'), () => {
@@ -7693,63 +7733,99 @@
 
     var _DressingRoom;
     (function (_DressingRoom) {
-        class _General extends DataAdmin._Table {
+        class _Clothes extends DataAdmin._Table {
             constructor() {
                 super(...arguments);
                 this._classify = {
                     Dress: 'Dress',
                     Top: 'Top',
                     Bottoms: 'Bottoms',
+                    DIY: 'DIY',
+                    FaceMask: 'FaceMask',
+                    Accessories: 'Accessories',
+                    Shoe: 'Shoe',
                 };
             }
             static _ins() {
                 if (!this.ins) {
-                    this.ins = new _General('ClothesGeneral', _Res._list.json.GeneralClothes.url, true);
+                    this.ins = new _Clothes('ClothesGeneral', _Res._list.json.GeneralClothes.dataArr, true);
                 }
                 return this.ins;
             }
         }
-        _DressingRoom._General = _General;
+        _DressingRoom._Clothes = _Clothes;
         class _Item extends Admin._ObjectBase {
             lwgButton() {
                 this._btnUp(this._Owner, (e) => {
-                    _MakeTailor._DIYClothes._ins()._setPitch(this._Owner['_dataSource'][_MakeTailor._DIYClothes._ins()._property.name]);
+                    _Clothes._ins()._setPitch(this._Owner['_dataSource'][_Clothes._ins()._property.name]);
                 }, null);
             }
         }
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
-                _General._ins()._List = this._ListVar('List');
-                let completeArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
-                _MakeTailor._DIYClothes._ins()._List = this._ListVar('List');
-                _MakeTailor._DIYClothes._ins()._List.array = completeArr;
-                _MakeTailor._DIYClothes._ins()._listRender = (Cell) => {
+                let DIYArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
+                let copyDIYArr = Tools._ObjArray.arrCopy(DIYArr);
+                Tools._ObjArray.modifyProValue(copyDIYArr, 'classify', 'DIY');
+                _Clothes._ins()._addObjectArr(copyDIYArr);
+                _Clothes._ins()._List = this._ListVar('List');
+                let arr = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
+                console.log(arr);
+                _Clothes._ins()._List.array = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
+                _Clothes._ins()._pitchName = _Clothes._ins()._List.array[0]['name'];
+                _Clothes._ins()._listRender = (Cell, index) => {
                     let data = Cell.dataSource;
                     let Icon = Cell.getChildByName('Icon');
-                    Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
-                    let Board = Cell.getChildByName('Board');
-                    Board.skin = `Lwg/UI/ui_orthogon_green.png`;
-                    if (data[_MakeTailor._DIYClothes._ins()._property.pitch]) {
-                        Board.skin = `Lwg/UI/ui_l_orthogon_green.png`;
+                    const Board = Cell.getChildByName('Board');
+                    if (data[_Clothes._ins()._property.pitch]) {
+                        Board.skin = `Game/UI/Common/xuanzhong.png`;
                     }
                     else {
-                        Board.skin = `Lwg/UI/ui_orthogon_grass.png`;
+                        Board.skin = null;
+                    }
+                    if (data[_Clothes._ins()._property.classify] === _Clothes._ins()._classify.DIY) {
+                        Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
+                    }
+                    else {
+                        Icon.skin = `Game/UI/DressingRoom/Icon/${data[_Clothes._ins()._property.name]}.png`;
                     }
                     if (!Cell.getComponent(_Item)) {
                         Cell.addComponent(_Item);
                     }
                 };
-                _MakeTailor._DIYClothes._ins()._Tap = this._ListVar('Tap');
             }
             lwgAdaptive() {
-                this._ImgVar('Navigation').x = Laya.stage.width - this._ImgVar('Navigation').width;
             }
             lwgOnStart() {
+                this.UI = new _MakeTailor._UI(this._Owner);
+                TimerAdmin._frameOnce(10, this, () => {
+                    this.UI.operationAppear();
+                    this.UI.btnBackAppear(null, 200);
+                    this.UI.btnCompleteAppear(null, 400);
+                });
+                this.UI.btnCompleteClick = () => {
+                    this._openScene('Start', true, true);
+                };
             }
             lwgButton() {
-                this._btnUp(this._ImgVar('BtnComplete'), () => {
-                    this._openScene('Start', true, true);
-                });
+                for (let index = 0; index < this._ImgVar('Classfiy').numChildren; index++) {
+                    const _element = this._ImgVar('Classfiy').getChildAt(index);
+                    this._btnUp(_element, () => {
+                        for (let index = 0; index < this._ImgVar('Classfiy').numChildren; index++) {
+                            const element = this._ImgVar('Classfiy').getChildAt(index);
+                            const Icon = element.getChildAt(0);
+                            if (_element === element) {
+                                element.skin = `Game/UI/Common/kuang_fen.png`;
+                                Icon.skin = `Game/UI/DressingRoom/ClassIcon/${element.name}_s.png`;
+                                let arr = _Clothes._ins()._getArrByClassify(_element.name);
+                                _Clothes._ins()._List.array = arr;
+                            }
+                            else {
+                                element.skin = `Game/UI/Common/kuang_bai.png`;
+                                Icon.skin = `Game/UI/DressingRoom/ClassIcon/${element.name}.png`;
+                            }
+                        }
+                    }, 'no');
+                }
             }
         }
         _DressingRoom.DressingRoom = DressingRoom;
