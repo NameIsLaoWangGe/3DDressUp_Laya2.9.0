@@ -1015,7 +1015,6 @@ export module lwg {
                         Gold._num.value = 5000;
                         break;
                     case _Tpye.Research:
-                        Laya.Stat.show();
                         Gold._num.value = 50000000000000;
                         break;
 
@@ -2647,7 +2646,7 @@ export module lwg {
                 return this[`${classify}Arr`];
             }
 
-            /**
+         /**
            * 获取某种品类中所有的对象
            * @param {string} classify
            * @memberof _Table
@@ -2781,9 +2780,7 @@ export module lwg {
                 }
             };
             set _pitchClassify(str: string) {
-                if (this._List) {
-                    this._List.refresh();
-                }
+                this._refreshAndStorage();
                 this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                 this[`${this._tableName}/pitchClassify`] = str;
                 if (this._localStorage) {
@@ -2803,9 +2800,7 @@ export module lwg {
                 }
             };
             set _pitchName(str: string) {
-                if (this._List) {
-                    this._List.refresh();
-                }
+                this._refreshAndStorage();
                 this._lastPitchName = this[`${this._tableName}/_pitchName`];
                 this[`${this._tableName}/_pitchName`] = str;
                 if (this._localStorage) {
@@ -2826,9 +2821,7 @@ export module lwg {
                 }
             };
             set _lastPitchClassify(str: string) {
-                if (this._List) {
-                    this._List.refresh();
-                }
+                this._refreshAndStorage();
                 this[`${this._tableName}/_lastPitchClassify`] = str;
                 if (this._localStorage && str) {
                     Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());

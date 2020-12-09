@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":13,
+    "selecteID":10,
     "searchKey":"View",
     "referenceLines":[
         {
@@ -250,7 +250,7 @@
                                     "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Icon",
-                                    "props":{"width":200,"skin":"Game/UI/Clothes/Icon/diy_bottom_008_final.png","name":"Icon","height":204,"centerY":0,"centerX":0},
+                                    "props":{"width":120,"skin":"Game/UI/Clothes/Icon/diy_bottom_008_final.png","name":"Icon","height":120,"centerY":0,"centerX":0},
                                     "nodeParent":806,
                                     "label":"Icon",
                                     "isDirectory":false,

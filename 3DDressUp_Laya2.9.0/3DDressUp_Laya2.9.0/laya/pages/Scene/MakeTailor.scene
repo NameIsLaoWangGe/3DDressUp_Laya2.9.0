@@ -2,7 +2,7 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":778,
+    "selecteID":786,
     "searchKey":"Scene",
     "referenceLines":[
         ],
@@ -20,7 +20,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image",
-            "props":{"y":0,"x":0,"top":0,"skin":"Lwg/UI/ui_orthogon_cycn.png","sizeGrid":"14,9,17,10","right":0,"left":0,"bottom":0},
+            "props":{"y":0,"x":0,"top":0,"skin":"Game/UI/MakeTailor/DIY_cutting_bg_01.png","sizeGrid":"14,9,17,10","right":0,"left":0,"bottom":0},
             "nodeParent":2,
             "label":"Image",
             "isOpen":true,

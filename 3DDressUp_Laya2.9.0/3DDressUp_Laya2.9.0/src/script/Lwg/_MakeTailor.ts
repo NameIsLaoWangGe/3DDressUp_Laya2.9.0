@@ -424,7 +424,7 @@ export module _MakeTailor {
             this._ImgVar('Scissor').addComponent(_Scissor);
             _DIYClothes._ins()._List = this._ListVar('List');
             _DIYClothes._ins()._List.array = _DIYClothes._ins()._getArrByPitchClassify();
-            _DIYClothes._ins()._pitchName = _DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name];
+            _DIYClothes._ins()._setPitch(_DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name]);
             _DIYClothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 const data = Cell.dataSource;
                 const Icon = Cell.getChildByName('Icon') as Laya.Image;
@@ -440,7 +440,6 @@ export module _MakeTailor {
                     Cell.addComponent(_Item)
                 }
             }
-            _DIYClothes._ins()._List.refresh();
         }
         UI: _UI;
         lwgOnStart(): void {

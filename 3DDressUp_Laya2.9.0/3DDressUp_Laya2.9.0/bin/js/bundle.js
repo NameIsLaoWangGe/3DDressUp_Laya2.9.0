@@ -750,7 +750,6 @@
                             Gold._num.value = 5000;
                             break;
                         case Platform._Tpye.Research:
-                            Laya.Stat.show();
                             Gold._num.value = 50000000000000;
                             break;
                         default:
@@ -2287,9 +2286,7 @@
                 }
                 ;
                 set _pitchClassify(str) {
-                    if (this._List) {
-                        this._List.refresh();
-                    }
+                    this._refreshAndStorage();
                     this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
                     this[`${this._tableName}/pitchClassify`] = str;
                     if (this._localStorage) {
@@ -2312,9 +2309,7 @@
                 }
                 ;
                 set _pitchName(str) {
-                    if (this._List) {
-                        this._List.refresh();
-                    }
+                    this._refreshAndStorage();
                     this._lastPitchName = this[`${this._tableName}/_pitchName`];
                     this[`${this._tableName}/_pitchName`] = str;
                     if (this._localStorage) {
@@ -2337,9 +2332,7 @@
                 }
                 ;
                 set _lastPitchClassify(str) {
-                    if (this._List) {
-                        this._List.refresh();
-                    }
+                    this._refreshAndStorage();
                     this[`${this._tableName}/_lastPitchClassify`] = str;
                     if (this._localStorage && str) {
                         Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
@@ -6767,7 +6760,7 @@
                 this._ImgVar('Scissor').addComponent(_Scissor);
                 _DIYClothes._ins()._List = this._ListVar('List');
                 _DIYClothes._ins()._List.array = _DIYClothes._ins()._getArrByPitchClassify();
-                _DIYClothes._ins()._pitchName = _DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name];
+                _DIYClothes._ins()._setPitch(_DIYClothes._ins()._getArrByPitchClassify()[0][_DIYClothes._ins()._property.name]);
                 _DIYClothes._ins()._listRender = (Cell, index) => {
                     const data = Cell.dataSource;
                     const Icon = Cell.getChildByName('Icon');
@@ -6784,7 +6777,6 @@
                         Cell.addComponent(_Item);
                     }
                 };
-                _DIYClothes._ins()._List.refresh();
             }
             lwgOnStart() {
                 this.UI = new _UI(this._Owner);
@@ -7010,7 +7002,7 @@
                         this.Tex.DisImg = new Laya.Image;
                         this.Tex.Img = new Laya.Image;
                         let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
-                        this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/general/${name}.png`;
+                        this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/Pattern/general/${name}.png`;
                         this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                         this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                         this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
@@ -7289,25 +7281,6 @@
                     }));
                 }));
             }
-            photo() {
-                _MakePattern._Hanger.transform.localRotationEulerY = 180;
-                this.EndCamera = _MakePattern._MainCamara.clone();
-                _MakePattern._Scene3D.addChild(this.EndCamera);
-                this.EndCamera.transform.position = _MakePattern._MainCamara.transform.position;
-                this.EndCamera.transform.localRotationEuler = _MakePattern._MainCamara.transform.localRotationEuler;
-                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
-                this.EndCamera.renderingOrder = -1;
-                this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
-                var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
-                this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
-                TimerAdmin._frameOnce(10, this, () => {
-                    const htmlCanvas1 = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
-                    let base64 = htmlCanvas1.toBase64("image/png", 1);
-                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
-                    this.EndCamera.destroy();
-                    this._openScene('DressingRoom', true, true);
-                });
-            }
             lwgEvent() {
                 this._evReg(_Event.createImg, (name, gPoint) => {
                     this.Tex.state = this.Tex.stateType.move;
@@ -7340,6 +7313,8 @@
                 this.UI.btnCompleteClick = () => {
                     this.Tex.restore();
                     this.UI.operationVinish(() => {
+                        Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200, 0);
+                        Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200, 0);
                         this.UI.btnBackVinish();
                         this.UI.btnRollbackVinish();
                         this.UI.btnAgainVinish(() => {
@@ -7350,7 +7325,31 @@
                 this.UI.btnRollbackClick = () => {
                     this._openScene('MakeTailor', true, true);
                 };
+                this.UI.btnAgainClick = () => {
+                    Tools._Node.removeAllChildren(this._SpriteVar('Front'));
+                    Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
+                    EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+                };
                 this.Tex.btn();
+            }
+            photo() {
+                _MakePattern._Hanger.transform.localRotationEulerY = 180;
+                this.EndCamera = _MakePattern._MainCamara.clone();
+                _MakePattern._Scene3D.addChild(this.EndCamera);
+                this.EndCamera.transform.position = _MakePattern._MainCamara.transform.position;
+                this.EndCamera.transform.localRotationEuler = _MakePattern._MainCamara.transform.localRotationEuler;
+                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
+                this.EndCamera.renderingOrder = -1;
+                this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
+                var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
+                this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
+                TimerAdmin._frameOnce(10, this, () => {
+                    const htmlCanvas1 = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
+                    let base64 = htmlCanvas1.toBase64("image/png", 1);
+                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                    this.EndCamera.destroy();
+                    this._openScene('DressingRoom', true, true);
+                });
             }
             onStageMouseDown(e) {
                 this.Tex.touchP = new Laya.Point(e.stageX, e.stageY);
@@ -7893,7 +7892,7 @@
     GameConfig.startScene = "Scene/LwgInit.scene";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
-    GameConfig.stat = true;
+    GameConfig.stat = false;
     GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();

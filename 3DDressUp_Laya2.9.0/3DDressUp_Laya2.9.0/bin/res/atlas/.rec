@@ -215,6 +215,32 @@ P 956ED858 lashen.png
 P E996F255 you.png
 P 91745C3A zuo.png
 D Game/UI/MakeTailor
+P 7B7F03ED diy_bottom_001_cut.png
+P EBA39A10 diy_bottom_002_cut.png
+P F56A3981 diy_bottom_003_cut.png
+P B6550C73 diy_bottom_004_cut.png
+P F0183338 diy_bottom_005_cut.png
+P 70121EF0 diy_bottom_006_cut.png
+P 5534F58C diy_bottom_007_cut.png
+P B752F1BC diy_bottom_008_cut.png
+P 620C1F41 DIY_cutting_bg_01.png
+P 1C497BAA diy_dress_001_cut.png
+P F0595826 diy_dress_002_cut.png
+P 7B168678 diy_dress_003_cut.png
+P 3BF6D2C7 diy_dress_004_cut.png
+P D94A2FD7 diy_dress_005_cut.png
+P 30BE361E diy_dress_006_cut.png
+P E4727AAC diy_dress_007_cut.png
+P 2AFA90F8 diy_dress_008_cut.png
+P 7B168678 diy_dress_009_cut.png
+P D1EF665C diy_top_001_cut.png
+P C96A178A diy_top_002_cut.png
+P 0B9924BF diy_top_003_cut.png
+P 8E2F2DEF diy_top_004_cut.png
+P 45F64995 diy_top_005_cut.png
+P D6F65BA4 diy_top_006_cut.png
+P 4C882DAB diy_top_007_cut.png
+P 378635B3 diy_top_008_cut.png
 P 511CC254 dotted1.png
 P 82029C53 scissors_01.png
 P 9131BB5C scissors_02.png
@@ -370,19 +396,6 @@ P 30797EC5 diy_top_005_basic.png
 P 4390B4F3 diy_top_006_basic.png
 P 9DF3CB8E diy_top_007_basic.png
 P 29A45970 diy_top_008_basic.png
-D Game/UI/MakePattern/general
-P 14810733 pattern1.png
-P 14810733 pattern1_icon.png
-P 764CE028 pattern2.png
-P 764CE028 pattern2_icon.png
-P 0EC648AF pattern3.png
-P 0EC648AF pattern3_icon.png
-P 14810733 pattern4.png
-P 14810733 pattern4_icon.png
-P 0EC648AF pattern5.png
-P 0EC648AF pattern5_icon.png
-P 764CE028 pattern6.png
-P 764CE028 pattern6_icon.png
 D Game/UI/MakePattern/Pattern
 D Game/UI/MakePattern/PatternIcon
 D Game/UI/MakeTailor/diy_bottom_003_final
@@ -493,11 +506,11 @@ P 5222D989 x4.png
 P A9AF380E x5.png
 P 343BD2C8 x6.png
 D Game/UI/MakePattern/Pattern/general
-P 428D9D49 tuan1.png
-P 3049515E tuan2.png
-P 11FB32F1 tuan3.png
-P 54CBEB13 tuan4.png
-P 14E65103 tuan5.png
+P 428D9D49 pattern1.png
+P 3049515E pattern2.png
+P 11FB32F1 pattern3.png
+P 54CBEB13 pattern4.png
+P 14E65103 pattern5.png
 D Game/UI/MakePattern/PatternIcon/general
 P 428D9D49 pattern1.png
 P 3049515E pattern2.png

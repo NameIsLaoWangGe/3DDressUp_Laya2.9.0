@@ -103,30 +103,6 @@ export module _MakePattern {
             }));
         }
 
-        EndCamera: Laya.Camera;
-        /**渲染到大照片上*/
-        photo(): void {
-            _Hanger.transform.localRotationEulerY = 180;
-            this.EndCamera = _MainCamara.clone() as Laya.Camera;
-            _Scene3D.addChild(this.EndCamera);
-            this.EndCamera.transform.position = _MainCamara.transform.position;
-            this.EndCamera.transform.localRotationEuler = _MainCamara.transform.localRotationEuler;
-            //选择渲染目标为纹理
-            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
-            //渲染顺序
-            this.EndCamera.renderingOrder = -1;
-            //清除标记
-            this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
-            var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
-            this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
-            TimerAdmin._frameOnce(10, this, () => {
-                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
-                let base64 = htmlCanvas1.toBase64("image/png", 1);
-                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
-                this.EndCamera.destroy();
-                this._openScene('DressingRoom', true, true);
-            })
-        }
 
         lwgEvent(): void {
             this._evReg(_Event.createImg, (name: string, gPoint: Laya.Point) => {
@@ -173,7 +149,7 @@ export module _MakePattern {
                 this.Tex.DisImg = new Laya.Image;
                 this.Tex.Img = new Laya.Image;
                 let lPoint = this._SpriteVar('Ultimately').globalToLocal(gPoint);
-                this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/general/${name}.png`;
+                this.Tex.Img.skin = this.Tex.DisImg.skin = `Game/UI/MakePattern/Pattern/general/${name}.png`;
                 this.Tex.Img.x = this.Tex.DisImg.x = lPoint.x;
                 this.Tex.Img.y = this.Tex.DisImg.y = lPoint.y;
                 this.Tex.Img.width = this.Tex.DisImg.width = this.Tex.imgWH[0];
@@ -312,7 +288,7 @@ export module _MakePattern {
                     let _outF = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _Front.name);
                     _outF && fOutArr.push(_outF)
                     let _outR = Tools._3D.rayScanning(_MainCamara, _Scene3D, new Laya.Vector2(gPoint.x, gPoint.y), _Reverse.name);
-                    _outR && rOutArr.push(_outR)
+                    _outR && rOutArr.push(_outR);
                 }
                 if (fOutArr.length !== 0 || rOutArr.length !== 0) {
                     return true;
@@ -447,6 +423,7 @@ export module _MakePattern {
             this.UI = new _MakeTailor._UI(this._Owner);
             this.UI.BtnAgain.pos(86, 630);
             TimerAdmin._frameOnce(10, this, () => {
+
                 this.UI.operationAppear();
                 this.UI.btnBackAppear(null, 200);
                 this.UI.btnCompleteAppear(null, 400);
@@ -456,6 +433,8 @@ export module _MakePattern {
             this.UI.btnCompleteClick = () => {
                 this.Tex.restore();
                 this.UI.operationVinish(() => {
+                    Animation2D.fadeOut(this._ImgVar('BtnL'), 1, 0, 200, 0);
+                    Animation2D.fadeOut(this._ImgVar('BtnR'), 1, 0, 200, 0);
                     this.UI.btnBackVinish();
                     this.UI.btnRollbackVinish();
                     this.UI.btnAgainVinish(() => {
@@ -466,8 +445,39 @@ export module _MakePattern {
             this.UI.btnRollbackClick = () => {
                 this._openScene('MakeTailor', true, true);
             }
+            this.UI.btnAgainClick = () => {
+                Tools._Node.removeAllChildren(this._SpriteVar('Front'));
+                Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
+                EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
+            }
             this.Tex.btn();
         }
+        
+        EndCamera: Laya.Camera;
+        /**渲染到照片上*/
+        photo(): void {
+            _Hanger.transform.localRotationEulerY = 180;
+            this.EndCamera = _MainCamara.clone() as Laya.Camera;
+            _Scene3D.addChild(this.EndCamera);
+            this.EndCamera.transform.position = _MainCamara.transform.position;
+            this.EndCamera.transform.localRotationEuler = _MainCamara.transform.localRotationEuler;
+            //选择渲染目标为纹理
+            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
+            //渲染顺序
+            this.EndCamera.renderingOrder = -1;
+            //清除标记
+            this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
+            var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
+            this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
+            TimerAdmin._frameOnce(10, this, () => {
+                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
+                let base64 = htmlCanvas1.toBase64("image/png", 1);
+                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                this.EndCamera.destroy();
+                this._openScene('DressingRoom', true, true);
+            })
+        }
+
         onStageMouseDown(e: Laya.Event): void {
             // if (this.Tex.checkInside()) {
             //     this._ImgVar('Wireframe').visible = false;

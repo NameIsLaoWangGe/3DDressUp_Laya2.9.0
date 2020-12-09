@@ -46,10 +46,10 @@
         {
             "x":15,
             "type":"Sprite",
-            "searchKey":"Sprite,Cloth04_R",
-            "props":{"y":507,"x":196,"width":326,"texture":"Game/UI/MakeTailor/diy_dress_006_final/s4.png","presetID":4,"preset":"laya/pages/Prefab/diy_dress_006_final.prefab","name":"Cloth04_R","height":192},
+            "searchKey":"Sprite,Cloth04_D",
+            "props":{"y":507,"x":196,"width":326,"texture":"Game/UI/MakeTailor/diy_dress_006_final/s4.png","presetID":4,"preset":"laya/pages/Prefab/diy_dress_006_final.prefab","name":"Cloth04_D","height":192},
             "nodeParent":2992,
-            "label":"Cloth04_R",
+            "label":"Cloth04_D",
             "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
