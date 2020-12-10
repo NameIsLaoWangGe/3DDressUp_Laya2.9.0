@@ -65,16 +65,14 @@ export module _DressingRoom {
                     Cell.addComponent(_Item)
                 }
             }
-            const obj = _Clothes._ins()._getPitchObj();
-            this._ImgVar('Front').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texF]);
-            this._ImgVar('Reverse').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texR]);
+            // this._ImgVar('Front').loadImage(Laya.LocalStorage.getItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texF}`));
+            // this._ImgVar('Front').width = this._ImgVar('Front').height = 512;
+            // this._ImgVar('Reverse').loadImage(Laya.LocalStorage.getItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texR}`));
+            // this._ImgVar('Reverse').width = this._ImgVar('Reverse').height = 512;
         }
         lwgAdaptive(): void {
         }
 
-        lwgOnDisable(): void {
-            _Clothes._ins()._List = null;
-        }
         UI: _MakeTailor._UI;
         lwgOnStart(): void {
             this.UI = new _MakeTailor._UI(this._Owner);

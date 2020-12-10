@@ -3,6 +3,7 @@ import lwg, { Admin, Animation2D, Click, Dialogue, TimerAdmin, Gold, _SceneName,
 import { _Game } from "./_Game";
 import { _MakeTailor } from "./_MakeTailor";
 import { _Res } from "./_PreLoad";
+import { _Ranking } from "./_Ranking";
 
 /**测试模块,每个模块分开，默认导出一个类，这个类是默认挂载的脚本类，如果有多个脚本，
  * 那么在这个默认类中进行添加，或者在其他地方动态添加*/
@@ -11,6 +12,15 @@ export module _Start {
 
     }
     export class Start extends Admin._SceneBase {
+
+        lwgOnAwake(): void {
+            if (_Ranking._whereFrom === 'MakePattern') {
+                TimerAdmin._frameOnce(60, this, () => {
+                    this._openScene('Ranking', false);
+                })
+            }
+        }
+
         lwgButton(): void {
             const Clothes = _MakeTailor._DIYClothes._ins();
             this._btnUp(this._ImgVar('BtnTop'), () => {

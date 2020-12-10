@@ -219,14 +219,14 @@
 								"type":"Sprite3D",
 								"instanceID":5,
 								"props":{
-									"name":"diy_dress_008_final",
+									"name":"diy_dress_001_final",
 									"active":true,
 									"isStatic":false,
 									"layer":0,
 									"position":[
-										0,
-										0.047,
-										0.142
+										-0.037,
+										-0.079,
+										0.031
 									],
 									"rotation":[
 										0,
@@ -245,6 +245,149 @@
 									{
 										"type":"MeshSprite3D",
 										"instanceID":6,
+										"props":{
+											"name":"diy_dress_001_final_0",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
+												}
+											]
+										},
+										"components":[
+											{
+												"type":"PhysicsCollider",
+												"restitution":0,
+												"friction":0.5,
+												"rollingFriction":0,
+												"shapes":[
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm"
+													},
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm"
+													},
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm"
+													}
+												],
+												"isTrigger":false
+											}
+										],
+										"child":[]
+									},
+									{
+										"type":"MeshSprite3D",
+										"instanceID":7,
+										"props":{
+											"name":"diy_dress_001_final_1",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0,
+												0,
+												0
+											],
+											"rotation":[
+												0.7071068,
+												0,
+												0,
+												-0.7071068
+											],
+											"scale":[
+												1,
+												1,
+												1
+											],
+											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm",
+											"enableRender":true,
+											"materials":[
+												{
+													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
+												}
+											]
+										},
+										"components":[
+											{
+												"type":"PhysicsCollider",
+												"restitution":0,
+												"friction":0.5,
+												"rollingFriction":0,
+												"shapes":[
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm"
+													},
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm"
+													},
+													{
+														"type":"MeshColliderShape",
+														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm"
+													}
+												],
+												"isTrigger":false
+											}
+										],
+										"child":[]
+									}
+								]
+							},
+							{
+								"type":"Sprite3D",
+								"instanceID":8,
+								"props":{
+									"name":"diy_dress_008_final",
+									"active":true,
+									"isStatic":false,
+									"layer":0,
+									"position":[
+										-0.019,
+										-0.047,
+										0.102
+									],
+									"rotation":[
+										0,
+										1,
+										0,
+										0
+									],
+									"scale":[
+										1,
+										1,
+										1
+									]
+								},
+								"components":[],
+								"child":[
+									{
+										"type":"MeshSprite3D",
+										"instanceID":9,
 										"props":{
 											"name":"diy_dress_008_final_0",
 											"active":true,
@@ -294,7 +437,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":7,
+										"instanceID":10,
 										"props":{
 											"name":"diy_dress_008_final_1",
 											"active":true,
@@ -346,7 +489,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":8,
+								"instanceID":11,
 								"props":{
 									"name":"diy_dress_007_final",
 									"active":true,
@@ -373,7 +516,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":9,
+										"instanceID":12,
 										"props":{
 											"name":"diy_dress_007_final_0",
 											"active":true,
@@ -423,7 +566,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":10,
+										"instanceID":13,
 										"props":{
 											"name":"diy_dress_007_final_1",
 											"active":true,
@@ -475,7 +618,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":11,
+								"instanceID":14,
 								"props":{
 									"name":"diy_dress_006_final",
 									"active":true,
@@ -502,7 +645,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":12,
+										"instanceID":15,
 										"props":{
 											"name":"diy_dress_006_final_0",
 											"active":true,
@@ -552,7 +695,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":13,
+										"instanceID":16,
 										"props":{
 											"name":"diy_dress_006_final_1",
 											"active":true,
@@ -604,7 +747,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":14,
+								"instanceID":17,
 								"props":{
 									"name":"diy_dress_005_final",
 									"active":true,
@@ -631,7 +774,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":15,
+										"instanceID":18,
 										"props":{
 											"name":"diy_dress_005_final_0",
 											"active":true,
@@ -681,7 +824,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":16,
+										"instanceID":19,
 										"props":{
 											"name":"diy_dress_005_final_1",
 											"active":true,
@@ -733,7 +876,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":17,
+								"instanceID":20,
 								"props":{
 									"name":"diy_dress_004_final",
 									"active":true,
@@ -760,7 +903,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":18,
+										"instanceID":21,
 										"props":{
 											"name":"diy_dress_004_final_0",
 											"active":true,
@@ -810,7 +953,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":19,
+										"instanceID":22,
 										"props":{
 											"name":"diy_dress_004_final_1",
 											"active":true,
@@ -862,7 +1005,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":20,
+								"instanceID":23,
 								"props":{
 									"name":"diy_dress_003_final",
 									"active":true,
@@ -889,7 +1032,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":21,
+										"instanceID":24,
 										"props":{
 											"name":"diy_dress_003_final_0",
 											"active":true,
@@ -939,7 +1082,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":22,
+										"instanceID":25,
 										"props":{
 											"name":"diy_dress_003_final_1",
 											"active":true,
@@ -980,141 +1123,6 @@
 													{
 														"type":"MeshColliderShape",
 														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_003_final-diy_dress_003_final_1.lm"
-													}
-												],
-												"isTrigger":false
-											}
-										],
-										"child":[]
-									}
-								]
-							},
-							{
-								"type":"Sprite3D",
-								"instanceID":23,
-								"props":{
-									"name":"diy_dress_001_final",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0.026,
-										0
-									],
-									"rotation":[
-										0,
-										1,
-										0,
-										0
-									],
-									"scale":[
-										1,
-										1,
-										1
-									]
-								},
-								"components":[],
-								"child":[
-									{
-										"type":"MeshSprite3D",
-										"instanceID":24,
-										"props":{
-											"name":"diy_dress_001_final_0",
-											"active":true,
-											"isStatic":false,
-											"layer":0,
-											"position":[
-												0,
-												0,
-												0
-											],
-											"rotation":[
-												0.7071068,
-												0,
-												0,
-												-0.7071068
-											],
-											"scale":[
-												1,
-												1,
-												1
-											],
-											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm",
-											"enableRender":true,
-											"materials":[
-												{
-													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
-												}
-											]
-										},
-										"components":[
-											{
-												"type":"PhysicsCollider",
-												"restitution":0,
-												"friction":0.5,
-												"rollingFriction":0,
-												"shapes":[
-													{
-														"type":"MeshColliderShape",
-														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm"
-													},
-													{
-														"type":"MeshColliderShape",
-														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_0.lm"
-													}
-												],
-												"isTrigger":false
-											}
-										],
-										"child":[]
-									},
-									{
-										"type":"MeshSprite3D",
-										"instanceID":25,
-										"props":{
-											"name":"diy_dress_001_final_1",
-											"active":true,
-											"isStatic":false,
-											"layer":0,
-											"position":[
-												0,
-												0,
-												0
-											],
-											"rotation":[
-												0.7071068,
-												0,
-												0,
-												-0.7071068
-											],
-											"scale":[
-												1,
-												1,
-												1
-											],
-											"meshPath":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm",
-											"enableRender":true,
-											"materials":[
-												{
-													"path":"Assets/Game/Mesh/DIY/DIY_Dress/Materials/diy_dress_001_basic.lmat"
-												}
-											]
-										},
-										"components":[
-											{
-												"type":"PhysicsCollider",
-												"restitution":0,
-												"friction":0.5,
-												"rollingFriction":0,
-												"shapes":[
-													{
-														"type":"MeshColliderShape",
-														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm"
-													},
-													{
-														"type":"MeshColliderShape",
-														"mesh":"Assets/Game/Mesh/DIY/DIY_Dress/diy_dress_001_final-diy_dress_001_final_1.lm"
 													}
 												],
 												"isTrigger":false

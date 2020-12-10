@@ -4,6 +4,7 @@ import { lwg3D } from "./Lwg3D";
 import { _MakeTailor } from "./_MakeTailor";
 import { _MakeUp } from "./_MakeUp";
 import { _Res } from "./_PreLoad";
+import { _Ranking } from "./_Ranking";
 export module _MakePattern {
     export enum _Event {
         addTexture2D = '_MakePattern_addTexture2D',
@@ -136,6 +137,9 @@ export module _MakePattern {
                 Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
                 EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
             }
+
+            this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _texHeight;
+            this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _texHeight;
         }
 
         lwgEvent(): void {
@@ -153,10 +157,10 @@ export module _MakePattern {
                 this.Tex.state = this.Tex.stateType.none;
             })
 
-            this._evReg(_Event.setTexSize, (_height: number) => {
-                this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _height;
-                this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _height;
-            })
+            // this._evReg(_Event.setTexSize, (_height: number) => {
+            //     this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _height;
+            //     this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _height;
+            // })
         }
         /**图片移动控制*/
         Tex = {
@@ -222,19 +226,19 @@ export module _MakePattern {
                     _outR && rOutArr.push(_outR)
                     if (_outF || _outR) {
                         indexArr.push(posArr[index]);
-                        // let Img = this._Owner.getChildByName(`Img${index}`) as Laya.Image;
-                        // if (!Img) {
-                        //     let Img = new Laya.Image;
-                        //     Img.skin = `Lwg/UI/ui_circle_004.png`;
-                        //     this._Owner.addChild(Img);
-                        //     Img.name = `Img${index}`;
-                        //     Img.width = 20;
-                        //     Img.height = 20;
-                        //     Img.pivotX = Img.width / 2;
-                        //     Img.pivotY = Img.height / 2;
-                        // } else {
-                        //     Img.pos(gPoint.x, gPoint.y);
-                        // }
+                        let Img = this._Owner.getChildByName(`Img${index}`) as Laya.Image;
+                        if (!Img) {
+                            let Img = new Laya.Image;
+                            Img.skin = `Lwg/UI/ui_circle_004.png`;
+                            this._Owner.addChild(Img);
+                            Img.name = `Img${index}`;
+                            Img.width = 20;
+                            Img.height = 20;
+                            Img.pivotX = Img.width / 2;
+                            Img.pivotY = Img.height / 2;
+                        } else {
+                            Img.pos(gPoint.x, gPoint.y);
+                        }
                     }
                 }
                 if (indexArr.length !== 0) {
@@ -266,10 +270,12 @@ export module _MakePattern {
                     let _angleY: number;
                     if (this.Tex.dir == this.Tex.dirType.Front) {
                         _angleY = angleXZ + _HangerSimRY;
+                        this.Tex.Img.x = _width - _width / 180 * (_angleY);
                     } else {
                         _angleY = angleXZ + _HangerSimRY - 180;
+                        this.Tex.Img.x = - _width / 180 * (_angleY);
                     }
-                    this.Tex.Img.x = _width - _width / 180 * (_angleY);
+                    console.log(this.Tex.Img.x);
 
                     // 通过xy计算y
                     let pH = out.point.y - _HangerP.transform.position.y;//扫描点位置
@@ -473,16 +479,23 @@ export module _MakePattern {
             var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
             this._SpriteVar('IconPhoto').graphics.drawTexture(rtex);
             TimerAdmin._frameOnce(10, this, () => {
-                const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'));
+                const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'), 0.5);
                 this._SpriteVar('Front').scaleY = 1;
-                const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'));
+                this._SpriteVar('Front').width = this._SpriteVar('Front').height = 256;
+                const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'), 0.1);
                 this._SpriteVar('Reverse').scaleY = 1;
-                const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'));
+                this._SpriteVar('Reverse').width = this._SpriteVar('Reverse').height = 256;
+                const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'), 0.1);
                 _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.icon, base64Icon);
-                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texF, base64F);
-                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texR, base64R);
+                Laya.LocalStorage.setItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texF}`, base64F);
+                Laya.LocalStorage.setItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texR}`, base64R);
+
                 this.EndCamera.destroy();
-                this._openScene('DressingRoom', true, true);
+                this._openScene('Start', true, true);
+                _Ranking._whereFrom = this._Owner.name;
+                // console.log(base64Icon);
+                // console.log(base64F);
+                // console.log(base64R);
             })
         }
 
@@ -538,6 +551,7 @@ export module _MakePattern {
     export let _Front: Laya.MeshSprite3D;
     export let _Reverse: Laya.MeshSprite3D;
     export let _HangerP: Laya.MeshSprite3D;
+    export let _texHeight = 0;
     /**模型的角度*/
     export let _HangerSimRY = 90;
     export class MakeClothes3D extends lwg3D._Scene3DBase {
@@ -567,7 +581,8 @@ export module _MakePattern {
                 let p2 = new Laya.Vector3(center.x, center.y - extent.y, center.z);
                 let point1 = Tools._3D.posToScreen(p1, _MainCamara);
                 let point2 = Tools._3D.posToScreen(p2, _MainCamara);
-                this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
+                _texHeight = point2.y - point1.y;
+                // this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
             })
 
             this._evReg(_Event.addTexture2D, (Text2DF: Laya.Texture2D, Text2DR: Laya.Texture2D) => {

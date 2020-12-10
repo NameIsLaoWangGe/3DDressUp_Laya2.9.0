@@ -6567,12 +6567,13 @@ export module lwg {
             /**
              * 对一个Sprite进行截图，返回一个图片信息字符串，可直接使用
              * @export
-             * @param {Laya.Sprite} Sp 需要截图的Sp，Sp必须有宽高；
+             * @param {Laya.Sprite} Sp 需要截图的Sp，Sp必须有宽高
+             * @param quality 品质0-1;
              * @return {*}  {string}
              */
-            export function screenshot(Sp: Laya.Sprite): string {
+            export function screenshot(Sp: Laya.Sprite, quality?: number): string {
                 const htmlCanvas: Laya.HTMLCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
-                const base64 = htmlCanvas.toBase64("image/png", 1);
+                const base64 = htmlCanvas.toBase64("image/png", quality ? quality : 1);
                 return base64;
             }
 

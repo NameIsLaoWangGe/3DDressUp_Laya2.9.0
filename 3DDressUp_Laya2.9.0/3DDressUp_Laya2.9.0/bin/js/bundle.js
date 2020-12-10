@@ -4970,9 +4970,9 @@
                     return drawPie;
                 }
                 _Draw.drawPieMask = drawPieMask;
-                function screenshot(Sp) {
+                function screenshot(Sp, quality) {
                     const htmlCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
-                    const base64 = htmlCanvas.toBase64("image/png", 1);
+                    const base64 = htmlCanvas.toBase64("image/png", quality ? quality : 1);
                     return base64;
                 }
                 _Draw.screenshot = screenshot;
@@ -6979,6 +6979,27 @@
         _MakeTailor.MakeTailor = MakeTailor;
     })(_MakeTailor || (_MakeTailor = {}));
 
+    var _Ranking;
+    (function (_Ranking) {
+        _Ranking._whereFrom = 'Start';
+        class Ranking extends Admin._SceneBase {
+            lwgOnAwake() {
+            }
+            lwgOnStart() {
+                if (_Ranking._whereFrom === 'MakePattern') {
+                }
+                _Ranking._whereFrom = 'Start';
+            }
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnClose'), () => {
+                    this._closeScene();
+                });
+            }
+        }
+        _Ranking.Ranking = Ranking;
+    })(_Ranking || (_Ranking = {}));
+    var _Ranking$1 = _Ranking.Ranking;
+
     var _MakePattern;
     (function (_MakePattern) {
         let _Event;
@@ -7105,6 +7126,20 @@
                             _outR && rOutArr.push(_outR);
                             if (_outF || _outR) {
                                 indexArr.push(posArr[index]);
+                                let Img = this._Owner.getChildByName(`Img${index}`);
+                                if (!Img) {
+                                    let Img = new Laya.Image;
+                                    Img.skin = `Lwg/UI/ui_circle_004.png`;
+                                    this._Owner.addChild(Img);
+                                    Img.name = `Img${index}`;
+                                    Img.width = 20;
+                                    Img.height = 20;
+                                    Img.pivotX = Img.width / 2;
+                                    Img.pivotY = Img.height / 2;
+                                }
+                                else {
+                                    Img.pos(gPoint.x, gPoint.y);
+                                }
                             }
                         }
                         if (indexArr.length !== 0) {
@@ -7132,11 +7167,13 @@
                             let _angleY;
                             if (this.Tex.dir == this.Tex.dirType.Front) {
                                 _angleY = angleXZ + _MakePattern._HangerSimRY;
+                                this.Tex.Img.x = _width - _width / 180 * (_angleY);
                             }
                             else {
                                 _angleY = angleXZ + _MakePattern._HangerSimRY - 180;
+                                this.Tex.Img.x = -_width / 180 * (_angleY);
                             }
-                            this.Tex.Img.x = _width - _width / 180 * (_angleY);
+                            console.log(this.Tex.Img.x);
                             let pH = out.point.y - _MakePattern._HangerP.transform.position.y;
                             let _DirHeight = Tools._3D.getMeshSize(this.Tex.dir == this.Tex.dirType.Front ? _MakePattern._Front : _MakePattern._Reverse).y;
                             let ratio = 1 - pH / _DirHeight;
@@ -7154,18 +7191,6 @@
                         let _height = this._ImgVar('Frame').height;
                         return [
                             new Laya.Point(0, 0),
-                            new Laya.Point(0, _height / 2),
-                            new Laya.Point(_width, _height / 2),
-                            new Laya.Point(_width, 0),
-                            new Laya.Point(_width / 2, 0),
-                            new Laya.Point(_width / 2, _height),
-                            new Laya.Point(_width * 1 / 4, _height * 3 / 4),
-                            new Laya.Point(_width * 3 / 4, _height * 1 / 4),
-                            new Laya.Point(_width / 2, _height / 2),
-                            new Laya.Point(_width * 1 / 4, _height * 1 / 4),
-                            new Laya.Point(_width * 3 / 4, _height * 3 / 4),
-                            new Laya.Point(x, _height),
-                            new Laya.Point(_width, _height),
                         ];
                     },
                     crashType: {
@@ -7372,6 +7397,8 @@
                     Tools._Node.removeAllChildren(this._SpriteVar('Reverse'));
                     EventAdmin._notify(_Event.addTexture2D, this.Tex.getTex());
                 };
+                this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _MakePattern._texHeight;
+                this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _MakePattern._texHeight;
             }
             lwgEvent() {
                 this._evReg(_Event.createImg, (name, gPoint) => {
@@ -7386,10 +7413,6 @@
                         this.Tex.close();
                     }
                     this.Tex.state = this.Tex.stateType.none;
-                });
-                this._evReg(_Event.setTexSize, (_height) => {
-                    this._SpriteVar('Front').height = this._ImgVar('Reverse').height = _height;
-                    this._SpriteVar('Front').y = this._ImgVar('Reverse').y = _height;
                 });
             }
             lwgButton() {
@@ -7407,16 +7430,19 @@
                 var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
                 this._SpriteVar('IconPhoto').graphics.drawTexture(rtex);
                 TimerAdmin._frameOnce(10, this, () => {
-                    const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'));
+                    const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'), 0.5);
                     this._SpriteVar('Front').scaleY = 1;
-                    const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'));
+                    this._SpriteVar('Front').width = this._SpriteVar('Front').height = 256;
+                    const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'), 0.1);
                     this._SpriteVar('Reverse').scaleY = 1;
-                    const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'));
+                    this._SpriteVar('Reverse').width = this._SpriteVar('Reverse').height = 256;
+                    const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'), 0.1);
                     _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.icon, base64Icon);
-                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texF, base64F);
-                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texR, base64R);
+                    Laya.LocalStorage.setItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texF}`, base64F);
+                    Laya.LocalStorage.setItem(`${_MakeTailor._DIYClothes._ins()._pitchName}/${_MakeTailor._DIYClothes._ins()._otherPro.texR}`, base64R);
                     this.EndCamera.destroy();
-                    this._openScene('DressingRoom', true, true);
+                    this._openScene('Start', true, true);
+                    _Ranking._whereFrom = this._Owner.name;
                 });
             }
             onStageMouseDown(e) {
@@ -7464,6 +7490,7 @@
             }
         }
         _MakePattern.MakePattern = MakePattern;
+        _MakePattern._texHeight = 0;
         _MakePattern._HangerSimRY = 90;
         class MakeClothes3D extends lwg3D._Scene3DBase {
             lwgOnAwake() {
@@ -7486,7 +7513,7 @@
                     let p2 = new Laya.Vector3(center.x, center.y - extent.y, center.z);
                     let point1 = Tools._3D.posToScreen(p1, _MakePattern._MainCamara);
                     let point2 = Tools._3D.posToScreen(p2, _MakePattern._MainCamara);
-                    this._evNotify(_Event.setTexSize, [point2.y - point1.y]);
+                    _MakePattern._texHeight = point2.y - point1.y;
                 });
                 this._evReg(_Event.addTexture2D, (Text2DF, Text2DR) => {
                     const bMF = _MakePattern._Front.meshRenderer.material;
@@ -7608,6 +7635,13 @@
         }
         _Start._init = _init;
         class Start extends Admin._SceneBase {
+            lwgOnAwake() {
+                if (_Ranking._whereFrom === 'MakePattern') {
+                    TimerAdmin._frameOnce(60, this, () => {
+                        this._openScene('Ranking', false);
+                    });
+                }
+            }
             lwgButton() {
                 const Clothes = _MakeTailor._DIYClothes._ins();
                 this._btnUp(this._ImgVar('BtnTop'), () => {
@@ -7824,9 +7858,6 @@
                     if (!Cell.getComponent(_Item)) {
                         Cell.addComponent(_Item);
                     }
-                    const obj = _Clothes._ins()._getPitchObj();
-                    this._ImgVar('Front').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texF]);
-                    this._ImgVar('Reverse').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texR]);
                 };
             }
             lwgAdaptive() {
@@ -7884,23 +7915,11 @@
         _PersonalInfo.PersonalInfo = PersonalInfo;
     })(_PersonalInfo || (_PersonalInfo = {}));
 
-    var _Ranking;
-    (function (_Ranking) {
-        class Ranking extends Admin._SceneBase {
-            lwgButton() {
-                this._btnUp(this._ImgVar('BtnClose'), () => {
-                    this._closeScene();
-                });
-            }
-        }
-        _Ranking.Ranking = Ranking;
-    })(_Ranking || (_Ranking = {}));
-    var _Ranking$1 = _Ranking.Ranking;
-
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
             Platform._Ues.value = Platform._Tpye.Web;
+            Laya.Stat.show();
             SceneAnimation._Use.value = SceneAnimation._Type.shutters.randomshutters;
             SceneAnimation._closeSwitch = true;
             SceneAnimation._openSwitch = false;

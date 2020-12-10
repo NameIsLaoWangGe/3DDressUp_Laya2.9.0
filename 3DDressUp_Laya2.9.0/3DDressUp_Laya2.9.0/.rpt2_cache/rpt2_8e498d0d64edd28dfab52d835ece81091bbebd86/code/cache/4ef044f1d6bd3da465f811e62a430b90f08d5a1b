@@ -1,0 +1,6 @@
+{
+  "code": "import { Admin } from \"./Lwg\";\r\nexport var _Ranking;\r\n(function (_Ranking) {\r\n    _Ranking._whereFrom = 'Start';\r\n    class Ranking extends Admin._SceneBase {\r\n        lwgOnAwake() {\r\n        }\r\n        lwgOnStart() {\r\n            if (_Ranking._whereFrom === 'MakePattern') {\r\n            }\r\n            _Ranking._whereFrom = 'Start';\r\n        }\r\n        lwgButton() {\r\n            this._btnUp(this._ImgVar('BtnClose'), () => {\r\n                this._closeScene();\r\n            });\r\n        }\r\n    }\r\n    _Ranking.Ranking = Ranking;\r\n})(_Ranking || (_Ranking = {}));\r\nexport default _Ranking.Ranking;\r\n",
+  "references": [
+    "D:/Game/project/3DDressUp/Project_Laya2.9.0/3DDressUp_Laya2.9.0/3DDressUp_Laya2.9.0/src/script/Lwg/Lwg.ts"
+  ]
+}
