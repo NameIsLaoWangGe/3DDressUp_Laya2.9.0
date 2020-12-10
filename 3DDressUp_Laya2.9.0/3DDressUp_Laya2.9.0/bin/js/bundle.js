@@ -2171,32 +2171,28 @@
                     }
                 }
                 _getArrByClassify(classify) {
-                    if (!this[`${classify}Arr`]) {
-                        this[`${classify}Arr`] = [];
-                        for (const key in this._arr) {
-                            if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
-                                const element = this._arr[key];
-                                if (element[this._property.classify] == classify) {
-                                    this[`${classify}Arr`].push(element);
-                                }
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == classify) {
+                                arr.push(element);
                             }
                         }
                     }
-                    return this[`${classify}Arr`];
+                    return arr;
                 }
                 _getArrByPitchClassify() {
-                    if (!this[`${this._pitchClassify}Arr`]) {
-                        this[`${this._pitchClassify}Arr`] = [];
-                        for (const key in this._arr) {
-                            if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
-                                const element = this._arr[key];
-                                if (element[this._property.classify] == this._pitchClassify) {
-                                    this[`${this._pitchClassify}Arr`].push(element);
-                                }
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == this._pitchClassify) {
+                                arr.push(element);
                             }
                         }
                     }
-                    return this[`${this._pitchClassify}Arr`];
+                    return arr;
                 }
                 _getPropertyArr(proName, value) {
                     let arr = [];
@@ -2387,7 +2383,12 @@
                 }
                 _addObject(obj) {
                     let _obj = Tools._ObjArray.objCopy(obj);
-                    this._arr.push(_obj);
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] === _obj[this._property.name]) {
+                            this._arr[index] == _obj;
+                        }
+                    }
                     this._refreshAndStorage();
                 }
                 _addObjectArr(objArr) {
@@ -4969,6 +4970,12 @@
                     return drawPie;
                 }
                 _Draw.drawPieMask = drawPieMask;
+                function screenshot(Sp) {
+                    const htmlCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
+                    const base64 = htmlCanvas.toBase64("image/png", 1);
+                    return base64;
+                }
+                _Draw.screenshot = screenshot;
                 function reverseRoundMask(node, x, y, radius, eliminate) {
                     if (eliminate == undefined || eliminate == true) {
                         _Node.removeAllChildren(node);
@@ -6351,7 +6358,9 @@
                 };
                 this._otherPro = {
                     color: 'color',
-                    completeSkin: 'completeSkin'
+                    icon: 'icon',
+                    texR: 'texR',
+                    texF: 'texF',
                 };
             }
             static _ins() {
@@ -7392,15 +7401,20 @@
                 _MakePattern._Scene3D.addChild(this.EndCamera);
                 this.EndCamera.transform.position = _MakePattern._MainCamara.transform.position;
                 this.EndCamera.transform.localRotationEuler = _MakePattern._MainCamara.transform.localRotationEuler;
-                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
+                this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhoto').width, this._SpriteVar('IconPhoto').height);
                 this.EndCamera.renderingOrder = -1;
                 this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
                 var rtex = new Laya.Texture(this.EndCamera.renderTarget, Laya.Texture.DEF_UV);
-                this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
+                this._SpriteVar('IconPhoto').graphics.drawTexture(rtex);
                 TimerAdmin._frameOnce(10, this, () => {
-                    const htmlCanvas1 = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
-                    let base64 = htmlCanvas1.toBase64("image/png", 1);
-                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                    const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'));
+                    this._SpriteVar('Front').scaleY = 1;
+                    const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'));
+                    this._SpriteVar('Reverse').scaleY = 1;
+                    const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'));
+                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.icon, base64Icon);
+                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texF, base64F);
+                    _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texR, base64R);
                     this.EndCamera.destroy();
                     this._openScene('DressingRoom', true, true);
                 });
@@ -7544,6 +7558,8 @@
                                 _MakeTailor._DIYClothes._ins().ClothesArr = null;
                                 _MakeTailor._DIYClothes._ins().getClothesArr();
                                 break;
+                            case 'DressingRoom':
+                                break;
                             case 'Start':
                                 this.backStart();
                                 break;
@@ -7613,6 +7629,10 @@
                 this._btnUp(this._ImgVar('BtnRanking'), () => {
                     Clothes._pitchClassify = Clothes._classify.Bottoms;
                     this._openScene('Ranking', false);
+                });
+                this._btnUp(this._ImgVar('BtnDressingRoom'), () => {
+                    Clothes._pitchClassify = Clothes._classify.Bottoms;
+                    this._openScene('DressingRoom', true, true);
                 });
             }
         }
@@ -7775,16 +7795,16 @@
         }
         class DressingRoom extends Admin._SceneBase {
             lwgOnAwake() {
-                let DIYArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
+                let DIYArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.icon, "");
                 let copyDIYArr = Tools._ObjArray.arrCopy(DIYArr);
                 Tools._ObjArray.modifyProValue(copyDIYArr, 'classify', 'DIY');
                 _Clothes._ins()._addObjectArr(copyDIYArr);
-                console.log(copyDIYArr, _Clothes._ins()._arr);
                 _Clothes._ins()._List = this._ListVar('List');
-                let arr = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
-                console.log(_Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY), _Clothes._ins()._arr);
                 _Clothes._ins()._List.array = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
                 _Clothes._ins()._pitchName = _Clothes._ins()._List.array[0]['name'];
+                this._ImgVar('DIY').skin = `Game/UI/Common/kuang_fen.png`;
+                const Icon = this._ImgVar('DIY').getChildAt(0);
+                Icon.skin = `Game/UI/DressingRoom/ClassIcon/${this._ImgVar('DIY').name}_s.png`;
                 _Clothes._ins()._listRender = (Cell, index) => {
                     let data = Cell.dataSource;
                     let Icon = Cell.getChildByName('Icon');
@@ -7796,7 +7816,7 @@
                         Board.skin = null;
                     }
                     if (data[_Clothes._ins()._property.classify] === _Clothes._ins()._classify.DIY) {
-                        Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
+                        Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.icon];
                     }
                     else {
                         Icon.skin = `Game/UI/DressingRoom/Icon/${data[_Clothes._ins()._property.name]}.png`;
@@ -7804,6 +7824,9 @@
                     if (!Cell.getComponent(_Item)) {
                         Cell.addComponent(_Item);
                     }
+                    const obj = _Clothes._ins()._getPitchObj();
+                    this._ImgVar('Front').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texF]);
+                    this._ImgVar('Reverse').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texR]);
                 };
             }
             lwgAdaptive() {
@@ -7816,7 +7839,11 @@
                     this.UI.btnCompleteAppear(null, 400);
                 });
                 this.UI.btnCompleteClick = () => {
-                    this._openScene('Start', true, true);
+                    this.UI.operationVinish(() => {
+                        this.UI.btnBackVinish(() => {
+                            this._openScene('Start', true, true);
+                        });
+                    }, 200);
                 };
             }
             lwgButton() {

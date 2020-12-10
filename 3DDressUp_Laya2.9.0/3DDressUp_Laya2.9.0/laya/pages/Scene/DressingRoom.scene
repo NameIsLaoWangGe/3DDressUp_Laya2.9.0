@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":48,
-    "selecteID":51,
+    "selectedBox":2,
+    "selecteID":70,
     "searchKey":"View",
     "props":{"width":1280,"sceneColor":"#9a7473","height":720},
     "nodeParent":-1,
-    "maxID":70,
+    "maxID":72,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -342,6 +342,36 @@
                                 ]
                         }]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,Front,Front",
+            "props":{"y":512,"x":0,"width":512,"visible":true,"var":"Front","texture":"Game/UI/MakePattern/basic/diy_bottom_001_basic.png","scaleY":-1,"name":"Front","height":512},
+            "nodeParent":2,
+            "label":"Front",
+            "isOpen":true,
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":70,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,Reverse,Reverse",
+            "props":{"y":512,"x":512,"width":512,"visible":true,"var":"Reverse","texture":"Game/UI/MakePattern/basic/diy_bottom_001_basic.png","scaleY":-1,"name":"Reverse","height":512},
+            "nodeParent":2,
+            "label":"Reverse",
+            "isOpen":true,
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":71,
+            "child":[
+                ]
         }],
     "animations":[
         {

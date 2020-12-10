@@ -2454,7 +2454,7 @@ export module lwg {
             _lastArr: Array<any> = [];
             /**是否启用本地存储*/
             _localStorage: boolean = false;
-            /**表格中的List,会有一些默认设置*/
+            /**设置表格中的List,会有一些默认设置,页面关闭时最好清空*/
             get _List(): Laya.List {
                 return this[`${this._tableName}_List`];
             }
@@ -2596,7 +2596,7 @@ export module lwg {
             };
 
             /**
-             * 设置被选中的某个属性的值
+             * 设置当前被选中的某个属性的值
              * @param {string} name 名称
              * @param {string} pro 属性名
              * @param {any} value 属性值
@@ -2644,18 +2644,16 @@ export module lwg {
              * @memberof _Table
              */
             _getArrByClassify(classify: string): Array<any> {
-                if (!this[`${classify}Arr`]) {
-                    this[`${classify}Arr`] = [];
-                    for (const key in this._arr) {
-                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
-                            const element = this._arr[key];
-                            if (element[this._property.classify] == classify) {
-                                this[`${classify}Arr`].push(element);
-                            }
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.classify] == classify) {
+                            arr.push(element);
                         }
                     }
                 }
-                return this[`${classify}Arr`];
+                return arr;
             }
 
             /**
@@ -2664,18 +2662,16 @@ export module lwg {
               * @memberof _Table
               */
             _getArrByPitchClassify(): Array<any> {
-                if (!this[`${this._pitchClassify}Arr`]) {
-                    this[`${this._pitchClassify}Arr`] = [];
-                    for (const key in this._arr) {
-                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
-                            const element = this._arr[key];
-                            if (element[this._property.classify] == this._pitchClassify) {
-                                this[`${this._pitchClassify}Arr`].push(element);
-                            }
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.classify] == this._pitchClassify) {
+                            arr.push(element);
                         }
                     }
                 }
-                return this[`${this._pitchClassify}Arr`];
+                return arr;
             }
 
             /**
@@ -2899,7 +2895,12 @@ export module lwg {
             _addObject(obj: any): void {
                 // 必须拷贝
                 let _obj = Tools._ObjArray.objCopy(obj);
-                this._arr.push(_obj);
+                for (let index = 0; index < this._arr.length; index++) {
+                    const element = this._arr[index];
+                    if (element[this._property.name] === _obj[this._property.name]) {
+                        this._arr[index] == _obj;
+                    }
+                }
                 this._refreshAndStorage();
             }
 
@@ -6563,6 +6564,17 @@ export module lwg {
                 return drawPie;
             }
 
+            /**
+             * 对一个Sprite进行截图，返回一个图片信息字符串，可直接使用
+             * @export
+             * @param {Laya.Sprite} Sp 需要截图的Sp，Sp必须有宽高；
+             * @return {*}  {string}
+             */
+            export function screenshot(Sp: Laya.Sprite): string {
+                const htmlCanvas: Laya.HTMLCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
+                const base64 = htmlCanvas.toBase64("image/png", 1);
+                return base64;
+            }
 
             /**
              * 在一个节点上绘制一个圆形反向遮罩,可以绘制很多个，清除直接删除node中的子节点即可

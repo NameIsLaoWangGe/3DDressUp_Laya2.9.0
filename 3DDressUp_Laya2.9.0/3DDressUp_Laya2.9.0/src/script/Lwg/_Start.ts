@@ -34,6 +34,10 @@ export module _Start {
                 Clothes._pitchClassify = Clothes._classify.Bottoms;
                 this._openScene('Ranking', false);
             })
+            this._btnUp(this._ImgVar('BtnDressingRoom'), () => {
+                Clothes._pitchClassify = Clothes._classify.Bottoms;
+                this._openScene('DressingRoom', true, true);
+            })
         }
     }
 }

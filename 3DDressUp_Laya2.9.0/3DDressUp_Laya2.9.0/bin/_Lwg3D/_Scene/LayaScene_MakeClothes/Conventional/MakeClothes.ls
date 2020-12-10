@@ -68,129 +68,8 @@
 				"child":[]
 			},
 			{
-				"type":"Sprite3D",
-				"instanceID":1,
-				"props":{
-					"name":"Body",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						5.68146,
-						-5.291734,
-						4.444588
-					],
-					"rotation":[
-						0,
-						0,
-						0.1736482,
-						-0.9848078
-					],
-					"scale":[
-						0.7,
-						0.7,
-						0.7
-					]
-				},
-				"components":[
-					{
-						"type":"Animator",
-						"layers":[],
-						"cullingMode":0,
-						"playOnWake":true
-					}
-				],
-				"child":[
-					{
-						"type":"Sprite3D",
-						"instanceID":2,
-						"props":{
-							"name":"Body",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								0,
-								0,
-								-1
-							],
-							"scale":[
-								0.8,
-								0.8,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"Sprite3D",
-								"instanceID":3,
-								"props":{
-									"name":"Image - Back",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0,
-										0,
-										-0.1305262,
-										-0.9914449
-									],
-									"scale":[
-										1,
-										1,
-										1
-									]
-								},
-								"components":[],
-								"child":[]
-							},
-							{
-								"type":"Sprite3D",
-								"instanceID":4,
-								"props":{
-									"name":"Image - Front",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0,
-										0,
-										0.1305262,
-										-0.9914449
-									],
-									"scale":[
-										1,
-										1,
-										1
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					}
-				]
-			},
-			{
 				"type":"DirectionLight",
-				"instanceID":5,
+				"instanceID":1,
 				"props":{
 					"name":"Directional Light",
 					"active":true,
@@ -225,7 +104,7 @@
 			},
 			{
 				"type":"MeshSprite3D",
-				"instanceID":6,
+				"instanceID":2,
 				"props":{
 					"name":"HangerP",
 					"active":true,
@@ -284,7 +163,7 @@
 			},
 			{
 				"type":"Sprite3D",
-				"instanceID":7,
+				"instanceID":3,
 				"props":{
 					"name":"Role",
 					"active":true,
@@ -311,7 +190,7 @@
 				"child":[
 					{
 						"type":"Sprite3D",
-						"instanceID":8,
+						"instanceID":4,
 						"props":{
 							"name":"Dress",
 							"active":true,
@@ -338,7 +217,7 @@
 						"child":[
 							{
 								"type":"Sprite3D",
-								"instanceID":9,
+								"instanceID":5,
 								"props":{
 									"name":"diy_dress_008_final",
 									"active":true,
@@ -365,7 +244,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":10,
+										"instanceID":6,
 										"props":{
 											"name":"diy_dress_008_final_0",
 											"active":true,
@@ -415,7 +294,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":11,
+										"instanceID":7,
 										"props":{
 											"name":"diy_dress_008_final_1",
 											"active":true,
@@ -467,7 +346,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":12,
+								"instanceID":8,
 								"props":{
 									"name":"diy_dress_007_final",
 									"active":true,
@@ -494,7 +373,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":13,
+										"instanceID":9,
 										"props":{
 											"name":"diy_dress_007_final_0",
 											"active":true,
@@ -544,7 +423,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":14,
+										"instanceID":10,
 										"props":{
 											"name":"diy_dress_007_final_1",
 											"active":true,
@@ -596,7 +475,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":15,
+								"instanceID":11,
 								"props":{
 									"name":"diy_dress_006_final",
 									"active":true,
@@ -623,7 +502,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":16,
+										"instanceID":12,
 										"props":{
 											"name":"diy_dress_006_final_0",
 											"active":true,
@@ -673,7 +552,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":17,
+										"instanceID":13,
 										"props":{
 											"name":"diy_dress_006_final_1",
 											"active":true,
@@ -725,7 +604,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":18,
+								"instanceID":14,
 								"props":{
 									"name":"diy_dress_005_final",
 									"active":true,
@@ -752,7 +631,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":19,
+										"instanceID":15,
 										"props":{
 											"name":"diy_dress_005_final_0",
 											"active":true,
@@ -802,7 +681,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":20,
+										"instanceID":16,
 										"props":{
 											"name":"diy_dress_005_final_1",
 											"active":true,
@@ -854,7 +733,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":21,
+								"instanceID":17,
 								"props":{
 									"name":"diy_dress_004_final",
 									"active":true,
@@ -881,7 +760,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":22,
+										"instanceID":18,
 										"props":{
 											"name":"diy_dress_004_final_0",
 											"active":true,
@@ -931,7 +810,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":23,
+										"instanceID":19,
 										"props":{
 											"name":"diy_dress_004_final_1",
 											"active":true,
@@ -983,7 +862,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":24,
+								"instanceID":20,
 								"props":{
 									"name":"diy_dress_003_final",
 									"active":true,
@@ -1010,7 +889,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":25,
+										"instanceID":21,
 										"props":{
 											"name":"diy_dress_003_final_0",
 											"active":true,
@@ -1060,7 +939,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":26,
+										"instanceID":22,
 										"props":{
 											"name":"diy_dress_003_final_1",
 											"active":true,
@@ -1112,7 +991,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":27,
+								"instanceID":23,
 								"props":{
 									"name":"diy_dress_001_final",
 									"active":true,
@@ -1139,7 +1018,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":28,
+										"instanceID":24,
 										"props":{
 											"name":"diy_dress_001_final_0",
 											"active":true,
@@ -1192,7 +1071,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":29,
+										"instanceID":25,
 										"props":{
 											"name":"diy_dress_001_final_1",
 											"active":true,
@@ -1247,7 +1126,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":30,
+								"instanceID":26,
 								"props":{
 									"name":"diy_dress_002_final",
 									"active":true,
@@ -1274,7 +1153,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":31,
+										"instanceID":27,
 										"props":{
 											"name":"diy_dress_002_final_0",
 											"active":true,
@@ -1327,7 +1206,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":32,
+										"instanceID":28,
 										"props":{
 											"name":"diy_dress_002_final_1",
 											"active":true,
@@ -1384,7 +1263,7 @@
 					},
 					{
 						"type":"Sprite3D",
-						"instanceID":33,
+						"instanceID":29,
 						"props":{
 							"name":"Top",
 							"active":true,
@@ -1411,7 +1290,7 @@
 						"child":[
 							{
 								"type":"Sprite3D",
-								"instanceID":34,
+								"instanceID":30,
 								"props":{
 									"name":"diy_top_008_final",
 									"active":true,
@@ -1438,7 +1317,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":35,
+										"instanceID":31,
 										"props":{
 											"name":"diy_top_008_final_0",
 											"active":true,
@@ -1488,7 +1367,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":36,
+										"instanceID":32,
 										"props":{
 											"name":"diy_top_008_final_1",
 											"active":true,
@@ -1540,7 +1419,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":37,
+								"instanceID":33,
 								"props":{
 									"name":"diy_top_005_final",
 									"active":true,
@@ -1549,7 +1428,7 @@
 									"position":[
 										0,
 										-0.039,
-										-0.058
+										-0.078
 									],
 									"rotation":[
 										0,
@@ -1567,7 +1446,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":38,
+										"instanceID":34,
 										"props":{
 											"name":"diy_top_005_final_0",
 											"active":true,
@@ -1617,7 +1496,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":39,
+										"instanceID":35,
 										"props":{
 											"name":"diy_top_005_final_1",
 											"active":true,
@@ -1669,7 +1548,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":40,
+								"instanceID":36,
 								"props":{
 									"name":"diy_top_001_final",
 									"active":true,
@@ -1696,7 +1575,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":41,
+										"instanceID":37,
 										"props":{
 											"name":"diy_top_001_final_0",
 											"active":true,
@@ -1746,7 +1625,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":42,
+										"instanceID":38,
 										"props":{
 											"name":"diy_top_001_final_1",
 											"active":true,
@@ -1798,7 +1677,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":43,
+								"instanceID":39,
 								"props":{
 									"name":"diy_top_002_final",
 									"active":true,
@@ -1825,7 +1704,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":44,
+										"instanceID":40,
 										"props":{
 											"name":"diy_top_002_final_0",
 											"active":true,
@@ -1875,7 +1754,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":45,
+										"instanceID":41,
 										"props":{
 											"name":"diy_top_002_final_1",
 											"active":true,
@@ -1927,7 +1806,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":46,
+								"instanceID":42,
 								"props":{
 									"name":"diy_top_003_final",
 									"active":true,
@@ -1954,7 +1833,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":47,
+										"instanceID":43,
 										"props":{
 											"name":"diy_top_003_final_0",
 											"active":true,
@@ -2004,7 +1883,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":48,
+										"instanceID":44,
 										"props":{
 											"name":"diy_top_003_final_1",
 											"active":true,
@@ -2056,7 +1935,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":49,
+								"instanceID":45,
 								"props":{
 									"name":"diy_top_004_final",
 									"active":true,
@@ -2083,7 +1962,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":50,
+										"instanceID":46,
 										"props":{
 											"name":"diy_top_004_final_0",
 											"active":true,
@@ -2133,7 +2012,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":51,
+										"instanceID":47,
 										"props":{
 											"name":"diy_top_004_final_1",
 											"active":true,
@@ -2185,7 +2064,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":52,
+								"instanceID":48,
 								"props":{
 									"name":"diy_top_006_final",
 									"active":true,
@@ -2194,7 +2073,7 @@
 									"position":[
 										0,
 										-0.085,
-										0.02
+										-0.113
 									],
 									"rotation":[
 										0,
@@ -2212,7 +2091,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":53,
+										"instanceID":49,
 										"props":{
 											"name":"diy_top_006_final_0",
 											"active":true,
@@ -2262,7 +2141,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":54,
+										"instanceID":50,
 										"props":{
 											"name":"diy_top_006_final_1",
 											"active":true,
@@ -2314,7 +2193,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":55,
+								"instanceID":51,
 								"props":{
 									"name":"diy_top_007_final",
 									"active":true,
@@ -2341,7 +2220,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":56,
+										"instanceID":52,
 										"props":{
 											"name":"diy_top_007_final_0",
 											"active":true,
@@ -2391,7 +2270,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":57,
+										"instanceID":53,
 										"props":{
 											"name":"diy_top_007_final_1",
 											"active":true,
@@ -2445,7 +2324,7 @@
 					},
 					{
 						"type":"Sprite3D",
-						"instanceID":58,
+						"instanceID":54,
 						"props":{
 							"name":"Bottoms",
 							"active":true,
@@ -2472,7 +2351,7 @@
 						"child":[
 							{
 								"type":"Sprite3D",
-								"instanceID":59,
+								"instanceID":55,
 								"props":{
 									"name":"diy_bottom_007_final",
 									"active":true,
@@ -2499,7 +2378,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":60,
+										"instanceID":56,
 										"props":{
 											"name":"diy_bottom_007_final_0",
 											"active":true,
@@ -2549,7 +2428,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":61,
+										"instanceID":57,
 										"props":{
 											"name":"diy_bottom_007_final_1",
 											"active":true,
@@ -2601,7 +2480,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":62,
+								"instanceID":58,
 								"props":{
 									"name":"diy_bottom_005_final",
 									"active":true,
@@ -2628,7 +2507,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":63,
+										"instanceID":59,
 										"props":{
 											"name":"diy_bottom_005_final_0",
 											"active":true,
@@ -2678,7 +2557,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":64,
+										"instanceID":60,
 										"props":{
 											"name":"diy_bottom_005_final_1",
 											"active":true,
@@ -2730,7 +2609,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":65,
+								"instanceID":61,
 								"props":{
 									"name":"diy_bottom_001_final",
 									"active":true,
@@ -2757,7 +2636,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":66,
+										"instanceID":62,
 										"props":{
 											"name":"diy_bottom_001_final_0",
 											"active":true,
@@ -2806,7 +2685,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":67,
+										"instanceID":63,
 										"props":{
 											"name":"diy_bottom_001_final_1",
 											"active":true,
@@ -2857,7 +2736,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":68,
+								"instanceID":64,
 								"props":{
 									"name":"diy_bottom_002_final",
 									"active":true,
@@ -2884,7 +2763,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":69,
+										"instanceID":65,
 										"props":{
 											"name":"diy_bottom_002_final_0",
 											"active":true,
@@ -2934,7 +2813,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":70,
+										"instanceID":66,
 										"props":{
 											"name":"diy_bottom_002_final_1",
 											"active":true,
@@ -2986,7 +2865,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":71,
+								"instanceID":67,
 								"props":{
 									"name":"diy_bottom_003_final",
 									"active":true,
@@ -3013,7 +2892,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":72,
+										"instanceID":68,
 										"props":{
 											"name":"diy_bottom_003_final_0",
 											"active":true,
@@ -3063,7 +2942,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":73,
+										"instanceID":69,
 										"props":{
 											"name":"diy_bottom_003_final_1",
 											"active":true,
@@ -3115,7 +2994,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":74,
+								"instanceID":70,
 								"props":{
 									"name":"diy_bottom_004_final",
 									"active":true,
@@ -3142,7 +3021,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":75,
+										"instanceID":71,
 										"props":{
 											"name":"diy_bottom_004_final_0",
 											"active":true,
@@ -3192,7 +3071,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":76,
+										"instanceID":72,
 										"props":{
 											"name":"diy_bottom_004_final_1",
 											"active":true,
@@ -3244,7 +3123,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":77,
+								"instanceID":73,
 								"props":{
 									"name":"diy_bottom_006_final",
 									"active":true,
@@ -3253,7 +3132,7 @@
 									"position":[
 										0,
 										0.188,
-										-0.11
+										-0.147
 									],
 									"rotation":[
 										0,
@@ -3271,7 +3150,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":78,
+										"instanceID":74,
 										"props":{
 											"name":"diy_bottom_006_final_0",
 											"active":true,
@@ -3321,7 +3200,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":79,
+										"instanceID":75,
 										"props":{
 											"name":"diy_bottom_006_final_1",
 											"active":true,
@@ -3373,7 +3252,7 @@
 							},
 							{
 								"type":"Sprite3D",
-								"instanceID":80,
+								"instanceID":76,
 								"props":{
 									"name":"diy_bottom_008_final",
 									"active":true,
@@ -3400,7 +3279,7 @@
 								"child":[
 									{
 										"type":"MeshSprite3D",
-										"instanceID":81,
+										"instanceID":77,
 										"props":{
 											"name":"diy_bottom_008_final_0",
 											"active":true,
@@ -3450,7 +3329,7 @@
 									},
 									{
 										"type":"MeshSprite3D",
-										"instanceID":82,
+										"instanceID":78,
 										"props":{
 											"name":"diy_bottom_008_final_1",
 											"active":true,

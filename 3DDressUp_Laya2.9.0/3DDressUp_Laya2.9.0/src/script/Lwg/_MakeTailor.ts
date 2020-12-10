@@ -31,7 +31,9 @@ export module _MakeTailor {
         };
         _otherPro = {
             color: 'color',
-            completeSkin: 'completeSkin'
+            icon: 'icon',
+            texR: 'texR',
+            texF: 'texF',
         };
         _getColor(): Array<any> {
             let obj = this._getPitchObj();

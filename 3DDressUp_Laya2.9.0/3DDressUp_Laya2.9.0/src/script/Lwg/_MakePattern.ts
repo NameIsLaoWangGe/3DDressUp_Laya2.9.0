@@ -457,7 +457,7 @@ export module _MakePattern {
         }
 
         EndCamera: Laya.Camera;
-        /**渲染到照片上*/
+        /**截图*/
         photo(): void {
             _Hanger.transform.localRotationEulerY = 180;
             this.EndCamera = _MainCamara.clone() as Laya.Camera;
@@ -465,17 +465,22 @@ export module _MakePattern {
             this.EndCamera.transform.position = _MainCamara.transform.position;
             this.EndCamera.transform.localRotationEuler = _MainCamara.transform.localRotationEuler;
             //选择渲染目标为纹理
-            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height);
+            this.EndCamera.renderTarget = new Laya.RenderTexture(this._SpriteVar('IconPhoto').width, this._SpriteVar('IconPhoto').height);
             //渲染顺序
             this.EndCamera.renderingOrder = -1;
             //清除标记
             this.EndCamera.clearFlag = Laya.CameraClearFlags.Sky;
             var rtex = new Laya.Texture(((<Laya.Texture2D>(this.EndCamera.renderTarget as any))), Laya.Texture.DEF_UV);
-            this._SpriteVar('IconPhorto').graphics.drawTexture(rtex);
+            this._SpriteVar('IconPhoto').graphics.drawTexture(rtex);
             TimerAdmin._frameOnce(10, this, () => {
-                const htmlCanvas1: Laya.HTMLCanvas = this._SpriteVar('IconPhorto').drawToCanvas(this._SpriteVar('IconPhorto').width, this._SpriteVar('IconPhorto').height, this._SpriteVar('IconPhorto').x, this._SpriteVar('IconPhorto').y);
-                let base64 = htmlCanvas1.toBase64("image/png", 1);
-                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, base64);
+                const base64Icon = Tools._Draw.screenshot(this._SpriteVar('IconPhoto'));
+                this._SpriteVar('Front').scaleY = 1;
+                const base64F = Tools._Draw.screenshot(this._SpriteVar('Front'));
+                this._SpriteVar('Reverse').scaleY = 1;
+                const base64R = Tools._Draw.screenshot(this._SpriteVar('Reverse'));
+                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.icon, base64Icon);
+                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texF, base64F);
+                _MakeTailor._DIYClothes._ins()._setPitchProperty(_MakeTailor._DIYClothes._ins()._otherPro.texR, base64R);
                 this.EndCamera.destroy();
                 this._openScene('DressingRoom', true, true);
             })

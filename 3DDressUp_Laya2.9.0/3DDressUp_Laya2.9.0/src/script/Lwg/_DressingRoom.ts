@@ -1,4 +1,4 @@
-import { Admin, DataAdmin, TimerAdmin, Tools } from "./Lwg";
+import { Admin, Animation2D, DataAdmin, TimerAdmin, Tools } from "./Lwg";
 import { _MakeTailor } from "./_MakeTailor";
 import { _Res } from "./_PreLoad";
 import { _PropTry } from "./_PropTry";
@@ -34,17 +34,17 @@ export module _DressingRoom {
     export class DressingRoom extends Admin._SceneBase {
 
         lwgOnAwake(): void {
-            let DIYArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.completeSkin, "");
+            let DIYArr = _MakeTailor._DIYClothes._ins()._getNoPropertyArr(_MakeTailor._DIYClothes._ins()._otherPro.icon, "");
             // 必须复制
             let copyDIYArr = Tools._ObjArray.arrCopy(DIYArr);
             Tools._ObjArray.modifyProValue(copyDIYArr, 'classify', 'DIY');
             _Clothes._ins()._addObjectArr(copyDIYArr);
-            console.log(copyDIYArr, _Clothes._ins()._arr);
             _Clothes._ins()._List = this._ListVar('List');
-            let arr = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
-            console.log(_Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY), _Clothes._ins()._arr);
             _Clothes._ins()._List.array = _Clothes._ins()._getArrByClassify(_Clothes._ins()._classify.DIY);
             _Clothes._ins()._pitchName = _Clothes._ins()._List.array[0]['name'];
+            this._ImgVar('DIY').skin = `Game/UI/Common/kuang_fen.png`;
+            const Icon = this._ImgVar('DIY').getChildAt(0) as Laya.Image;
+            Icon.skin = `Game/UI/DressingRoom/ClassIcon/${this._ImgVar('DIY').name}_s.png`;
 
             _Clothes._ins()._listRender = (Cell: Laya.Box, index: number) => {
                 let data = Cell.dataSource;
@@ -57,7 +57,7 @@ export module _DressingRoom {
                 }
 
                 if (data[_Clothes._ins()._property.classify] === _Clothes._ins()._classify.DIY) {
-                    Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.completeSkin];
+                    Icon.skin = data[_MakeTailor._DIYClothes._ins()._otherPro.icon];
                 } else {
                     Icon.skin = `Game/UI/DressingRoom/Icon/${data[_Clothes._ins()._property.name]}.png`;
                 }
@@ -65,10 +65,16 @@ export module _DressingRoom {
                     Cell.addComponent(_Item)
                 }
             }
+            const obj = _Clothes._ins()._getPitchObj();
+            this._ImgVar('Front').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texF]);
+            this._ImgVar('Reverse').loadImage(obj[_MakeTailor._DIYClothes._ins()._otherPro.texR]);
         }
         lwgAdaptive(): void {
         }
 
+        lwgOnDisable(): void {
+            _Clothes._ins()._List = null;
+        }
         UI: _MakeTailor._UI;
         lwgOnStart(): void {
             this.UI = new _MakeTailor._UI(this._Owner);
@@ -78,7 +84,11 @@ export module _DressingRoom {
                 this.UI.btnCompleteAppear(null, 400);
             })
             this.UI.btnCompleteClick = () => {
-                this._openScene('Start', true, true);
+                this.UI.operationVinish(() => {
+                    this.UI.btnBackVinish(() => {
+                        this._openScene('Start', true, true);
+                    });
+                }, 200);
             }
         }
 

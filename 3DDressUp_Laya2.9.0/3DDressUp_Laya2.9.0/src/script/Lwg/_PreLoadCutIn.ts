@@ -46,6 +46,10 @@ export module _PreLoadCutIn {
                             _MakeTailor._DIYClothes._ins().ClothesArr = null;
                             _MakeTailor._DIYClothes._ins().getClothesArr();
                             break;
+
+                        case 'DressingRoom':
+                            // this.intoMakePattern();
+                            break;
                         case 'Start':
                             this.backStart();
                             break;
